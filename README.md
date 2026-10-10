@@ -91,6 +91,23 @@ rtlarch bundle /path/to/new-review-package --workspace /path/to/my-rtl --json
 
 在线画布双击子系统进入下一层，可通过“阅读大小”放大当前模块。只有明确声明为配置或时钟复位的组默认折叠，控制和数据连接保持可见。框图位置与距离不表示周期。
 
+## 更新与版本核对
+
+在线窗口左上角显示页面构建版本，页脚“版本信息”显示后台服务版本。候选创建版本属于历史记录，不会随工具升级重写。早期 0.9.1 发布曾把左上角标签写死为 0.8；修复后直接读取包版本。
+
+更新源码后需要重新构建页面：
+
+```bash
+git pull --ff-only
+source ./env.sh
+npm ci
+npm run build
+```
+
+若服务由 `npm start` 在终端前台运行，先在原终端按 Ctrl+C 停止，再重新启动。CLI 管理的服务使用本仓库入口对指定工作区运行 `./bin/rtlarch stop --workspace /path/to/my-rtl --json`，再运行 `./bin/rtlarch start --workspace /path/to/my-rtl --json`，打开新返回的 `reviewUrl`。已有项目不要重新初始化。
+
+`bundle` 生成的离线 HTML 是固定快照，更新源码不会改变旧文件；需要导出到新目录。仓库根目录的 `index.html` 是构建入口，应通过服务访问，不能作为离线成果直接双击打开。
+
 ## 维护
 
 ```bash
