@@ -1,3 +1,8 @@
+import {architectureContext} from './context';
+import {verificationRuns} from './verification';
+import {reviewDependencies,reviewImpact} from '../core/reviewImpact';
+import {workbenchSchema,workActionSchema,emptyWorkbench,type WorkbenchSnapshot} from '../core/workbench';
+import {evaluateStudy} from '../core/studies';
 import {toolVersion} from './environment';
 import { mkdir, readFile, readdir, rename, rm, writeFile } from 'node:fs/promises';
 import { dirname, resolve } from 'node:path';
@@ -35,13 +40,77 @@ export class Repository {
     const records = moduleReviewsSchema.parse(await this.optional('architecture/module-reviews.json') ?? { schemaVersion: 1, modules: {} });
     const moduleReviews = model.modules.map(module => {
       const record = records.modules[module.id] ?? null;
-      const status: ReviewStatus = !record ? 'DRAFT' : record.modelHash === hash ? 'APPROVED' : 'STALE';
-      return { moduleId: module.id, status, record };
+      const impact=!record?{retained:false,reasons:['尚未确认']}:record.modelHash===hash?{retained:false,reasons:[]}:reviewImpact(record,reviewDependencies(model,module.id),hash);
+      const status: ReviewStatus = !record ? 'DRAFT' : record.modelHash===hash||impact.retained ? 'APPROVED' : 'STALE';
+      return { moduleId: module.id, status, record, ...impact };
     });
     const reviewStatus: ReviewStatus = !review ? 'DRAFT' : review.modelHash === hash && moduleReviews.every(r => r.status === 'APPROVED') ? 'APPROVED' : 'STALE';
     return { model, modelHash: hash, issues, reviewStatus, review: review ?? null, moduleReviews };
   }
   getModel() { return this.queue(() => this.snapshot()); }
+  private async workbenchSnapshot():Promise<WorkbenchSnapshot> {
+    const snapshot=await this.snapshot(),workbench=workbenchSchema.parse(await this.optional('architecture/workbench.json')??emptyWorkbench());
+    const threadStates=await Promise.all(workbench.threads.map(async t=>{
+      const proposal=t.target.proposalId?await this.readProposal(t.target.proposalId).catch(()=>undefined):undefined;
+      const proposalState=proposal?this.proposalState(proposal,snapshot.modelHash):undefined;
+      const targetModel=proposal&&proposalState==='READY'?this.candidate(snapshot.model,snapshot.modelHash,proposal.proposal).model:snapshot.model;
+      return {id:t.id,versionChanged:modelHash(targetModel)!==t.target.modelHash,missingTargets:[...(t.target.moduleId&&!targetModel.modules.some(m=>m.id===t.target.moduleId)?[t.target.moduleId]:[]),...t.target.connectionIds.filter(id=>!targetModel.connections.some(l=>l.id===id))],...(proposalState?{proposalState}:{})};
+    }));
+    return {workbench,workbenchHash:hashValue(workbench),modelHash:snapshot.modelHash,threadStates};
+  }
+  getWorkbench(){return this.queue(()=>this.workbenchSnapshot());}
+  getContext(moduleId?:string,index?:number){return this.queue(async()=>{
+    const snapshot=await this.snapshot(),work=await this.workbenchSnapshot();
+    const owner=snapshot.model.modules.find(m=>m.id===moduleId);
+    if(moduleId&&!owner)throw new ApiError(422,'模块不存在','MODULE_NOT_FOUND');
+    if(index!==undefined&&(!Number.isSafeInteger(index)||!owner?.instances||index<owner.instances.from||index>owner.instances.to))throw new ApiError(422,'数组索引超出范围','INSTANCE_INDEX');
+    const threads=work.workbench.threads.filter(t=>t.status!=='resolved'&&(!moduleId||!t.target.moduleId||t.target.moduleId===moduleId||t.target.connectionIds.some(id=>snapshot.model.connections.some(l=>l.id===id&&(l.from.moduleId===moduleId||l.to.moduleId===moduleId)))));
+    return {...architectureContext(snapshot,moduleId,index),collaboration:{workbenchHash:work.workbenchHash,checkpoint:work.workbench.checkpoint,openCount:threads.length,threads:threads.slice(-25).map(t=>({...t,messages:t.messages.slice(-4),...work.threadStates.find(s=>s.id===t.id)})),studies:work.workbench.studies.filter(s=>!moduleId||s.moduleIds.includes(moduleId)).map(s=>({id:s.id,title:s.title,modelHash:s.modelHash,versionChanged:s.modelHash!==snapshot.modelHash})),note:'讨论是独立记录；回答用 workbench 命令提交，用户确认解决不等于架构批准。完整历史可用 workbench 读取。'}};
+  });}
+  getResume(){return this.queue(async()=>{
+    const snapshot=await this.snapshot(),work=await this.workbenchSnapshot();
+    const names=await readdir(this.path('proposals/registered')).catch(e=>{if(e.code==='ENOENT')return [] as string[];throw e;});
+    const proposals=await Promise.all(names.filter(n=>/^[a-f0-9]{64}\.json$/.test(n)).map(async name=>{const p=await this.readProposal(name.slice(0,-5));return {id:p.id,reason:p.proposal.reason,createdAt:p.createdAt,state:this.proposalState(p,snapshot.modelHash)};}));
+    proposals.sort((a,b)=>b.createdAt.localeCompare(a.createdAt));
+    const active=work.workbench.threads.filter(t=>t.status!=='resolved'),pending=active.filter(t=>t.status==='open').length;
+    return {...work,design:snapshot.model.design,reviewStatus:snapshot.reviewStatus,reviewNeeded:snapshot.moduleReviews.filter(r=>r.status!=='APPROVED').map(r=>({moduleId:r.moduleId,reasons:r.reasons})),proposals,runs:await verificationRuns(this.workspace,snapshot.modelHash),nextActions:[...(pending?[`回答 ${pending} 个尚未处理的问题`]:[]),...(active.length>pending?[`核对 ${active.length-pending} 个已答复问题`]:[]),...(proposals.some(p=>p.state==='READY')?['查看尚未保存的候选方案']:[]),...(work.workbench.checkpoint?[work.workbench.checkpoint.nextStep]:[])]};
+  });}
+
+  updateWorkbench(input:unknown){return this.queue(async()=>{
+    const parsed=workActionSchema.parse(input),current=await this.workbenchSnapshot();
+    if(current.workbenchHash!==parsed.baseHash)throw new ApiError(409,'讨论记录已更新；请重新加载后再发送，输入内容不会自动丢弃。','WORKBENCH_CONFLICT');
+    const {model,modelHash:hash}=await this.snapshot(),a=parsed.action,w=current.workbench,now=new Date().toISOString();
+    const uid=()=>`w_${randomUUID().replaceAll('-','')}`;
+    const checkTarget=async(target:{modelHash:string;moduleId?:string;connectionIds?:string[];proposalId?:string})=>{
+      const record=target.proposalId?await this.readProposal(target.proposalId):undefined;
+      const candidate=record&&this.proposalState(record,hash)==='READY'?this.candidate(model,hash,record.proposal).model:model;
+      if(modelHash(candidate)!==target.modelHash)throw new ApiError(409,'讨论对象的版本已变化；请核对当前对象后重新发送。');
+      if(target.moduleId&&!candidate.modules.some(m=>m.id===target.moduleId)||(target.connectionIds??[]).some(id=>!candidate.connections.some(l=>l.id===id)))throw new ApiError(422,'讨论对象不存在');
+    };
+    if(a.kind==='ask'){
+      await checkTarget(a.target);w.threads.push({id:uid(),target:a.target,title:a.title,status:'open',createdAt:now,updatedAt:now,messages:[{id:uid(),author:'user',text:a.text,createdAt:now,modelHash:a.target.modelHash}]});
+    }else if(a.kind==='checkpoint'){
+      await checkTarget(a.target);w.checkpoint={intent:a.intent,nextStep:a.nextStep,target:a.target,updatedAt:now};
+    }else if(a.kind==='study'){
+      if(a.study.modelHash!==hash)throw new ApiError(409,'方案预算对应旧模型');
+      if(a.study.moduleIds.some(id=>!model.modules.some(m=>m.id===id)))throw new ApiError(422,'预算引用不存在的模块');
+      evaluateStudy(a.study);
+      const runs=await verificationRuns(this.workspace,hash);
+      for(const id of a.study.options.flatMap(o=>o.runIds)){const run=runs.find(r=>r.id===id);if(!run||!run.fresh||run.status!=='passed'||!('moduleIds' in run)||!a.study.moduleIds.every(m=>run.moduleIds?.includes(m)))throw new ApiError(422,'关联验证必须通过、输入新鲜、对应当前模型并覆盖预算模块');}
+      const index=w.studies.findIndex(s=>s.id===a.study.id);
+      if(index>=0)throw new ApiError(409,'此预算已保存；修订请使用新的 ID，保留原始假设与结果。','STUDY_EXISTS');
+      w.studies.push(a.study);
+    }else{
+      const t=w.threads.find(t=>t.id===a.threadId);if(!t)throw new ApiError(404,'讨论不存在');
+      if(a.modelHash!==hash)throw new ApiError(409,'当前模型已变化，请重新读取上下文');
+      if(a.kind==='reply'){
+        if(a.proposalId){const p=await this.readProposal(a.proposalId);if(this.proposalState(p,hash)==='STALE')throw new ApiError(409,'回复关联的提案已过期');}
+        t.messages.push({id:uid(),author:a.author,text:a.text,createdAt:now,modelHash:hash,...(a.proposalId?{proposalId:a.proposalId}:{})});t.status=a.author==='agent'?'addressed':'open';
+      }else t.status=a.kind==='resolve'?'resolved':'open';
+      t.updatedAt=now;
+    }
+    await this.save('architecture/workbench.json',workbenchSchema.parse(w));return this.workbenchSnapshot();
+  });}
   getEvidence(input: unknown) {
     return this.queue(async () => {
       const parsed = z.strictObject({ id: idSchema, modelHash: hashSchema, proposal: proposalSchema.optional() }).parse(input);
@@ -143,7 +212,7 @@ export class Repository {
       if (!current.model.modules.some(m => m.id === parsed.moduleId)) throw new ApiError(422, '模块不存在');
       if (moduleIssues(current.model, current.issues, parsed.moduleId).some(i => i.blocks.includes('review'))) throw new ApiError(422, '当前模块仍有阻断问题');
       const records = moduleReviewsSchema.parse(await this.optional('architecture/module-reviews.json') ?? { schemaVersion: 1, modules: {} });
-      records.modules[parsed.moduleId] = { modelHash: parsed.modelHash, reviewer: parsed.reviewer, reviewedAt: new Date().toISOString() };
+      records.modules[parsed.moduleId] = { modelHash: parsed.modelHash, reviewer: parsed.reviewer, reviewedAt: new Date().toISOString(),...reviewDependencies(current.model,parsed.moduleId) };
       await this.save('architecture/module-reviews.json', records);
       return this.snapshot();
     });

@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "name": "two-stage stream: transactions, bubbles and reset",
+  "stage": "simulation",
+  "moduleIds": ["top"],
+  "inputs": ["rtl/stage.sv", "rtl/stream_top.sv", "tb/tb_stream.sv"],
+  "timeoutMs": 180000,
+  "commands": [
+    {"program": "verilator", "versionArgs": ["--version"], "args": ["--binary", "--timing", "--assert", "--top-module", "tb_stream", "--Mdir", "{runDir}/obj", "-j", "2", "rtl/stage.sv", "rtl/stream_top.sv", "tb/tb_stream.sv"]},
+    {"program": "{runDir}/obj/Vtb_stream", "args": []}
+  ],
+  "checks": [{"kind": "contains", "file": "step-1.stdout.log", "text": "PASS rtl-intake:"}]
+}

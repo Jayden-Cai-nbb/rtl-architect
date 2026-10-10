@@ -1,0 +1,45 @@
+{
+  "toolVersion": "1.0.0",
+  "sourceBuildId": "2705a4f86c8695336e16872268a7be19122144b6a96a6d471819027a5d6c1a83",
+  "recordedAt": "2026-10-10T08:55:35.643Z",
+  "fixture": "examples/rtl-intake",
+  "scenario": "raw RTL → elaboration → candidate → human-save fixture → graph question → CLI context → candidate-linked reply → checkpoint → service restart → RTL simulation → source-change invalidation",
+  "timings": {
+    "firstCandidateMs": 6605,
+    "resumeAfterRestartMs": 3133,
+    "simulationRunMs": 7398
+  },
+  "cliCalls": 15,
+  "model": {
+    "modules": 3,
+    "connections": 10,
+    "fidelity": "partial"
+  },
+  "restored": {
+    "threads": 1,
+    "messages": 2,
+    "checkpoint": true,
+    "candidate": true,
+    "module": true,
+    "manualContextReentry": 0
+  },
+  "sourceChange": {
+    "affectedModules": 2,
+    "unaffectedModules": 1,
+    "verificationFresh": false
+  },
+  "verification": {
+    "status": "passed",
+    "checks": [
+      {
+        "kind": "contains",
+        "file": "step-1.stdout.log",
+        "text": "PASS rtl-intake:",
+        "passed": true
+      }
+    ],
+    "toolVersion": "Verilator 5.053 devel rev v5.052-46-g599f8b8e3 (mod)"
+  },
+  "totalMs": 27190,
+  "note": "自动化临时工作区测量，非人类可读性或效率提升百分比；第一次构建是否需要会影响时间。仿真只验证此 RTL 样例，不证明导入模型完整。"
+}

@@ -2,7 +2,7 @@
 
 与 AI 一起设计、理解和审阅 RTL 架构。通过一份架构模型连接模块框图、设计说明、接口约定与实现合同，让用户参与关键取舍，而不必直接编辑 JSON。
 
-项目包含可复用的 **rtl-architect skill**、本机命令行工具和浏览器审阅界面。当前版本为 0.9.1。
+项目包含可复用的 **rtl-architect skill**、本机命令行工具和浏览器审阅界面。当前版本为 **1.0.0**。
 
 ## 能做什么
 
@@ -16,19 +16,21 @@
 
 工具不自动批准设计，也不是通用 HDL 导入器、RTL 等价检查器或 STA 工具。图形检查与合同导出不能替代仿真、综合和器件验收。
 
-## 默认阅读布局（0.10）
+## 1.0：从看图到持续共同设计
 
-[升级说明与实际截图](docs/UPGRADE-0.10.md)。
+- 在图上选模块或连线提问；Codex 从 context 读取问题、保存答复并关联候选，由用户核对解决。
+- resume 保留目标、下一步、候选和讨论；open 核对源码、页面和服务版本，打开当前工作区。
+- 导入 Yosys 展开 JSON，保留层级、端口、位连接与源码映射；源码修改后列出需要重核的实例。
+- 对同一配置计算 A/B 运算、存储端口与缓存预算，保存假设；运行明确的验证清单，保存独立输入摘要和报告。
+- 修改后只重新确认受影响模块，显示原因；整体批准仍对应完整当前版本。
 
-新建与还原任务会同步整理有证据的接口组，默认布局无需手写坐标。工具依据声明的模块类型和连接安排位置、按连线密度留空间；业务主线需要强调时再补独立 `reading`。这改善了普通模型的起点，但源码用途不明、大规模交叉互连仍需要逐层整理和实际审阅。
+[1.0 升级说明](docs/UPGRADE-1.0.md) · [完整共同设计流程](.agents/skills/rtl-architect/references/workbench.md) · [从原始 RTL 开始的样例](examples/rtl-intake/README.md)
 
-更新后重新构建并重启自己工作区的服务。已保存完整位置优先，旧页面中点击“自动布局”预览，再按需保存；旧的离线 HTML 是快照，需要重新生成。工具不会覆盖已有布局或把未知信号自动当作配置隐藏。
-
-可复现的通用样例：`npm run check:auto-reading`；追加 `-- /tmp/rtlarch-reading-preview` 可在一个新目录下导出各样例的交互 HTML。它们是展示测试模型，不是经过仿真的 RTL 项目。
+默认框图继续沿用 [0.10 阅读布局](docs/UPGRADE-0.10.md)：按声明的模块类型和真实拓扑分配位置，支持四侧端口与按缩放显示名称。语义未知或大规模交叉互连仍需逐层整理和实际审阅。
 
 ## 环境与安装
 
-当前验证环境为 Linux/WSL。需要 Bash、Git、Node **24.18.1**、npm **11.6.2**；依赖版本由 `package-lock.json` 固定。完整维护检查还需要 Python 3；RTL 示例仿真需要 Verilator 和 C++ 构建工具。尚未验证原生 Windows/macOS。
+当前验证环境为 Linux/WSL。需要 Bash、Git、Node **24.18.1**、npm **11.6.2**；依赖版本由 `package-lock.json` 固定。完整维护检查还需要 Python 3 和 Yosys；完整用户路径及 RTL 示例仿真需要 Verilator 和 C++ 构建工具。尚未验证原生 Windows/macOS。
 
 克隆仓库并安装依赖：
 
@@ -80,14 +82,16 @@ npm start
 工具仓库与目标 RTL 项目分开保存。目标项目保留自己的 `architecture/`、`proposals/`、`generated/`、RTL 与验证资料。
 
 ```bash
-rtlarch doctor --workspace /path/to/my-rtl --json
-# 仅当目标项目尚无架构模型时初始化：
-rtlarch init --workspace /path/to/my-rtl --json
+# --init 仅在无模型时创建未知时钟/复位的草稿；已有模型不覆盖
+rtlarch open --init --workspace /path/to/my-rtl
+rtlarch resume --workspace /path/to/my-rtl --json
 rtlarch context --workspace /path/to/my-rtl --json
 rtlarch draft proposals/design.json --workspace /path/to/my-rtl --open --json
 ```
 
-`draft` 登记候选并返回审阅链接；在页面核对差异后由用户提交草稿，再分别确认模块与批准整体架构。语义变化使旧确认失效，布局和缩放不改变架构版本。模型不完整或存在未表达结构时，不能将其当作可直接实施的完整合同。
+`draft` 登记候选并返回审阅链接；在页面核对差异后由用户提交草稿，再分别确认模块与批准整体架构。语义变化使受影响模块需复核，无变化的依赖保留局部确认；整体批准必须重新对应当前完整版本。讨论、预算、布局和缩放不改变架构版本。模型不完整或存在未表达结构时，不能将其当作可直接实施的完整合同。
+
+网页中的“讨论与继续”可保存问题、查看答复、记录下一步和比较预算。保存问题后回到 Codex 让它继续处理；页面不会自行运行 AI。再次运行 `rtlarch open --workspace /path/to/my-rtl` 打开当前成果；加 `--json` 仅返回链接，不弹浏览器。
 
 完整命令、候选与交接约定见 [提案指南](.agents/skills/rtl-architect/references/proposal-guide.md)。
 
@@ -104,18 +108,18 @@ rtlarch bundle /path/to/new-review-package --workspace /path/to/my-rtl --json
 
 ## 更新与版本核对
 
-在线窗口左上角显示页面构建版本，页脚“版本信息”显示后台服务版本。候选创建版本属于历史记录，不会随工具升级重写。早期 0.9.1 发布曾把左上角标签写死为 0.8；修复后直接读取包版本。
-
-更新源码后需要重新构建页面：
+在线窗口显示包版本，并核对页面/服务构建身份。源码和构建按内容摘要匹配，避免同版本号的旧页面悄悄混用。候选创建版本是历史记录，不会随升级重写。
 
 ```bash
 git pull --ff-only
 source ./env.sh
 npm ci
-npm run build
+rtlarch open --workspace /path/to/my-rtl --restart
 ```
 
-若服务由 `npm start` 在终端前台运行，先在原终端按 Ctrl+C 停止，再重新启动。CLI 管理的服务使用本仓库入口对指定工作区运行 `./bin/rtlarch stop --workspace /path/to/my-rtl --json`，再运行 `./bin/rtlarch start --workspace /path/to/my-rtl --json`，打开新返回的 `reviewUrl`。已有项目不要重新初始化。
+open 缺少或发现过期页面时自动运行构建，不安装或升级依赖；构建日志在工作区 `.rtlarch/build.log`。旧服务存在时必须显式 `--restart`，且只影响这一工作区。重启前保存页面未发送的输入。浏览器无法自动打开时复制返回的 reviewUrl；诊断使用 doctor。
+
+已有模型、布局、候选与 IR 1/2/3 保持可读，工作记录按需新建；没有依赖指纹的旧模块确认，在下一次模型变更后需重新确认。已有项目不要重新初始化。
 
 `bundle` 生成的离线 HTML 是固定快照，更新源码不会改变旧文件；需要导出到新目录。仓库根目录的 `index.html` 是构建入口，应通过服务访问，不能作为离线成果直接双击打开。
 
@@ -126,9 +130,10 @@ source ./env.sh
 npm run build
 npm run check
 npm run rtl:test
+npm run check:workflow
 ```
 
-RTL 自检只验证 `examples/tiny-stream` fixture。能力边界与本次验证见 [VALIDATION.md](VALIDATION.md)，实现职责见 [架构说明](docs/ARCHITECTURE.md)。
+`rtl:test` 验证 tiny-stream；`check:workflow` 从 rtl-intake 原始 RTL 展开、导入、讨论、续接、仿真并检查来源变化。所有提交/确认都在临时工作区。能力边界与本次验证见 [VALIDATION.md](VALIDATION.md)，实现职责见 [架构说明](docs/ARCHITECTURE.md)。
 
 | 目录 | 内容 |
 |---|---|

@@ -25,7 +25,7 @@
 
 连接端点加 `index:123` 或 `index:"all"`；数组端点必须明确索引。all→all 按双方各自索引升序配对且长度一致，普通 source→all 为广播。all→普通 target 会展开检查多驱动，不代表自动归约。每元素位宽、参数、必连位域和驱动冲突均参与验证。固定 slice 保留整数边界；规律性切片优先用下述 sliceMapping，不逐元素复制。
 
-框图保留一个 ×N 节点，点开后可输入任意索引，查看真实路径、有效参数与接口；主图默认显示数组汇总；“检查此索引连线”按同一连接规则解析该元素的具体切片和广播，并高亮路径。退出检查恢复汇总，不平铺全部元素。`context --module pe --index 123 --workspace <项目> --json` 返回该元素解析参数/连接。改变共享定义影响全部元素，`set_instance_parameter` 只覆盖一个元素。两者都要 preview/commit；语义变化使旧确认失效。
+框图保留一个 ×N 节点，点开后可输入任意索引，查看真实路径、有效参数与接口；主图默认显示数组汇总；“检查此索引连线”按同一连接规则解析该元素的具体切片和广播，并高亮路径。退出检查恢复汇总，不平铺全部元素。`context --module pe --index 123 --workspace <项目> --json` 返回该元素解析参数/连接。改变共享定义影响全部元素，`set_instance_parameter` 只覆盖一个元素。两者都要 preview/commit；按模块和依赖范围重新复核，整体批准对应完整当前版本。
 
 coverage.representedInstances 等于普通模块个数（含顶层）加数组各元素数量；节点数与展开数分开。展开数来自真实工程核对，不能把模型求和当源码 elaboration。数组建模不自动清空 partial、origin 或 unsupportedStructures。
 

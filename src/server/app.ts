@@ -4,7 +4,6 @@ import { ZodError } from 'zod';
 import { randomUUID } from 'node:crypto';
 import { protocolVersion, type ServiceInfo } from '../core/service';
 import { toolVersion, ToolError, workspaceIdentity } from '../workspace/environment';
-import { architectureContext } from '../workspace/context';
 import { EngineError } from '../core/engine';
 import { ApiError, Repository } from '../workspace/repository';
 export function createApp(repository: Repository, apiPort = 4317, webPort = 5173, staticDirectory?: string, options: { service?: ServiceInfo; shutdown?: () => void } = {}) {
@@ -29,15 +28,14 @@ export function createApp(repository: Repository, apiPort = 4317, webPort = 5173
   app.post('/api/runtime/stop', (_req, res) => { if (!options.shutdown) throw new ApiError(422, '此服务不支持远程停止', 'STOP_UNSUPPORTED'); res.json({ stopping: true }); options.shutdown(); });
   app.get('/api/context', async (req, res) => {
     const id = typeof req.query.moduleId === 'string' ? req.query.moduleId : undefined;
-    const snapshot = await repository.getModel();
-    if (id && !snapshot.model.modules.some(m => m.id === id)) throw new ApiError(422, '模块不存在', 'MODULE_NOT_FOUND');
     const index=req.query.index===undefined?undefined:Number(req.query.index);
-    const array=snapshot.model.modules.find(m=>m.id===id)?.instances;
-    if(index!==undefined&&(!Number.isSafeInteger(index)||!array||index<array.from||index>array.to))throw new ApiError(422,'数组索引超出范围','INSTANCE_INDEX');
-    res.json(architectureContext(snapshot,id,index));
+    res.json(await repository.getContext(id,index));
   });
   app.use(express.json({ limit: requestLimitBytes, strict: true }));
   if (!staticDirectory) app.get('/', (_req, res) => res.redirect(302, `http://127.0.0.1:${webPort}/`));
+  app.get('/api/workbench',async(_req,res)=>res.json(await repository.getWorkbench()));
+  app.post('/api/workbench',async(req,res)=>res.json(await repository.updateWorkbench(req.body)));
+  app.get('/api/resume',async(_req,res)=>res.json(await repository.getResume()));
   app.get('/api/model', async (_req, res) => res.json(await repository.getModel()));
   app.get('/api/spec', async (req, res) => res.json(await repository.getSpec(typeof req.query.moduleId === 'string' ? req.query.moduleId : undefined)));
   app.get('/api/handoff/:moduleId', async (req, res) => res.json(await repository.handoff(String(req.params.moduleId))));

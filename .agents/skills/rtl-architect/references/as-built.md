@@ -1,6 +1,6 @@
 # 从已有 RTL 建立现状模型
 
-适用于审阅、文档化和后续优化前的现状还原。工具读取结构化 IR，不自动解析 Verilog/SystemVerilog。提取方法应匹配工程规模与语法；针对某项目的正则或静态脚本必须说明支持范围，不能称为通用解析器。
+适用于审阅、文档化和后续优化前的现状还原。工具支持一个有明确范围的 Yosys 展开 JSON 适配器，不直接解析任意 Verilog/SystemVerilog。提取方法应匹配工程规模与语法；针对某项目的正则或静态脚本必须说明支持范围，不能称为通用解析器。
 
 ## 先明确构建对象
 
@@ -33,6 +33,14 @@ rtlarch inventory proposals/inputs.json --workspace <项目> --json
 输出每个显式文件的 SHA-256 和 sourceDigest，不要求已有模型，不创建目录，不启动服务。保存输出到 proposals/evidence 下作为附件。缺失输入时退出非零，仍输出缺失条目与摘要；存在全部文件也不意味着编译或仿真通过。compileInputsAvailable / simulationInputsAvailable 仅说明对应清单依赖齐全，不是 compileReady/simulationReady 或运行通过。它不会自动展开 filelist、发现 include/$readmemh、验证 HDL 表达式或执行测试。
 
 sourceDigest 纳入配置、文件顺序、文件内容和缺失状态。生成候选前后重跑并比较，变化则重新读取相关源码并生成新提案。模型中的摘要和 evidence 是声明，运行时不会自动读取工程文件或检测源码变化；旧候选不会自动更新。
+
+## 优先复用可核对的展开结构
+
+工程可以生成 Yosys `write_json` 时，保留层级、实际顶层和配置，使用 `import-yosys <manifest.json> <新目录>`；适配器不执行展开命令。manifest 含 schemaVersion=1、top、netlist、files 和 configuration，文件相对 workspace，完整例子见 [原始 RTL 样例](../../../../examples/rtl-intake/README.md)。将宏/include/参数配置等依赖也纳入 files。先核对工程语法、库和展开支持，不能为了适配器改变原 RTL。
+
+输出 model.json 与 import.json：实例 ID 按路径稳定生成，来源 src 属性映射到实例，单向端口与可确定的位级连线/常量进入 IR。原位序 offset/upto/signed 和 RTL 名留在映射。双向、未知/多驱动、内部运算、存储行为及周期仍列缺口；参数二进制保留字符串，不猜 signed。最多 4096 个层级实例，整个输出仍为 as_built / partial，未核对展开输入与源码对应关系前不能消除该未知。
+
+更新源码先 `import-impact <import.json>`：显示直接映射到的重核范围，缺映射、展开 JSON 或未映射配置变化则保守扩大。重新展开到新 JSON、导入新目录、compare/draft 新旧候选；影响报告不是语义等价证明。不要自动把旧职责、组、合同覆盖到新端口上；按稳定 ID 对齐后复核受影响部分。没有展开器时继续受限静态还原，明确未核对范围。
 
 ## 还原事实及参数环境
 

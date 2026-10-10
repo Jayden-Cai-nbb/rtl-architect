@@ -1,4 +1,4 @@
-# RTL Architect 0.10.0
+# RTL Architect 1.0.0
 
 - 先读 README。当前任务是可在本机多个 RTL 项目复用的 skill 与审阅工具，用户指令优先于设计文档。
 - `bin/rtlarch` 是统一入口，保留调用方 cwd；技能脚本通过真实路径定位它。机器调用使用 --json；npm run arch 只是兼容入口。
@@ -6,7 +6,7 @@
 - 代码位于 src/core、workspace、cli、server、web。核心语义逻辑不依赖 React/HTTP/文件系统；客户端和 UI 共用同一模型与规则，不维护另一套展示语义。
 - architecture/model.json 是唯一语义权威。语义修改经 engine 与 API preview/commit，原子写入并检查 base/candidate hash。layout 独立保存。
 - 提案登记只写 proposals/registered，不提交或批准。链接必须检查 workspaceId，旧提案不能自动重放；冲突保留原提案并明确重新预览。
-- 逐模块确认与整体批准相互独立；任何语义变化使旧确认失效，布局变化不影响确认。handoff 要求当前批准且导出合同内容匹配，不是 RTL 一致性证明。
+- 逐模块确认与整体批准相互独立；语义变化按模块及依赖指纹标记受影响确认，旧记录无指纹时保守失效；整体批准仍绑定完整模型，布局变化不影响确认。handoff 要求当前批准且导出合同内容匹配，不是 RTL 一致性证明。
 - Agent 为目标项目做架构或按合同实现 RTL 时使用 .agents/skills/rtl-architect/SKILL.md。不得自动批准真实工作区，不直接写权威模型、确认文件或 generated。
 - 每个工作区只允许一个写入服务，不同项目可同时运行。发现服务需核对工作区、协议、工具版本，不能仅信任端口。临时状态存 .rtlarch，运行中不支持外部直接改架构文件。
 - 安装通过符号链接引用本工具目录，不覆盖目标项目已有配置或 AGENTS.md。不要把个人安装目录、node_modules 或 .runtime 复制进用户 RTL 项目。
@@ -49,3 +49,9 @@
 - 0.9 框图按 .agents/skills/rtl-architect/references/diagram.md：紧凑模块、四侧端口、实际语义线名；分叉点仅按真实来源端点集合判定。离线页增强同一 SVG，不维护第二套模型或路由。文字与交叉的浏览器审阅不能由几何数字代替。
 
 - 0.10 默认阅读布局只依据声明的 kind/组和真实连接，不从名字推导用途或折叠。无声明端口保留原名和独立身份；自动布局不写 reading 或语义。完整保存位置与显式 reading 优先，空/不完整位置使用共同 arrangeScope。scripts/check-auto-reading.ts 覆盖通用拓扑与误分类负例。
+
+- 1.0 工作记录保存于 architecture/workbench.json，通过服务及 workbenchHash 写入，与 IR/布局/批准分开。Agent 答复不代替用户标记解决；预算修订另存新 ID。
+- import-yosys 仅导入明确层级/端口/位连接，保留未知、原位序、来源映射及 partial；import-impact 不是语义等价证明。不要自动执行不明构建脚本。
+- verify 只通过显式 CLI 清单执行 argv，在独立 evidence/runs 目录保存输入/报告摘要、版本与结果；不自动批准或修改 IR 验证声明。网页不执行任意命令。
+- open 核对源代码、页面构建和服务身份；缺/旧 dist 可构建，不自动安装依赖；旧服务只在显式 --restart 时重启指定工作区。维护源代码后先 build 再运行服务检查。
+- 新增 check:milestone 检查边界；check:workflow 从原始通用 RTL 运行 Yosys/Verilator 并测量完整用户路径。继续禁止真实项目自动提交、确认及历史日志冒充本次结果。

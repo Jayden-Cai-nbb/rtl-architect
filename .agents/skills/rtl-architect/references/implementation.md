@@ -32,3 +32,5 @@
 记录用于追溯，不能证明 RTL 一致性。未执行的验证必须明确记为 not_run。当前 tiny-stream 的 RTL 自检只覆盖其固定 fixture；packet-pipeline 只有架构示例，不能引用前者的仿真结果证明后者。
 
 已有项目先核对 TB 版本和 ROM/golden 等输入。缺依赖标 blocked，不用编译成功替代仿真；不擅造验证资产。handoff 的 sourceDigest/evidence 是该版本的来源声明，运行 `rtlarch evidence` 核对已声明来源，并按 [证据与交付](delivery.md) 为本次验证绑定实际输入和结果。检查不能自动发现未声明依赖，预期源码变更仍需解释；关键结果保存在 clean 不删除的目录。
+
+需要持久保存方案预算、执行本次验证或继续前一会话时，按 [持续工作](workbench.md) 使用 study / verify / resume。计算下界、当前输入下的实际运行、历史日志和人工批准分别报告。

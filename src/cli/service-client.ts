@@ -1,3 +1,4 @@
+import {sourceBuildId} from '../workspace/build';
 import {serializeRequest} from '../core/transport';
 import { open, mkdir, readFile } from 'node:fs/promises';
 import { join } from 'node:path';
@@ -23,6 +24,7 @@ async function probe(workspace: string, base: string, allowOlderVersion = false)
   localUrl(info.apiUrl); localUrl(info.webUrl);
   if (info.apiUrl !== localUrl(base)) throw new ToolError('SERVICE_METADATA_INVALID', '服务报告的 API 地址与实际连接地址不一致。');
   if (!allowOlderVersion && info.toolVersion !== toolVersion) throw new ToolError('VERSION_MISMATCH', `服务为 ${info.toolVersion}，工具为 ${toolVersion}；请运行 rtlarch stop 后重试。`);
+  if(!allowOlderVersion && info.buildId && info.buildId!==await sourceBuildId())throw new ToolError('SERVICE_BUILD_MISMATCH','该工作区服务对应旧源码；保存未发送的页面输入后，运行 rtlarch open --restart。');
   return info;
 }
 export async function discoverService(workspace: string, options: ClientOptions = {}) {

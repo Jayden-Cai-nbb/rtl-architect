@@ -1,0 +1,7 @@
+{
+  "schemaVersion": 1,
+  "top": "stream_top",
+  "netlist": "netlist.json",
+  "files": ["rtl/stage.sv", "rtl/stream_top.sv"],
+  "configuration": "stage BIAS=1 then BIAS=2, 8-bit unsigned modular addition, unflattened hierarchy"
+}

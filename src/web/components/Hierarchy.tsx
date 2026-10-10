@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { Model } from '../../core/schema';
 import type { Snapshot } from '../../core/api';
 import { childrenOf } from '../../core/engine';
 export function Hierarchy({ model, scope, selected, reviews, select, enter }: { model: Model; scope: string; selected?: string; reviews: Snapshot['moduleReviews']; select: (id: string) => void; enter: (id: string) => void }) {
   const [search, setSearch] = useState(''), [collapsed, setCollapsed] = useState<string[]>(()=>model.modules.filter(m=>m.kind==='subsystem'&&m.id!==model.design.top).map(m=>m.id));
+  useEffect(()=>{const ancestors=new Set<string>();let node=model.modules.find(m=>m.id===selected);while(node?.parent){ancestors.add(node.parent);node=model.modules.find(m=>m.id===node!.parent);}ancestors.add(scope);setCollapsed(ids=>ids.filter(id=>!ancestors.has(id)));},[scope,selected]);
   function matches(id: string): boolean { const m = model.modules.find(m => m.id === id)!; return `${m.id} ${m.name}`.toLowerCase().includes(search.toLowerCase()) || childrenOf(model, id).some(child => matches(child.id)); }
   const render = (id: string, depth = 0) => {
     const m = model.modules.find(m => m.id === id)!, children = childrenOf(model, id), isClosed = collapsed.includes(id) && !search;

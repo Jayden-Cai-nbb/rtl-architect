@@ -74,6 +74,8 @@ required 未连接、合同描述缺失、未决问题或需求缺少验收条�
 ## 常用命令
 
 ```bash
+rtlarch open --workspace <项目> --json
+rtlarch resume --workspace <项目> --json
 rtlarch context
 rtlarch schema
 rtlarch draft proposals/design.json proposals/proposal.json --workspace <项目> --open --json
@@ -82,7 +84,7 @@ rtlarch spec processing
 rtlarch handoff compute
 ```
 
-`draft` 不覆盖已存在提案文件。输入/显式输出路径相对于当前 shell 目录；未指定输出时写到目标工作区 proposals/。除 schema / compare 外，命令应指定 --workspace；--json 返回单个 JSON 对象。spec 是当前 IR 的确定性派生；候选 spec 可在 GUI 候选框图的 Spec 面板查看。带 --open 的 draft 或 propose 会登记提案并返回 reviewUrl；链接打开候选框图，仍需人提交和确认。登记文件位于 proposals/registered/，不要手改。
+`draft` 不覆盖已存在提案文件。输入/显式输出路径相对于当前 shell 目录；未指定输出时写到目标工作区 proposals/。除 schema / compare / study 外，命令应指定 --workspace；--json 返回单个 JSON 对象。spec 是当前 IR 的确定性派生；候选 spec 可在 GUI 候选框图的 Spec 面板查看。带 --open 的 draft 或 propose 会登记提案并返回 reviewUrl；链接打开候选框图，仍需人提交和确认。登记文件位于 proposals/registered/，不要手改。
 
 
 ## 错误与恢复
@@ -109,3 +111,5 @@ rtlarch handoff compute
 路径参数相对调用 cwd。成果入口、四种状态与证据保存方法见 [证据与交付](delivery.md)。只读导出成功不代表来源全部新鲜或实现验收通过。
 
 宿主命令执行、工具环境、工作区服务与 RTL 检查是不同故障层。命令尚未开始或长时间无返回时，不宣称已运行，也不盲目并行重试；按环境权限流程处理，保留已完成步骤，继续读取已有文件或离线说明。不能修改系统挂载来绕开宿主故障。
+
+持续讨论、预算、显式验证与按影响复核见 [持续工作](workbench.md)。讨论动作必须走服务，以 workbenchHash 并发控制；不是修改 Model 的新命令。

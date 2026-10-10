@@ -78,7 +78,7 @@ export const readingLayoutSchema = z.strictObject({
 });
 export const scopeLayoutSchema = z.strictObject({ positions: z.record(z.string().min(1), position), reading: readingLayoutSchema.optional(), viewport: z.strictObject({ x: z.number().finite(), y: z.number().finite(), zoom: z.number().finite().positive() }) });
 export const layoutSchema = z.strictObject({ schemaVersion: z.literal(1), scopes: z.record(idSchema, scopeLayoutSchema) });
-export const reviewSchema = z.strictObject({ modelHash: hashSchema, reviewer: z.string().trim().min(1), reviewedAt: z.iso.datetime() });
+export const reviewSchema = z.strictObject({ modelHash: hashSchema, reviewer: z.string().trim().min(1), reviewedAt: z.iso.datetime(), scopeHash: hashSchema.optional(), scopeParts: z.record(z.string(), hashSchema).optional() });
 export const moduleReviewsSchema = z.strictObject({ schemaVersion: z.literal(1), modules: z.record(idSchema, reviewSchema) });
 export type ModuleReviews = z.infer<typeof moduleReviewsSchema>;
 export type Specification = z.infer<typeof specificationSchema>;

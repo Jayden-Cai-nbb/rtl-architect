@@ -95,10 +95,10 @@ try {
     await assert.rejects(repo.putLayout({ baseLayoutHash: old.layoutHash, layout: old.layout }), { status: 409 });
     assert.equal((await repo.getModel()).modelHash, current.modelHash); assert.equal((await repo.getModel()).reviewStatus, 'APPROVED');
   });
-  await check('semantic edits invalidate all module reviews and block old handoff', async () => {
+  await check('semantic edits invalidate dependent module reviews, retain unrelated reviews and block old handoff', async () => {
     const current = await repo.getModel(), proposal = { baseHash: current.modelHash, reason: 'edit spec', commands: [{ op: 'set_parameter', moduleId: 'buffer', key: 'DEPTH', value: 32 }] };
     const preview = await repo.preview(proposal); await repo.commit({ proposal, candidateHash: preview.candidateHash });
-    const next = await repo.getModel(); assert.equal(next.reviewStatus, 'STALE'); assert.ok(next.moduleReviews.every(r => r.status === 'STALE'));
+    const next = await repo.getModel(); assert.equal(next.reviewStatus, 'STALE'); assert.deepEqual(next.moduleReviews.filter(r=>r.status==='STALE').map(r=>r.moduleId).sort(),['buffer','compute','packet_top','processing','scheduler']); assert.deepEqual(next.moduleReviews.filter(r=>r.status==='APPROVED').map(r=>r.moduleId).sort(),['egress','ingress']); assert.ok(next.moduleReviews.filter(r=>r.status==='APPROVED').every(r=>r.retained));
     await assert.rejects(repo.handoff('buffer'), { status: 422 });
   });
   await check('incomplete requirements and unconnected ports block review but permit drafts', async () => {

@@ -18,12 +18,14 @@ export function useArchitecture() {
   useEffect(() => {
     let cancelled = false;
     void (async () => {
-      await load();
+      const loaded=await load();
+      const focusTarget=(model:Snapshot['model'])=>{const params=new URLSearchParams(window.location.search),id=params.get('module'),m=model.modules.find(m=>m.id===id);if(m){setSelected(m.id);setScope(m.kind==='subsystem'?m.id:m.parent??model.design.top);}const edge=params.get('connection');if(edge&&model.connections.some(l=>l.id===edge))setSelectedEdge(edge);};
+      focusTarget(loaded.model);
       const id = new URLSearchParams(window.location.search).get('proposal');
       if (!id || cancelled) return;
       const saved = await api<RegisteredProposal>(`proposals/${encodeURIComponent(id)}`);
       if (cancelled) return;
-      setLinkedProposal(saved);
+      setLinkedProposal(saved);if(saved.preview)focusTarget(saved.preview.candidate);
       if (saved.state === 'APPLIED') { setMessage('当前模型已与该提案的候选版本一致；人工确认状态仍需单独检查。'); return; }
       setProposal(saved.proposal);
       if (saved.state === 'READY' && saved.preview) { setPreview(saved.preview); setMessage('已加载 AI 提案，可探索候选框图；尚未写入模型或批准。'); }
