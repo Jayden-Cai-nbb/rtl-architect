@@ -1,0 +1,63 @@
+---
+name: rtl-architect
+description: 与用户共同设计、评审或还原 RTL 架构，推演时序、存储和资源取舍，生成同源框图、Spec 与实现合同；适用于架构设计、学习讲解、现状还原及批准后的实现交接。
+---
+
+# 先让人和 AI 看懂电路，再写 RTL
+
+读者应能沿图说清：输入如何成为输出、谁保存状态、在哪个时钟沿推进、阻塞和复位时发生什么。还要解释为什么选择这个结构。Spec、主图和实现合同使用同一份模型；不要把填满模型或生成更多文档当作完成。
+
+默认边设计边解释关键取舍。按 [共同设计](references/collaboration.md) 在影响结构的选择处邀请用户参与；日常实现选择自主推进。沿一笔真实事务讲解，学习深度随用户意愿调整，不设置强制问卷、测验或逐步审批。
+
+## 按任务选入口
+
+| 本次任务 | 读取与交付 |
+|---|---|
+| 根据已有 RTL 还原 | [现状还原](references/as-built.md)：读实际 RTL、TB、构建配置，记录事实、推断、未知及来源，保留 partial |
+| 框图拥挤、线名难读 | [框图阅读设计](references/diagram.md)：先整理显示布局，做顶层与复杂子层样稿，再在正常窗口沿事务检查；不为美观修改语义 |
+| 旧图职责或名称含糊 | [阅读整理](references/reading-refinement.md)：保留原候选，逐层整理职责与有依据的业务组，生成独立候选并检查受保护字段 |
+| 新设计或架构修改 | [设计方法](references/design.md)：先明确边界、状态归属、验收和取舍，再形成模块与连接 |
+| 理解、补齐或评审时序 | [时序方法](references/timing.md)：先统一采样与计拍，再追踪寄存、存储、反馈、流控、复位及约束 |
+| 看当前成果、核验证据或离线交付 | [证据与交付](references/delivery.md)：检查来源新鲜度，导出当前版本入口，分别说明批准、实现和器件验收 |
+| 按批准设计写 RTL | [实现交接](references/implementation.md)：取得当前 handoff，按时序合同实现、逐级验证 |
+
+任务可组合，但阅读整理不能夹带行为修正。涉及状态或时钟的还原、设计和实现，都按时序方法核对；纯组合范围说明输入稳定与输出有效条件，不强造周期。
+
+写模型前读 [提案约定](references/proposal-guide.md)，查询实际 `schema model` / `schema proposal`。数组、切片、局部驱动、参数传递按需读 [进阶建模](references/advanced-modeling.md)。文字遵循 [表达方式](references/writing.md)，图遵循 [框图阅读设计](references/diagram.md)。
+
+## 从目标项目和真实基线开始
+
+读取项目 AGENTS.md、README 和任务相关文件。使用本 skill 的 `scripts/rtlarch`，按实际 SKILL.md 路径定位脚本；保留调用项目 cwd，传 `--workspace <项目绝对路径>`，机器调用加 `--json` 并检查退出码及 ok/error.code。不要复制工具环境或硬编码旧项目路径。
+
+运行 doctor、context，核对 workspaceRoot、当前模型 hash 和确认状态。局部任务用 `context --module <id>`，数组元素加 `--index <索引>`。仅在任务需要且尚无模型时 init，随后核对默认时钟/复位。服务不可用时用 `context --offline` 继续读取，不据此声称链接可用。恢复上下文、实现交接或正式交付时运行 `evidence` 批量核对来源；摘要变化只表示字节变化，须分析设计影响，不能静默刷新 hash。
+
+明确区分当前已保存模型、待修订候选和比较用候选。修订未提交候选用完整 Model 再 draft；其提交基线仍是当前工作区，不能把旧候选 hash 当作 baseHash。
+
+## 先建立设计与时序解释
+
+按任务规模先形成短设计说明：目标与边界、状态所有者、关键事务、周期/存储预算、最值得比较的方案、验收办法。已有 RTL 或局部修改只补受影响部分。按 [设计方法](references/design.md) 提前推演 RAM 端口、反馈路径、数值精度和信用容量；必要时做小规模验证，避免整机写完才发现结构不可行。
+
+用 specification.summary 描述一条完整处理过程，contract.responsibility 说明各模块接收什么、负责什么、交给谁。实例 ID 和 RTL 标识保留追溯，name 用简短职责名。划分理由放 decisions，来源及导入进度留在 provenance；没有理由的证据就写待确认。
+
+对关键事务至少区分**接收沿、结果可见时刻、输出被接收沿**。沿真实寄存器/存储边界追踪数据、valid、地址、标签和使能；说明空载延迟、可接受新事务的间隔以及阻塞条件。正常、阻塞、复位的时序需要时逐拍展开，不能用一个“延迟N拍”概括所有情景。
+
+关键结论写回现有 contract、requirements、findings 与证据字段。周期表/时序图是带 modelHash、来源与场景前提的派生说明，不成为第二份权威合同；当前工具没有原生波形、自动周期推导或 STA 约束模型。未知不填成确定零拍，多时钟或无法表达的结构继续列出缺口。
+
+## 预览并交给人决定
+
+候选文件放目标项目 proposals/。新模型用 schemaVersion 3；已有 RTL 用 origin=as_built，未完整导入保留 partial。事实、推断和未知分别记录，不能为图整齐删反馈、补假复位或把数据藏到配置组。
+
+```bash
+rtlarch draft proposals/design.json --workspace <项目> --open --json
+# 对已保存模型做增量修改：
+rtlarch preview proposals/change.json --workspace <项目> --json
+rtlarch propose proposals/change.json --workspace <项目> --open --json
+# A/B 比较只读，不改变提交基线：
+rtlarch compare proposals/before.json proposals/after.json --json
+```
+
+检查差异、校验和请求大小；数组规则不要展开成超限请求。运行页面时核对顶层、一个复杂子层级、反馈和非首数组元素：业务组可追到原端口，选择与退出保留上下文，缺线明确属于模型缺口。再选一条事务对照时序解释，检查控制与数据是否同一拍、同一对象。没有运行页面或验证就明确未执行。
+
+draft/propose 只登记并返回 reviewUrl。AI 不直接写权威 model、确认文件或 generated，不自动提交、确认或批准真实项目。人查看差异后保存草稿，再逐模块确认和整体批准；文字、分组或证据变更也会改变模型版本，使旧确认失效。as_built、partial、未表达结构与未核对覆盖不能靠改标记绕过交接。
+
+交付先给链接、主要变化和待决定问题，再说明本轮验证及未执行项。较大设计用 `bundle <新目录>` 生成离线入口，保留完整连接索引及图形质量记录。批准、来源新鲜度、实现验证、器件验收分别报告；无关联证据就是未核验。完整 hash、版本、命令与来源留在可追溯记录中。冲突时保留提案，读取新基线后解释差异再预览；恢复命令见提案约定。仅维护工具时不迁移或重启其他真实项目。

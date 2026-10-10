@@ -1,0 +1,4 @@
+interface:
+  display_name: "RTL Architect"
+  short_description: "共同设计 RTL 架构，推演时序与资源取舍，沿真实事务学习并审阅同源框图"
+  default_prompt: "使用 $rtl-architect 依据当前项目证据设计或评审架构，推荐并解释关键取舍，沿一笔事务讲清状态与时序，交付可审阅候选和易读的成果入口。"

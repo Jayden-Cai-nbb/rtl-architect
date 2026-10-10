@@ -1,0 +1,16 @@
+node_modules/
+.runtime/
+.venv/
+.tools/
+dist/
+.rtlarch/
+architecture/
+generated/
+proposals/
+test-results/
+playwright-report/
+__pycache__/
+*.pyc
+.env
+.env.*
+!.env.example

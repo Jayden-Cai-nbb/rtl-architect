@@ -1,0 +1,5 @@
+{
+  "baseHash": "REPLACE_WITH_MODEL_HASH_FROM_STATUS",
+  "reason": "将 FIFO 缓冲深度从 4 改为 8",
+  "commands": [{ "op": "set_parameter", "moduleId": "fifo", "key": "DEPTH", "value": 8 }]
+}

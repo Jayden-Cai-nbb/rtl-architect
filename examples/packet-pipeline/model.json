@@ -1,0 +1,525 @@
+{
+  "schemaVersion": 2,
+  "design": {
+    "id": "packet_pipeline",
+    "name": "128-bit Packet Pipeline",
+    "top": "packet_top"
+  },
+  "clocks": [
+    {
+      "id": "clk",
+      "edge": "rising"
+    }
+  ],
+  "resets": [
+    {
+      "id": "rst_n",
+      "clock": "clk",
+      "activeLevel": "low",
+      "synchronous": true
+    }
+  ],
+  "modules": [
+    {
+      "id": "packet_top",
+      "name": "Packet Pipeline",
+      "parent": null,
+      "kind": "subsystem",
+      "rtlModule": "packet_top",
+      "clock": "clk",
+      "reset": "rst_n",
+      "parameters": {
+        "DATA_W": 128
+      },
+      "interfaces": [
+        {
+          "id": "rx",
+          "role": "consumer",
+          "protocol": "rv",
+          "width": {
+            "param": "DATA_W"
+          },
+          "required": true
+        },
+        {
+          "id": "tx",
+          "role": "producer",
+          "protocol": "rv",
+          "width": {
+            "param": "DATA_W"
+          },
+          "required": true
+        }
+      ],
+      "contract": {
+        "responsibility": "接收 128 位无符号载荷，通过入口、处理子系统与出口保持原始数据和事务顺序。",
+        "latencyMinCycles": 5,
+        "latencyCondition": "初始为空、无复位且下游持续 ready；不声明持续背压下的有限最大延迟。稳定运行目标每周期 1 个事务。",
+        "backpressure": "valid && !ready 时保持 valid 和 data，直到握手或复位。只有 valid && ready 才接收事务。",
+        "resetBehavior": "clk 上升沿采样同步低有效 rst_n；清空在途事务；复位期间 valid/ready 输出为 0。",
+        "invariants": [
+          "保持接收顺序，不重复或丢失未被复位取消的事务。",
+          "任何时刻内部占用计数不超过配置的容量。"
+        ],
+        "verificationPlan": [
+          "按输入输出握手维护 scoreboard，覆盖连续流量与随机背压。",
+          "覆盖在途复位、满/空边界、输入暂停与输出恢复。"
+        ],
+        "openQuestions": []
+      }
+    },
+    {
+      "id": "ingress",
+      "name": "Ingress",
+      "parent": "packet_top",
+      "kind": "controller",
+      "rtlModule": "ingress",
+      "clock": "clk",
+      "reset": "rst_n",
+      "parameters": {
+        "DATA_W": 128
+      },
+      "interfaces": [
+        {
+          "id": "in",
+          "role": "consumer",
+          "protocol": "rv",
+          "width": {
+            "param": "DATA_W"
+          },
+          "required": true
+        },
+        {
+          "id": "out",
+          "role": "producer",
+          "protocol": "rv",
+          "width": {
+            "param": "DATA_W"
+          },
+          "required": true
+        },
+        {
+          "id": "enable",
+          "role": "consumer",
+          "protocol": "signal",
+          "width": 1,
+          "required": false
+        }
+      ],
+      "contract": {
+        "responsibility": "登记输入握手并将载荷送入处理子系统。可选 enable 控制仅决定是否接受新事务，不丢弃已接收数据。",
+        "latencyMinCycles": 1,
+        "latencyCondition": "初始为空、无复位且下游持续 ready；不声明持续背压下的有限最大延迟。稳定运行目标每周期 1 个事务。",
+        "backpressure": "valid && !ready 时保持 valid 和 data，直到握手或复位。只有 valid && ready 才接收事务。",
+        "resetBehavior": "clk 上升沿采样同步低有效 rst_n；清空在途事务；复位期间 valid/ready 输出为 0。",
+        "invariants": [
+          "保持接收顺序，不重复或丢失未被复位取消的事务。",
+          "任何时刻内部占用计数不超过配置的容量。"
+        ],
+        "verificationPlan": [
+          "按输入输出握手维护 scoreboard，覆盖连续流量与随机背压。",
+          "覆盖在途复位、满/空边界、输入暂停与输出恢复。"
+        ],
+        "openQuestions": []
+      }
+    },
+    {
+      "id": "processing",
+      "name": "Processing",
+      "parent": "packet_top",
+      "kind": "subsystem",
+      "rtlModule": "processing",
+      "clock": "clk",
+      "reset": "rst_n",
+      "parameters": {
+        "DATA_W": 128
+      },
+      "interfaces": [
+        {
+          "id": "request",
+          "role": "consumer",
+          "protocol": "rv",
+          "width": {
+            "param": "DATA_W"
+          },
+          "required": true
+        },
+        {
+          "id": "response",
+          "role": "producer",
+          "protocol": "rv",
+          "width": {
+            "param": "DATA_W"
+          },
+          "required": true
+        }
+      ],
+      "contract": {
+        "responsibility": "依次执行调度、缓冲和计算透传，内部结构可逐层探索。",
+        "latencyMinCycles": 3,
+        "latencyCondition": "初始为空、无复位且下游持续 ready；不声明持续背压下的有限最大延迟。稳定运行目标每周期 1 个事务。",
+        "backpressure": "valid && !ready 时保持 valid 和 data，直到握手或复位。只有 valid && ready 才接收事务。",
+        "resetBehavior": "clk 上升沿采样同步低有效 rst_n；清空在途事务；复位期间 valid/ready 输出为 0。",
+        "invariants": [
+          "保持接收顺序，不重复或丢失未被复位取消的事务。",
+          "任何时刻内部占用计数不超过配置的容量。"
+        ],
+        "verificationPlan": [
+          "按输入输出握手维护 scoreboard，覆盖连续流量与随机背压。",
+          "覆盖在途复位、满/空边界、输入暂停与输出恢复。"
+        ],
+        "openQuestions": []
+      }
+    },
+    {
+      "id": "egress",
+      "name": "Egress",
+      "parent": "packet_top",
+      "kind": "module",
+      "rtlModule": "egress",
+      "clock": "clk",
+      "reset": "rst_n",
+      "parameters": {
+        "DATA_W": 128
+      },
+      "interfaces": [
+        {
+          "id": "in",
+          "role": "consumer",
+          "protocol": "rv",
+          "width": {
+            "param": "DATA_W"
+          },
+          "required": true
+        },
+        {
+          "id": "out",
+          "role": "producer",
+          "protocol": "rv",
+          "width": {
+            "param": "DATA_W"
+          },
+          "required": true
+        }
+      ],
+      "contract": {
+        "responsibility": "通过单级弹性寄存器输出载荷，隔离上游内部状态。",
+        "latencyMinCycles": 1,
+        "latencyCondition": "初始为空、无复位且下游持续 ready；不声明持续背压下的有限最大延迟。稳定运行目标每周期 1 个事务。",
+        "backpressure": "valid && !ready 时保持 valid 和 data，直到握手或复位。只有 valid && ready 才接收事务。",
+        "resetBehavior": "clk 上升沿采样同步低有效 rst_n；清空在途事务；复位期间 valid/ready 输出为 0。",
+        "invariants": [
+          "保持接收顺序，不重复或丢失未被复位取消的事务。",
+          "任何时刻内部占用计数不超过配置的容量。"
+        ],
+        "verificationPlan": [
+          "按输入输出握手维护 scoreboard，覆盖连续流量与随机背压。",
+          "覆盖在途复位、满/空边界、输入暂停与输出恢复。"
+        ],
+        "openQuestions": []
+      }
+    },
+    {
+      "id": "scheduler",
+      "name": "Scheduler",
+      "parent": "processing",
+      "kind": "controller",
+      "rtlModule": "scheduler",
+      "clock": "clk",
+      "reset": "rst_n",
+      "parameters": {
+        "DATA_W": 128,
+        "POLICY": "in_order"
+      },
+      "interfaces": [
+        {
+          "id": "in",
+          "role": "consumer",
+          "protocol": "rv",
+          "width": {
+            "param": "DATA_W"
+          },
+          "required": true
+        },
+        {
+          "id": "out",
+          "role": "producer",
+          "protocol": "rv",
+          "width": {
+            "param": "DATA_W"
+          },
+          "required": true
+        }
+      ],
+      "contract": {
+        "responsibility": "按到达顺序调度输入事务，当前仅一个请求入口，策略参数保留说明用途。",
+        "latencyMinCycles": 1,
+        "latencyCondition": "初始为空、无复位且下游持续 ready；不声明持续背压下的有限最大延迟。稳定运行目标每周期 1 个事务。",
+        "backpressure": "valid && !ready 时保持 valid 和 data，直到握手或复位。只有 valid && ready 才接收事务。",
+        "resetBehavior": "clk 上升沿采样同步低有效 rst_n；清空在途事务；复位期间 valid/ready 输出为 0。",
+        "invariants": [
+          "保持接收顺序，不重复或丢失未被复位取消的事务。",
+          "任何时刻内部占用计数不超过配置的容量。"
+        ],
+        "verificationPlan": [
+          "按输入输出握手维护 scoreboard，覆盖连续流量与随机背压。",
+          "覆盖在途复位、满/空边界、输入暂停与输出恢复。"
+        ],
+        "openQuestions": []
+      }
+    },
+    {
+      "id": "buffer",
+      "name": "Packet Buffer",
+      "parent": "processing",
+      "kind": "memory",
+      "rtlModule": "buffer",
+      "clock": "clk",
+      "reset": "rst_n",
+      "parameters": {
+        "DATA_W": 128,
+        "DEPTH": 16
+      },
+      "interfaces": [
+        {
+          "id": "in",
+          "role": "consumer",
+          "protocol": "rv",
+          "width": {
+            "param": "DATA_W"
+          },
+          "required": true
+        },
+        {
+          "id": "out",
+          "role": "producer",
+          "protocol": "rv",
+          "width": {
+            "param": "DATA_W"
+          },
+          "required": true
+        }
+      ],
+      "contract": {
+        "responsibility": "缓冲最多 DEPTH 个载荷，满时停止接收；本示例使用寄存器数组存储。若改用 RAM，应先修改合同并重新审阅。",
+        "latencyMinCycles": 1,
+        "latencyCondition": "初始为空、无复位且下游持续 ready；不声明持续背压下的有限最大延迟。稳定运行目标每周期 1 个事务。",
+        "backpressure": "valid && !ready 时保持 valid 和 data，直到握手或复位。只有 valid && ready 才接收事务。",
+        "resetBehavior": "clk 上升沿采样同步低有效 rst_n；清空在途事务；复位期间 valid/ready 输出为 0。",
+        "invariants": [
+          "保持接收顺序，不重复或丢失未被复位取消的事务。",
+          "任何时刻内部占用计数不超过配置的容量。"
+        ],
+        "verificationPlan": [
+          "按输入输出握手维护 scoreboard，覆盖连续流量与随机背压。",
+          "覆盖在途复位、满/空边界、输入暂停与输出恢复。"
+        ],
+        "openQuestions": []
+      }
+    },
+    {
+      "id": "compute",
+      "name": "Compute",
+      "parent": "processing",
+      "kind": "compute",
+      "rtlModule": "compute",
+      "clock": "clk",
+      "reset": "rst_n",
+      "parameters": {
+        "DATA_W": 128,
+        "MODE": "passthrough",
+        "ENABLE_CHECK": true
+      },
+      "interfaces": [
+        {
+          "id": "in",
+          "role": "consumer",
+          "protocol": "rv",
+          "width": {
+            "param": "DATA_W"
+          },
+          "required": true
+        },
+        {
+          "id": "out",
+          "role": "producer",
+          "protocol": "rv",
+          "width": {
+            "param": "DATA_W"
+          },
+          "required": true
+        }
+      ],
+      "contract": {
+        "responsibility": "当前 MODE=passthrough，输出数据与输入完全一致。ENABLE_CHECK 为实现时的可选断言开关。",
+        "latencyMinCycles": 1,
+        "latencyCondition": "初始为空、无复位且下游持续 ready；不声明持续背压下的有限最大延迟。稳定运行目标每周期 1 个事务。",
+        "backpressure": "valid && !ready 时保持 valid 和 data，直到握手或复位。只有 valid && ready 才接收事务。",
+        "resetBehavior": "clk 上升沿采样同步低有效 rst_n；清空在途事务；复位期间 valid/ready 输出为 0。",
+        "invariants": [
+          "保持接收顺序，不重复或丢失未被复位取消的事务。",
+          "任何时刻内部占用计数不超过配置的容量。"
+        ],
+        "verificationPlan": [
+          "按输入输出握手维护 scoreboard，覆盖连续流量与随机背压。",
+          "覆盖在途复位、满/空边界、输入暂停与输出恢复。"
+        ],
+        "openQuestions": []
+      }
+    }
+  ],
+  "connections": [
+    {
+      "id": "top_rx",
+      "scope": "packet_top",
+      "from": {
+        "moduleId": "packet_top",
+        "interfaceId": "rx"
+      },
+      "to": {
+        "moduleId": "ingress",
+        "interfaceId": "in"
+      }
+    },
+    {
+      "id": "ingress_processing",
+      "scope": "packet_top",
+      "from": {
+        "moduleId": "ingress",
+        "interfaceId": "out"
+      },
+      "to": {
+        "moduleId": "processing",
+        "interfaceId": "request"
+      }
+    },
+    {
+      "id": "processing_egress",
+      "scope": "packet_top",
+      "from": {
+        "moduleId": "processing",
+        "interfaceId": "response"
+      },
+      "to": {
+        "moduleId": "egress",
+        "interfaceId": "in"
+      }
+    },
+    {
+      "id": "top_tx",
+      "scope": "packet_top",
+      "from": {
+        "moduleId": "egress",
+        "interfaceId": "out"
+      },
+      "to": {
+        "moduleId": "packet_top",
+        "interfaceId": "tx"
+      }
+    },
+    {
+      "id": "processing_in",
+      "scope": "processing",
+      "from": {
+        "moduleId": "processing",
+        "interfaceId": "request"
+      },
+      "to": {
+        "moduleId": "scheduler",
+        "interfaceId": "in"
+      }
+    },
+    {
+      "id": "schedule_buffer",
+      "scope": "processing",
+      "from": {
+        "moduleId": "scheduler",
+        "interfaceId": "out"
+      },
+      "to": {
+        "moduleId": "buffer",
+        "interfaceId": "in"
+      }
+    },
+    {
+      "id": "buffer_compute",
+      "scope": "processing",
+      "from": {
+        "moduleId": "buffer",
+        "interfaceId": "out"
+      },
+      "to": {
+        "moduleId": "compute",
+        "interfaceId": "in"
+      }
+    },
+    {
+      "id": "processing_out",
+      "scope": "processing",
+      "from": {
+        "moduleId": "compute",
+        "interfaceId": "out"
+      },
+      "to": {
+        "moduleId": "processing",
+        "interfaceId": "response"
+      }
+    }
+  ],
+  "specification": {
+    "summary": "一个用于展示 AI 架构提案、分层框图和逐模块审阅的 128 位数据流处理流水线。当前计算语义为透传，无对应行为 RTL；实现前须完成审阅并导出合同。",
+    "requirements": [
+      {
+        "id": "REQ_ORDER",
+        "text": "所有未被复位取消的输入按序输出，载荷不变。",
+        "moduleIds": [
+          "packet_top",
+          "processing",
+          "compute"
+        ],
+        "acceptance": "随机背压和连续输入下，scoreboard 无丢失、重复或数据错误。"
+      },
+      {
+        "id": "REQ_BUFFER",
+        "text": "缓冲容量最多 16 个载荷，满时不接收新事务。",
+        "moduleIds": [
+          "buffer"
+        ],
+        "acceptance": "覆盖满/空、指针回绕、同时读写，占用数始终在 0..16。"
+      },
+      {
+        "id": "REQ_RESET",
+        "text": "复位采样边沿取消全部在途事务。",
+        "moduleIds": [
+          "packet_top",
+          "ingress",
+          "scheduler",
+          "buffer",
+          "compute",
+          "egress"
+        ],
+        "acceptance": "在多个占用水平下复位，输出不得出现复位前遗留事务。"
+      }
+    ],
+    "decisions": [
+      {
+        "id": "DEC_RV",
+        "text": "以逻辑 rv 通道表示数据流",
+        "moduleIds": [
+          "packet_top",
+          "processing"
+        ],
+        "rationale": "顶层只画一个连接点；接口详情说明 data/valid 正向、ready 反向。避免单独展示信号线造成拥挤。"
+      },
+      {
+        "id": "DEC_HIERARCHY",
+        "text": "将处理路径划为独立子系统",
+        "moduleIds": [
+          "processing"
+        ],
+        "rationale": "顶层审阅职责和连接，进入子系统后再确认调度、缓冲与计算细节。"
+      }
+    ],
+    "openQuestions": []
+  }
+}

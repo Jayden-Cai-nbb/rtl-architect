@@ -1,0 +1,13 @@
+import type {Model,Issue} from '../../core/schema';
+import {decisionItems,excerpt,issueSummary,kindLabel} from '../reading';
+export function DesignBrief({model,scope,issues,select,enter,openModule,openSpec,openProblems}:{model:Model;scope:string;issues:Issue[];select:(id:string)=>void;enter:(id:string)=>void;openModule:()=>void;openSpec:()=>void;openProblems:()=>void}){
+ const owner=model.modules.find(m=>m.id===scope)!,children=model.modules.filter(m=>m.parent===scope),questions=decisionItems(model,scope),summary=issueSummary(issues);
+ const decisions=model.specification?.decisions.filter(d=>d.moduleIds.includes(scope))??[];
+ return <aside className="inspector design-brief" data-testid="design-brief"><div className="inspector-title"><span className="eyebrow">理解设计</span><h2>这个设计做什么</h2><p className="prose">{excerpt(scope===model.design.top?model.specification?.summary||owner.contract.responsibility:owner.contract.responsibility,260)||'先补充设计目标、输入与输出。'}</p><div className="actions"><button onClick={openSpec}>阅读设计说明 ↗</button><button className="text-button" onClick={openModule}>本层行为与参数</button></div></div><div className="inspector-scroll">
+ <details className="brief-decision"><summary>沿一笔事务理解本层</summary><p>先选择输入连接，找到接收数据的模块；再沿输出追踪状态保存和处理结果。点击连线可核对真实端点。</p><p>留意：谁保持被阻塞的数据？谁决定完成或取消？图中位置不表示拍数，周期约定请看“本层行为与参数”。</p><button onClick={openModule}>查看时序与不变量</button></details>
+ <h3>模块分工</h3>{children.map(m=><article className="brief-module" key={m.id}><button className="brief-select" onClick={()=>select(m.id)}><span><strong>{m.name}</strong><small>{kindLabel[m.kind]??m.kind}{m.instances?` · ${m.instances.to-m.instances.from+1} 个实例`:''}</small></span><p>{excerpt(m.contract.responsibility,76)||'职责待补充'}</p></button>{m.kind==='subsystem'&&<button className="brief-enter" onClick={()=>enter(m.id)}>进入内部 →</button>}</article>)}
+ {decisions.length>0&&<><h3>为什么这样划分</h3>{decisions.map(d=><details className="brief-decision" key={d.id}><summary>{excerpt(d.text,130)}</summary><p className="prose">{d.rationale||'尚未记录取舍依据。'}</p></details>)}</>}
+ <h3>需要你判断</h3>{questions.length?<><p className="hint">当前层级有 {questions.length} 项待确认。</p>{questions.slice(0,3).map((q,i)=><p className="decision-question" key={i}>{excerpt(q,160)}</p>)}{questions.length>3&&<button className="text-button" onClick={openSpec}>查看全部待确认问题 →</button>}</>:<p className="hint">当前层级没有记录待定问题。</p>}
+ {(summary.errors>0||summary.gaps>0)&&<button className="coverage-link" onClick={openProblems}>{summary.errors?`${summary.errors} 项结构错误`:'连线还没有导入完整'} · 查看检查</button>}
+ <p className="hint">点击模块看行为，点击连线看信号。双击子系统进入内部。</p></div></aside>;
+}

@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+set -euo pipefail
+rtlarch_entry="$(readlink -f -- "${BASH_SOURCE[0]}")"
+rtlarch_root="$(cd -- "$(dirname -- "$rtlarch_entry")/.." && pwd)"
+rtlarch_node="$rtlarch_root/.runtime/bin/node"
+if [[ ! -x "$rtlarch_node" ]]; then rtlarch_node="$(command -v node || true)"; fi
+if [[ -z "$rtlarch_node" || ! -f "$rtlarch_root/node_modules/tsx/dist/loader.mjs" ]]; then
+  echo '{"ok":false,"error":{"code":"RUNTIME_MISSING","message":"工具环境缺少 Node 或依赖，请在工具目录恢复环境并 npm ci。"}}'
+  exit 1
+fi
+exec "$rtlarch_node" --import "$rtlarch_root/node_modules/tsx/dist/loader.mjs" "$rtlarch_root/src/cli/main.ts" "$@"

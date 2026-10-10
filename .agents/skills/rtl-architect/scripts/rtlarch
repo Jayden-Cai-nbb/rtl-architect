@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+set -euo pipefail
+rtlarch_skill_entry="$(readlink -f -- "${BASH_SOURCE[0]}")"
+exec "$(dirname -- "$rtlarch_skill_entry")/../../../../bin/rtlarch" "$@"

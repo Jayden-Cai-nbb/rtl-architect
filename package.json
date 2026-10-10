@@ -1,0 +1,54 @@
+{
+  "name": "rtl-architect",
+  "version": "0.9.1",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": "24.18.1",
+    "npm": "11.6.2"
+  },
+  "scripts": {
+    "start": "node --import tsx scripts/start-demo.ts",
+    "init:demo": "node --import tsx scripts/init-demo.ts",
+    "dev": "node --import tsx scripts/dev.ts",
+    "typecheck": "tsc --noEmit",
+    "build": "npm run typecheck && vite build",
+    "rtl:test": "node --import tsx scripts/rtl-test.ts",
+    "arch": "node --import tsx scripts/cli.ts",
+    "server": "node --import tsx src/server/index.ts",
+    "check": "npm run check:core && npm run check:skill && npm run check:import && npm run check:explore && npm run check:review && npm run check:reading && npm run check:reading-skill && npm run check:delivery",
+    "check:core": "node --import tsx scripts/check.ts",
+    "check:skill": "node --import tsx scripts/check-skill.ts",
+    "setup": "bash bin/rtlarch install --user --json",
+    "check:import": "node --import tsx scripts/check-import.ts",
+    "check:explore": "node --import tsx scripts/check-explore.ts",
+    "check:review": "node --import tsx scripts/check-review.ts",
+    "check:reading": "node --import tsx scripts/check-reading.ts",
+    "check:reading-skill": "python3 scripts/check-reading-skill.py",
+    "check:delivery": "node --import tsx scripts/check-delivery.ts"
+  },
+  "dependencies": {
+    "@xyflow/react": "12.10.0",
+    "elkjs": "0.11.0",
+    "express": "5.1.0",
+    "react": "19.2.0",
+    "react-dom": "19.2.0",
+    "zod": "4.1.12"
+  },
+  "devDependencies": {
+    "@types/express": "5.0.5",
+    "@types/node": "24.9.1",
+    "@types/react": "19.2.2",
+    "@types/react-dom": "19.2.2",
+    "@vitejs/plugin-react": "5.0.4",
+    "tsx": "4.20.6",
+    "typescript": "5.9.3",
+    "vite": "7.1.12"
+  },
+  "packageManager": "npm@11.6.2",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Jayden-Cai-nbb/rtl-architect.git"
+  }
+}
