@@ -27,6 +27,9 @@ export function scopeDiagram(model:Model,scope:string,options:DiagramOptions={},
   }return [...groups.values()];
  };
  const racks=(['consumer','producer'] as const).map(role=>({role,groups:groupRows(role)}));
+ // The input/output channels need room for their names too, independent of module spacing.
+ const boundaryGap=Math.max(160,...inspection.stored.filter(l=>[l.from,l.to].some(e=>e.moduleId===scope&&!e.local)).map(l=>[...linkGroup(model,l).label].reduce((w,c)=>w+(c.charCodeAt(0)>255?16:8.5),0)+64));
+ const frameMargin=174+boundaryGap;
  const nodeId=(e:Endpoint)=>e.local?`local:${scope}:${e.interfaceId}`:e.moduleId===scope?`rack:${scope}:${owner.interfaces.find(p=>p.id===e.interfaceId)?.role}`:e.moduleId;
  // Port anchors come from all stored links, so selection or folding never moves them.
  const anchorGroups=new Map<string,{in:Set<string>;out:Set<string>}>();
@@ -68,7 +71,7 @@ export function scopeDiagram(model:Model,scope:string,options:DiagramOptions={},
  }
  const bottom=Math.max(maxY,...nodes.map(n=>n.position.y+(n.height??baseHeight)));
  const rackHeight=Math.max(0,...racks.map(r=>r.groups.length*44+64));
- const frame={id:`frame:${scope}`,position:{x:minX-230,y:minY-108},width:maxX-minX+460,height:Math.max(bottom-minY+186,rackHeight+148)};
+ const frame={id:`frame:${scope}`,position:{x:minX-frameMargin,y:minY-108},width:maxX-minX+frameMargin*2,height:Math.max(bottom-minY+186,rackHeight+148)};
  nodes.unshift({id:frame.id,type:'rtlModule',position:frame.position,width:frame.width,height:frame.height,draggable:false,selectable:false,zIndex:-1,data:{label:owner.name,moduleId:scope,kind:'frame',boundary:true,geometry:{width:frame.width,height:frame.height,ports:[]},ports:[],summary:`${children.length} 个模块${localSignals.length?` · ${localSignals.length} 项内部逻辑`:''}`}});
  for(const {role,groups} of racks){
   if(!groups.length)continue;
@@ -116,8 +119,8 @@ export function scopeDiagram(model:Model,scope:string,options:DiagramOptions={},
  }
  orientPorts(nodes,model,scope,inspection.stored,nodeId);
  const contentRight=Math.max(maxX,...nodes.filter(n=>!n.data.boundary).map(n=>n.position.x+n.data.geometry.width));
- const outputRack=nodes.find(n=>n.id===`rack:${scope}:producer`);if(outputRack)outputRack.position.x=contentRight+56;
- frame.width=Math.max(frame.width,contentRight-minX+460);nodes[0].width=frame.width;nodes[0].data.geometry.width=frame.width;
+ const outputRack=nodes.find(n=>n.id===`rack:${scope}:producer`);if(outputRack)outputRack.position.x=contentRight+boundaryGap;
+ frame.width=Math.max(frame.width,contentRight-minX+frameMargin*2);nodes[0].width=frame.width;nodes[0].data.geometry.width=frame.width;
  if(!options.measureOnly){routeEdges(nodes,edges);annotateWireNets(edges);}
  // Return paths belong inside the scope too.
  const points=edges.flatMap(e=>(e.data?.routePoints as {x:number;y:number}[]|undefined)??[]);

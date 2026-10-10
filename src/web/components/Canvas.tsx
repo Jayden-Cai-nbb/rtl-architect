@@ -34,7 +34,7 @@ export function Canvas({view,changeView,selectLocal,model,modelHash,scope,select
   }catch(e){report(String(e))}finally{setLayingOut(false)}
  }
  useEffect(()=>{
-  if(view.positions){if(view.viewport)void flow.setViewport(view.viewport)}else void arrange();
+  if(view.positions&&model.modules.filter(m=>m.parent===scope).every(m=>view.positions?.[m.id])){if(view.viewport)void flow.setViewport(view.viewport)}else void arrange();
   // The provider is mounted per scope. Inspection changes never arrange or fit the graph.
  },[]);
  useEffect(()=>{if(view.restoreTick&&view.viewport)void flow.setViewport(view.viewport)},[view.restoreTick]);

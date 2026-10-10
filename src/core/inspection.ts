@@ -7,11 +7,14 @@ export type GroupInfo={id:string;label:string;category:string;description:string
 export function interfaceGroup(model:Model,endpoint:Endpoint):GroupInfo{
  const module=model.modules.find(m=>m.id===endpoint.moduleId),port=module?.interfaces.find(p=>p.id===endpoint.interfaceId);
  const declared=module?.interfaceGroups?.find(g=>g.id===port?.group);
- return declared?{...declared,auxiliary:['clock_reset','configuration'].includes(declared.category)}:{id:port?.group??port?.protocol??'local',label:port?.group??(port?.protocol==='rv'?'数据通道':endpoint.local?'内部驱动':'信号'),category:'other',description:'显示分组；未声明业务含义',auxiliary:false};
+ if(declared)return {...declared,auxiliary:['clock_reset','configuration'].includes(declared.category)};
+ // Unclassified ports keep their identity. A shared protocol/name does not establish a bus.
+ const local=endpoint.local?model.localSignals?.find(s=>s.scope===endpoint.moduleId&&s.id===endpoint.interfaceId):undefined;
+ return {id:port?.group??`${endpoint.local?'local':'port'}:${endpoint.moduleId}:${endpoint.interfaceId}`,label:port?.group??local?.name??endpoint.interfaceId,category:'other',description:'原始接口；未声明业务分组',auxiliary:false};
 }
 export function linkGroup(model:Model,link:Link){
  const a=interfaceGroup(model,link.from),b=interfaceGroup(model,link.to);
- return a.category!=='other'?a:b.category!=='other'?b:a.id!=='signal'?a:b;
+ return a.category!=='other'?a:b.category!=='other'?b:a.id.startsWith('port:')&&!b.id.startsWith('port:')?b:a;
 }
 const endpointMatches=(a:Endpoint,b:Endpoint)=>a.moduleId===b.moduleId&&a.interfaceId===b.interfaceId&&!!a.local===!!b.local&&(a.index===undefined||b.index===undefined||a.index==='all'||b.index==='all'||a.index===b.index);
 export function inspectScope(model:Model,scope:string,inspection?:Inspection){

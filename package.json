@@ -1,6 +1,6 @@
 {
   "name": "rtl-architect",
-  "version": "0.9.1",
+  "version": "0.10.0",
   "private": true,
   "type": "module",
   "engines": {
@@ -16,7 +16,7 @@
     "rtl:test": "node --import tsx scripts/rtl-test.ts",
     "arch": "node --import tsx scripts/cli.ts",
     "server": "node --import tsx src/server/index.ts",
-    "check": "npm run check:core && npm run check:skill && npm run check:import && npm run check:explore && npm run check:review && npm run check:reading && npm run check:reading-skill && npm run check:delivery",
+    "check": "npm run check:core && npm run check:skill && npm run check:import && npm run check:explore && npm run check:review && npm run check:reading && npm run check:reading-skill && npm run check:delivery && npm run check:auto-reading",
     "check:core": "node --import tsx scripts/check.ts",
     "check:skill": "node --import tsx scripts/check-skill.ts",
     "setup": "bash bin/rtlarch install --user --json",
@@ -25,7 +25,8 @@
     "check:review": "node --import tsx scripts/check-review.ts",
     "check:reading": "node --import tsx scripts/check-reading.ts",
     "check:reading-skill": "python3 scripts/check-reading-skill.py",
-    "check:delivery": "node --import tsx scripts/check-delivery.ts"
+    "check:delivery": "node --import tsx scripts/check-delivery.ts",
+    "check:auto-reading": "node --import tsx scripts/check-auto-reading.ts"
   },
   "dependencies": {
     "@xyflow/react": "12.10.0",

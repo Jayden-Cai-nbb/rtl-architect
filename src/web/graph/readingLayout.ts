@@ -1,13 +1,13 @@
 import type { Model, ScopeLayout } from '../../core/schema';
 import { scopeDiagram, type Positions } from './scopeDiagram';
 import {wireSpacing} from './ports';
-import { elkLayout } from './elkLayout';
+import { autoReadingLayout } from './autoReadingLayout';
 
-/** Display-only constraints from an explicitly reviewed reading plan; no names imply semantics. */
+/** Shared online/offline layout: explicit plans take priority over automatic display hints. */
 export async function arrangeScope(model: Model, scope: string, hash: string, reading?: ScopeLayout['reading']): Promise<Positions> {
   const diagram = scopeDiagram(model, scope,{measureOnly:true}), nodes = diagram.nodes.filter(n => !n.data.boundary && !n.data.localId);
   const ids = new Set(nodes.map(n => n.id));
-  if (!reading) return nodes.length ? elkLayout(nodes, diagram.edges.filter(e => ids.has(e.source) && ids.has(e.target))) : {};
+  if (!reading) return autoReadingLayout(model, scope);
   if (reading.modelHash !== hash) throw new Error('阅读布局对应旧模型；核对展示约束并更新布局版本后重试。');
   const assigned = [...reading.mainPath, ...reading.control, ...reading.adjacent.map(p => p.node)];
   if (new Set(assigned).size !== assigned.length || assigned.some(id => !ids.has(id)) || reading.adjacent.some(p => !reading.mainPath.includes(p.anchor))) throw new Error('阅读布局含重复/非直属模块，或邻接锚点不在主行。');

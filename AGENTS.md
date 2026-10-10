@@ -1,4 +1,4 @@
-# RTL Architect 0.9.1
+# RTL Architect 0.10.0
 
 - 先读 README。当前任务是可在本机多个 RTL 项目复用的 skill 与审阅工具，用户指令优先于设计文档。
 - `bin/rtlarch` 是统一入口，保留调用方 cwd；技能脚本通过真实路径定位它。机器调用使用 --json；npm run arch 只是兼容入口。
@@ -47,3 +47,5 @@
 - scripts/check-delivery.ts 覆盖证据新鲜度、路径保护、离线交付、版本和布局负例。能力与共创方法按 skill 的 design/collaboration/delivery 按需读取；不把 Turbo 参数、数值语义和工具命令写死进共享实现。
 
 - 0.9 框图按 .agents/skills/rtl-architect/references/diagram.md：紧凑模块、四侧端口、实际语义线名；分叉点仅按真实来源端点集合判定。离线页增强同一 SVG，不维护第二套模型或路由。文字与交叉的浏览器审阅不能由几何数字代替。
+
+- 0.10 默认阅读布局只依据声明的 kind/组和真实连接，不从名字推导用途或折叠。无声明端口保留原名和独立身份；自动布局不写 reading 或语义。完整保存位置与显式 reading 优先，空/不完整位置使用共同 arrangeScope。scripts/check-auto-reading.ts 覆盖通用拓扑与误分类负例。
