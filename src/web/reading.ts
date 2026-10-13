@@ -1,6 +1,6 @@
 import type {Model,Module,Issue} from '../core/schema';
 
-export const kindLabel:Record<string,string>={subsystem:'子系统',module:'模块',memory:'存储',compute:'运算',controller:'控制',fifo:'队列',add_const:'运算',local:'内部逻辑'};
+export const kindLabel:Record<string,string>={subsystem:'子系统',module:'模块',memory:'存储',compute:'运算',controller:'控制',fifo:'队列',add_const:'运算',state:'寄存状态',local:'内部逻辑'};
 // Only remove known audit wrappers in a short preview. The original is always
 // available in the inspector / Spec and never rewritten into the model.
 export function excerpt(text:string,length=110){

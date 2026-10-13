@@ -8,6 +8,7 @@ export function ModuleNode({id,data,selected}:NodeProps<RtlNode>){
  const details=useStore(state=>state.transform[2]>=portDetailZoom);
  const side={WEST:Position.Left,EAST:Position.Right,NORTH:Position.Top,SOUTH:Position.Bottom};
  const update=useUpdateNodeInternals();useEffect(()=>{update(id)},[id,data.geometry,update]);
+ if(data.kind==='region')return <div className="reading-region" style={{width:data.geometry.width,height:data.geometry.height}}><strong>{data.label}</strong><small>{data.summary}</small></div>;
  if(data.kind==='frame')return <div className="scope-frame" style={{width:data.geometry.width,height:data.geometry.height}}><strong title={data.label}>{data.label}</strong><small>{data.summary}</small></div>;
  if(data.kind==='rack')return <div className="boundary-rack" data-testid={`boundary-${data.role}`} style={{width:data.geometry.width,height:data.geometry.height}}><strong>{data.label}</strong>{(data.groups as {id:string;label:string;count:number}[]).map(group=><button type="button" className="boundary-group nodrag" data-group-id={group.id} key={group.id} title={`${group.label} · ${group.count} 个端口`} onClick={event=>{event.stopPropagation();(data.inspectGroup as ((id:string)=>void)|undefined)?.(group.id)}}><span>{group.label}</span><small>{group.count>1?group.count:''}</small></button>)}{data.geometry.ports.map(p=><Handle key={p.id} id={p.id} type={p.direction} position={side[p.side]} style={{left:p.x,top:p.y,transform:'translate(-50%,-50%)'}}/>)}</div>;
  const inspected=data.inspectedPorts as string[]|undefined;

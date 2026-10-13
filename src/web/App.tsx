@@ -27,7 +27,7 @@ export default function App() {
   const a = useArchitecture();
   const [panel,setPanel]=useState<Panel|null>(new URLSearchParams(window.location.search).get('panel')==='work'?'work':null),[candidate,setCandidate]=useState(false),[showInspector,setShowInspector]=useState(true),[showTree,setShowTree]=useState(true);
   const [detailScope,setDetailScope]=useState<string>();
-  const [localSignal, setLocalSignal] = useState<string>();
+  const [localSignal, setLocalSignal] = useState<{id:string;endpoints?:Endpoint[]}>();
   const [views,setViews]=useState<Record<string,ScopeView>>({});
   const [evidence, setEvidence] = useState<string>();
   const [add,setAdd]=useState(false),[newId,setNewId]=useState(''),[kind,setKind]=useState<Module['kind']>('module'),[editSpec,setEditSpec]=useState(false);
@@ -36,27 +36,26 @@ export default function App() {
   const model=readOnly?a.preview!.candidate:a.snapshot?.model;
   if(!a.snapshot||!a.layouts||!model)return <main className="loading-screen"><div className="brand-mark">R</div><h1>RTL Architect</h1><p role="status">{a.message||'加载当前设计…'}</p><button onClick={()=>void a.reload()}>重试连接</button></main>;
   const scope=model.modules.some(m=>m.id===a.scope&&m.kind==='subsystem')?a.scope:model.design.top;
-  const viewKey=`${readOnly?'candidate':'current'}:${scope}`,view={...(readOnly?{}:a.layouts.layout.scopes[scope]??{}),...views[viewKey]};
+  const hash=readOnly?a.preview!.candidateHash:a.snapshot.modelHash;
+  const viewKey=`${hash}:${scope}`,view={...(readOnly?{}:a.layouts.layout.scopes[scope]??{}),...views[viewKey]};
   const changeView=(patch:Partial<ScopeView>)=>{
     if(Object.hasOwn(patch,'inspection')&&!patch.inspection&&view.checkpoint?.selectedId)a.select(view.checkpoint.selectedId);
     setViews(current=>{const previous=current[viewKey]??view;let next={...previous,...patch};
       if(Object.hasOwn(patch,'inspection')){
         if(!patch.inspection&&previous.checkpoint)next={...previous,...previous.checkpoint,checkpoint:undefined,restoreTick:(previous.restoreTick??0)+1};
-        else if(patch.inspection?.kind==='module')next.checkpoint=undefined;
         else if(patch.inspection&&!previous.checkpoint)next.checkpoint={inspection:previous.inspection,viewport:patch.viewport??previous.viewport,selectedId:previous.selectedId,showAuxiliary:previous.showAuxiliary,showLocals:previous.showLocals};
       }return {...current,[viewKey]:next};
-    });if(patch.inspection&&patch.inspection.kind!=='module')setPanel('connections');else if(Object.hasOwn(patch,'inspection'))setPanel(null);
+    });if(patch.inspection)setPanel('connections');else if(Object.hasOwn(patch,'inspection'))setPanel(null);
   };
   const selected=model.modules.find(m=>m.id===a.selected)??model.modules.find(m=>m.id===scope)!;
-  const hash=readOnly?a.preview!.candidateHash:a.snapshot.modelHash;
   const inspectedArray=view.inspection?.kind==='array'?{moduleId:view.inspection.id,index:view.inspection.index}:view.inspection?.kind==='connection'?view.inspection.index:undefined;
   const issues=readOnly?a.preview!.issues:a.extraIssues.length?a.extraIssues:a.snapshot.issues;
   const reviews=readOnly?[]:a.snapshot.moduleReviews;
   const confirmed=a.snapshot.moduleReviews.filter(r=>r.status==='APPROVED').length;
   const changePanel=(next:Panel)=>setPanel(p=>p===next?null:next);
-  const select=(id:string,selectionScope=scope)=>{if(a.select(id)){setViews(current=>{const key=`${readOnly?'candidate':'current'}:${selectionScope}`;return {...current,[key]:{...current[key],selectedId:id,inspection:{kind:'module',id},checkpoint:undefined}}});setPanel(null);setShowInspector(true)}};
-  const enter=(id:string)=>{if(!a.enter(id))return false;const next=views[`${readOnly?'candidate':'current'}:${id}`];if(next?.selectedId)a.select(next.selectedId);if(panel==='connections')setPanel(next?.inspection&&next.inspection.kind!=='module'?'connections':null);return true};
-  const navigateEndpoint=(endpoint:Endpoint)=>{const owner=model.modules.find(m=>m.id===scope)!;const next=endpoint.moduleId===scope?owner.parent:endpoint.moduleId;if(!next||!enter(next))return;const ids=model.connections.filter(l=>l.scope===next&&[l.from,l.to].some(e=>e.moduleId===endpoint.moduleId&&e.interfaceId===endpoint.interfaceId)).map(l=>l.id);setViews(current=>({...current,[`${readOnly?'candidate':'current'}:${next}`]:{...current[`${readOnly?'candidate':'current'}:${next}`],inspection:{kind:'connection',ids}}}));setPanel('connections')};
+  const select=(id:string,selectionScope=scope)=>{if(a.select(id)){setViews(current=>{const key=`${hash}:${selectionScope}`;return {...current,[key]:{...current[key],selectedId:id}}});setPanel(null);setShowInspector(true)}};
+  const enter=(id:string)=>{if(!a.enter(id))return false;const next=views[`${hash}:${id}`];if(next?.selectedId)a.select(next.selectedId);if(panel==='connections')setPanel(next?.inspection&&next.inspection.kind!=='module'?'connections':null);return true};
+  const navigateEndpoint=(endpoint:Endpoint)=>{const owner=model.modules.find(m=>m.id===scope)!;const next=endpoint.moduleId===scope?owner.parent:endpoint.moduleId;if(!next||!enter(next))return;const ids=model.connections.filter(l=>l.scope===next&&[l.from,l.to].some(e=>e.moduleId===endpoint.moduleId&&e.interfaceId===endpoint.interfaceId)).map(l=>l.id);setViews(current=>({...current,[`${hash}:${next}`]:{...current[`${hash}:${next}`],inspection:{kind:'connection',ids}}}));setPanel('connections')};
   const focus=(id:string)=>{const m=model.modules.find(m=>m.id===id);if(!m)return;const parent=m.parent??m.id;if(parent!==scope){if(!enter(parent))return;}select(id,parent)};
   const navigateReview=(id:string)=>{const m=model.modules.find(m=>m.id===id);if(!m)return;const target=m.kind==='subsystem'?id:m.parent??model.design.top;if(!enter(target))return;select(id,target);setPanel('review')};
   const propose=(commands:Command[],reason:string)=>{setCandidate(false);a.propose(commands,reason);setPanel('changes')};
@@ -66,7 +65,7 @@ export default function App() {
     <div className={`workbench ${showTree?'':'hide-tree'} ${showInspector||panel==='connections'?'':'hide-inspector'}`}>
       {showTree&&<Hierarchy key={hash} model={model} scope={scope} selected={selected.id} reviews={reviews} select={focus} enter={enter} />}
       <main className="graph-workspace"><div className="graph-topbar"><button className="icon-button" title="切换层级树" aria-label="切换层级树" onClick={()=>setShowTree(!showTree)}>☷</button><Breadcrumbs model={model} scope={scope} enter={enter}/><div className="actions"><button disabled={readOnly} onClick={()=>setAdd(true)}>＋ 模块</button><button className="quiet" aria-label="切换属性面板" onClick={()=>setShowInspector(!showInspector)}>详情 {showInspector?'›':'‹'}</button></div></div>
-        <ReactFlowProvider key={`${scope}-${a.reloadVersion}-${readOnly?'candidate':'current'}`}><Canvas view={view} changeView={changeView} selectLocal={setLocalSignal} model={model} modelHash={hash} scope={scope} layout={readOnly?undefined:a.layouts.layout.scopes[scope]} layoutHash={a.layouts.layoutHash} selectedId={selected.id} reviews={reviews} readOnly={readOnly} select={select} enter={enter} connect={(link,replace)=>{if(a.connect(link,replace))setPanel('changes')}} selectEdge={ids=>{a.setSelectedEdge(ids[0]);setPanel('connections')}} saveLayout={a.saveLayout} report={a.setMessage}/></ReactFlowProvider>
+        <ReactFlowProvider key={`${hash}-${scope}-${a.reloadVersion}`}><Canvas view={view} changeView={changeView} selectLocal={(id,endpoints)=>setLocalSignal({id,endpoints})} model={model} modelHash={hash} scope={scope} layout={readOnly?undefined:a.layouts.layout.scopes[scope]} layoutHash={a.layouts.layoutHash} selectedId={selected.id} reviews={reviews} readOnly={readOnly} select={select} enter={enter} connect={(link,replace)=>{if(a.connect(link,replace))setPanel('changes')}} selectEdge={ids=>{a.setSelectedEdge(ids[0]);setPanel('connections')}} saveLayout={a.saveLayout} report={a.setMessage}/></ReactFlowProvider>
         {model.modules.every(m=>m.parent!==scope)&&model.modules.find(m=>m.id===scope)?.interfaces.length===0&&<div className="canvas-empty"><h3>这个层级等待定义</h3><p>添加模块与接口，或导入 AI 架构提案。</p></div>}
       </main>
       {panel==='connections'?<aside className="inspector signal-sidebar"><div className="inspector-title"><h2>连接详情</h2></div><div className="inspector-scroll">{selected.instances&&<ArrayExplorer key={selected.id} model={model} module={selected} readOnly={readOnly} preview={propose} dirty={a.markDirty} initialIndex={inspectedArray?.moduleId===selected.id?inspectedArray.index:undefined} inspect={index=>changeView({inspection:index===undefined?undefined:{kind:'array',id:selected.id,index}})}/>}<SignalInspection arrayControlsId={selected.instances?selected.id:undefined} model={model} scope={scope} inspection={view.inspection} inspect={inspection=>changeView({inspection})} choose={a.setSelectedEdge} navigateEndpoint={navigateEndpoint}/>{!readOnly&&<ConnectionEditor key={`${scope}-${a.selectedEdge}`} model={model} scope={scope} selected={a.selectedEdge} submit={(link,replace)=>{if(a.connect(link,replace))setPanel('changes')}} disconnect={id=>propose([{op:'disconnect',connectionId:id}],'断开逻辑连接')}/>}</div></aside>:showInspector&&(selected.id===scope&&detailScope!==scope?<DesignBrief model={model} scope={scope} issues={issues} select={select} enter={enter} openModule={()=>setDetailScope(scope)} openSpec={()=>setPanel('spec')} openProblems={()=>setPanel('problems')}/>:<Inspector key={`${selected.id}-${hash}-${a.formVersion}`} enter={()=>enter(selected.id)} overview={selected.id===scope?()=>{if(a.allowSwitch())setDetailScope(undefined)}:undefined} module={selected} model={model} initialIndex={inspectedArray?.moduleId===selected.id?inspectedArray.index:undefined} inspectIndex={index=>changeView({inspection:index===undefined?undefined:{kind:'array',id:selected.id,index}})} readOnly={readOnly} reviews={reviews} preview={propose} dirty={a.markDirty} remove={id=>propose([{op:'delete_module',moduleId:id}],`删除 ${id} 及关联连接`)}/>)} 
@@ -84,7 +83,7 @@ export default function App() {
     <footer className="statusbar"><span className={`status-light ${issues.length?'warning':''}`}/><span data-testid="message" role="status">{a.message||'点击模块了解职责，点击连接查看信号'}</span><ModelIdentity model={model} hash={hash} serviceVersion={a.service?.toolVersion} proposal={a.linkedProposal} candidate={readOnly} compare={()=>setPanel('changes')}/></footer>
     {add&&<div className="modal-backdrop"><section className="modal" role="dialog" aria-modal="true" aria-label="新增模块"><h2>在 {scope} 新增模块</h2><label>实例 ID<input autoFocus aria-label="新实例 ID" value={newId} onChange={e=>setNewId(e.target.value)}/></label><label>模块类型<select aria-label="模块类型" value={kind} onChange={e=>setKind(e.target.value as Module['kind'])}>{kindSchema.options.map(k=><option key={k} value={k}>{k}</option>)}</select></label><p className="hint">通用模块的职责与接口需补充；fifo/add_const 保留初始示例限制。</p><footer><button onClick={()=>setAdd(false)}>取消</button><button className="primary" disabled={!newId.trim()} onClick={()=>{propose([{op:'create_module',id:newId,parent:scope,template:kind}],`在 ${scope} 新增 ${kind}`);setAdd(false);setNewId('')}}>预览新增</button></footer></section></div>}
     {editSpec&&<SpecificationEditor model={model} close={()=>setEditSpec(false)} submit={spec=>{propose([{op:'update_specification',specification:spec}],'更新设计需求与决策');setEditSpec(false)}}/>}
-    {localSignal&&<LocalSignalDialog model={model} id={localSignal} close={()=>setLocalSignal(undefined)}/>}
+    {localSignal&&<LocalSignalDialog model={model} id={localSignal.id} endpoints={localSignal.endpoints} trace={()=>{changeView({inspection:{kind:'local',id:localSignal.id}});setLocalSignal(undefined)}} close={()=>setLocalSignal(undefined)}/>}
     {evidence&&<EvidenceDialog key={`${evidence}-${hash}`} id={evidence} hash={hash} proposal={readOnly?a.proposal:undefined} close={()=>setEvidence(undefined)}/>}
   </div></EvidenceContext.Provider>;
 }

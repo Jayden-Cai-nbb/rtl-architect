@@ -40,9 +40,9 @@ export async function exportBundle(workspace: string, destination: string, model
     if (saved?.reading && saved.reading.modelHash !== hash) throw new ToolError('LAYOUT_OUTDATED', `层级 ${owner.id} 的阅读约束对应旧模型`);
     const positions = saved && children.every(m => saved.positions[m.id]) ? saved.positions : await arrangeScope(model, owner.id, hash, saved?.reading);
     resolvedLayout[owner.id] = { positions, ...(saved?.reading ? { reading: saved.reading } : {}) };
-    const graph = scopeDiagram(model, owner.id, { positions }), quality = diagramQuality(graph);
+    const graph = scopeDiagram(model, owner.id, { positions,reading:saved?.reading }), quality = diagramQuality(graph);
     const file = `${owner.id}.svg`, qualityFile = `${owner.id}.quality.json`;
-    files[file] = diagramSvg(model, owner.id, { positions, showPortNames:true }, hash);
+    files[file] = diagramSvg(model, owner.id, { positions, reading:saved?.reading, showPortNames:true }, hash,graph);
     files[qualityFile] = json({ modelHash: hash, scope: owner.id, layoutHash: hashValue(resolvedLayout[owner.id]), ...quality });
     graphs.push(graph);
     diagrams.push({ scope: owner.id, name: owner.name, file, qualityFile, quality });

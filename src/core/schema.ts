@@ -71,10 +71,13 @@ export const commandSchema = z.discriminatedUnion('op', [
 ]);
 export const proposalSchema = z.strictObject({ baseHash: hashSchema, reason: z.string().trim().min(1), commands: z.array(commandSchema).min(1) });
 const position = z.strictObject({ x: z.number().finite(), y: z.number().finite() });
+// Namespaced local references belong only to presentation; they never create RTL instances.
+const readingNodeSchema = z.union([idSchema,z.string().regex(/^local:[A-Za-z0-9_]+:[A-Za-z0-9_]+$/)]);
 export const readingLayoutSchema = z.strictObject({
   modelHash: hashSchema, reason: z.string().trim().min(1),
-  mainPath: z.array(idSchema).min(1), control: z.array(idSchema),
-  adjacent: z.array(z.strictObject({ node: idSchema, anchor: idSchema }))
+  mainPath: z.array(readingNodeSchema).min(1), control: z.array(readingNodeSchema),
+  adjacent: z.array(z.strictObject({ node: readingNodeSchema, anchor: readingNodeSchema })),
+  stages: z.array(z.strictObject({id:idSchema,label:z.string().trim().min(1).max(120),nodes:z.array(readingNodeSchema).min(1),note:z.string().max(1000).optional()})).max(32).optional()
 });
 export const scopeLayoutSchema = z.strictObject({ positions: z.record(z.string().min(1), position), reading: readingLayoutSchema.optional(), viewport: z.strictObject({ x: z.number().finite(), y: z.number().finite(), zoom: z.number().finite().positive() }) });
 export const layoutSchema = z.strictObject({ schemaVersion: z.literal(1), scopes: z.record(idSchema, scopeLayoutSchema) });

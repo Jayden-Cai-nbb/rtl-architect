@@ -1,4 +1,4 @@
-import type {Model} from '../core/schema';
+import type {Model,Endpoint} from '../core/schema';
 import {scopeDiagram} from '../web/graph/scopeDiagram';
 import {linkGroup} from '../core/inspection';
 const html=(s:unknown)=>String(s??'').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'",'&#39;');
@@ -8,11 +8,11 @@ type Diagram={scope:string;name:string;file:string};
 export function diagramReader(model:Model,diagrams:Diagram[],files:Record<string,string>,graphs:ReturnType<typeof scopeDiagram>[]){
  const metadata=graphs.map(g=>({
   nodes:g.nodes.filter(n=>n.data.kind!=='frame').map(n=>({id:n.id,name:n.data.label,ports:n.data.geometry.ports,detail:model.modules.find(m=>m.id===n.id)?.contract.responsibility??n.data.summary})),
-  edges:g.edges.map(e=>({id:e.id,name:e.label,source:e.source,target:e.target,sourceHandle:e.sourceHandle,targetHandle:e.targetHandle,detail:e.data?.title,sharedWith:e.data?.labelSharedWith,links:g.inspection.stored.filter(l=>(e.data?.connectionIds as string[]??[]).includes(l.id)).map(l=>({id:l.id,name:linkGroup(model,l).label,from:endpoint(l.from),to:endpoint(l.to)}))})),
+  edges:g.edges.map(e=>({id:e.id,name:e.label,source:e.source,target:e.target,sourceHandle:e.sourceHandle,targetHandle:e.targetHandle,detail:e.data?.title,dependencies:(e.data?.dependencyEndpoints as Endpoint[]??[]).map(endpoint),sharedWith:e.data?.labelSharedWith,links:g.inspection.stored.filter(l=>(e.data?.connectionIds as string[]??[]).includes(l.id)).map(l=>({id:l.id,name:linkGroup(model,l).label,from:endpoint(l.from),to:endpoint(l.to)}))})),
  }));
  const safe=JSON.stringify(metadata).replaceAll('<','\\u003c').replaceAll('>','\\u003e').replaceAll('&','\\u0026');
  return `<section class="diagram-reader" aria-label="架构框图"><div class="diagram-bar"><div class="scope-tabs" role="tablist" aria-label="层级">${diagrams.map((d,i)=>`<button type="button" role="tab" id="diagram-tab-${i}" aria-controls="diagram-panel-${i}" aria-selected="${i===0}" data-scope-tab="${i}">${html(d.name)}</button>`).join('')}</div><div class="diagram-actions"><button type="button" id="diagram-fit" aria-pressed="true">全图</button><button type="button" id="diagram-native" aria-pressed="false">原尺寸</button><button type="button" id="diagram-zoom-out" aria-label="缩小框图">−</button><output id="diagram-zoom" aria-label="当前缩放">全图</output><button type="button" id="diagram-zoom-in" aria-label="放大框图">＋</button><button type="button" id="diagram-focus" aria-pressed="false">专注看图</button><button type="button" id="diagram-clear">退出追踪</button></div></div>
- <p class="reader-hint">滚轮滚动，Ctrl+滚轮缩放；双击模块放大。放大后显示接口名，可点名称追踪。实心点是同源分叉，留白交叉不相连。</p>
+ <p class="reader-hint">大图从可读比例开始；滚轮滚动，Ctrl+滚轮缩放，“全图”查看总览；双击模块放大。放大后显示接口名，可点名称追踪。“N 项”是可展开的依赖集合，不是物理总线。实心点是同源分叉，留白交叉不相连。</p>
  ${diagrams.map((d,i)=>`<div class="diagram-panel" role="tabpanel" id="diagram-panel-${i}" aria-labelledby="diagram-tab-${i}" ${i?'hidden':''}><div class="diagram-stage">${files[d.file]}</div><p class="diagram-caption"><a href="${d.file}">打开 / 保存 SVG</a> · <a href="#scope-${d.scope}">完整连接索引</a></p></div>`).join('')}
  <aside id="diagram-trace" aria-live="polite"><strong>从一笔事务开始</strong><p>选择输入相邻模块，观察它把数据交给谁；再核对存储往返、完成与取消。框图位置不代表周期。</p></aside>
  <script type="application/json" id="diagram-metadata">${safe}</script>
@@ -20,7 +20,7 @@ export function diagramReader(model:Model,diagrams:Diagram[],files:Record<string
  const data=JSON.parse(document.getElementById('diagram-metadata').textContent);let current=0;
  const panels=[...document.querySelectorAll('.diagram-panel')],tabs=[...document.querySelectorAll('[data-scope-tab]')],trace=document.getElementById('diagram-trace');
  const reset=()=>{panels[current].querySelectorAll('[data-node-id],[data-edge-id],[data-wire-label]').forEach(el=>{el.style.opacity='';el.classList.remove('traced');});trace.replaceChildren();const p=document.createElement('p');p.textContent='点模块看分工，点连线查看来源、去向与真实接口。';trace.append(p);};
- tabs.forEach((tab,i)=>tab.addEventListener('click',()=>{reset();current=i;panels.forEach((p,j)=>p.hidden=j!==i);tabs.forEach((t,j)=>t.setAttribute('aria-selected',String(j===i)));reset();requestAnimationFrame(refreshZoom);}));
+ tabs.forEach((tab,i)=>tab.addEventListener('click',()=>{reset();current=i;panels.forEach((p,j)=>p.hidden=j!==i);tabs.forEach((t,j)=>t.setAttribute('aria-selected',String(j===i)));reset();requestAnimationFrame(initialZoom);}));
  const currentStage=()=>panels[current].querySelector('.diagram-stage');
  const scale=()=>{const m=currentStage().querySelector('svg').getScreenCTM();return m?Math.hypot(m.a,m.b):1;};
  const refreshZoom=()=>{const stage=currentStage();if(!stage.isConnected)return;const svg=stage.querySelector('svg'),z=scale();svg.classList.toggle('show-port-names',z>=Number(svg.dataset.portDetailZoom));document.getElementById('diagram-zoom').textContent=Math.round(z*100)+'%';document.getElementById('diagram-fit').setAttribute('aria-pressed',String(!stage.classList.contains('native')));document.getElementById('diagram-native').setAttribute('aria-pressed',String(stage.classList.contains('native')&&Math.abs(z-1)<.01));};
@@ -34,7 +34,8 @@ export function diagramReader(model:Model,diagrams:Diagram[],files:Record<string
  document.getElementById('diagram-native').addEventListener('click',()=>zoomTo(1));
  document.getElementById('diagram-zoom-in').addEventListener('click',()=>zoomTo(scale()*1.25));
  document.getElementById('diagram-zoom-out').addEventListener('click',()=>zoomTo(scale()/1.25));
- const observer=new ResizeObserver(()=>refreshZoom());panels.forEach(panel=>observer.observe(panel.querySelector('.diagram-stage')));requestAnimationFrame(refreshZoom);
+ const initialZoom=()=>{const stage=currentStage();if(!stage.dataset.initialized){stage.dataset.initialized='true';if(scale()<.65){const box=stage.getBoundingClientRect();zoomTo(.65,{x:box.x,y:box.y});stage.scrollLeft=stage.scrollTop=0;}}refreshZoom();};
+ const observer=new ResizeObserver(()=>refreshZoom());panels.forEach(panel=>observer.observe(panel.querySelector('.diagram-stage')));requestAnimationFrame(initialZoom);
  document.getElementById('diagram-clear').addEventListener('click',reset);
  const focus=document.getElementById('diagram-focus');focus.addEventListener('click',()=>{const active=document.querySelector('.diagram-reader').classList.toggle('focus');focus.setAttribute('aria-pressed',String(active));focus.textContent=active?'返回页面':'专注看图';});
  const paragraph=text=>{const p=document.createElement('p');p.textContent=text;trace.append(p);};
@@ -45,10 +46,10 @@ export function diagramReader(model:Model,diagrams:Diagram[],files:Record<string
    const edges=node?d.edges.filter(e=>(e.source===node&&(!portId||e.sourceHandle===portId))||(e.target===node&&(!portId||e.targetHandle===portId))):d.edges.filter(e=>e.id===edgeId),ids=new Set(edges.map(e=>e.id)),nodes=new Set(edges.flatMap(e=>[e.source,e.target]));if(node)nodes.add(node);
    // Keep the shared fanout name readable when inspecting an individual branch.
    edges.forEach(e=>{if(e.sharedWith)ids.add(e.sharedWith);});
-   panel.querySelectorAll('[data-edge-id],[data-wire-label]').forEach(e=>{const active=ids.has(e.getAttribute('data-edge-id')||e.getAttribute('data-wire-label'));e.style.opacity=active?'1':'.13';e.classList.toggle('traced',active);});
-   panel.querySelectorAll('[data-node-id]').forEach(n=>n.style.opacity=nodes.has(n.getAttribute('data-node-id'))?'1':'.25');
+   panel.querySelectorAll('[data-edge-id],[data-wire-label]').forEach(e=>{const active=ids.has(e.getAttribute('data-edge-id')||e.getAttribute('data-wire-label'));e.style.opacity=active?'1':'.3';e.classList.toggle('traced',active);});
+   panel.querySelectorAll('[data-node-id]').forEach(n=>n.style.opacity=nodes.has(n.getAttribute('data-node-id'))?'1':'.75');
    trace.replaceChildren();const title=document.createElement('strong');title.textContent=selected.name+(portId?' · '+(selected.ports.find(p=>p.id===portId)?.label||portId):'');trace.append(title);if(selected.detail)paragraph(selected.detail);
-   for(const e of edges){paragraph((d.nodes.find(n=>n.id===e.source)?.name||e.source)+' → '+(d.nodes.find(n=>n.id===e.target)?.name||e.target)+' · '+e.name);const list=document.createElement('ul');for(const link of e.links){const item=document.createElement('li');item.textContent=link.from+' → '+link.to+'  ['+link.id+']';list.append(item);}trace.append(list);}
+   for(const e of edges){paragraph((d.nodes.find(n=>n.id===e.source)?.name||e.source)+' → '+(d.nodes.find(n=>n.id===e.target)?.name||e.target)+' · '+e.name);const list=document.createElement('ul');for(const link of e.links){const item=document.createElement('li');item.textContent=link.from+' → '+link.to+'  ['+link.id+']';list.append(item);}for(const source of e.dependencies){const item=document.createElement('li');item.textContent=source;list.append(item);}if(e.dependencies.length>1)paragraph('以下是此关系包含的真实输入依赖；不表示同一物理网络或已拆解寄存字段。');trace.append(list);}
   };
   panel.querySelectorAll('[data-node-id],[data-edge-id]').forEach(el=>{el.setAttribute('tabindex','0');el.setAttribute('role','button');el.setAttribute('aria-label',el.querySelector('title')?.textContent||'查看关系');});
   panel.addEventListener('click',event=>activate(event.target.closest('[data-node-id],[data-edge-id],[data-wire-label]'),event.target.closest('[data-port-id]')?.getAttribute('data-port-id')));

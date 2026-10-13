@@ -1,3 +1,4 @@
+import type {DependencyRelation} from './dependencies';
 import type {Model,Endpoint} from '../../core/schema';
 import {interfaceGroup,linkGroup} from '../../core/inspection';
 import type {RtlNode,PortGeometry} from './types';
@@ -5,14 +6,15 @@ export const portDetailZoom=.9;
 export const wireSpacing=32;
 const short=(name:string)=>name.length>17?name.slice(0,14)+'…':name;
 /** Display-only geometry from all stored links; zoom/selection never changes pin placement. */
-export function orientPorts(nodes:RtlNode[],model:Model,scope:string,links:Model['connections'],nodeId:(e:Endpoint)=>string){
+export function orientPorts(nodes:RtlNode[],model:Model,scope:string,links:Model['connections'],nodeId:(e:Endpoint)=>string,dependencies:DependencyRelation[]=[]){
  const byId=new Map(nodes.map(n=>[n.id,n]));
  const neighbors=new Map<string,{x:number;y:number}[]>(),names=new Map<string,Set<string>>(),categories=new Map<string,string>();
  const returns=new Map<string,Set<PortGeometry['side']>>();
- for(const link of links)for(const [end,other,direction] of [[link.from,link.to,'out'],[link.to,link.from,'in']] as const){
+ const relations=[...links.map(link=>({from:link.from,to:link.to,group:linkGroup(model,link),fromGroup:link.from.moduleId===scope&&!link.from.local?interfaceGroup(model,link.from).id:linkGroup(model,link).id,toGroup:link.to.moduleId===scope&&!link.to.local?interfaceGroup(model,link.to).id:linkGroup(model,link).id,labels:undefined as string[]|undefined})),...dependencies.map(d=>({...d,labels:d.endpoints.map(e=>e.interfaceId)}))];
+ for(const link of relations)for(const [end,other,direction,group] of [[link.from,link.to,'out',link.fromGroup],[link.to,link.from,'in',link.toGroup]] as const){
   const n=byId.get(nodeId(end)),o=byId.get(nodeId(other));if(!n)continue;
-  const relation=linkGroup(model,link),group=end.moduleId===scope&&!end.local?interfaceGroup(model,end).id:relation.id,key=`${n.id}/${direction}:${group}`;
-  const entry=names.get(key)??new Set<string>();entry.add(end.interfaceId);names.set(key,entry);categories.set(key,relation.category);
+  const relation=link.group,key=`${n.id}/${direction}:${group}`;
+  const entry=names.get(key)??new Set<string>();for(const name of link.labels??[end.interfaceId])entry.add(name);names.set(key,entry);categories.set(key,relation.category);
   if(!o)continue;
   if(relation.category==='response'){
    const a=byId.get(nodeId(link.from)),b=byId.get(nodeId(link.to));
@@ -35,9 +37,10 @@ export function orientPorts(nodes:RtlNode[],model:Model,scope:string,links:Model
    p.interfaceIds=[...names.get(key)??[]].sort();p.label=p.interfaceIds.length?short(p.interfaceIds[0])+(p.interfaceIds.length>1?` +${p.interfaceIds.length-1}`:''):undefined;p.category=categories.get(key);
    if(peers?.length){
     const x=peers.reduce((v,p)=>v+p.x,0)/peers.length,y=peers.reduce((v,p)=>v+p.y,0)/peers.length;
-    if(Math.abs(y-cy)>g.height+30){side=y<cy?'NORTH':'SOUTH';order=x;}
+    if(Math.abs(y-cy)>g.height+30&&Math.abs(y-cy)>Math.abs(x-cx)){side=y<cy?'NORTH':'SOUTH';order=x;}
     else {side=x<cx?'WEST':'EAST';order=y;}
    }
+   if(peers?.length&&!n.data.boundary&&['writeback','response'].includes(String(p.category))&&peers.every(peer=>p.direction==='source'?peer.x<cx-380:peer.x>cx+380))side='SOUTH';
    const choices=returns.get(key);if(choices?.size===1)side=[...choices][0];else if(choices?.size)side=(peers!.reduce((v,p)=>v+p.x,0)/peers!.length)<cx?'WEST':'EAST';p.side=side;sides.set(side,[...sides.get(side)??[],{p,order}]);
   }
   const labelWidth=(p:PortGeometry)=>[...(p.label??'')].reduce((v,c)=>v+(c.charCodeAt(0)>255?12:7.2),0);
@@ -46,7 +49,7 @@ export function orientPorts(nodes:RtlNode[],model:Model,scope:string,links:Model
   const north=!!sides.get('NORTH')?.length,south=!!sides.get('SOUTH')?.length,sideCount=Math.max(sides.get('WEST')?.length??0,sides.get('EAST')?.length??0);
   g.captionY=north?40:24;const start=g.captionY+72;
   g.height=Math.max(g.captionY+66,sideCount?start+(sideCount-1)*36+18:0)+(south?26:0);n.height=g.height;
-  g.width=Math.max(240,rowWidth('NORTH'),rowWidth('SOUTH'),sideWidth('WEST')+sideWidth('EAST')+44);n.width=g.width;
+  g.width=Math.max(n.data.kind==='state'?168:240,rowWidth('NORTH'),rowWidth('SOUTH'),sideWidth('WEST')+sideWidth('EAST')+44);n.width=g.width;
   for(const [side,entries] of sides){
    entries.sort((a,b)=>a.order-b.order||a.p.id.slice(a.p.id.indexOf(':')+1).localeCompare(b.p.id.slice(b.p.id.indexOf(':')+1)));
    const horizontal=side==='NORTH'||side==='SOUTH',slots=entries.map(({p})=>Math.max(48,labelWidth(p)+28)),total=slots.reduce((a,b)=>a+b,0);let cursor=(g.width-total)/2;

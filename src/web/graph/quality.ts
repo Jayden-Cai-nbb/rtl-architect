@@ -2,7 +2,7 @@ import type { scopeDiagram } from './scopeDiagram';
 type Point = { x: number; y: number };
 const interior = (v: number, a: number, b: number) => v > Math.min(a, b) && v < Math.max(a, b);
 export function diagramQuality(graph: ReturnType<typeof scopeDiagram>) {
-  const nodes = graph.nodes.filter(n => n.data.kind !== 'frame');
+  const nodes = graph.nodes.filter(n => !['frame','region'].includes(n.data.kind));
   const boxes = nodes.map(n => ({ id: n.id, left: n.position.x, top: n.position.y, right: n.position.x + n.data.geometry.width, bottom: n.position.y + n.data.geometry.height }));
   const overlaps: string[][] = [], nodeHits: { edge: string; node: string }[] = [];
   for (let i = 0; i < boxes.length; i++) for (const b of boxes.slice(i + 1)) {

@@ -1,7 +1,7 @@
-import {signalText} from '../../core/signals';
-import type { Model } from '../../core/schema';
+import {signalText,endpointLabel} from '../../core/signals';
+import type { Model,Endpoint } from '../../core/schema';
 import { EvidenceLinks } from './Evidence';
-export function LocalSignalDialog({model,id,close}:{model:Model;id:string;close:()=>void}) {
+export function LocalSignalDialog({model,id,close,trace,endpoints}:{model:Model;id:string;endpoints?:Endpoint[];close:()=>void;trace:()=>void}) {
  const item=model.localSignals?.find(n=>n.id===id);if(!item)return null;
- return <div className="modal-backdrop"><section className="modal wide" role="dialog" aria-label="局部信号"><div className="section-title"><h2>{item.name} · 局部{item.driver.kind==='register'?'寄存':'组合'}驱动</h2><button onClick={close}>关闭</button></div><p>{item.description}</p><p className="hint">scope: {item.scope} · 位宽 {JSON.stringify(item.width)} · 这是作用域内部信号，不是额外 RTL 模块。</p><pre className="command-preview">{item.driver.kind==='comb'?signalText(item.driver.value):item.driver.sourceText}</pre><EvidenceLinks ids={item.evidenceIds}/></section></div>;
+ return <div className="modal-backdrop"><section className="modal wide" role="dialog" aria-label="局部信号"><div className="section-title"><h2>{item.name} · 局部{item.driver.kind==='register'?'寄存':'组合'}驱动</h2><button onClick={close}>关闭</button></div><p>{item.description}</p>{endpoints&&<div className="dependency-detail"><strong>这条关系束包含 {endpoints.length} 项输入依赖</strong><p className="hint">逐项来自模型记录；关系束不表示一根物理总线，寄存输入集合不证明字段级对应。</p><ul>{endpoints.map(e=><li key={endpointLabel(e)}><code>{endpointLabel(e)}</code></li>)}</ul></div>}<p className="hint">scope: {item.scope} · 位宽 {JSON.stringify(item.width)} · 这是作用域内部信号，不是额外 RTL 模块。</p><pre className="command-preview">{item.driver.kind==='comb'?signalText(item.driver.value):item.driver.sourceText}</pre><button onClick={trace}>查看输入依赖</button><EvidenceLinks ids={item.evidenceIds}/></section></div>;
 }

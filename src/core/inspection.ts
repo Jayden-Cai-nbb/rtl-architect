@@ -2,7 +2,7 @@ import type {Endpoint,Link,Model} from './schema';
 import {driverReads,expandLink} from './signals';
 import {resolveEndpoint} from './endpoints';
 import {connectionFacts} from './connectivity';
-export type Inspection = {kind:'module';id:string}|{kind:'connection';ids:string[];index?:{moduleId:string;index:number}}|{kind:'array';id:string;index:number}|{kind:'local';id:string}|{kind:'boundary';role:'consumer'|'producer';groupId?:string};
+export type Inspection = ({kind:'module';id:string}|{kind:'connection';ids:string[];index?:{moduleId:string;index:number}}|{kind:'array';id:string;index:number}|{kind:'local';id:string}|{kind:'boundary';role:'consumer'|'producer';groupId?:string}) & {depth?:number;crossState?:boolean};
 export type GroupInfo={id:string;label:string;category:string;description:string;auxiliary:boolean};
 export function interfaceGroup(model:Model,endpoint:Endpoint):GroupInfo{
  const module=model.modules.find(m=>m.id===endpoint.moduleId),port=module?.interfaces.find(p=>p.id===endpoint.interfaceId);
@@ -30,14 +30,29 @@ export function inspectScope(model:Model,scope:string,inspection?:Inspection){
   }
  });
  if(array)links=links.flatMap(link=>expandLink(model,link,array));
- const localIds=new Set<string>(),dependencies:{localId:string;endpoint:Endpoint}[]=[];
- function visit(id:string){if(localIds.has(id))return;localIds.add(id);const local=model.localSignals?.find(s=>s.id===id&&s.scope===scope);if(!local)return;for(const endpoint of driverReads(local)){dependencies.push({localId:id,endpoint});if(endpoint.local)visit(endpoint.interfaceId);else for(const link of stored)if(endpointMatches(link.from,endpoint)&&!links.some(l=>l.id===link.id))links.push(link);}}
+ const localIds=new Set<string>(),dependencies:{localId:string;endpoint:Endpoint}[]=[],stateBoundaries=new Set<string>(),limited=new Set<string>();
+ const locals=new Map((model.localSignals??[]).filter(s=>s.scope===scope).map(s=>[s.id,s]));
+ const depth=Math.max(1,Math.min(8,inspection?.depth??1));
+ function visit(id:string,level=0){
+  if(localIds.has(id))return;
+  if(localIds.size>=48){limited.add(id);return;}
+  localIds.add(id);const local=locals.get(id);if(!local)return;
+  if(local.driver.kind==='register'&&!inspection?.crossState){stateBoundaries.add(id);return;}
+  if(level>=depth){limited.add(id);return;}
+  const seen=new Set<string>();
+  for(const endpoint of driverReads(local)){
+   const key=JSON.stringify(endpoint);if(seen.has(key))continue;seen.add(key);
+   if(dependencies.length>=160){limited.add(id);break;}
+   dependencies.push({localId:id,endpoint});
+   if(endpoint.local)visit(endpoint.interfaceId,level+1);
+  }
+ }
  if(inspection?.kind==='local')visit(inspection.id);
- if(inspection)for(const link of links)if(link.from.local)visit(link.from.interfaceId);
+ if(inspection)for(const link of links)for(const endpoint of [link.from,link.to])if(endpoint.local)visit(endpoint.interfaceId);
  const moduleIds=new Set(links.flatMap(l=>[l.from.moduleId,l.to.moduleId]).concat(dependencies.map(d=>d.endpoint.moduleId)));
  if(inspection?.kind==='module'||inspection?.kind==='array')moduleIds.add(inspection.id);
  const missing=array?connectionFacts(model).ports.filter(p=>p.scope===scope&&p.endpoint.moduleId===array.moduleId&&p.endpoint.index===array.index&&p.intf.required&&p.missing.length).map(p=>({interfaceId:p.endpoint.interfaceId,bits:p.missing})):[];
- return {stored,links,localIds:[...localIds],dependencies,moduleIds:[...moduleIds],array,missing,
+ return {stored,links,stateBoundaries:[...stateBoundaries],limited:[...limited],depth,localIds:[...localIds],dependencies,moduleIds:[...moduleIds],array,missing,
   resolved:links.map(link=>({link,width:resolveEndpoint(model,scope,link.from)?.width,group:linkGroup(model,link)})),
   summaryCount:stored.filter(l=>!array||[l.from,l.to].some(e=>e.moduleId===array.moduleId)).length};
 }
