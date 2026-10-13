@@ -1,3 +1,4 @@
+import {loadChecks} from './contractChecks';
 import {z} from 'zod';
 import {spawn,execFile} from 'node:child_process';
 import {promisify} from 'node:util';
@@ -9,7 +10,7 @@ import {hashValue,modelHash} from '../core/export';
 import {inputFile,newArtifactDirectory,workspacePath} from './artifacts';
 import {ToolError} from './environment';
 const exec=promisify(execFile),text=z.string().trim().min(1);
-export const verificationProfileSchema=z.strictObject({schemaVersion:z.literal(1),name:text,stage:z.enum(['compile','elaboration','lint','simulation','synthesis','timing','formal']),moduleIds:z.array(idSchema).min(1),inputs:z.array(text).min(1).max(10000),timeoutMs:z.number().int().min(100).max(3600000),commands:z.array(z.strictObject({program:text,args:z.array(z.string()).max(1000),versionArgs:z.array(z.string()).max(20).optional()})).min(1).max(20),checks:z.array(z.discriminatedUnion('kind',[z.strictObject({kind:z.literal('exit_code')}),z.strictObject({kind:z.literal('contains'),file:text,text}),z.strictObject({kind:z.literal('junit'),file:text})])).min(1).max(30)});
+export const verificationProfileSchema=z.strictObject({schemaVersion:z.literal(1),name:text,stage:z.enum(['compile','elaboration','lint','simulation','synthesis','timing','formal']),moduleIds:z.array(idSchema).min(1),inputs:z.array(text).min(1).max(10000),inputClosure:z.strictObject({status:z.enum(['declared_complete','partial']),note:text}).optional(),timeoutMs:z.number().int().min(100).max(3600000),commands:z.array(z.strictObject({program:text,args:z.array(z.string()).max(1000),versionArgs:z.array(z.string()).max(20).optional()})).min(1).max(20),checks:z.array(z.discriminatedUnion('kind',[z.strictObject({kind:z.literal('artifact'),file:text}),z.strictObject({kind:z.literal('obligations'),file:text,metadata:text}),z.strictObject({kind:z.literal('exit_code')}),z.strictObject({kind:z.literal('contains'),file:text,text}),z.strictObject({kind:z.literal('junit'),file:text})])).min(1).max(30)});
 const snapshot=async(workspace:string,paths:string[])=>Promise.all(paths.map(async file=>{const {sha256}=await inputFile(workspace,file);return {file,sha256};}));
 const json=(x:unknown)=>JSON.stringify(x,null,2)+'\n';
 async function command(program:string,args:string[],cwd:string,timeoutMs:number){
@@ -27,6 +28,8 @@ export async function runVerification(workspace:string,input:unknown){
  const profile=verificationProfileSchema.parse(input),model=modelSchema.parse(JSON.parse((await inputFile(workspace,'architecture/model.json')).bytes.toString())),hash=modelHash(model);
  if(profile.moduleIds.some(id=>!model.modules.some(m=>m.id===id)))throw new ToolError('MODULE_NOT_FOUND','验证清单引用不存在的模块');
  if(new Set(profile.inputs).size!==profile.inputs.length)throw new ToolError('INPUT_DUPLICATE','验证输入清单含重复文件');
+ if(profile.checks.some(c=>c.kind==='obligations')&&profile.stage!=='simulation')throw new ToolError('CHECK_STAGE_INVALID','过程监视器仅作为 simulation 场景证据');
+ const obligationTargets=[];for(const c of profile.checks)if(c.kind==='obligations'){const meta=await loadChecks(workspace,c.metadata,profile.inputs);for(const item of meta.items){if(!profile.moduleIds.includes(item.moduleId))throw new ToolError('CHECK_SCOPE_INVALID','验证清单需包含每个监视器所属模块');obligationTargets.push(item);}}
  const before=await snapshot(workspace,profile.inputs),id=`run_${Date.now()}_${randomUUID().replaceAll('-','')}`;
  // Resolve the evidence parent before accepting it as a workspace-owned destination.
  await mkdir(join(workspace,'evidence'),{recursive:true});await workspacePath(workspace,'evidence');await mkdir(join(workspace,'evidence/runs'),{recursive:true});await workspacePath(workspace,'evidence/runs');
@@ -35,6 +38,7 @@ export async function runVerification(workspace:string,input:unknown){
  for(const [index,c] of profile.commands.entries()){
   const program=c.program.replaceAll('{runDir}',dir),args=c.args.map(a=>a.replaceAll('{runDir}',dir));
   let toolVersion='unknown';if(c.versionArgs){const v=await command(program,c.versionArgs,workspace,Math.min(5000,profile.timeoutMs));toolVersion=v.exitCode===0?(v.stdout||v.stderr).trim().slice(0,2000):'version probe failed';}
+  if(toolVersion==='unknown'&&program.startsWith(dir+'/'))try{const executable=await inputFile(dir,relative(dir,program),32*1024*1024);artifacts.push({file:relative(dir,program),sha256:executable.sha256});toolVersion='generated executable: sha256 '+executable.sha256;}catch{failure='executable_unavailable';break;}
   const remaining=profile.timeoutMs-(Date.now()-start);if(remaining<=0){failure='timeout';break;}
   const result=await command(program,args,workspace,remaining);
   for(const stream of ['stdout','stderr'] as const){const file=`step-${index}.${stream}.log`;await writeFile(join(dir,file),result[stream]);artifacts.push({file,sha256:(await inputFile(dir,file)).sha256});}
@@ -44,7 +48,9 @@ export async function runVerification(workspace:string,input:unknown){
  if(!failure)for(const check of profile.checks){if(Date.now()-start>=profile.timeoutMs){failure='timeout';break;}try{
   if(check.kind==='exit_code'){checks.push({...check,passed:true});continue;}
   const content=await inputFile(dir,check.file,8*1024*1024);artifacts.push({file:check.file,sha256:content.sha256});
-  if(check.kind==='contains'){const passed=content.bytes.toString().includes(check.text);checks.push({...check,passed});if(!passed)failure='check_failed';}
+  if(check.kind==='artifact'){checks.push({...check,passed:true});}
+  else if(check.kind==='obligations'){const meta=await loadChecks(workspace,check.metadata,profile.inputs);const log=content.bytes.toString();const results=meta.items.map(item=>({...item,passed:log.split(/\r?\n/).some(line=>line.startsWith(item.marker+' hits=')&&/hits=[1-9][0-9]*$/.test(line))}));const passed=results.every(r=>r.passed);checks.push({...check,results,passed});if(!passed)failure='obligation_not_exercised';}
+  else if(check.kind==='contains'){const passed=content.bytes.toString().includes(check.text);checks.push({...check,passed});if(!passed)failure='check_failed';}
   else {
    const script="import json,sys,xml.etree.ElementTree as E\ns=open(sys.argv[1],encoding='utf-8').read()\nif '<!DOCTYPE' in s.upper() or '<!ENTITY' in s.upper(): raise ValueError('DTD/entity declarations are not supported')\nr=E.fromstring(s)\nc=[e for e in r.iter() if e.tag.split('}')[-1]=='testcase']\nf=sum(any(n.tag.split('}')[-1] in ('failure','error') for n in e) for e in c)\nsuite_problem=any(any(int(e.get(k,'0'))!=0 for k in ('failures','errors','skipped','disabled')) for e in r.iter() if e.tag.split('}')[-1] in ('testsuite','testsuites'))\nsk=sum(any(n.tag.split('}')[-1]=='skipped' for n in e) for e in c)\nreport_problem=suite_problem or any(e.tag.split('}')[-1] in ('failure','error','skipped') for e in r.iter())\nprint(json.dumps(dict(tests=len(c),failed=f,skipped=sk,reportProblem=report_problem)))";
    const result=JSON.parse((await exec('python3',['-c',script,await workspacePath(dir,check.file)],{timeout:Math.max(1,Math.min(10000,profile.timeoutMs-(Date.now()-start))),maxBuffer:1024*1024})).stdout);
@@ -54,7 +60,7 @@ export async function runVerification(workspace:string,input:unknown){
  let after:typeof before=[];try{after=await snapshot(workspace,profile.inputs);if(hashValue(after)!==hashValue(before))failure='inputs_changed';}catch(e){failure='inputs_unavailable';}
  try{if(modelHash(modelSchema.parse(JSON.parse((await inputFile(workspace,'architecture/model.json')).bytes.toString())))!==hash)failure='model_changed';}catch{failure='model_unavailable';}
  if(Date.now()-start>profile.timeoutMs&&!failure)failure='timeout';
- const record={schemaVersion:1,id,name:profile.name,stage:profile.stage,moduleIds:profile.moduleIds,modelHash:hash,profileHash:hashValue(profile),profile,startedAt,finishedAt:new Date().toISOString(),durationMs:Date.now()-start,status:failure??'passed',inputs:before,inputsAfter:after,steps,checks,artifacts,note:'只证明声明命令和检查在本次显式输入下的结果；未自动发现依赖，不改变架构批准或模型验证声明。'};
+ const record={schemaVersion:1,id,name:profile.name,stage:profile.stage,moduleIds:profile.moduleIds,modelHash:hash,profileHash:hashValue(profile),profile,startedAt,finishedAt:new Date().toISOString(),durationMs:Date.now()-start,status:failure??'passed',inputs:before,inputsAfter:after,steps,checks,artifacts,obligationTargets,note:'只证明声明命令和检查在本次显式输入下的结果；未自动发现依赖，不改变架构批准或模型验证声明。'};
  await writeFile(join(dir,'run.json'),json(record),{flag:'wx'});return {...record,directory:dir};
 }
 const runSchema=z.object({schemaVersion:z.literal(1),id:idSchema,name:text,stage:text,moduleIds:z.array(idSchema),modelHash:hashSchema,status:text,finishedAt:text,durationMs:z.number(),inputs:z.array(z.object({file:text,sha256:hashSchema})),artifacts:z.array(z.object({file:text,sha256:hashSchema}))});
@@ -63,11 +69,11 @@ export async function verificationRuns(workspace:string,currentHash:string){
  const summaries=[];
  for(const id of names.filter(n=>/^run_\d+_[a-f0-9]{32}$/.test(n)).sort().reverse().slice(0,100)){
   try{
-   const r=runSchema.parse(JSON.parse((await inputFile(workspace,`evidence/runs/${id}/run.json`)).bytes.toString()));if(r.id!==id)throw new Error('运行标识不匹配');
+   const raw=JSON.parse((await inputFile(workspace,`evidence/runs/${id}/run.json`)).bytes.toString()),r=runSchema.parse(raw);if(r.id!==id)throw new Error('运行标识不匹配');
    const changed:string[]=[];
    for(const input of r.inputs){try{if((await inputFile(workspace,input.file)).sha256!==input.sha256)changed.push(input.file);}catch{changed.push(input.file);}}
    for(const artifact of r.artifacts){try{if((await inputFile(await workspacePath(workspace,`evidence/runs/${id}`),artifact.file)).sha256!==artifact.sha256)changed.push(`报告:${artifact.file}`);}catch{changed.push(`报告:${artifact.file}`);}}
-   summaries.push({id,name:r.name,stage:r.stage,moduleIds:r.moduleIds,modelHash:r.modelHash,status:r.status,finishedAt:r.finishedAt,durationMs:r.durationMs,fresh:r.modelHash===currentHash&&!changed.length,changedFiles:changed,record:`evidence/runs/${id}/run.json`});
+   summaries.push({id,name:r.name,stage:r.stage,moduleIds:r.moduleIds,modelHash:r.modelHash,status:r.status,finishedAt:r.finishedAt,durationMs:r.durationMs,inputClosure:raw.profile?.inputClosure?.status??'unknown',toolVersionsKnown:Array.isArray(raw.steps)&&raw.steps.length>0&&raw.steps.every((s:{toolVersion?:string})=>s.toolVersion&&s.toolVersion!=='unknown'&&s.toolVersion!=='version probe failed'),fresh:r.modelHash===currentHash&&!changed.length,changedFiles:changed,record:`evidence/runs/${id}/run.json`});
   }catch(e){summaries.push({id,name:id,status:'unreadable',fresh:false,error:String(e)});}
  }
  return summaries;

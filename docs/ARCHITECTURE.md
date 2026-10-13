@@ -103,3 +103,25 @@ layout API 保留旧文件的读取与独立写入能力；0.6 主图使用会�
 - WorkbenchPanel 使用同一模型对象与服务状态。关闭 dock 保留本会话未发送文字；持久保存的讨论跨会话恢复。Canvas 在尺寸改变时保持中心/缩放，不重新布局或写 IR。
 
 维护新增 check:milestone、check:open 与 check:workflow；真实浏览器验收继续使用临时环境，未添加项目测试框架或新依赖。
+
+## 1.3 合同与证据链
+
+IR 3 的可选 contract.obligations 仍是设计语义；bindings、生成的监视器、运行记录和结构报告都是派生物，不成为第二份权威合同。旧模型不补字段。core/verificationImpact 只解释声明依赖，workspace/contextView 按任务组织有预算的读取；不为省字删除未知。
+
+workspace/contractChecks 按当前模型和显式引脚映射生成有限仿真监视器。verification 将触发结果绑定到声明输入、模型、工具及产物摘要；输入闭包仍由作者声明。conformance 复用显式展开记录，在共同 RTL 作用域比较参数、端口和位连接，不以网表整数 ID 跨层级比较。
+
+assurance 重新核对本地证据并分开审阅、结构与行为状态；最新失败或损坏记录不能被旧通过覆盖。UI 只按需读取，不运行任意命令。认证审批、形式证明、完整依赖发现和增量验证豁免均未实现。具体支持范围与实际验收见 UPGRADE-1.3.md / VALIDATION.md。
+
+## 1.4 硬件关系与阅读模式
+
+core/hardwareView 在 IR 上建立只读关系投影，保留连接 ID、端点、协议声明、业务冲突与直接证据关联。原生 RV 明示 ready 反向；表达式的选择端只从 AST 读取，寄存输入集合继续保持角色未知。不扩展 IR、不自动推断协议或写回来源。
+
+scopeDiagram 按架构、内部状态与运算、原始连接三种模式决定展开和锚点，仍共用同一投影与路由。模式位置和视口保存在当前会话；普通选择不重建几何。quality 在绘图 Worker 内计算，连接对应、语义缺口、基本几何与阅读拥挤分开。连接对应仅审计当前模型连接，不能证明 RTL 覆盖或行为。在线与 SVG 共用实心直接连接/空心依赖箭头，复合通道及输入依赖不产生电气分叉点。
+
+autoReadingLayout 用已声明关系限制控制器上置和存储贴附；layoutFeedback 对最多 26 个显示节点、60 条关系的小图做至多一次间距试探，比较最终路由，保留优先指标更好的结果。显式 reading、大图及完整保存位置不进入试探。没有替换 ELK 端口策略或实现全局重路由。维护脚本 check-hardware-view 覆盖三模式、分类冲突、状态角色、共享存储、并行分支及审计负例。
+
+## 1.5 状态更新闭环
+
+IR 3 的 register.update 为可选语义；signals 校验条件/值位宽、复位域和完整输入集合。stateUpdates 生成同源优先级表，hardwareView 依据规则细分依赖角色；普通输入集合继续标未知。inspection 的 data/control 目的只改变明确追踪的范围，默认在上游状态停止。
+
+stateChecks 将规则与递归组合 AST 转成有限 SystemVerilog 监视器，实际状态和叶输入用显式映射。它接入既有 contractChecks、verify 与 assurance 的输入摘要及重生成检查；不新建第二份权威合同或执行网页命令。有效沿采样、相反沿观察，所有声明分支/复位/保持都需实际覆盖。未知值、缺映射、超出支持范围或检查器过期不生成近似通过。人工逐行整理示例，未实现自动解析任意 always_ff。

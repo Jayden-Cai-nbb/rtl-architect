@@ -1,6 +1,6 @@
 import type {Model} from '../../core/schema';
 import type {DiagramOptions,ScopeDiagram,Positions} from './scopeDiagram';
-type Result={graph:ScopeDiagram;positions?:Positions};
+type Result={quality:ReturnType<typeof import('./quality').diagramQuality>;graph:ScopeDiagram;positions?:Positions};
 // A cache entry owns immutable geometry. Selection/hover never enter its key.
 export class DiagramClient {
  private cache=new Map<string,Result>();
@@ -20,7 +20,7 @@ export class DiagramClient {
    worker.onmessage=e=>{
     if(e.data.id!==id||this.pending?.worker!==worker)return;
     finish();if(e.data.error){reject(new Error(e.data.error));return;}
-    const result:Result={graph:e.data.graph,positions:e.data.positions};this.cache.set(key,result);
+    const result:Result={graph:e.data.graph,quality:e.data.quality,positions:e.data.positions};this.cache.set(key,result);
     if(arrange)this.cache.set(JSON.stringify([hash,scope,{...options,positions:result.positions},false]),result);
     while(this.cache.size>8)this.cache.delete(this.cache.keys().next().value!);
     resolve(result);

@@ -1,0 +1,92 @@
+{
+  "schemaVersion": 1,
+  "testbench": "tb",
+  "bindings": [
+    {
+      "moduleId": "top",
+      "obligationId": "out_data_update",
+      "instancePath": "tb.dut",
+      "clock": "clk",
+      "reset": "rst_n",
+      "interfaces": {},
+      "state": "out_data",
+      "signals": [
+        {
+          "endpoint": {
+            "moduleId": "top",
+            "interfaceId": "rst_n"
+          },
+          "pin": "rst_n"
+        },
+        {
+          "endpoint": {
+            "moduleId": "top",
+            "interfaceId": "s_valid"
+          },
+          "pin": "s_valid"
+        },
+        {
+          "endpoint": {
+            "moduleId": "top",
+            "interfaceId": "s_data"
+          },
+          "pin": "s_data"
+        },
+        {
+          "endpoint": {
+            "moduleId": "top",
+            "interfaceId": "m_ready"
+          },
+          "pin": "m_ready"
+        },
+        {
+          "endpoint": {
+            "moduleId": "top",
+            "interfaceId": "out_valid",
+            "local": true
+          },
+          "pin": "out_valid"
+        }
+      ]
+    },
+    {
+      "moduleId": "top",
+      "obligationId": "out_valid_update",
+      "instancePath": "tb.dut",
+      "clock": "clk",
+      "reset": "rst_n",
+      "interfaces": {},
+      "state": "out_valid",
+      "signals": [
+        {
+          "endpoint": {
+            "moduleId": "top",
+            "interfaceId": "rst_n"
+          },
+          "pin": "rst_n"
+        },
+        {
+          "endpoint": {
+            "moduleId": "top",
+            "interfaceId": "s_valid"
+          },
+          "pin": "s_valid"
+        },
+        {
+          "endpoint": {
+            "moduleId": "top",
+            "interfaceId": "s_data"
+          },
+          "pin": "s_data"
+        },
+        {
+          "endpoint": {
+            "moduleId": "top",
+            "interfaceId": "m_ready"
+          },
+          "pin": "m_ready"
+        }
+      ]
+    }
+  ]
+}

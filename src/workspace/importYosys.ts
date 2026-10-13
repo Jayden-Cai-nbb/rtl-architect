@@ -14,7 +14,7 @@ const params=z.record(z.string(),z.union([z.string(),z.number()])).default({});
 const port=z.object({direction:z.enum(['input','output','inout']),bits,offset:z.number().optional(),upto:z.number().optional(),signed:z.number().optional()});
 const cell=z.object({type:file,parameters:params,attributes,connections:z.record(z.string(),bits),port_directions:z.record(z.string(),z.enum(['input','output','inout'])).optional()});
 const definition=z.object({attributes,parameter_default_values:params,ports:z.record(z.string(),port),cells:z.record(z.string(),cell).default({}),memories:z.record(z.string(),z.unknown()).optional()});
-const netlistSchema=z.object({creator:z.string().optional(),modules:z.record(z.string(),definition)});
+export const netlistSchema=z.object({creator:z.string().optional(),modules:z.record(z.string(),definition)});
 const safe=(name:string,prefix:string)=>idSchema.safeParse(name).success?name:`${prefix}_${hashValue(name).slice(0,20)}`;
 const json=(x:unknown)=>JSON.stringify(x,null,2)+'\n';
 export async function importYosys(workspace:string,input:unknown,destination:string){

@@ -1,3 +1,5 @@
+import {assurance} from '../workspace/assurance';
+import {contextViewSchema} from '../workspace/contextView';
 import {requestLimitBytes,RequestSizeError} from '../core/transport';
 import express from 'express';
 import { ZodError } from 'zod';
@@ -26,6 +28,7 @@ export function createApp(repository: Repository, apiPort = 4317, webPort = 5173
   });
   app.get('/api/health', async (_req, res) => res.json(await service()));
   app.post('/api/runtime/stop', (_req, res) => { if (!options.shutdown) throw new ApiError(422, '此服务不支持远程停止', 'STOP_UNSUPPORTED'); res.json({ stopping: true }); options.shutdown(); });
+  app.get('/api/context-view',async(req,res)=>res.json(await repository.getContextView(contextViewSchema.parse({...req.query,...(req.query.maxBytes?{maxBytes:Number(req.query.maxBytes)}:{}),...(req.query.offset?{offset:Number(req.query.offset)}:{}),...(req.query.limit?{limit:Number(req.query.limit)}:{}),...(req.query.index?{index:Number(req.query.index)}:{})}))));
   app.get('/api/context', async (req, res) => {
     const id = typeof req.query.moduleId === 'string' ? req.query.moduleId : undefined;
     const index=req.query.index===undefined?undefined:Number(req.query.index);
@@ -36,6 +39,7 @@ export function createApp(repository: Repository, apiPort = 4317, webPort = 5173
   app.get('/api/workbench',async(_req,res)=>res.json(await repository.getWorkbench()));
   app.post('/api/workbench',async(req,res)=>res.json(await repository.updateWorkbench(req.body)));
   app.get('/api/resume',async(_req,res)=>res.json(await repository.getResume()));
+  app.get('/api/assurance',async(req,res)=>res.json(await assurance(repository.workspace,await repository.getModel(),typeof req.query.moduleId==='string'?req.query.moduleId:undefined)));
   app.get('/api/model', async (_req, res) => res.json(await repository.getModel()));
   app.get('/api/spec', async (req, res) => res.json(await repository.getSpec(typeof req.query.moduleId === 'string' ? req.query.moduleId : undefined)));
   app.get('/api/handoff/:moduleId', async (req, res) => res.json(await repository.handoff(String(req.params.moduleId))));

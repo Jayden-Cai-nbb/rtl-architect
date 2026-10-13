@@ -1,0 +1,22 @@
+{
+  "browser": "140.0.7339.16",
+  "errors": [],
+  "overflow": {
+    "page": false,
+    "panel": false
+  },
+  "obligations": 3,
+  "approval": "local draft",
+  "structural": "MATCH",
+  "behavior": "PASSED",
+  "dimensions": [
+    [
+      1280,
+      900
+    ],
+    [
+      1100,
+      820
+    ]
+  ]
+}

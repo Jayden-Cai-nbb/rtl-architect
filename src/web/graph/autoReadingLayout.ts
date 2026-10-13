@@ -1,15 +1,16 @@
+import {refineSpacing} from './layoutFeedback';
 import {orderingRelations,alignColumns} from './topology';
 import type { Model } from '../../core/schema';
-import { scopeDiagram, type Positions } from './scopeDiagram';
+import { scopeDiagram, type Positions, type DiagramOptions } from './scopeDiagram';
 import { elkLayout } from './elkLayout';
 import { wireSpacing } from './ports';
 
 /** Display hints from declared kinds and actual connections, never from RTL/name patterns.
  * All edges remain in scopeDiagram; this projection only chooses block positions.
  */
-export async function autoReadingLayout(model: Model, scope: string): Promise<Positions> {
+export async function autoReadingLayout(model: Model, scope: string,options:DiagramOptions={}): Promise<Positions> {
   const initial = Object.fromEntries(model.modules.filter(m => m.parent === scope).sort((a,b) => a.id.localeCompare(b.id)).map((m,i) => [m.id,{x:i*420,y:120}]));
-  const measure = (positions: Positions = initial) => scopeDiagram(model, scope, { positions, measureOnly: true });
+  const measure = (positions: Positions = initial) => scopeDiagram(model, scope, {...options, positions, measureOnly: true });
   let graph = measure();
   let nodes = graph.nodes.filter(n => !n.data.boundary).sort((a,b) => a.id.localeCompare(b.id));
   if (!nodes.length) return {};
@@ -22,14 +23,14 @@ export async function autoReadingLayout(model: Model, scope: string): Promise<Po
     return rv ? [l.from.moduleId, l.to.moduleId] : [];
   }));
   // A controller carrying declared data stays in the topology instead of being lifted out.
-  const control = new Set(nodes.filter(n => n.data.kind === 'controller' && !rvNodes.has(n.id) && !incident(n.id).some(e => e.data?.category==='data'||e.data?.category==='writeback')).map(n => n.id));
+  const control = new Set(nodes.filter(n => n.data.kind === 'controller' && !rvNodes.has(n.id) && incident(n.id).length>0 && incident(n.id).every(e=>['control','request','response','configuration','clock_reset'].includes(String(e.data?.category)))).map(n => n.id));
   if (control.size === nodes.length) control.clear();
   const adjacent = new Map<string,string>();
   for (const n of nodes.filter(n => n.data.kind === 'memory')) {
     const peers = new Set(incident(n.id).filter(e => !control.has(peer(e,n.id))).map(e => peer(e,n.id)));
     const anchor = [...peers][0];
     // Boundary-connected/shared/in-line memories stay in the main topology.
-    if (peers.size === 1 && ids.has(anchor) && nodes.find(n => n.id === anchor)?.data.kind !== 'memory') adjacent.set(n.id, anchor);
+    if (!rvNodes.has(n.id)&&!incident(n.id).some(e=>e.data?.category==='data'||e.data?.category==='writeback')&&peers.size === 1 && ids.has(anchor) && nodes.find(n => n.id === anchor)?.data.kind !== 'memory') adjacent.set(n.id, anchor);
   }
   const body = nodes.filter(n => !control.has(n.id) && !adjacent.has(n.id));
   const bodyIds = new Set(body.map(n => n.id));
@@ -73,5 +74,5 @@ export async function autoReadingLayout(model: Model, scope: string): Promise<Po
     for (const n of nodes) { const old = size(n.id), g = n.data.geometry; if (g.width>old.width || g.height>old.height) grew=true; sizes.set(n.id,{width:Math.max(old.width,g.width),height:Math.max(old.height,g.height)}); }
     if (!grew) break;
   }
-  return positions;
+  return refineSpacing(model,scope,positions,options).positions;
 }

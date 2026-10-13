@@ -1,10 +1,10 @@
 import type {Model,ScopeLayout} from '../../core/schema';
-import {scopeDiagram,type Positions} from './scopeDiagram';
+import {scopeDiagram,type Positions,type DiagramOptions} from './scopeDiagram';
 import {elkLayout} from './elkLayout';
 import {orderingRelations,alignColumns} from './topology';
 /** Semantic reading regions constrain columns. RTL nodes and edges retain their identities. */
-export async function stageLayout(model:Model,scope:string,reading:NonNullable<ScopeLayout['reading']>):Promise<Positions>{
- let graph=scopeDiagram(model,scope,{reading,measureOnly:true});
+export async function stageLayout(model:Model,scope:string,reading:NonNullable<ScopeLayout['reading']>,options:DiagramOptions={}):Promise<Positions>{
+ let graph=scopeDiagram(model,scope,{...options,reading,measureOnly:true});
  const regions=reading.stages??[],assigned=new Set(regions.flatMap(r=>r.nodes));
  const loose=graph.nodes.filter(n=>!n.data.boundary&&!assigned.has(n.id)).map(n=>n.id);
  const groups=[...regions.map(r=>r.nodes),...(loose.length?[loose]:[])];
@@ -45,7 +45,7 @@ export async function stageLayout(model:Model,scope:string,reading:NonNullable<S
   }
   const baseline=Math.max(100,...plans.map(p=>p.center))+80;let x=0;positions={};
   for(const plan of plans){for(const n of plan.nodes)positions[n.id]={x:x+plan.placed[n.id].x-plan.left,y:baseline+plan.placed[n.id].y-plan.center};x+=plan.width+220;}
-  if(pass<2)graph=scopeDiagram(model,scope,{positions,reading,measureOnly:true});
+  if(pass<2)graph=scopeDiagram(model,scope,{...options,positions,reading,measureOnly:true});
  }
  return positions;
 }

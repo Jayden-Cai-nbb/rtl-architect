@@ -36,7 +36,19 @@ export function diagramQuality(graph: ReturnType<typeof scopeDiagram>) {
   const unrouted = graph.edges.filter(e => e.data?.routingFallback || !e.data?.routePoints).map(e => e.id);
   const sharedLabels=graph.edges.filter(e=>e.data?.labelSharedWith).map(e=>({edge:e.id,namedBy:e.data!.labelSharedWith}));
   const labelStatus=graph.edges.some(e=>e.label&&e.data?.labelHidden)?'needs_attention':'named';
-  return { sharedLabels, labelStatus, status: overlaps.length || nodeHits.length || unrouted.length ? 'failed' : 'passed', overlaps, nodeHits, unrouted,
+  const omissions=new Set(graph.omissions.map(o=>o.connectionId)),expected=new Map(graph.semantics.relationships.map(r=>[r.id,r]));
+  const represented=new Map<string,string[]>(),wrongEndpoints:string[]=[];
+  const scope=graph.nodes[0].data.moduleId;
+  const nodeFor=(e:typeof graph.semantics.relationships[number]['from'],role?:string)=>e.local?`local:${scope}:${e.interfaceId}`:e.moduleId===scope?`rack:${scope}:${role}`:e.moduleId;
+  for(const edge of graph.edges)for(const id of (edge.data?.connectionIds as string[]??[])){
+   represented.set(id,[...represented.get(id)??[],edge.id]);const r=expected.get(id);
+   if(r&&(nodeFor(r.from,r.fromRole)!==edge.source||nodeFor(r.to,r.toRole)!==edge.target))wrongEndpoints.push(id);
+  }
+  const missing=[...expected.keys()].filter(id=>!represented.has(id)&&!omissions.has(id)),extra=[...represented.keys()].filter(id=>!expected.has(id)),duplicates=[...represented].filter(([,edges])=>edges.length!==1).map(([id])=>id);
+  const structuralFidelity={status:missing.length||extra.length||duplicates.length||wrongEndpoints.length?'failed':'passed',missing,extra,duplicates,wrongEndpoints,omissions:graph.omissions,note:'仅检查当前视图对应模型连接；折叠有明确原因，不证明 RTL 覆盖。'};
+  const semanticClarity={status:graph.semantics.issues.length?'needs_review':'no_detected_issue',issues:graph.semantics.issues,humanReview:'not_run'};
+  const geometricReadability={status:overlaps.length||nodeHits.length||unrouted.length?'blocked':labelStatus!=='named'||crossings>0||sharedLength>0?'needs_review':'clear',note:'交叉、共线和隐藏线名与基本几何完整性分开；仍需沿真实事务人工阅读。'};
+  return {structuralFidelity,semanticClarity,geometricReadability, sharedLabels, labelStatus, status: overlaps.length || nodeHits.length || unrouted.length ? 'failed' : 'passed', overlaps, nodeHits, unrouted,
     crossings, unrelatedSharedLength: sharedLength, bends: segments.length - graph.edges.filter(e => e.data?.routePoints).length,
     wireLength: segments.reduce((n, s) => n + Math.abs(s.a.x - s.b.x) + Math.abs(s.a.y - s.b.y), 0),
     hiddenLabels: graph.edges.filter(e => e.label && e.data?.labelHidden).map(e => e.id),

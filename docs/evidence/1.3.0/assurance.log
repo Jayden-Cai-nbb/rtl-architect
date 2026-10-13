@@ -1,0 +1,10 @@
+
+> rtl-architect@1.3.0 check:assurance
+> node --import tsx scripts/check-assurance.ts
+
+{
+  "groups": 25,
+  "passed": true,
+  "scenario": "real Verilator monitors + fault injection + current Yosys structure + DEPTH 4→8 + freshness + compact context",
+  "workspace": "/tmp/rtlarch-assurance-qQ9ub6"
+}

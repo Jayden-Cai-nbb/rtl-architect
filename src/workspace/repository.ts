@@ -1,3 +1,5 @@
+import {verificationImpact} from '../core/verificationImpact';
+import {contextView,type ContextViewOptions} from './contextView';
 import {architectureContext} from './context';
 import {verificationRuns} from './verification';
 import {reviewDependencies,reviewImpact} from '../core/reviewImpact';
@@ -59,6 +61,7 @@ export class Repository {
     return {workbench,workbenchHash:hashValue(workbench),modelHash:snapshot.modelHash,threadStates};
   }
   getWorkbench(){return this.queue(()=>this.workbenchSnapshot());}
+  getContextView(options:ContextViewOptions){return this.queue(async()=>contextView(await this.snapshot(),options));}
   getContext(moduleId?:string,index?:number){return this.queue(async()=>{
     const snapshot=await this.snapshot(),work=await this.workbenchSnapshot();
     const owner=snapshot.model.modules.find(m=>m.id===moduleId);
@@ -144,7 +147,7 @@ export class Repository {
     const proposal = proposalSchema.parse(input);
     if (proposal.baseHash !== hash) throw new ApiError(409, '模型版本冲突：请保留提案，重新加载并显式重新预览');
     const result = applyCommands(model, proposal.commands);
-    return { model: result.model, candidateHash: modelHash(result.model), diff: semanticDiff(model, result.model), issues: result.issues };
+    return { model: result.model, candidateHash: modelHash(result.model), diff: semanticDiff(model, result.model), impact:verificationImpact(model,result.model), issues: result.issues };
   }
   preview(input: unknown) { return this.queue(async () => { const current = await this.snapshot(); const { model, ...preview } = this.candidate(current.model, current.modelHash, input); return { ...preview, candidate: model }; }); }
   private async readProposal(id: string) {
@@ -225,7 +228,7 @@ export class Repository {
       if (!current.model.modules.some(m => m.id === moduleId)) throw new ApiError(422, '模块不存在');
       const exported = await this.optional('generated/contract.json');
       if (!exported || stableStringify(exported) !== stableStringify(contractData(current.model))) throw new ApiError(409, '导出合同缺失、陈旧或与当前 IR 不一致，请从 GUI 重新导出', 'CONTRACT_OUTDATED');
-      return { modelHash: current.modelHash, reviewStatus: current.reviewStatus, design: current.model.design, ...moduleDocument(current.model, moduleId), clocks: current.model.clocks, resets: current.model.resets, reviews: current.moduleReviews, instruction: '实现必须遵守该版本的接口、参数、复位、背压、不变量和验收条件；不满足时先提架构变更。此交接不证明行为 RTL 一致性。' };
+      return { approvalAssurance:'local_record', verificationAssurance:'not_implied_by_handoff', modelHash: current.modelHash, reviewStatus: current.reviewStatus, design: current.model.design, ...moduleDocument(current.model, moduleId), clocks: current.model.clocks, resets: current.model.resets, reviews: current.moduleReviews, instruction: '实现必须遵守该版本的接口、参数、复位、背压、不变量和验收条件；不满足时先提架构变更。此交接不证明行为 RTL 一致性。' };
     });
   }
   review(input: unknown) {

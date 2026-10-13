@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "runId": "REPLACE_WITH_ELABORATION_RUN_ID",
+  "netlist": "netlist.json",
+  "top": "rv_fifo",
+  "mappings": [
+    {
+      "moduleId": "top",
+      "instancePath": [],
+      "rtlType": "rv_fifo",
+      "parameters": {
+        "DATA_W": "DATA_W",
+        "DEPTH": "DEPTH"
+      },
+      "ports": {
+        "in": {
+          "data": "s_data",
+          "valid": "s_valid",
+          "ready": "s_ready"
+        },
+        "out": {
+          "data": "m_data",
+          "valid": "m_valid",
+          "ready": "m_ready"
+        }
+      },
+      "clock": "clk",
+      "reset": "rst_n"
+    }
+  ]
+}

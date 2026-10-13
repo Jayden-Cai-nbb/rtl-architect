@@ -4,7 +4,15 @@ const integer = z.number().finite().int().safe();
 export const hashSchema = z.string().regex(/^[a-f0-9]{64}$/);
 export const widthSchema = z.union([integer.min(1).max(65536), z.strictObject({ param: idSchema }), z.strictObject({ expr: z.string().trim().min(1).max(2048) })]);
 export const interfaceSchema = z.strictObject({ id: idSchema, role: z.enum(['producer', 'consumer']), protocol: z.enum(['rv', 'signal']), width: widthSchema, required: z.boolean(), group: idSchema.optional() });
-export const contractSchema = z.strictObject({ responsibility: z.string(), latencyMinCycles: integer.nonnegative(), latencyCondition: z.string(), backpressure: z.string(), resetBehavior: z.string(), invariants: z.array(z.string()), verificationPlan: z.array(z.string()), openQuestions: z.array(z.string()) });
+const obligationBase={id:idSchema,description:z.string().trim().min(1),requirementIds:z.array(idSchema).optional()};
+export const obligationSchema=z.discriminatedUnion('kind',[
+ z.strictObject({...obligationBase,kind:z.literal('ready_valid_stability'),interfaceId:idSchema}),
+ z.strictObject({...obligationBase,kind:z.literal('reset_flush'),interfaceId:idSchema}),
+ z.strictObject({...obligationBase,kind:z.literal('state_transition'),localSignalId:idSchema}),
+ z.strictObject({...obligationBase,kind:z.literal('fifo_ordering'),inputInterfaceId:idSchema,outputInterfaceId:idSchema,capacity:widthSchema,completion:z.literal('drained_test_end')})
+]);
+export type Obligation=z.infer<typeof obligationSchema>;
+export const contractSchema = z.strictObject({ responsibility: z.string(), latencyMinCycles: integer.nonnegative(), latencyCondition: z.string(), backpressure: z.string(), resetBehavior: z.string(), invariants: z.array(z.string()), verificationPlan: z.array(z.string()), openQuestions: z.array(z.string()), obligations:z.array(obligationSchema).optional() });
 export const parameterSchema = z.union([integer, z.string(), z.boolean()]);
 export const kindSchema = z.enum(['subsystem', 'module', 'memory', 'compute', 'controller', 'fifo', 'add_const']);
 export const specificationSchema = z.strictObject({
@@ -41,9 +49,15 @@ export const signalValueSchema: z.ZodType<SignalValue> = z.lazy(()=>z.discrimina
  z.strictObject({kind:z.literal('concat'),parts:z.array(signalValueSchema).min(1).max(4096)}),
  z.strictObject({kind:z.literal('operator'),operator:z.enum(['&','|','^','~','&&','||','!','+','-','mux']),operands:z.array(signalValueSchema).min(1).max(3)})
 ]));
+export const stateUpdateSchema=z.strictObject({
+ reset:z.strictObject({signal:endpointSchema,activeLevel:z.enum(['low','high']),value:signalValueSchema}).nullable(),
+ branches:z.array(z.strictObject({id:idSchema,condition:signalValueSchema,value:signalValueSchema})).min(1).max(64),
+ otherwise:z.literal('hold')
+});
+export type StateUpdate=z.infer<typeof stateUpdateSchema>;
 export const localSignalSchema=z.strictObject({id:idSchema,scope:idSchema,name:z.string().trim().min(1),width:widthSchema,description:z.string().trim().min(1),driver:z.discriminatedUnion('kind',[
  z.strictObject({kind:z.literal('comb'),value:signalValueSchema}),
- z.strictObject({kind:z.literal('register'),inputs:z.array(endpointSchema),sourceText:z.string().trim().min(1)})
+ z.strictObject({kind:z.literal('register'),inputs:z.array(endpointSchema),sourceText:z.string().trim().min(1),update:stateUpdateSchema.optional()})
 ]),evidenceIds:z.array(idSchema)});
 export const clockSchema = z.strictObject({ id: idSchema, edge: z.enum(['rising', 'falling']) });
 export const resetSchema = z.strictObject({ id: idSchema, clock: idSchema.nullable(), activeLevel: z.enum(['low', 'high']), synchronous: z.boolean(), deassertion: z.enum(['synchronous', 'asynchronous', 'unknown']).optional() });

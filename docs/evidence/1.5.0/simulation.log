@@ -1,0 +1,8 @@
+- tb.sv:19: Verilog $finish
+RTLARCH_STATE_COVER top/out_data reset=4 hold=8 branch0=11
+RTLARCH_OBL_PASS top/out_data_update 5ac52b4db1f56068ec47787f29aadf578d89f9c51499a52e18bfb2d56989ae22 hits=23
+RTLARCH_STATE_COVER top/out_valid reset=4 hold=3 branch0=16
+RTLARCH_OBL_PASS top/out_valid_update e85fd5642da4d88287c78e10ff7efd47b39078e692a1a8c200f114c46d3a4d79 hits=23
+- S i m u l a t i o n   R e p o r t: Verilator 5.053 devel
+- Verilator: $finish at 232ns; walltime 0.000 s; speed 3.949 ms/s
+- Verilator: cpu 0.000 s on 1 threads; allocated 4 MB

@@ -1,8 +1,8 @@
 import type {Endpoint,Link,Model} from './schema';
-import {driverReads,expandLink} from './signals';
+import {driverReads,expandLink,stateUpdateReads} from './signals';
 import {resolveEndpoint} from './endpoints';
 import {connectionFacts} from './connectivity';
-export type Inspection = ({kind:'module';id:string}|{kind:'connection';ids:string[];index?:{moduleId:string;index:number}}|{kind:'array';id:string;index:number}|{kind:'local';id:string}|{kind:'boundary';role:'consumer'|'producer';groupId?:string}) & {depth?:number;crossState?:boolean};
+export type Inspection = ({kind:'module';id:string}|{kind:'connection';ids:string[];index?:{moduleId:string;index:number}}|{kind:'array';id:string;index:number}|{kind:'local';id:string;purpose?:'data'|'control'}|{kind:'boundary';role:'consumer'|'producer';groupId?:string}) & {depth?:number;crossState?:boolean};
 export type GroupInfo={id:string;label:string;category:string;description:string;auxiliary:boolean};
 export function interfaceGroup(model:Model,endpoint:Endpoint):GroupInfo{
  const module=model.modules.find(m=>m.id===endpoint.moduleId),port=module?.interfaces.find(p=>p.id===endpoint.interfaceId);
@@ -14,7 +14,13 @@ export function interfaceGroup(model:Model,endpoint:Endpoint):GroupInfo{
 }
 export function linkGroup(model:Model,link:Link){
  const a=interfaceGroup(model,link.from),b=interfaceGroup(model,link.to);
+ if(a.category!=='other'&&b.category!=='other'&&a.category!==b.category)return {id:`conflict:${link.id}`,label:`${a.label} / ${b.label} ?`,category:'other',description:'两端业务分类冲突，需核对；不自动折叠或认定协议',auxiliary:false};
  return a.category!=='other'?a:b.category!=='other'?b:a.id.startsWith('port:')&&!b.id.startsWith('port:')?b:a;
+}
+/** Detail mode gives each recorded port its own anchor, without inventing RTL pins for an RV interface. */
+export function linkAnchorGroup(model:Model,scope:string,end:Endpoint,link:Link,individual=false){
+ if(end.moduleId===scope&&!end.local)return interfaceGroup(model,end).id;
+ return individual?`raw:${end.moduleId}:${end.local?'local:':''}${end.interfaceId}`:linkGroup(model,link).id;
 }
 const endpointMatches=(a:Endpoint,b:Endpoint)=>a.moduleId===b.moduleId&&a.interfaceId===b.interfaceId&&!!a.local===!!b.local&&(a.index===undefined||b.index===undefined||a.index==='all'||b.index==='all'||a.index===b.index);
 export function inspectScope(model:Model,scope:string,inspection?:Inspection){
@@ -37,10 +43,11 @@ export function inspectScope(model:Model,scope:string,inspection?:Inspection){
   if(localIds.has(id))return;
   if(localIds.size>=48){limited.add(id);return;}
   localIds.add(id);const local=locals.get(id);if(!local)return;
-  if(local.driver.kind==='register'&&!inspection?.crossState){stateBoundaries.add(id);return;}
+  const purpose=inspection?.kind==='local'&&inspection.id===id?inspection.purpose:undefined;
+  if(local.driver.kind==='register'&&!inspection?.crossState&&!(purpose&&local.driver.update)){stateBoundaries.add(id);return;}
   if(level>=depth){limited.add(id);return;}
   const seen=new Set<string>();
-  for(const endpoint of driverReads(local)){
+  for(const endpoint of (purpose&&local.driver.kind==='register'&&local.driver.update?stateUpdateReads(local.driver.update,purpose):driverReads(local))){
    const key=JSON.stringify(endpoint);if(seen.has(key))continue;seen.add(key);
    if(dependencies.length>=160){limited.add(id);break;}
    dependencies.push({localId:id,endpoint});

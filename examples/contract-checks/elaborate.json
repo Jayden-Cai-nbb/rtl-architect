@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "name": "FIFO 显式展开",
+  "stage": "elaboration",
+  "moduleIds": [
+    "top"
+  ],
+  "inputs": [
+    "rtl/rv_fifo.sv"
+  ],
+  "inputClosure": {
+    "status": "declared_complete",
+    "note": "全部源码及配置显式提供，无外部依赖。"
+  },
+  "timeoutMs": 30000,
+  "commands": [
+    {
+      "program": "yosys",
+      "versionArgs": [
+        "-V"
+      ],
+      "args": [
+        "-Q",
+        "-T",
+        "-p",
+        "read_verilog -sv rtl/rv_fifo.sv; hierarchy -top rv_fifo; proc; write_json {runDir}/netlist.json"
+      ]
+    }
+  ],
+  "checks": [
+    {
+      "kind": "artifact",
+      "file": "netlist.json"
+    }
+  ]
+}

@@ -1,16 +1,16 @@
 import type {DependencyRelation} from './dependencies';
 import type {Model,Endpoint} from '../../core/schema';
-import {interfaceGroup,linkGroup} from '../../core/inspection';
+import {interfaceGroup,linkGroup,linkAnchorGroup} from '../../core/inspection';
 import type {RtlNode,PortGeometry} from './types';
 export const portDetailZoom=.9;
 export const wireSpacing=32;
 const short=(name:string)=>name.length>17?name.slice(0,14)+'…':name;
 /** Display-only geometry from all stored links; zoom/selection never changes pin placement. */
-export function orientPorts(nodes:RtlNode[],model:Model,scope:string,links:Model['connections'],nodeId:(e:Endpoint)=>string,dependencies:DependencyRelation[]=[]){
+export function orientPorts(nodes:RtlNode[],model:Model,scope:string,links:Model['connections'],nodeId:(e:Endpoint)=>string,dependencies:DependencyRelation[]=[],individual=false){
  const byId=new Map(nodes.map(n=>[n.id,n]));
  const neighbors=new Map<string,{x:number;y:number}[]>(),names=new Map<string,Set<string>>(),categories=new Map<string,string>();
  const returns=new Map<string,Set<PortGeometry['side']>>();
- const relations=[...links.map(link=>({from:link.from,to:link.to,group:linkGroup(model,link),fromGroup:link.from.moduleId===scope&&!link.from.local?interfaceGroup(model,link.from).id:linkGroup(model,link).id,toGroup:link.to.moduleId===scope&&!link.to.local?interfaceGroup(model,link.to).id:linkGroup(model,link).id,labels:undefined as string[]|undefined})),...dependencies.map(d=>({...d,labels:d.endpoints.map(e=>e.interfaceId)}))];
+ const relations=[...links.map(link=>({from:link.from,to:link.to,group:linkGroup(model,link),fromGroup:linkAnchorGroup(model,scope,link.from,link,individual),toGroup:linkAnchorGroup(model,scope,link.to,link,individual),labels:undefined as string[]|undefined})),...dependencies.map(d=>({...d,labels:d.endpoints.map(e=>e.interfaceId)}))];
  for(const link of relations)for(const [end,other,direction,group] of [[link.from,link.to,'out',link.fromGroup],[link.to,link.from,'in',link.toGroup]] as const){
   const n=byId.get(nodeId(end)),o=byId.get(nodeId(other));if(!n)continue;
   const relation=link.group,key=`${n.id}/${direction}:${group}`;

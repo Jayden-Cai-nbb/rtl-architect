@@ -14,3 +14,14 @@ __pycache__/
 .env
 .env.*
 !.env.example
+
+# Publish only the authority fixtures of these generic, runnable examples.
+!examples/contract-checks/architecture/
+examples/contract-checks/architecture/*
+!examples/contract-checks/architecture/model.json
+!examples/hardware-views/architecture/
+examples/hardware-views/architecture/*
+!examples/hardware-views/architecture/model.json
+!examples/state-updates/architecture/
+examples/state-updates/architecture/*
+!examples/state-updates/architecture/model.json

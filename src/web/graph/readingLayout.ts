@@ -1,16 +1,16 @@
 import {stageLayout} from './stageLayout';
 import type { Model, ScopeLayout } from '../../core/schema';
-import { scopeDiagram, type Positions } from './scopeDiagram';
+import { scopeDiagram, type Positions,type DiagramOptions } from './scopeDiagram';
 import {wireSpacing} from './ports';
 import { autoReadingLayout } from './autoReadingLayout';
 
 /** Shared online/offline layout: explicit plans take priority over automatic display hints. */
-export async function arrangeScope(model: Model, scope: string, hash: string, reading?: ScopeLayout['reading']): Promise<Positions> {
-  const diagram = scopeDiagram(model, scope,{measureOnly:true,reading}), nodes = diagram.nodes.filter(n => !n.data.boundary);
+export async function arrangeScope(model: Model, scope: string, hash: string, reading?: ScopeLayout['reading'],options:DiagramOptions={}): Promise<Positions> {
+  const diagram = scopeDiagram(model, scope,{...options,measureOnly:true,reading}), nodes = diagram.nodes.filter(n => !n.data.boundary);
   const ids = new Set(nodes.map(n => n.id));
-  if (!reading) return autoReadingLayout(model, scope);
+  if (!reading) return autoReadingLayout(model, scope,options);
   if (reading.modelHash !== hash) throw new Error('阅读布局对应旧模型；核对展示约束并更新布局版本后重试。');
-  if(reading.stages?.length)return stageLayout(model,scope,reading);
+  if(reading.stages?.length)return stageLayout(model,scope,reading,options);
   const controls=new Set(reading.control);
   const controlNets=new Set(diagram.edges.filter(e=>(controls.has(e.source)&&ids.has(e.target))||(controls.has(e.target)&&ids.has(e.source))).map(e=>e.data?.netKey??e.id));
   const channelHeight=Math.max(180,controlNets.size*wireSpacing),gap=220;
@@ -37,6 +37,6 @@ export async function arrangeScope(model: Model, scope: string, hash: string, re
   };
   // Measure ports in the intended rows before choosing row spacing, without doing routing twice.
   const draft=place();
-  for(const n of scopeDiagram(model,scope,{positions:draft,measureOnly:true,reading}).nodes)if(ids.has(n.id))dimensions.set(n.id,n.data.geometry);
+  for(const n of scopeDiagram(model,scope,{...options,positions:draft,measureOnly:true,reading}).nodes)if(ids.has(n.id))dimensions.set(n.id,n.data.geometry);
   return place();
 }

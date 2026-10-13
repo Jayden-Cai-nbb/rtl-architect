@@ -1,0 +1,416 @@
+{
+  "schemaVersion": 3,
+  "design": {
+    "id": "stallable_add",
+    "name": "真实 RTL：可停顿运算与状态",
+    "top": "top"
+  },
+  "clocks": [
+    {
+      "id": "clk",
+      "edge": "rising"
+    }
+  ],
+  "resets": [
+    {
+      "id": "rst_n",
+      "clock": "clk",
+      "activeLevel": "low",
+      "synchronous": true
+    }
+  ],
+  "modules": [
+    {
+      "id": "top",
+      "name": "可停顿加常数级",
+      "parent": null,
+      "kind": "subsystem",
+      "rtlModule": "add_const",
+      "clock": "clk",
+      "reset": "rst_n",
+      "parameters": {
+        "DATA_W": 8,
+        "CONST": 3
+      },
+      "interfaces": [
+        {
+          "id": "s_data",
+          "role": "consumer",
+          "protocol": "signal",
+          "width": 8,
+          "required": false,
+          "group": "payload"
+        },
+        {
+          "id": "s_valid",
+          "role": "consumer",
+          "protocol": "signal",
+          "width": 1,
+          "required": false,
+          "group": "flow"
+        },
+        {
+          "id": "m_ready",
+          "role": "consumer",
+          "protocol": "signal",
+          "width": 1,
+          "required": false,
+          "group": "flow"
+        },
+        {
+          "id": "m_data",
+          "role": "producer",
+          "protocol": "signal",
+          "width": 8,
+          "required": false,
+          "group": "payload"
+        },
+        {
+          "id": "m_valid",
+          "role": "producer",
+          "protocol": "signal",
+          "width": 1,
+          "required": false,
+          "group": "flow"
+        },
+        {
+          "id": "s_ready",
+          "role": "producer",
+          "protocol": "signal",
+          "width": 1,
+          "required": false,
+          "group": "flow"
+        },
+        {
+          "id": "clk",
+          "role": "consumer",
+          "protocol": "signal",
+          "width": 1,
+          "required": false,
+          "group": "domain"
+        },
+        {
+          "id": "rst_n",
+          "role": "consumer",
+          "protocol": "signal",
+          "width": 1,
+          "required": false,
+          "group": "domain"
+        }
+      ],
+      "contract": {
+        "responsibility": "单级弹性输出寄存器，实现 (x + CONST) mod 2^DATA_W。",
+        "latencyMinCycles": 1,
+        "latencyCondition": "输入握手采样边沿至对应输出握手采样边沿；初始为空、无复位且下游持续 ready 时为最小延迟。持续背压不声明有限最大延迟。稳定无背压目标每周期 1 个事务。",
+        "backpressure": "发送方在 valid && !ready 时保持 valid/data，直到接收或复位。加法级 s_ready = rst_n && (!out_valid || m_ready)，允许输出接收同沿装入新结果。",
+        "resetBehavior": "posedge clk 同步低有效 rst_n；复位期间 valid/ready 输出为 0；复位采样边沿取消全部在途事务。FIFO 清读写指针和计数，不要求清存储数组。",
+        "invariants": [
+          "仅在 posedge clk 且 rst_n=1 时以 valid && ready 记账。",
+          "每个未被复位取消的输入恰好按序输出一次。",
+          "DATA_W 为 1..32，CONST 为 0..2^DATA_W-1；结果按 DATA_W 截断。"
+        ],
+        "verificationPlan": [
+          "握手 scoreboard 检查顺序、丢失、重复及溢出截断。",
+          "连续输入、随机背压、FIFO 满/空与同时入队/出队。",
+          "在途复位、背压保持、超时失败；非采样边沿驱动。"
+        ],
+        "openQuestions": []
+      },
+      "interfaceGroups": [
+        {
+          "id": "payload",
+          "label": "载荷",
+          "category": "data",
+          "description": "数据值，未将原始信号自动拼成 RV"
+        },
+        {
+          "id": "flow",
+          "label": "握手控制",
+          "category": "control",
+          "description": "valid/ready 控制信号，方向分别保留"
+        },
+        {
+          "id": "domain",
+          "label": "时钟与复位",
+          "category": "clock_reset",
+          "description": "源码声明的时钟和同步低有效复位"
+        }
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "id": "data_out",
+      "scope": "top",
+      "from": {
+        "moduleId": "top",
+        "interfaceId": "out_data",
+        "local": true
+      },
+      "to": {
+        "moduleId": "top",
+        "interfaceId": "m_data"
+      }
+    },
+    {
+      "id": "valid_out",
+      "scope": "top",
+      "from": {
+        "moduleId": "top",
+        "interfaceId": "visible_valid",
+        "local": true
+      },
+      "to": {
+        "moduleId": "top",
+        "interfaceId": "m_valid"
+      }
+    },
+    {
+      "id": "ready_out",
+      "scope": "top",
+      "from": {
+        "moduleId": "top",
+        "interfaceId": "accept",
+        "local": true
+      },
+      "to": {
+        "moduleId": "top",
+        "interfaceId": "s_ready"
+      }
+    }
+  ],
+  "localSignals": [
+    {
+      "id": "out_data",
+      "scope": "top",
+      "name": "输出数据寄存器",
+      "width": 8,
+      "description": "RTL out_data 保存输出载荷；条件更新，停顿时保持。",
+      "driver": {
+        "kind": "register",
+        "inputs": [
+          {
+            "moduleId": "top",
+            "interfaceId": "sum_value",
+            "local": true
+          },
+          {
+            "moduleId": "top",
+            "interfaceId": "s_valid"
+          },
+          {
+            "moduleId": "top",
+            "interfaceId": "accept",
+            "local": true
+          },
+          {
+            "moduleId": "top",
+            "interfaceId": "rst_n"
+          }
+        ],
+        "sourceText": "if (!rst_n) out_data <= '0; else if (s_ready && s_valid) out_data <= s_data + CONST;"
+      },
+      "evidenceIds": [
+        "rtl"
+      ]
+    },
+    {
+      "id": "out_valid",
+      "scope": "top",
+      "name": "输出有效寄存器",
+      "width": 1,
+      "description": "RTL out_valid 保存输出槽占用状态。",
+      "driver": {
+        "kind": "register",
+        "inputs": [
+          {
+            "moduleId": "top",
+            "interfaceId": "s_valid"
+          },
+          {
+            "moduleId": "top",
+            "interfaceId": "accept",
+            "local": true
+          },
+          {
+            "moduleId": "top",
+            "interfaceId": "rst_n"
+          }
+        ],
+        "sourceText": "if (!rst_n) out_valid <= 1'b0; else if (s_ready) out_valid <= s_valid;"
+      },
+      "evidenceIds": [
+        "rtl"
+      ]
+    },
+    {
+      "id": "accept",
+      "scope": "top",
+      "name": "输入可接受条件",
+      "width": 1,
+      "description": "源码 s_ready 的组合表达式：复位释放且输出为空或正在被接收。",
+      "driver": {
+        "kind": "comb",
+        "value": {
+          "kind": "operator",
+          "operator": "&&",
+          "operands": [
+            {
+              "kind": "endpoint",
+              "endpoint": {
+                "moduleId": "top",
+                "interfaceId": "rst_n"
+              }
+            },
+            {
+              "kind": "operator",
+              "operator": "||",
+              "operands": [
+                {
+                  "kind": "operator",
+                  "operator": "!",
+                  "operands": [
+                    {
+                      "kind": "endpoint",
+                      "endpoint": {
+                        "moduleId": "top",
+                        "interfaceId": "out_valid",
+                        "local": true
+                      }
+                    }
+                  ]
+                },
+                {
+                  "kind": "endpoint",
+                  "endpoint": {
+                    "moduleId": "top",
+                    "interfaceId": "m_ready"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "evidenceIds": [
+        "rtl"
+      ]
+    },
+    {
+      "id": "visible_valid",
+      "scope": "top",
+      "name": "对外有效",
+      "width": 1,
+      "description": "源码 m_valid 的组合表达式，不是额外寄存级。",
+      "driver": {
+        "kind": "comb",
+        "value": {
+          "kind": "operator",
+          "operator": "&&",
+          "operands": [
+            {
+              "kind": "endpoint",
+              "endpoint": {
+                "moduleId": "top",
+                "interfaceId": "rst_n"
+              }
+            },
+            {
+              "kind": "endpoint",
+              "endpoint": {
+                "moduleId": "top",
+                "interfaceId": "out_valid",
+                "local": true
+              }
+            }
+          ]
+        }
+      },
+      "evidenceIds": [
+        "rtl"
+      ]
+    },
+    {
+      "id": "sum_value",
+      "scope": "top",
+      "name": "输入加三",
+      "width": 8,
+      "description": "源码 s_data + CONST 的派生表达式节点；不是命名 RTL 网络或新实例。本样例固定 CONST=3、DATA_W=8。",
+      "driver": {
+        "kind": "comb",
+        "value": {
+          "kind": "operator",
+          "operator": "+",
+          "operands": [
+            {
+              "kind": "endpoint",
+              "endpoint": {
+                "moduleId": "top",
+                "interfaceId": "s_data"
+              }
+            },
+            {
+              "kind": "constant",
+              "width": 8,
+              "value": "3"
+            }
+          ]
+        }
+      },
+      "evidenceIds": [
+        "rtl"
+      ]
+    }
+  ],
+  "provenance": {
+    "origin": "as_built",
+    "fidelity": "partial",
+    "scope": "单级 add_const 的已声明端口、表达式与状态输入集合",
+    "sourceDigest": "581b358f68e87a9b03c854de4b226e4952555a8975e690f0344da8e8551e6c7f",
+    "configuration": "DATA_W=8, CONST=3",
+    "coverage": {
+      "elaboratedInstances": null,
+      "representedInstances": 1
+    },
+    "evidence": [
+      {
+        "id": "rtl",
+        "file": "rtl/add_const.sv",
+        "fileHash": "581b358f68e87a9b03c854de4b226e4952555a8975e690f0344da8e8551e6c7f",
+        "sourceKind": "code",
+        "targets": [
+          {
+            "kind": "module",
+            "moduleId": "top"
+          }
+        ]
+      }
+    ],
+    "findings": [
+      {
+        "id": "source_read",
+        "classification": "fact",
+        "moduleIds": [
+          "top"
+        ],
+        "text": "依据随附 add_const.sv 记录表达式与寄存器；没有新增流水级。",
+        "evidenceIds": [
+          "rtl"
+        ]
+      },
+      {
+        "id": "granularity",
+        "classification": "unknown",
+        "moduleIds": [
+          "top"
+        ],
+        "text": "寄存更新仅记录输入集合与源码文字，未用 IR 精确表达使能/取消/逐位更新条件。",
+        "evidenceIds": [
+          "rtl"
+        ]
+      }
+    ],
+    "unsupportedStructures": [],
+    "verification": []
+  }
+}

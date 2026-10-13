@@ -1,0 +1,101 @@
+{
+  "schemaVersion": 3,
+  "design": {
+    "id": "checked_fifo",
+    "name": "可核验 FIFO",
+    "top": "top"
+  },
+  "clocks": [
+    {
+      "id": "clk",
+      "edge": "rising"
+    }
+  ],
+  "resets": [
+    {
+      "id": "rst_n",
+      "clock": "clk",
+      "activeLevel": "low",
+      "synchronous": true
+    }
+  ],
+  "modules": [
+    {
+      "id": "top",
+      "name": "fifo",
+      "parent": null,
+      "kind": "subsystem",
+      "rtlModule": "rv_fifo",
+      "clock": "clk",
+      "reset": "rst_n",
+      "parameters": {
+        "DATA_W": 8,
+        "DEPTH": 4
+      },
+      "interfaces": [
+        {
+          "id": "in",
+          "role": "consumer",
+          "protocol": "rv",
+          "width": {
+            "param": "DATA_W"
+          },
+          "required": true
+        },
+        {
+          "id": "out",
+          "role": "producer",
+          "protocol": "rv",
+          "width": {
+            "param": "DATA_W"
+          },
+          "required": true
+        }
+      ],
+      "contract": {
+        "responsibility": "寄存器 FIFO 按接收顺序缓冲数据；无空队列组合旁路。",
+        "latencyMinCycles": 1,
+        "latencyCondition": "输入握手采样边沿至对应输出握手采样边沿；初始为空、无复位且下游持续 ready 时为最小延迟。持续背压不声明有限最大延迟。稳定无背压目标每周期 1 个事务。",
+        "backpressure": "s_ready = rst_n && count < DEPTH；m_valid = rst_n && count != 0。满时即使出队也不接受输入；非满可同时入队/出队，计数不变。阻塞时保持 valid/data。",
+        "resetBehavior": "posedge clk 同步低有效 rst_n；复位期间 valid/ready 输出为 0；复位采样边沿取消全部在途事务。FIFO 清读写指针和计数，不要求清存储数组。",
+        "invariants": [
+          "仅在 posedge clk 且 rst_n=1 时以 valid && ready 记账。",
+          "每个未被复位取消的输入恰好按序输出一次。",
+          "0 <= count <= DEPTH；DEPTH 仅允许 2、4、8、16。"
+        ],
+        "verificationPlan": [
+          "握手 scoreboard 检查顺序、丢失、重复及溢出截断。",
+          "连续输入、随机背压、FIFO 满/空与同时入队/出队。",
+          "在途复位、背压保持、超时失败；非采样边沿驱动。"
+        ],
+        "openQuestions": [],
+        "obligations": [
+          {
+            "id": "stable",
+            "kind": "ready_valid_stability",
+            "interfaceId": "out",
+            "description": "背压期间保持有效输出"
+          },
+          {
+            "id": "flush",
+            "kind": "reset_flush",
+            "interfaceId": "out",
+            "description": "同步复位后的首个非复位采样沿输出为空"
+          },
+          {
+            "id": "order",
+            "kind": "fifo_ordering",
+            "inputInterfaceId": "in",
+            "outputInterfaceId": "out",
+            "capacity": {
+              "param": "DEPTH"
+            },
+            "completion": "drained_test_end",
+            "description": "接受的数据按序输出，测试结束时排空"
+          }
+        ]
+      }
+    }
+  ],
+  "connections": []
+}

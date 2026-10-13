@@ -1,4 +1,4 @@
-import type { Endpoint, Interface, Link, Model, Module, SignalValue } from './schema';
+import type { Endpoint, Interface, Link, Model, Module, SignalValue, StateUpdate } from './schema';
 import { widthValue } from './parameters';
 export function endpointInstances(model:Model,endpoint:Endpoint):Endpoint[]{
  const m=model.modules.find(m=>m.id===endpoint.moduleId);
@@ -30,8 +30,11 @@ export function expandLink(model:Model,link:Link,selection?:{moduleId:string;ind
 export function signalReads(value:SignalValue):Endpoint[]{
  return value.kind==='endpoint'?[value.endpoint]:value.kind==='constant'?[]:(value.kind==='concat'?value.parts:value.operands).flatMap(signalReads);
 }
+export function stateUpdateReads(update:StateUpdate,purpose?:'data'|'control'):Endpoint[]{
+ return [...(update.reset?(purpose==='data'?signalReads(update.reset.value):purpose==='control'?[update.reset.signal]:[update.reset.signal,...signalReads(update.reset.value)]):[]),...update.branches.flatMap(b=>purpose==='data'?signalReads(b.value):purpose==='control'?signalReads(b.condition):[...signalReads(b.condition),...signalReads(b.value)])];
+}
 export function driverReads(local:NonNullable<Model['localSignals']>[number]):Endpoint[]{
- return local.driver.kind==='comb'?signalReads(local.driver.value):local.driver.inputs;
+ return local.driver.kind==='comb'?signalReads(local.driver.value):local.driver.update?stateUpdateReads(local.driver.update):local.driver.inputs;
 }
 export type ResolvedSignal={module:Module;intf:Interface;direction:string;width:number|undefined;fullWidth:number|undefined};
 export function localSignalAnalysis(model:Model,resolve:(scope:string,e:Endpoint)=>ResolvedSignal|undefined){
@@ -42,7 +45,18 @@ export function localSignalAnalysis(model:Model,resolve:(scope:string,e:Endpoint
   visiting.add(id);
   try {
    const declared=widthValue(model,scope,item.width);
-   const result=item.driver.kind==='comb'?value(item.scope,item.driver.value):{width:declared,reads:item.driver.inputs.flatMap(e=>value(item.scope,{kind:'endpoint',endpoint:e}).reads)};
+   const result=item.driver.kind==='comb'?value(item.scope,item.driver.value):{width:declared,reads:driverReads(item).flatMap(e=>value(item.scope,{kind:'endpoint',endpoint:e}).reads)};
+   if(item.driver.kind==='register'&&item.driver.update){
+    const update=item.driver.update,keys=(items:Endpoint[])=>[...new Set(items.map(endpointLabel))].sort().join('|');
+    if(keys(item.driver.inputs)!==keys(stateUpdateReads(update)))throw new Error('状态更新规则与 inputs 依赖集合不一致，不能遗漏或夹带输入');
+    if(new Set(update.branches.map(b=>b.id)).size!==update.branches.length)throw new Error('状态分支 ID 必须唯一');
+    for(const b of update.branches){if(value(item.scope,b.condition).width!==1)throw new Error('状态更新条件必须为 1 位');if(value(item.scope,b.value).width!==declared)throw new Error('状态写入值位宽与寄存器不一致');}
+    if(update.reset){
+     if(value(item.scope,{kind:'endpoint',endpoint:update.reset.signal}).width!==1||value(item.scope,update.reset.value).width!==declared)throw new Error('状态复位信号或复位值位宽不匹配');
+     const reset=model.resets.find(r=>r.id===scope.reset);
+     if(!reset||!reset.synchronous||reset.clock!==scope.clock||reset.activeLevel!==update.reset.activeLevel)throw new Error('显式状态更新当前仅支持同域同步复位，极性须与作用域一致');
+    }
+   }
    if(result.width!==declared)throw new Error(`局部信号 ${id} 位宽 ${declared} 与驱动 ${result.width} 不符`);
    const clocks=new Set(result.reads.map(e=>resolve(item.scope,e)?.module.clock).filter(Boolean));if(clocks.size>1||(scope.clock&&[...clocks].some(c=>c!==scope.clock)))throw new Error(`局部信号 ${id} 涉及不同声明时钟域`);
    memo.set(id,result);return result;
@@ -68,7 +82,7 @@ export function localSignalAnalysis(model:Model,resolve:(scope:string,e:Endpoint
   }
   if(width<1||width>65536)throw new Error('局部表达式位宽超出1..65536');return {width,reads};
  }
- return {local};
+ return {local,value};
 }
 
 export const endpointLabel=(e:Endpoint)=>`${e.moduleId}${e.index!==undefined?`[${e.index}]`:''}.${e.local?'local:':''}${e.interfaceId}${e.slice?`[${e.slice.msb}:${e.slice.lsb}]`:e.sliceMapping?`[${e.sliceMapping.arrayModuleId}索引×${e.sliceMapping.stride}+${e.sliceMapping.offset}，${e.sliceMapping.width}位]`:''}`;

@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "name": "状态更新闭环：复位/装载/保持",
+  "stage": "simulation",
+  "moduleIds": [
+    "top"
+  ],
+  "inputs": [
+    "rtl/add_const.sv",
+    "tb.sv",
+    "checks/checks.sv",
+    "checks/checks.json"
+  ],
+  "inputClosure": {
+    "status": "declared_complete",
+    "note": "Standalone add_const, explicit default DATA_W=8 CONST=3, testbench and generated monitors."
+  },
+  "timeoutMs": 120000,
+  "commands": [
+    {
+      "program": "verilator",
+      "versionArgs": [
+        "--version"
+      ],
+      "args": [
+        "--binary",
+        "--timing",
+        "--assert",
+        "-Wno-fatal",
+        "--top-module",
+        "tb",
+        "--Mdir",
+        "{runDir}/obj",
+        "rtl/add_const.sv",
+        "tb.sv",
+        "checks/checks.sv"
+      ]
+    },
+    {
+      "program": "{runDir}/obj/Vtb",
+      "args": []
+    }
+  ],
+  "checks": [
+    {
+      "kind": "obligations",
+      "file": "step-1.stdout.log",
+      "metadata": "checks/checks.json"
+    }
+  ]
+}

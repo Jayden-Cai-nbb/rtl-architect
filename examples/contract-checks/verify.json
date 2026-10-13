@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "name": "FIFO 三项合同检查",
+  "stage": "simulation",
+  "moduleIds": [
+    "top"
+  ],
+  "inputs": [
+    "rtl/rv_fifo.sv",
+    "tb.sv",
+    "checks/checks.sv",
+    "checks/checks.json"
+  ],
+  "inputClosure": {
+    "status": "declared_complete",
+    "note": "独立 RTL、TB、生成检查器；无外部 include，构建选项均在 argv。"
+  },
+  "timeoutMs": 120000,
+  "commands": [
+    {
+      "program": "verilator",
+      "versionArgs": [
+        "--version"
+      ],
+      "args": [
+        "--binary",
+        "--timing",
+        "--assert",
+        "-Wno-fatal",
+        "--top-module",
+        "tb",
+        "--Mdir",
+        "{runDir}/obj",
+        "rtl/rv_fifo.sv",
+        "tb.sv",
+        "checks/checks.sv"
+      ]
+    },
+    {
+      "program": "{runDir}/obj/Vtb",
+      "args": []
+    }
+  ],
+  "checks": [
+    {
+      "kind": "obligations",
+      "file": "step-1.stdout.log",
+      "metadata": "checks/checks.json"
+    }
+  ]
+}

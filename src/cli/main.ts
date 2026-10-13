@@ -1,3 +1,8 @@
+import {verificationImpact} from '../core/verificationImpact';
+import {assurance} from '../workspace/assurance';
+import {conformanceSchema,runConformance} from '../workspace/conformance';
+import {checkBindingsSchema,generateChecks} from '../workspace/contractChecks';
+import {contextViewSchema} from '../workspace/contextView';
 import {openWorkspace} from './open';
 import {buildStatus} from '../workspace/build';
 import {workActionSchema,workbenchSchema} from '../core/workbench';
@@ -26,7 +31,7 @@ import { inputManifestSchema, sourceInventory } from '../workspace/inventory';
 import { evidenceFreshness } from '../workspace/freshness';
 import { exportBundle } from '../workspace/bundle';
 
-type Options = { model?: string; layout?: string; index?:number; workspace?: string; module?: string; apiPort?: number; port?: number; name?: string; json: boolean; open: boolean; user: boolean; offline: boolean; restart:boolean; init:boolean };
+type Options = { purpose?:string; maxBytes?:number; offset?:number; limit?:number; model?: string; layout?: string; index?:number; workspace?: string; module?: string; apiPort?: number; port?: number; name?: string; json: boolean; open: boolean; user: boolean; offline: boolean; restart:boolean; init:boolean };
 function parseArgs() {
   const options: Options = { json: false, open: false, user: false, offline: false, restart:false, init:false }, positionals: string[] = [];
   const args = process.argv.slice(2);
@@ -34,8 +39,10 @@ function parseArgs() {
     const arg = args[i];
     if (arg === '--') { positionals.push(...args.slice(i + 1)); break; }
     if (['--json', '--open', '--user', '--offline', '--restart', '--init'].includes(arg)) { options[arg.slice(2) as 'json' | 'open' | 'user' | 'offline' | 'restart' | 'init'] = true; continue; }
-    if (['--workspace', '--module', '--api-port', '--port', '--name', '--index', '--model', '--layout'].includes(arg)) {
+    if (['--workspace', '--module', '--api-port', '--port', '--name', '--index', '--model', '--layout', '--purpose', '--max-bytes', '--offset', '--limit'].includes(arg)) {
       const value = args[++i]; if (!value || value.startsWith('--')) throw new ToolError('USAGE', `${arg} 缺少参数`);
+      if(arg==='--purpose'){options.purpose=value;continue;}
+      if(['--max-bytes','--offset','--limit'].includes(arg)){const key=arg==='--max-bytes'?'maxBytes':arg.slice(2) as 'offset'|'limit';options[key]=Number(value);continue;}
       if(arg==='--index'){options.index=Number(value);if(!Number.isSafeInteger(options.index)||options.index<0)throw new ToolError('USAGE','index 必须为非负整数');continue;}
       if (arg === '--api-port' || arg === '--port') {
         const port = Number(value); if (!Number.isInteger(port) || port < (arg === '--port' ? 0 : 1) || port > 65535) throw new ToolError('USAGE', '端口超出有效范围');
@@ -57,30 +64,34 @@ const output = (value: unknown) => console.log(JSON.stringify(value, null, 2));
 async function main() {
   const { options, positionals } = parseArgs(), [command = 'help', argument, destination] = positionals;
   if (command === 'help') return { ok: true, toolVersion, commands: {
+    checks:'checks <bindings.json> <新目录> --workspace . --json',conform:'conform <mapping.json> --workspace . --json',assurance:'assurance [--module ID] --workspace . --json', 'context-index':'context-index [--module ID] [--offset N] [--limit N] [--max-bytes N] --offline --json',
     open:'open --workspace . [--init] [--restart] [--json]（构建、续接并打开当前页面）', resume:'resume --workspace . --json（继续工作、问题、候选与验证）',workbench:'workbench [action.json] --workspace . --json',study:'study <budget.json> --json（只读计算，保存使用 workbench）',verify:'verify <profile.json> --workspace . --json（显式运行）',runs:'runs --workspace . --json',
     'import-yosys':'import-yosys <manifest.json> <新目录> --workspace . --json', 'import-impact':'import-impact <import.json> --workspace . --json',
     evidence: 'evidence [--model candidate.json] --workspace . --json（只读，不启动服务）', bundle: 'bundle <新目录> [--model candidate.json] [--layout layout.json] --workspace . --json',
     doctor: 'doctor --workspace . --json', init: 'init --workspace . [--name 名称]', start: 'start --workspace .', stop: 'stop --workspace .',
-    serve: 'serve --workspace . [--port 0] [--api-port 4317]', context: 'context [moduleId] [--module moduleId] [--index N] [--offline] --workspace . --json',
+    serve: 'serve --workspace . [--port 0] [--api-port 4317]', context: 'context [moduleId] [--module moduleId] [--index N] [--purpose design|review|implementation|debug] [--max-bytes N] [--offline] --workspace . --json',
     compare: 'compare <before-model.json> <after-model.json> --json（只读，不启动服务）', schema: 'schema [model|proposal|inputs|layout]', inventory: 'inventory <inputs.json> --workspace . --json', draft: 'draft <model.json> [proposal.json] --workspace . [--open] --json',
     preview: 'preview <proposal.json> --workspace . --json', propose: 'propose <proposal.json> --workspace . [--open] --json',
     proposals: 'proposals --workspace . --json', handoff: 'handoff <moduleId> --workspace . --json', status: 'status --workspace . --json',
     validate: 'validate --workspace . --json', spec: 'spec [moduleId] --workspace . [--json]', export: 'export spec|contract --workspace .',
     install: 'install --workspace <目标项目> 或 install --user',
   }, note: '--open 返回可直接打开的审阅链接；不自动提交或批准。不弹出浏览器，适用于终端和 WSL。' };
-  const supported = ['open','resume','workbench','study','verify','runs','import-yosys','import-impact','evidence', 'bundle', 'compare','doctor', 'init', 'start', 'stop', 'serve', 'context', 'schema', 'inventory', 'draft', 'preview', 'propose', 'proposals', 'handoff', 'status', 'validate', 'spec', 'export', 'install'];
+  const supported = ['checks','conform','assurance','context-index','open','resume','workbench','study','verify','runs','import-yosys','import-impact','evidence', 'bundle', 'compare','doctor', 'init', 'start', 'stop', 'serve', 'context', 'schema', 'inventory', 'draft', 'preview', 'propose', 'proposals', 'handoff', 'status', 'validate', 'spec', 'export', 'install'];
   if (!supported.includes(command)) throw new ToolError('USAGE', `未知命令 ${command}，运行 rtlarch help 查看用法。`);
-  const maxArgs = ['draft','compare','import-yosys'].includes(command) ? 3 : ['workbench','study','verify','import-impact','bundle', 'context', 'schema', 'inventory', 'preview', 'propose', 'handoff', 'spec', 'export'].includes(command) ? 2 : 1;
+  const maxArgs = ['checks','draft','compare','import-yosys'].includes(command) ? 3 : ['conform','workbench','study','verify','import-impact','bundle', 'context', 'schema', 'inventory', 'preview', 'propose', 'handoff', 'spec', 'export'].includes(command) ? 2 : 1;
   if (positionals.length > maxArgs) throw new ToolError('USAGE', '命令包含多余参数');
+  if((options.purpose||options.maxBytes!==undefined||options.offset!==undefined||options.limit!==undefined)&&!['context','context-index'].includes(command))throw new ToolError('USAGE','上下文选项仅用于 context/context-index');
+  if(command==='context'&&!options.purpose&&(options.maxBytes!==undefined||options.offset!==undefined||options.limit!==undefined))throw new ToolError('USAGE','局部字节预算需配合 --purpose');
+  if(command==='context'&&(options.offset!==undefined||options.limit!==undefined))throw new ToolError('USAGE','分页仅用于 context-index');
   if(options.init && command!=='open')throw new ToolError('USAGE','--init 仅用于 open，无模型时创建未定义的草稿');
   if(options.restart && command!=='open')throw new ToolError('USAGE','--restart 仅用于 open，且只影响指定工作区');
   if (options.model && !['evidence','bundle'].includes(command) || options.layout && command !== 'bundle') throw new ToolError('USAGE', '--model 仅用于 evidence/bundle；--layout 仅用于 bundle');
   if (options.port !== undefined && command !== 'serve') throw new ToolError('USAGE', '--port 仅用于 serve；后台服务自动分配端口。');
   if (options.open && !['draft', 'propose'].includes(command)) throw new ToolError('USAGE', '--open 仅用于 draft/propose。');
-  if (options.module && !['context', 'handoff', 'spec'].includes(command)) throw new ToolError('USAGE', '--module 不适用于此命令。');
+  if (options.module && !['context-index','assurance','context', 'handoff', 'spec'].includes(command)) throw new ToolError('USAGE', '--module 不适用于此命令。');
   if(options.index!==undefined&&(command!=='context'||!(options.module??argument)))throw new ToolError('USAGE','--index 需配合 context 的模块 ID');
   if (options.user && command !== 'install') throw new ToolError('USAGE', '--user 仅用于 install。');
-  if (options.offline && !['context','resume','workbench'].includes(command)) throw new ToolError('USAGE', '--offline 仅用于只读 context。');
+  if (options.offline && !['context-index','context','resume','workbench'].includes(command)) throw new ToolError('USAGE', '--offline 仅用于只读 context。');
   if (options.offline && options.apiPort !== undefined) throw new ToolError('USAGE', '--offline 不连接 API，请移除 --api-port / RTLARCH_API_PORT。');
   if (options.name && command !== 'init') throw new ToolError('USAGE', '--name 仅用于 init。');
   if (['bundle', 'draft', 'preview', 'propose', 'export', 'inventory'].includes(command) && !argument || command === 'handoff' && !(options.module ?? argument)) throw new ToolError('USAGE', '命令缺少必要参数，请运行 rtlarch help。');
@@ -88,11 +99,11 @@ async function main() {
   if(command==='compare'){
     if(!argument||!destination)throw new ToolError('USAGE','compare 需要两个模型 JSON 文件');
     const [before,after]=await Promise.all([argument,destination].map(async file=>modelSchema.parse(JSON.parse(await readFile(resolve(file),'utf8')))));
-    return {ok:true,toolVersion,command,readOnly:true,beforeHash:modelHash(before),afterHash:modelHash(after),diff:semanticDiff(before,after),beforeIssues:validateModel(before),afterIssues:validateModel(after),note:'候选比较不影响提交基线；提交仍须以工作区当前 hash 预览。'};
+    return {ok:true,toolVersion,command,readOnly:true,beforeHash:modelHash(before),afterHash:modelHash(after),diff:semanticDiff(before,after),impact:verificationImpact(before,after),beforeIssues:validateModel(before),afterIssues:validateModel(after),note:'候选比较不影响提交基线；提交仍须以工作区当前 hash 预览。'};
   }
   if(command==='study'){if(!argument)throw new ToolError('USAGE','study 需要预算文件');return {ok:true,toolVersion,...evaluateStudy(JSON.parse(await readFile(resolve(argument),'utf8')))};}
   if (command === 'schema') {
-    const extra={workbench:workbenchSchema,workAction:workActionSchema,study:studySchema,verification:verificationProfileSchema,yosys:yosysManifestSchema};
+    const extra={checks:checkBindingsSchema,conformance:conformanceSchema,context:contextViewSchema,workbench:workbenchSchema,workAction:workActionSchema,study:studySchema,verification:verificationProfileSchema,yosys:yosysManifestSchema};
     if(argument in extra)return {ok:true,toolVersion,[argument]:z.toJSONSchema(extra[argument as keyof typeof extra])};
     if (argument === 'layout') return { ok: true, toolVersion, layout: z.toJSONSchema(layoutSchema) };
     if (argument === 'inputs') return { ok: true, toolVersion, inputs: z.toJSONSchema(inputManifestSchema) };
@@ -109,6 +120,9 @@ async function main() {
   if(command==='import-yosys'){if(!argument||!destination)throw new ToolError('USAGE','import-yosys 需要清单与新输出目录');return envelope(await importYosys(workspace,JSON.parse(await readFile(resolve(argument),'utf8')),destination));}
   if(command==='import-impact'){if(!argument)throw new ToolError('USAGE','import-impact 需要导入记录');return envelope(await importImpact(workspace,JSON.parse(await readFile(resolve(argument),'utf8'))));}
   if(command==='verify'){if(!argument)throw new ToolError('USAGE','verify 需要显式验证清单');const run=await runVerification(workspace,JSON.parse(await readFile(resolve(argument),'utf8')));if(run.status!=='passed')process.exitCode=1;return envelope({...run,ok:run.status==='passed',...(run.status!=='passed'?{error:{code:'VERIFICATION_FAILED',message:`验证未通过：${run.status}`}}:{})});}
+  if(command==='checks'){if(!argument||!destination)throw new ToolError('USAGE','checks 需要映射与新目录');return envelope(await generateChecks(workspace,JSON.parse(await readFile(resolve(argument),'utf8')),resolve(destination)));}
+  if(command==='conform'){if(!argument)throw new ToolError('USAGE','conform 需要显式映射');const report=await runConformance(workspace,JSON.parse(await readFile(resolve(argument),'utf8')));if(report.status!=='MATCH')process.exitCode=1;return envelope({...report,ok:report.status==='MATCH'});}
+  if(command==='assurance')return envelope(await assurance(workspace,await new Repository(workspace).getModel(),options.module));
   if(command==='runs'){const current=await new Repository(workspace).getModel();return envelope({runs:await verificationRuns(workspace,current.modelHash)});}
   if(options.offline&&command==='resume')return envelope({...await new Repository(workspace).getResume(),readMode:'disk'});
   if(options.offline&&command==='workbench'){if(argument)throw new ToolError('USAGE','离线工作台只读；写入必须通过所属工作区服务');return envelope(await new Repository(workspace).getWorkbench());}
@@ -134,6 +148,7 @@ async function main() {
     if (!inventory.inputsAvailable) process.exitCode = 1;
     return envelope({ ...inventory, ok: inventory.inputsAvailable, ...(!inventory.inputsAvailable ? { error: { code: 'INPUTS_UNAVAILABLE', message: '显式输入清单有缺失、非普通文件或读取期间变化的条目；详见 files/assets/includeDirectories。' } } : {}) });
   }
+  if(command==='context-index'||command==='context'&&options.purpose){const query=contextViewSchema.parse({purpose:command==='context-index'?'index':options.purpose,moduleId,index:options.index,maxBytes:options.maxBytes,offset:options.offset,limit:options.limit});const data=options.offline?await new Repository(workspace).getContextView(query):await request<object>(await ensureService(workspace,options),'context-view?'+new URLSearchParams(Object.entries(query).filter(([,v])=>v!==undefined).map(([k,v])=>[k,String(v)])));const result=envelope({...data,readMode:options.offline?'disk':'service'});const bytes=Buffer.byteLength(JSON.stringify(result,null,2));if(bytes>query.maxBytes)throw new ToolError('CONTEXT_BUDGET_TOO_SMALL','包含工作区信息的结果超过字节预算，请增加 --max-bytes',{requiredBytes:bytes});return result;}
   if (command === 'context' && options.offline) return envelope({ ...await new Repository(workspace).getContext(moduleId, options.index), readMode: 'disk', note: '只读文件快照，未启动/核对服务；提交前仍须在线预览并检查版本。' });
   if (command === 'install') return envelope({ links: [await installLink(skillRoot, join(workspace, '.agents/skills/rtl-architect'))] });
   if (command === 'doctor') {

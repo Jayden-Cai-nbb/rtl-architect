@@ -21,7 +21,7 @@ export function validateModel(input: unknown): Issue[] {
   }
   unique(model.modules, 'modules'); unique(model.connections, 'connections'); unique(model.clocks, 'clocks'); unique(model.resets, 'resets');
   const byId = new Map(model.modules.map(m => [m.id, m]));
-  const extended = model.connections.some(l=>[l.from,l.to].some(e=>e.index!==undefined||e.local||e.slice||e.sliceMapping)) || !!model.provenance || !!model.localSignals || model.modules.some(m=>m.interfaceGroups||m.instances||m.parameterBindings||m.resetControlInputs||m.interfaces.some(i=>i.group||typeof i.width==='object'&&'expr' in i.width)) || model.modules.some(m => m.clock === null || m.reset === null || m.timing !== undefined) || model.clocks.some(c => c.edge !== 'rising') || model.resets.some(r => !r.synchronous || r.activeLevel !== 'low' || r.clock === null || r.deassertion !== undefined);
+  const extended = model.modules.some(m=>m.contract.obligations!==undefined) || model.connections.some(l=>[l.from,l.to].some(e=>e.index!==undefined||e.local||e.slice||e.sliceMapping)) || !!model.provenance || !!model.localSignals || model.modules.some(m=>m.interfaceGroups||m.instances||m.parameterBindings||m.resetControlInputs||m.interfaces.some(i=>i.group||typeof i.width==='object'&&'expr' in i.width)) || model.modules.some(m => m.clock === null || m.reset === null || m.timing !== undefined) || model.clocks.some(c => c.edge !== 'rising') || model.resets.some(r => !r.synchronous || r.activeLevel !== 'low' || r.clock === null || r.deassertion !== undefined);
   if (extended && model.schemaVersion < 3) add('SCHEMA_VERSION', 'schemaVersion', '来源、扩展时钟/复位和时序分类需 schemaVersion 3');
   issues.push(...provenanceIssues(model));
   const roots = model.modules.filter(m => m.parent === null);
@@ -43,6 +43,25 @@ export function validateModel(input: unknown): Issue[] {
     try{const indexes=m.instances&&instanceCount(m)>0&&instanceCount(m)<=4096?Array.from({length:instanceCount(m)},(_,i)=>m.instances!.from+i):[undefined];for(const index of indexes)for(const key of Object.keys(m.parameters))parameterValue(model,m,key,index)}catch(e){add('PARAMETER_BINDING',m.id,String(e))}
     for(const id of m.resetControlInputs??[])if(!m.interfaces.some(i=>i.id===id&&i.role==='consumer'&&i.protocol==='signal'))add('RESET_CONTROL_INPUT',m.id,'复位门控输入必须引用真实 signal 输入端口');
 
+    unique(m.contract.obligations??[],m.id+'.contract.obligations');
+    for(const obligation of m.contract.obligations??[]){
+      const target=m.id+'.contract.obligations.'+obligation.id;
+      for(const req of obligation.requirementIds??[])if(!model.specification?.requirements.some(r=>r.id===req&&(!r.moduleIds.length||r.moduleIds.includes(m.id))))add('OBLIGATION_REQUIREMENT',target,'验证义务需引用适用于本模块的真实需求');
+      if(obligation.kind==='state_transition'){
+        const local=model.localSignals?.find(l=>l.id===obligation.localSignalId&&l.scope===m.id);
+        if(!local||local.driver.kind!=='register'||!local.driver.update)add('OBLIGATION_STATE',target,'状态更新义务须引用本作用域具有明确更新规则的寄存状态');
+        if(!m.clock)add('OBLIGATION_DOMAIN',target,'状态更新义务需要明确时钟');
+        continue;
+      }
+      const output=m.interfaces.find(p=>p.id===(obligation.kind==='fifo_ordering'?obligation.outputInterfaceId:obligation.interfaceId));
+      if(!output||output.protocol!=='rv'||output.role!=='producer')add('OBLIGATION_INTERFACE',target,'这些行为模板要求模块的 ready/valid 输出接口');
+      if(obligation.kind==='fifo_ordering'){
+        const input=m.interfaces.find(p=>p.id===obligation.inputInterfaceId);
+        if(!input||!output||input.protocol!=='rv'||input.role!=='consumer'||resolveWidth(m,input,model)!==resolveWidth(m,output!,model))add('OBLIGATION_INTERFACE',target,'FIFO 顺序义务要求同宽的 ready/valid 输入与输出');
+        try{widthValue(model,m,obligation.capacity);}catch{add('OBLIGATION_CAPACITY',target,'容量必须能够按显式参数绑定求值');}
+      }
+      if(!m.clock||!m.reset)add('OBLIGATION_DOMAIN',target,'当前行为模板要求明确的时钟及复位域');
+    }
     if (['fifo', 'add_const'].includes(m.kind) && (m.interfaces.length !== 2 || !['in', 'out'].every(id => m.interfaces.some(i => i.id === id)))) add('INTERFACES', m.id, 'MVP 接口固定为 in/out');
     if (m.parent !== null && (!byId.has(m.parent) || byId.get(m.parent)?.kind !== 'subsystem')) add('PARENT', m.id, 'parent 必须引用 subsystem');
     const seen = new Set<string>(); let current: Module | undefined = m;

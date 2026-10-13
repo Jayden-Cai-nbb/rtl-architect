@@ -1,3 +1,5 @@
+import {stateDescription} from '../../core/stateUpdates';
+import {hardwareView,viewNames,type ViewMode} from '../../core/hardwareView';
 import {dependencyRelations} from './dependencies';
 import {validateReadingRefs} from './readingRefs';
 import {MarkerType,type Edge} from '@xyflow/react';
@@ -5,7 +7,7 @@ import type {Model,Endpoint,ScopeLayout} from '../../core/schema';
 import {childrenOf,resolveEndpoint} from '../../core/endpoints';
 import {endpointLabel} from '../../core/signals';
 import {instanceCount} from '../../core/parameters';
-import {inspectScope,interfaceGroup,linkGroup} from '../../core/inspection';
+import {inspectScope,interfaceGroup,linkGroup,linkAnchorGroup} from '../../core/inspection';
 import type {Inspection} from '../../core/inspection';
 import type {RtlNode,PortGeometry} from './types';
 import {excerpt} from '../reading';
@@ -13,10 +15,14 @@ import {annotateWireNets} from './wireNets';
 import {orientPorts} from './ports';
 import {routeEdges} from './orthogonal';
 export type Positions=Record<string,{x:number;y:number}>;
-export type DiagramOptions={positions?:Positions;inspection?:Inspection;showAuxiliary?:boolean;showLocals?:boolean;showState?:boolean;reading?:ScopeLayout['reading'];detail?:'architecture'|'signals';measureOnly?:boolean;showPortNames?:boolean};
+export type DiagramOptions={mode?:ViewMode;positions?:Positions;inspection?:Inspection;showAuxiliary?:boolean;showLocals?:boolean;showState?:boolean;reading?:ScopeLayout['reading'];detail?:'architecture'|'signals';measureOnly?:boolean;showPortNames?:boolean};
 export const diagramColors:Record<string,string>={data:'#326ea1',request:'#7c61ab',response:'#267e80',writeback:'#b07435',configuration:'#82919c',clock_reset:'#82919c',control:'#64758b',other:'#64758b'};
 const width=240,baseHeight=120;
 export function scopeDiagram(model:Model,scope:string,options:DiagramOptions={},inspection=inspectScope(model,scope,options.inspection)){
+ const mode=options.mode??(options.detail==='signals'?'signals':'architecture');
+ options={...options,...(mode==='microarchitecture'?{showLocals:true,showState:true}:mode==='signals'?{showLocals:true,showState:true,showAuxiliary:true}:{}),detail:mode==='signals'?'signals':options.detail};
+ if(options.inspection?.kind==='local'&&options.inspection.purpose==='control')options={...options,showAuxiliary:true};
+ const semantics=hardwareView(model,scope),relationshipById=new Map(semantics.relationships.map(r=>[r.id,r]));
  validateReadingRefs(model,scope,options.reading);
  const owner=model.modules.find(m=>m.id===scope)!;
  const children=childrenOf(model,scope),focused=new Set(inspection.moduleIds),focus=!!options.inspection;
@@ -42,7 +48,7 @@ export function scopeDiagram(model:Model,scope:string,options:DiagramOptions={},
  for(const link of inspection.stored){
   for(const [end,direction] of [[link.from,'out'],[link.to,'in']] as const){
    const id=nodeId(end),entry=anchorGroups.get(id)??{in:new Set<string>(),out:new Set<string>()};
-   const group=end.moduleId===scope&&!end.local?interfaceGroup(model,end).id:linkGroup(model,link).id;
+   const group=linkAnchorGroup(model,scope,end,link,mode==='signals');
    entry[direction].add(group);anchorGroups.set(id,entry);
   }
  }
@@ -78,7 +84,7 @@ export function scopeDiagram(model:Model,scope:string,options:DiagramOptions={},
   const row=visibleLocals.slice(i,i+columns),heights=row.map(local=>geometryFor(`local:${scope}:${local.id}`).height);
   row.forEach((local,j)=>{
    const id=`local:${scope}:${local.id}`,geometry=geometryFor(id);
-   nodes.push({id,type:'rtlModule',position:options.positions?.[id]??{x:minX+j*(width+52),y:rowY},width,height:geometry.height,data:{label:local.name,moduleId:scope,kind:local.driver.kind==='register'?'state':'local',boundary:false,localId:local.id,mainDiagram:true,summary:excerpt(local.description),title:local.description,geometry,ports:geometry.ports.map(p=>({id:p.id,width:undefined}))},style:{opacity:focus&&!inspection.localIds.includes(local.id)?.65:1}});
+   nodes.push({id,type:'rtlModule',position:options.positions?.[id]??{x:minX+j*(width+52),y:rowY},width,height:geometry.height,data:{label:local.name,moduleId:scope,kind:local.driver.kind==='register'?'state':'local',boundary:false,localId:local.id,mainDiagram:true,summary:excerpt(local.description),statePattern:stateDescription(local)?.pattern,title:local.description+(stateDescription(local)?'\n'+stateDescription(local)!.rows.map(r=>r.condition+' → '+r.action).join('\n'):''),geometry,ports:geometry.ports.map(p=>({id:p.id,width:undefined}))},style:{opacity:focus&&!inspection.localIds.includes(local.id)?.65:1}});
   });rowY+=Math.max(...heights)+54;
  }
  const allMinX=Math.min(minX,...nodes.map(n=>n.position.x)),allMinY=Math.min(minY,...nodes.map(n=>n.position.y));
@@ -94,19 +100,20 @@ export function scopeDiagram(model:Model,scope:string,options:DiagramOptions={},
   nodes.push({id:`rack:${scope}:${role}`,type:'rtlModule',position:{x:role==='consumer'?frame.position.x+18:frame.position.x+frame.width-174,y:frame.position.y+78},width:156,height:groups.length*44+56,draggable:false,selectable:false,data:{label:role==='consumer'?'输入':'输出',moduleId:scope,kind:'rack',boundary:true,role,groups,summary:'当前层级接口',ports:ports.map(p=>({id:p.id,width:undefined})),geometry:{width:156,height:groups.length*44+56,ports}}});
  }
  const visibleIds=new Set(nodes.map(n=>n.id)),selectedIds=new Set(inspection.links.map(l=>l.id));
- const bundles=new Map<string,Edge>();let auxiliaryCount=0,foldedLocalCount=0;
+ const omissions:{connectionId:string;reason:string}[]=[];const bundles=new Map<string,Edge>();let auxiliaryCount=0,foldedLocalCount=0;
  for(const link of inspection.stored){
+  const relation=relationshipById.get(link.id)!;
   const group=linkGroup(model,link),selected=focus&&selectedIds.has(link.id);
-  if(group.auxiliary&&!options.showAuxiliary&&!selected){auxiliaryCount++;continue;}
+  if(group.auxiliary&&!options.showAuxiliary&&!selected){auxiliaryCount++;omissions.push({connectionId:link.id,reason:'显式时钟/配置折叠'});continue;}
   const from=nodeId(link.from),to=nodeId(link.to);
-  if(!visibleIds.has(from)||!visibleIds.has(to)){foldedLocalCount++;continue;}
-  const fromGroup=link.from.moduleId===scope&&!link.from.local?interfaceGroup(model,link.from).id:group.id;
-  const toGroup=link.to.moduleId===scope&&!link.to.local?interfaceGroup(model,link.to).id:group.id;
-  const key=`relation:${from}>${to}/${fromGroup}/${toGroup}/${group.id}`,color=diagramColors[group.category]??diagramColors.other;
-  const edge=bundles.get(key)??{id:key,source:from,sourceHandle:`out:${fromGroup}`,target:to,targetHandle:`in:${toGroup}`,type:'relationship',reconnectable:false,markerEnd:{type:MarkerType.ArrowClosed,color,width:16,height:16},data:{connectionIds:[] as string[],category:group.category,title:group.description,selected:false,color},style:{stroke:color,opacity:focus?0.12:0.86,strokeWidth:1.7}};
+  if(!visibleIds.has(from)||!visibleIds.has(to)){foldedLocalCount++;omissions.push({connectionId:link.id,reason:'内部节点未展开'});continue;}
+  const fromGroup=linkAnchorGroup(model,scope,link.from,link,mode==='signals');
+  const toGroup=linkAnchorGroup(model,scope,link.to,link,mode==='signals');
+  const key=`relation:${from}>${to}/${fromGroup}/${toGroup}/${group.id}/${relation.kind}${mode==='signals'||relation.kind==='ready_valid'?'/'+link.id:''}`,color=diagramColors[group.category]??diagramColors.other;
+  const edge=bundles.get(key)??{id:key,source:from,sourceHandle:`out:${fromGroup}`,target:to,targetHandle:`in:${toGroup}`,type:'relationship',reconnectable:false,markerEnd:{type:MarkerType.ArrowClosed,color,width:16,height:16},data:{connectionIds:[] as string[],category:group.category,title:group.description+'\n'+relation.meaning,semanticKind:relation.kind,classification:relation.classification,members:relation.members,selected:false,color},style:{stroke:color,opacity:focus?0.12:0.86,strokeWidth:1.7}};
   (edge.data!.connectionIds as string[]).push(link.id);
   if(selected){edge.data!.selected=true;edge.style={stroke:color,opacity:1,strokeWidth:2.6};}
-  edge.label=group.label+((edge.data!.connectionIds as string[]).length>1?` ×${(edge.data!.connectionIds as string[]).length}`:'');bundles.set(key,edge);
+  edge.label=(mode==='signals'?`${endpointLabel(link.from)} → ${endpointLabel(link.to)} · ${relation.width??'?'}b`:group.label)+(relation.kind==='ready_valid'?' [RV →data/valid ←ready]':'')+((edge.data!.connectionIds as string[]).length>1?` ×${(edge.data!.connectionIds as string[]).length}`:'');bundles.set(key,edge);
  }
  const edges=[...bundles.values()].sort((a,b)=>a.id.localeCompare(b.id));
  let foldedDependencyCount=0;
@@ -118,8 +125,8 @@ export function scopeDiagram(model:Model,scope:string,options:DiagramOptions={},
   const color=diagramColors[group.category]??diagramColors.other;
   const selected=!focus||inspection.dependencies.some(d=>d.localId===localId&&endpoints.some(e=>endpointLabel(d.endpoint)===endpointLabel(e)));
   edges.push({id:dependency.id,source,target,sourceHandle:`out:${dependency.fromGroup}`,targetHandle:`in:${dependency.toGroup}`,type:'relationship',label:group.label,reconnectable:false,
-   data:{localSignalId:localId,dependencyEndpoint:endpoint,dependencyEndpoints:endpoints,category:group.category,relationBundle:endpoints.length>1,title:endpoints.map(endpointLabel).join('\n'),color,...(endpoints.length===1?{netKey:JSON.stringify([JSON.stringify([endpoint.moduleId,endpoint.interfaceId,endpoint.index??null,endpoint.local??false,endpoint.slice??null,endpoint.sliceMapping??null])])}:{})},
-   style:{stroke:color,strokeWidth:endpoints.length>1?2.4:1.8,opacity:selected?1:.24},markerEnd:{type:MarkerType.ArrowClosed,color}});
+   data:{localSignalId:localId,dependencyEndpoint:endpoint,dependencyEndpoints:endpoints,semanticKind:'dependency',dependencyRole:dependency.role,category:group.category,relationBundle:endpoints.length>1,title:(dependency.role==='state_unknown'?'状态输入集合；数据/使能/取消和逐位关系尚未表达\n':'模型表达式依赖；不是一条直接物理线\n')+endpoints.map(endpointLabel).join('\n'),color,granularity:dependency.role==='state_unknown'?'input_set':'expression'},
+   style:{stroke:color,strokeWidth:endpoints.length>1?2.4:1.8,opacity:selected?1:.24},markerEnd:{type:MarkerType.Arrow,color}});
  }
 
  if(focus)for(const node of nodes){
@@ -136,13 +143,13 @@ export function scopeDiagram(model:Model,scope:string,options:DiagramOptions={},
  });
  for(const edge of edges){
   const sources=inspection.stored.filter(l=>(edge.data?.connectionIds as string[]??[]).includes(l.id)).map(l=>[l.from.moduleId,l.from.interfaceId,l.from.index??null,l.from.local??false,l.from.slice??null,l.from.sliceMapping??null]);
-  if(sources.length)edge.data={...edge.data,netKey:JSON.stringify([...new Set(sources.map(s=>JSON.stringify(s)))].sort())};
+  if(sources.length&&edge.data?.semanticKind==='wire')edge.data={...edge.data,netKey:JSON.stringify([...new Set(sources.map(s=>JSON.stringify(s)))].sort())};
  }
- orientPorts(nodes,model,scope,inspection.stored,nodeId,dependencies);
+ orientPorts(nodes,model,scope,inspection.stored,nodeId,dependencies,mode==='signals');
  const contentRight=Math.max(maxX,...nodes.filter(n=>!n.data.boundary).map(n=>n.position.x+n.data.geometry.width));
  const outputRack=nodes.find(n=>n.id===`rack:${scope}:producer`);if(outputRack)outputRack.position.x=contentRight+boundaryGap;
  frame.width=Math.max(frame.width,contentRight-allMinX+frameMargin*2);nodes[0].width=frame.width;nodes[0].data.geometry.width=frame.width;
- const graph={nodes,edges,inspection,frame,auxiliaryCount,foldedLocalCount,foldedDependencyCount,localCount:localSignals.length,stateCount:localSignals.filter(n=>n.driver.kind==='register').length};
+ const graph={omissions,mode,modeLabel:viewNames[mode],semantics,nodes,edges,inspection,frame,auxiliaryCount,foldedLocalCount,foldedDependencyCount,localCount:localSignals.length,stateCount:localSignals.filter(n=>n.driver.kind==='register').length};
  for(const stage of options.reading?.stages??[]){
   const members=nodes.filter(n=>stage.nodes.includes(n.id));if(!members.length)continue;
   const left=Math.min(...members.map(n=>n.position.x))-24,top=Math.min(...members.map(n=>n.position.y))-60;

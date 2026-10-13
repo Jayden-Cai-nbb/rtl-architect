@@ -1,0 +1,26 @@
+{
+  "browser": "140.0.7339.16",
+  "stateRows": 3,
+  "sourceHashMatched": true,
+  "sourceAlwaysBlockShown": true,
+  "dataAndControlTracesDiffer": true,
+  "geometryRestored": true,
+  "svgStatePattern": true,
+  "stateAssurancePassed": 2,
+  "smallWindowNoOverflow": true,
+  "dataEdges": [
+    "dependency:local:top:sum_value>out_data/local:top:sum_value/state_data",
+    "dependency:top>sum_value/payload/operand",
+    "relation:local:top:out_data>rack:top:producer/payload/payload/payload/wire"
+  ],
+  "controlEdges": [
+    "dependency:local:top:accept>out_data/local:top:accept/state_condition",
+    "dependency:local:top:out_valid>accept/local:top:out_valid/operand",
+    "dependency:top>accept/domain/operand",
+    "dependency:top>accept/flow/operand",
+    "dependency:top>out_data/domain/state_reset",
+    "dependency:top>out_data/flow/state_condition",
+    "relation:local:top:out_data>rack:top:producer/payload/payload/payload/wire"
+  ],
+  "errors": []
+}

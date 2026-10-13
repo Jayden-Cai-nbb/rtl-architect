@@ -1,0 +1,63 @@
+{
+  "schemaVersion": 1,
+  "testbench": "tb",
+  "bindings": [
+    {
+      "moduleId": "top",
+      "obligationId": "stable",
+      "instancePath": "tb.dut",
+      "clock": "clk",
+      "reset": "rst_n",
+      "interfaces": {
+        "in": {
+          "data": "s_data",
+          "valid": "s_valid",
+          "ready": "s_ready"
+        },
+        "out": {
+          "data": "m_data",
+          "valid": "m_valid",
+          "ready": "m_ready"
+        }
+      }
+    },
+    {
+      "moduleId": "top",
+      "obligationId": "flush",
+      "instancePath": "tb.dut",
+      "clock": "clk",
+      "reset": "rst_n",
+      "interfaces": {
+        "in": {
+          "data": "s_data",
+          "valid": "s_valid",
+          "ready": "s_ready"
+        },
+        "out": {
+          "data": "m_data",
+          "valid": "m_valid",
+          "ready": "m_ready"
+        }
+      }
+    },
+    {
+      "moduleId": "top",
+      "obligationId": "order",
+      "instancePath": "tb.dut",
+      "clock": "clk",
+      "reset": "rst_n",
+      "interfaces": {
+        "in": {
+          "data": "s_data",
+          "valid": "s_valid",
+          "ready": "s_ready"
+        },
+        "out": {
+          "data": "m_data",
+          "valid": "m_valid",
+          "ready": "m_ready"
+        }
+      }
+    }
+  ]
+}
