@@ -1,0 +1,9 @@
+{
+  "temporaryDemoServicesStopped": 2,
+  "temporaryDemoRemoved": true,
+  "temporaryBrowserRemoved": true,
+  "projectDependenciesUnchanged": true,
+  "realProjectServicesRestarted": false,
+  "remotePush": false,
+  "remoteCI": "not_run"
+}

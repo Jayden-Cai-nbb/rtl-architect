@@ -1,0 +1,21 @@
+
+> rtl-architect@2.0.0 check:external-axis
+> node --import tsx scripts/check-external-axis.ts
+
+PASS 1: pinned MIT upstream is unchanged; explicit partial model validates
+PASS 2: unpruned unreachable X remains UNKNOWN; opt_muxtree is explicit in the producer record
+PASS 3: two identical parameterized instances compare independently, retaining unmodeled RTL state counts
+PASS 4: duplicate scopes/model targets and missing instance paths cannot pass
+EXTERNAL_AXIS_PASS accepted=255 delivered=254 flushed=1 stalls=187
+PASS 5: independent transaction scoreboard exercises backpressure, order and reset cancellation
+PASS 6: paired inversions cancel end-to-end but remain local state differences
+PASS 7: source mutation stales both instances; single-step comparison and independent scoreboard detect corruption
+PASS 8: repair needs fresh elaboration/comparison; partial repair never hides stale states
+{
+  "groups": 8,
+  "passed": true,
+  "upstream": "48ff7a7e2ef782cf778d47910cf85835c64b1bce",
+  "humanReview": "not_run",
+  "scope": "REG_TYPE=1, two instances, six modeled states, finite transaction scenarios; excludes sidebands, initial values, skid buffers, cross-instance equivalence and full AXI conformance."
+}
+

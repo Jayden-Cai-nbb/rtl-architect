@@ -1,0 +1,31 @@
+{
+  "modelHash": "2cd22e38e8248095a270a45eb113ea2d37b9edd87872ccb66ecbd362c886f4bf",
+  "checkedAt": "2026-10-14T06:08:53.675Z",
+  "status": "fresh",
+  "counts": {
+    "matched": 1,
+    "changed": 0,
+    "missing": 0,
+    "unreadable": 0,
+    "outside_workspace": 0,
+    "changed_during_read": 0
+  },
+  "files": [
+    {
+      "id": "rtl",
+      "file": "rtl/signed_scaler.sv",
+      "sourceKind": "code",
+      "expectedHash": "0b7424483adcb3cf6f860754c70cc6fdbf2d3cd170a115fc717a1bc719761cfe",
+      "actualHash": "0b7424483adcb3cf6f860754c70cc6fdbf2d3cd170a115fc717a1bc719761cfe",
+      "state": "matched",
+      "targets": [
+        {
+          "kind": "module",
+          "moduleId": "top"
+        }
+      ],
+      "findings": []
+    }
+  ],
+  "note": "仅核对声明文件的字节摘要；不自动发现依赖，不判断行为影响，不修改批准。"
+}

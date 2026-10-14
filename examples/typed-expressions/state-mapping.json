@@ -1,0 +1,189 @@
+{
+  "schemaVersion": 1,
+  "runId": "REPLACE_WITH_VERIFY_RUN_ID",
+  "netlist": "state.json",
+  "top": "signed_scaler",
+  "instancePath": [],
+  "mappings": [
+    {
+      "moduleId": "top",
+      "localSignalId": "scaled_q",
+      "state": "scaled",
+      "clock": "clk",
+      "signals": [
+        {
+          "endpoint": {
+            "moduleId": "top",
+            "interfaceId": "sample"
+          },
+          "pin": "sample"
+        },
+        {
+          "endpoint": {
+            "moduleId": "top",
+            "interfaceId": "shift"
+          },
+          "pin": "shift"
+        },
+        {
+          "endpoint": {
+            "moduleId": "top",
+            "interfaceId": "enable"
+          },
+          "pin": "enable"
+        },
+        {
+          "endpoint": {
+            "moduleId": "top",
+            "interfaceId": "rst_n"
+          },
+          "pin": "rst_n"
+        }
+      ]
+    },
+    {
+      "moduleId": "top",
+      "localSignalId": "packed_value_q",
+      "state": "packed_value",
+      "clock": "clk",
+      "signals": [
+        {
+          "endpoint": {
+            "moduleId": "top",
+            "interfaceId": "sample"
+          },
+          "pin": "sample"
+        },
+        {
+          "endpoint": {
+            "moduleId": "top",
+            "interfaceId": "shift"
+          },
+          "pin": "shift"
+        },
+        {
+          "endpoint": {
+            "moduleId": "top",
+            "interfaceId": "enable"
+          },
+          "pin": "enable"
+        },
+        {
+          "endpoint": {
+            "moduleId": "top",
+            "interfaceId": "rst_n"
+          },
+          "pin": "rst_n"
+        }
+      ]
+    },
+    {
+      "moduleId": "top",
+      "localSignalId": "logical_value_q",
+      "state": "logical_value",
+      "clock": "clk",
+      "signals": [
+        {
+          "endpoint": {
+            "moduleId": "top",
+            "interfaceId": "sample"
+          },
+          "pin": "sample"
+        },
+        {
+          "endpoint": {
+            "moduleId": "top",
+            "interfaceId": "shift"
+          },
+          "pin": "shift"
+        },
+        {
+          "endpoint": {
+            "moduleId": "top",
+            "interfaceId": "enable"
+          },
+          "pin": "enable"
+        },
+        {
+          "endpoint": {
+            "moduleId": "top",
+            "interfaceId": "rst_n"
+          },
+          "pin": "rst_n"
+        }
+      ]
+    },
+    {
+      "moduleId": "top",
+      "localSignalId": "negative_q",
+      "state": "negative",
+      "clock": "clk",
+      "signals": [
+        {
+          "endpoint": {
+            "moduleId": "top",
+            "interfaceId": "sample"
+          },
+          "pin": "sample"
+        },
+        {
+          "endpoint": {
+            "moduleId": "top",
+            "interfaceId": "shift"
+          },
+          "pin": "shift"
+        },
+        {
+          "endpoint": {
+            "moduleId": "top",
+            "interfaceId": "enable"
+          },
+          "pin": "enable"
+        },
+        {
+          "endpoint": {
+            "moduleId": "top",
+            "interfaceId": "rst_n"
+          },
+          "pin": "rst_n"
+        }
+      ]
+    },
+    {
+      "moduleId": "top",
+      "localSignalId": "parity_q",
+      "state": "parity",
+      "clock": "clk",
+      "signals": [
+        {
+          "endpoint": {
+            "moduleId": "top",
+            "interfaceId": "sample"
+          },
+          "pin": "sample"
+        },
+        {
+          "endpoint": {
+            "moduleId": "top",
+            "interfaceId": "shift"
+          },
+          "pin": "shift"
+        },
+        {
+          "endpoint": {
+            "moduleId": "top",
+            "interfaceId": "enable"
+          },
+          "pin": "enable"
+        },
+        {
+          "endpoint": {
+            "moduleId": "top",
+            "interfaceId": "rst_n"
+          },
+          "pin": "rst_n"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,95 @@
+{
+  "schemaVersion": 1,
+  "toolVersion": "2.0.0",
+  "modelHash": "2cd22e38e8248095a270a45eb113ea2d37b9edd87872ccb66ecbd362c886f4bf",
+  "createdAt": "2026-10-14T06:08:53.727Z",
+  "source": "workspace",
+  "reviewStatus": "DRAFT",
+  "layoutHash": "c01372c3c6d5100ae826d2f6210cea4ecf7e89ad5523ac33cc950b55ce19a3f9",
+  "states": {
+    "architecture": {
+      "status": "DRAFT",
+      "modelHash": "2cd22e38e8248095a270a45eb113ea2d37b9edd87872ccb66ecbd362c886f4bf"
+    },
+    "evidence": {
+      "status": "fresh",
+      "checkedAt": "2026-10-14T06:08:53.675Z"
+    },
+    "implementation": {
+      "status": "not_checked",
+      "declaredRecords": [],
+      "note": "以下为模型声明的历史记录；本次未执行 RTL 检查，未自动接入外部运行记录。"
+    },
+    "physical": {
+      "status": "not_checked",
+      "declaredRecords": [],
+      "note": "本次未执行器件验收；历史综合或 timing 字段不自动证明完整 STA。"
+    }
+  },
+  "diagrams": [
+    {
+      "scope": "top",
+      "name": "有符号缩放寄存级",
+      "file": "top.svg",
+      "qualityFile": "top.quality.json",
+      "status": "passed"
+    }
+  ],
+  "files": [
+    {
+      "file": "top.svg",
+      "sha256": "051aca775211708f2ba7ebaead97955a5e63f133dc161394d7aba716f45de354",
+      "bytes": 28344
+    },
+    {
+      "file": "top.quality.json",
+      "sha256": "dcc7728573f964cf86ac376a367d267dbf3feef7915cc71d7ee2b88c39869b4d",
+      "bytes": 3896
+    },
+    {
+      "file": "model.json",
+      "sha256": "be35256b57eb8c862dc65234378b9986f2dcd30de964793370ee3c372f1f6149",
+      "bytes": 19602
+    },
+    {
+      "file": "contract.json",
+      "sha256": "9830cf947cce49c45a40b8183449186fa2788064ab75fdab6737981d611cc9cd",
+      "bytes": 21309
+    },
+    {
+      "file": "spec.md",
+      "sha256": "a7acaf4a8d4a69efe7166a0904235ec1baa1d71bbc8cea4f94aa02d55fb4b2f5",
+      "bytes": 7731
+    },
+    {
+      "file": "evidence.json",
+      "sha256": "a7ef65d1229c690c316e1acc1dc419c195be675bb9232b0d91a98a8fa721162b",
+      "bytes": 864
+    },
+    {
+      "file": "connections.json",
+      "sha256": "787fa40f794dd63d8f1ff8f38bbda30fdfc33a49cfd24b9bdf9b84767a7e6c96",
+      "bytes": 12297
+    },
+    {
+      "file": "layout.json",
+      "sha256": "0f8d44369ef5bb9f9ac0e6902ae992fb77a3aae0eab6bd34a55566b29231f174",
+      "bytes": 1288
+    },
+    {
+      "file": "status.json",
+      "sha256": "14038a88d94ed433495e01f96e6da3a23011e82fd01f35729f9a70f1867d9e4e",
+      "bytes": 604
+    },
+    {
+      "file": "index.html",
+      "sha256": "5797ac50309a07b37222d33312a11346f46c1d392de7616b204466545581cc70",
+      "bytes": 59930
+    },
+    {
+      "file": "README.md",
+      "sha256": "d90591f2b8b7d88f5cefade7c5ccb9bf094491bd48b0a5fff2fa0dc693df42be",
+      "bytes": 574
+    }
+  ]
+}

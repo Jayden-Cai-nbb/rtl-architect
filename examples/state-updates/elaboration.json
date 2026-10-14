@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "name": "状态提取：固定 8 位加三配置",
+  "stage": "elaboration",
+  "moduleIds": [
+    "top"
+  ],
+  "inputs": [
+    "rtl/add_const.sv",
+    "elaboration.json"
+  ],
+  "inputClosure": {
+    "status": "declared_complete",
+    "note": "Standalone RTL; DATA_W=8 CONST=3; no includes, macros or external dependencies. Commands retain the complete configuration."
+  },
+  "timeoutMs": 30000,
+  "commands": [
+    {
+      "program": "yosys",
+      "versionArgs": [
+        "-V"
+      ],
+      "args": [
+        "-Q",
+        "-T",
+        "-p",
+        "read_verilog -sv rtl/add_const.sv; hierarchy -check -top add_const; proc; check; write_json {runDir}/state.json"
+      ]
+    }
+  ],
+  "checks": [
+    {
+      "kind": "artifact",
+      "file": "state.json"
+    }
+  ]
+}

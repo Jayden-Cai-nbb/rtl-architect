@@ -31,7 +31,7 @@ export function diagramSvg(model:Model,scope:string,options:DiagramOptions={},ha
   out.push(`<g data-node-id="${xml(n.id)}"><title>${xml(String(n.data.title??n.data.label)+'\n'+(model.modules.find(m=>m.id===n.data.moduleId)?.contract.responsibility??n.data.summary))}</title><rect x="${x}" y="${y}" width="${g.width}" height="${g.height}" rx="3" fill="${n.data.kind==='rack'?'#f7f9fb':n.data.kind==='state'?'#f3f8f2':n.data.kind==='memory'?'#fffaf0':n.data.kind==='controller'?'#f1f5fa':n.data.kind==='subsystem'?'#f0f8f7':'#fff'}" stroke="${n.data.localId?'#859977':'#9fb8ca'}"/>`);
   if(n.data.kind==='rack'){
    out.push(text(x+14,y+25,n.data.label,14));
-   (n.data.groups as {label:string;count:number}[]).forEach((group,i)=>out.push(text(x+14,y+70+i*44,excerpt(group.label,9),14),text(x+133,y+70+i*44,group.count>1?group.count:'',11)));
+   (n.data.groups as {id:string;label:string;count:number}[]).forEach(group=>{const row=y+(g.ports.find(p=>p.id.endsWith(':'+group.id))?.y??66)+4;out.push(text(x+14,row,excerpt(group.label,9),14),text(x+133,row,group.count>1?group.count:'',11));});
   }else{
    out.push(text(x+16,y+(g.captionY??24),`${n.data.statePattern??kindLabel[n.data.kind]??n.data.kind}${Number(n.data.instanceCount)>1?' ×'+n.data.instanceCount:''}`,11,'#667a89'));
    clampedRows(n.data.label,(g.width-32)/18,2).forEach((line,i)=>out.push(text(x+16,y+(g.captionY??24)+25+i*23,line,18)));

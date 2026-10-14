@@ -1,0 +1,56 @@
+{
+  "schemaVersion": 1,
+  "scopes": {
+    "top": {
+      "positions": {
+        "local:top:scaled_q": {
+          "x": 12,
+          "y": 100
+        },
+        "local:top:packed_value_q": {
+          "x": 12,
+          "y": 450
+        },
+        "local:top:logical_value_q": {
+          "x": 12,
+          "y": 800
+        },
+        "local:top:negative_q": {
+          "x": 12,
+          "y": 1150
+        },
+        "local:top:parity_q": {
+          "x": 12,
+          "y": 1464
+        }
+      },
+      "viewport": {
+        "x": 280,
+        "y": 24,
+        "zoom": 0.65
+      },
+      "reading": {
+        "modelHash": "2cd22e38e8248095a270a45eb113ea2d37b9edd87872ccb66ecbd362c886f4bf",
+        "reason": "五个状态在同一有效沿并行采样；列举顺序不代表串行流水。",
+        "mainPath": [
+          "local:top:scaled_q"
+        ],
+        "control": [],
+        "adjacent": [],
+        "parallel": [
+          {
+            "id": "sample_states",
+            "label": "并行采样状态",
+            "nodes": [
+              "local:top:scaled_q",
+              "local:top:packed_value_q",
+              "local:top:logical_value_q",
+              "local:top:negative_q",
+              "local:top:parity_q"
+            ]
+          }
+        ]
+      }
+    }
+  }
+}

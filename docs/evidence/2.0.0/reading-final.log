@@ -1,0 +1,16 @@
+
+> rtl-architect@2.0.0 check:reading
+> node --import tsx scripts/check-reading.ts
+
+PASS 1: boundary group selection excludes other inputs while retaining exact connection IDs
+PASS 2: each boundary group has a distinct stable handle; folding never changes model or module geometry
+PASS 3: three local drivers in a narrow subsystem all fit inside the frame and outside boundary racks
+PASS 4: forward and feedback connections avoid an intervening block and preserve arrow direction
+PASS 5: SVG uses routed geometry, escapes user strings, discloses partial/folded state and leaves model untouched
+PASS 6: short previews retain inference qualifiers and full exported evidence follows the behavior
+PASS 7: north/south handles remain stable across selection, and every route terminates at its declared handle
+PASS 8: a grouped port never implies a shared physical source; exact sources remain distinguishable
+PASS 9: status returns approach the facing controller side from left and right, independently of record order
+PASS 10: port names are exact model interfaces inside their blocks; detail export never moves nodes or routes
+PASS 11: long unrelated wires separate into readable lanes even when their endpoint pins are close
+完成 11 组架构阅读与框图检查。

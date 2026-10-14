@@ -1,0 +1,54 @@
+{
+  "schemaVersion": 1,
+  "name": "独立事务队列：背压、顺序、复位取消",
+  "stage": "simulation",
+  "moduleIds": [
+    "top",
+    "stage0",
+    "stage1"
+  ],
+  "inputs": [
+    "vendor/axis_register.v",
+    "rtl/axis_pair.sv",
+    "tb.sv",
+    "verification.json",
+    "upstream.json"
+  ],
+  "inputClosure": {
+    "status": "declared_complete",
+    "note": "Fixed vendored file and wrapper; no includes, external generators or macros. All parameters in wrapper."
+  },
+  "timeoutMs": 120000,
+  "commands": [
+    {
+      "program": "verilator",
+      "versionArgs": [
+        "--version"
+      ],
+      "args": [
+        "--binary",
+        "--timing",
+        "--assert",
+        "-Wno-fatal",
+        "--top-module",
+        "tb",
+        "--Mdir",
+        "{runDir}/obj",
+        "vendor/axis_register.v",
+        "rtl/axis_pair.sv",
+        "tb.sv"
+      ]
+    },
+    {
+      "program": "{runDir}/obj/Vtb",
+      "args": []
+    }
+  ],
+  "checks": [
+    {
+      "kind": "contains",
+      "file": "step-1.stdout.log",
+      "text": "EXTERNAL_AXIS_PASS"
+    }
+  ]
+}

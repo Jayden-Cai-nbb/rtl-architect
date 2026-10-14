@@ -1,8 +1,9 @@
+import {validateReadingRefs} from '../web/graph/readingRefs';
 import {verificationImpact} from '../core/verificationImpact';
 import {contextView,type ContextViewOptions} from './contextView';
 import {architectureContext} from './context';
 import {verificationRuns} from './verification';
-import {reviewDependencies,reviewImpact} from '../core/reviewImpact';
+import {reviewDependencies,reviewState} from '../core/reviewImpact';
 import {workbenchSchema,workActionSchema,emptyWorkbench,type WorkbenchSnapshot} from '../core/workbench';
 import {evaluateStudy} from '../core/studies';
 import {toolVersion} from './environment';
@@ -12,7 +13,7 @@ import { randomUUID } from 'node:crypto';
 import { z } from 'zod';
 import { applyCommands, EngineError, validateModel } from '../core/engine';
 import { semanticDiff, stableStringify } from '../core/diff';
-import { idSchema, hashSchema, moduleReviewsSchema, layoutSchema, modelSchema, proposalSchema, reviewSchema, type Layout, type Model, type Review, type ReviewStatus } from '../core/schema';
+import { idSchema, hashSchema, moduleReviewsSchema, layoutSchema, modelSchema, proposalSchema, reviewSchema, type Layout, type Model, type Review } from '../core/schema';
 import { moduleDocument, moduleIssues, specMarkdown } from '../core/spec';
 import { contractData, hashValue, modelHash, specText } from '../core/export';
 import type { RegisteredProposal } from '../core/api';
@@ -40,14 +41,7 @@ export class Repository {
     const hash = modelHash(model), rawReview = await this.optional('architecture/review.json');
     const review: Review | undefined = rawReview === undefined ? undefined : reviewSchema.parse(rawReview);
     const records = moduleReviewsSchema.parse(await this.optional('architecture/module-reviews.json') ?? { schemaVersion: 1, modules: {} });
-    const moduleReviews = model.modules.map(module => {
-      const record = records.modules[module.id] ?? null;
-      const impact=!record?{retained:false,reasons:['尚未确认']}:record.modelHash===hash?{retained:false,reasons:[]}:reviewImpact(record,reviewDependencies(model,module.id),hash);
-      const status: ReviewStatus = !record ? 'DRAFT' : record.modelHash===hash||impact.retained ? 'APPROVED' : 'STALE';
-      return { moduleId: module.id, status, record, ...impact };
-    });
-    const reviewStatus: ReviewStatus = !review ? 'DRAFT' : review.modelHash === hash && moduleReviews.every(r => r.status === 'APPROVED') ? 'APPROVED' : 'STALE';
-    return { model, modelHash: hash, issues, reviewStatus, review: review ?? null, moduleReviews };
+    return {model, modelHash:hash, issues, ...reviewState(model,hash,review,records)};
   }
   getModel() { return this.queue(() => this.snapshot()); }
   private async workbenchSnapshot():Promise<WorkbenchSnapshot> {
@@ -138,6 +132,7 @@ export class Repository {
         if (!model.modules.some(m => m.id === scope && m.kind === 'subsystem')) throw new ApiError(422, '布局 scope 不存在');
         const allowed = new Set([...(model.localSignals?.filter(n=>n.scope===scope).map(n=>`local:${scope}:${n.id}`)??[]), ...model.modules.filter(m => m.parent === scope).map(m => m.id), ...model.modules.find(m => m.id === scope)!.interfaces.map(i => `boundary:${scope}:${i.id}`)]);
         if (Object.keys(layout.positions).some(id => !allowed.has(id))) throw new ApiError(422, '布局包含非当前 scope 节点');
+        try{validateReadingRefs(model,scope,layout.reading);}catch(e){throw new ApiError(422,e instanceof Error?e.message:String(e));}
       }
       await this.save('architecture/layout.json', parsed.layout);
       return { layout: parsed.layout, layoutHash: hashValue(parsed.layout) };

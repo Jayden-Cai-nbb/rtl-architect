@@ -1,9 +1,11 @@
 # 1.2.0 通用维护记录
 
-- [104 组维护检查](checks.log)
-- [生产构建](build.log)
-- [tiny-stream 自检与 TIMEOUT 负例](rtl-fixture.log)
-- [skill 格式检查](skill.log)
+> 历史验证摘要。发布整理已移除重复截图、临时状态快照和生成包；下文描述当时执行情况，当前验收见 [2.0 记录](../2.0.0/README.md)。可运行源码和复现命令保留在 examples/ 与 scripts/。
+
+- [历史验证摘要](README.md)
+- [历史验证摘要](README.md)
+- [历史验证摘要](README.md)
+- [历史验证摘要](README.md)
 
 `scripts/check-feedback.ts` 新增关系束精确位域、同层不同宽度节点、阶段顺序与依赖保留检查；其余通用拓扑及边界/数组检查一并通过。固定依赖未变化，构建保留既有大 chunk 提示。
 

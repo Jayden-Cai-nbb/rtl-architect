@@ -1,0 +1,49 @@
+
+> rtl-architect@2.0.0 check:workflow
+> node --import tsx scripts/check-workflow.ts
+
+{
+  "toolVersion": "2.0.0",
+  "sourceBuildId": "c1e7dce42d624a2cb6a8dc47b70a1a1014aa08b06f12f80c8e71d097f5ad973b",
+  "recordedAt": "2026-10-14T06:08:42.627Z",
+  "fixture": "examples/rtl-intake",
+  "scenario": "raw RTL → elaboration → candidate → human-save fixture → graph question → CLI context → candidate-linked reply → checkpoint → service restart → RTL simulation → source-change invalidation",
+  "timings": {
+    "firstCandidateMs": 4411,
+    "resumeAfterRestartMs": 2590,
+    "simulationRunMs": 6214
+  },
+  "cliCalls": 15,
+  "model": {
+    "modules": 3,
+    "connections": 10,
+    "fidelity": "partial"
+  },
+  "restored": {
+    "threads": 1,
+    "messages": 2,
+    "checkpoint": true,
+    "candidate": true,
+    "module": true,
+    "manualContextReentry": 0
+  },
+  "sourceChange": {
+    "affectedModules": 2,
+    "unaffectedModules": 1,
+    "verificationFresh": false
+  },
+  "verification": {
+    "status": "passed",
+    "checks": [
+      {
+        "kind": "contains",
+        "file": "step-1.stdout.log",
+        "text": "PASS rtl-intake:",
+        "passed": true
+      }
+    ],
+    "toolVersion": "Verilator 5.053 devel rev v5.052-46-g599f8b8e3 (mod)"
+  },
+  "totalMs": 21270,
+  "note": "自动化临时工作区测量，非人类可读性或效率提升百分比；第一次构建是否需要会影响时间。仿真只验证此 RTL 样例，不证明导入模型完整。"
+}

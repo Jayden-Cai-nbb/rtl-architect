@@ -16,9 +16,21 @@ export function channelRoute(from:Point,start:Point,end:Point,to:Point,boxes:Box
  paths.push([start,{x:start.x,y:end.y},end],[start,{x:end.x,y:start.y},end]);
  const near=(xs:number[],center:number)=>[...new Set(xs)].sort((a,b)=>Math.abs(a-center)-Math.abs(b-center)).slice(0,12);
  const xs=[(start.x+end.x)/2,...near(boxes.flatMap(b=>[b.left-24,b.right+24]),(start.x+end.x)/2)];
+ // Reserve distinct lanes inside wide IO corridors, without growing a search grid.
+ if(start.x<end.x)for(let i=1;i<=12;i++){const x=start.x+i*32;if(x<end.x-24)xs.push(x);}
  for(const x of xs)paths.push([start,{x,y:start.y},{x,y:end.y},end]);
  const ys=[(start.y+end.y)/2,...[start.y,end.y].flatMap(y=>[y-32,y+32,y-64,y+64]),...Array.from({length:10},(_,i)=>[top-32-i*32,bottom+32+i*32]).flat()];
  for(const y of ys)paths.push([start,{x:start.x,y},{x:end.x,y},end]);
+ if(edge.data?.readingFeedback){
+  // A declared return must use an outer rail. Side escape lanes also serve stacked branches.
+  paths.length=0;
+  const side=edge.data.readingFeedback;
+  const exits=(p:Point)=>[p.x,...near(boxes.flatMap(b=>[b.left-24,b.right+24]),p.x).slice(0,4)];
+  for(let i=0;i<10;i++){
+   const y=side==='top'?top-32-i*32:bottom+32+i*32;
+   for(const x of exits(start))for(const x2 of exits(end))if(Math.abs(x-x2)>=32)paths.push([start,{x,y:start.y},{x,y},{x:x2,y},{x:x2,y:end.y},end]);
+  }
+ }
  let best:{points:Point[];cost:number}|undefined;
  for(const path of paths){
   const core=simplify(path),segments=core.slice(1).map((b,i)=>({a:core[i],b}));

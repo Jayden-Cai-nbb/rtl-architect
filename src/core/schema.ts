@@ -8,7 +8,7 @@ const obligationBase={id:idSchema,description:z.string().trim().min(1),requireme
 export const obligationSchema=z.discriminatedUnion('kind',[
  z.strictObject({...obligationBase,kind:z.literal('ready_valid_stability'),interfaceId:idSchema}),
  z.strictObject({...obligationBase,kind:z.literal('reset_flush'),interfaceId:idSchema}),
- z.strictObject({...obligationBase,kind:z.literal('state_transition'),localSignalId:idSchema}),
+ z.strictObject({...obligationBase,kind:z.literal('state_transition'),localSignalId:idSchema,priorityPairs:z.array(z.strictObject({higher:idSchema,lower:idSchema})).max(64).optional()}),
  z.strictObject({...obligationBase,kind:z.literal('fifo_ordering'),inputInterfaceId:idSchema,outputInterfaceId:idSchema,capacity:widthSchema,completion:z.literal('drained_test_end')})
 ]);
 export type Obligation=z.infer<typeof obligationSchema>;
@@ -42,12 +42,13 @@ export const provenanceSchema = z.strictObject({
 });
 export const endpointSchema = z.strictObject({ moduleId: idSchema, interfaceId: idSchema, index: z.union([integer.nonnegative(), z.literal('all')]).optional(), local: z.literal(true).optional(), slice: bitRange.optional(), sliceMapping:z.strictObject({arrayModuleId:idSchema,stride:integer,offset:integer,width:integer.min(1).max(65536)}).optional() });
 export const linkSchema = z.strictObject({ id: idSchema, scope: idSchema, from: endpointSchema, to: endpointSchema });
-export type SignalValue = { kind:'endpoint'; endpoint:z.infer<typeof endpointSchema> } | { kind:'constant'; width:number; value:string } | { kind:'concat'; parts:SignalValue[] } | { kind:'operator'; operator:'&'|'|'|'^'|'~'|'&&'|'||'|'!'|'+'|'-'|'mux'; operands:SignalValue[] };
+export type SignalValue = { kind:'endpoint'; endpoint:z.infer<typeof endpointSchema> } | { kind:'constant'; width:number; value:string } | { kind:'concat'; parts:SignalValue[] } | { kind:'cast'; mode:'reinterpret'|'zero_extend'|'sign_extend'|'truncate'; width:number; signed:boolean; value:SignalValue } | { kind:'operator'; operator:'&'|'|'|'^'|'~'|'&&'|'||'|'!'|'+'|'-'|'mux'|'=='|'!='|'<'|'<='|'>'|'>='|'<<'|'>>'|'>>>'|'reduce_and'|'reduce_or'|'reduce_xor'; operands:SignalValue[] };
 export const signalValueSchema: z.ZodType<SignalValue> = z.lazy(()=>z.discriminatedUnion('kind',[
  z.strictObject({kind:z.literal('endpoint'),endpoint:endpointSchema}),
  z.strictObject({kind:z.literal('constant'),width:integer.min(1).max(65536),value:z.string().regex(/^(?:0[xX][0-9a-fA-F]+|0[bB][01]+|[0-9]+)$/)}),
  z.strictObject({kind:z.literal('concat'),parts:z.array(signalValueSchema).min(1).max(4096)}),
- z.strictObject({kind:z.literal('operator'),operator:z.enum(['&','|','^','~','&&','||','!','+','-','mux']),operands:z.array(signalValueSchema).min(1).max(3)})
+ z.strictObject({kind:z.literal('cast'),mode:z.enum(['reinterpret','zero_extend','sign_extend','truncate']),width:integer.min(1).max(65536),signed:z.boolean(),value:signalValueSchema}),
+ z.strictObject({kind:z.literal('operator'),operator:z.enum(['&','|','^','~','&&','||','!','+','-','mux','==','!=','<','<=','>','>=','<<','>>','>>>','reduce_and','reduce_or','reduce_xor']),operands:z.array(signalValueSchema).min(1).max(3)})
 ]));
 export const stateUpdateSchema=z.strictObject({
  reset:z.strictObject({signal:endpointSchema,activeLevel:z.enum(['low','high']),value:signalValueSchema}).nullable(),
@@ -91,7 +92,10 @@ export const readingLayoutSchema = z.strictObject({
   modelHash: hashSchema, reason: z.string().trim().min(1),
   mainPath: z.array(readingNodeSchema).min(1), control: z.array(readingNodeSchema),
   adjacent: z.array(z.strictObject({ node: readingNodeSchema, anchor: readingNodeSchema })),
-  stages: z.array(z.strictObject({id:idSchema,label:z.string().trim().min(1).max(120),nodes:z.array(readingNodeSchema).min(1),note:z.string().max(1000).optional()})).max(32).optional()
+  stages: z.array(z.strictObject({id:idSchema,label:z.string().trim().min(1).max(120),nodes:z.array(readingNodeSchema).min(1),note:z.string().max(1000).optional()})).max(32).optional(),
+  parallel: z.array(z.strictObject({id:idSchema,label:z.string().trim().min(1).max(120),nodes:z.array(readingNodeSchema).min(2)})).max(32).optional(),
+  shared: z.array(z.strictObject({node:readingNodeSchema,clients:z.array(readingNodeSchema).min(2)})).max(32).optional(),
+  feedback: z.array(z.strictObject({from:readingNodeSchema,to:readingNodeSchema,side:z.enum(['top','bottom'])})).max(64).optional()
 });
 export const scopeLayoutSchema = z.strictObject({ positions: z.record(z.string().min(1), position), reading: readingLayoutSchema.optional(), viewport: z.strictObject({ x: z.number().finite(), y: z.number().finite(), zoom: z.number().finite().positive() }) });
 export const layoutSchema = z.strictObject({ schemaVersion: z.literal(1), scopes: z.record(idSchema, scopeLayoutSchema) });

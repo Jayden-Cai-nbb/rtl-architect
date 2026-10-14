@@ -1,0 +1,73 @@
+{
+  "browser": "140.0.7339.186",
+  "checks": [
+    {
+      "width": 1440,
+      "initialStateVisible": true,
+      "boundaryRows": [
+        {
+          "top": "104px",
+          "label": "算术缩放"
+        },
+        {
+          "top": "454px",
+          "label": "低位打包"
+        },
+        {
+          "top": "804px",
+          "label": "逻辑右移"
+        },
+        {
+          "top": "1154px",
+          "label": "负数标志"
+        },
+        {
+          "top": "1468px",
+          "label": "异或校验"
+        }
+      ],
+      "partialRerunPreservedFailure": true,
+      "scopedCoverage": {
+        "declared": 3,
+        "matched": 2,
+        "mismatched": 1
+      },
+      "pageErrors": []
+    },
+    {
+      "width": 1100,
+      "initialStateVisible": true,
+      "boundaryRows": [
+        {
+          "top": "104px",
+          "label": "算术缩放"
+        },
+        {
+          "top": "454px",
+          "label": "低位打包"
+        },
+        {
+          "top": "804px",
+          "label": "逻辑右移"
+        },
+        {
+          "top": "1154px",
+          "label": "负数标志"
+        },
+        {
+          "top": "1468px",
+          "label": "异或校验"
+        }
+      ],
+      "partialRerunPreservedFailure": true,
+      "scopedCoverage": {
+        "declared": 3,
+        "matched": 2,
+        "mismatched": 1
+      },
+      "pageErrors": []
+    }
+  ],
+  "humanReadingStudy": "not_run",
+  "note": "State screenshots use a temporary +1 fault in both external RTL instances, then rerun only valid/ready; the local data failures must remain visible."
+}

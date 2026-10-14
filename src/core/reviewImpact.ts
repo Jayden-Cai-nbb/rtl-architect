@@ -1,5 +1,17 @@
-import type {Model,Review} from './schema';
+import type {Model,Review,ReviewStatus,ModuleReviews} from './schema';
 import {hashValue} from './export';
+
+/** Shared approval interpretation for the repository and verification-time evidence. */
+export function reviewState(model:Model,hash:string,review:Review|undefined,records:ModuleReviews){
+ const moduleReviews=model.modules.map(module=>{
+  const record=records.modules[module.id]??null;
+  const impact=!record?{retained:false,reasons:['尚未确认']}:record.modelHash===hash?{retained:false,reasons:[]}:reviewImpact(record,reviewDependencies(model,module.id),hash);
+  const status:ReviewStatus=!record?'DRAFT':record.modelHash===hash||impact.retained?'APPROVED':'STALE';
+  return {moduleId:module.id,status,record,...impact};
+ });
+ const reviewStatus:ReviewStatus=!review?'DRAFT':review.modelHash===hash&&moduleReviews.every(r=>r.status==='APPROVED')?'APPROVED':'STALE';
+ return {reviewStatus,review:review??null,moduleReviews};
+}
 
 /** Explicit contract boundary: own subtree, adjacent contracts, ancestor environment and globals.
  * Legacy confirmations have no dependency proof and retain whole-model invalidation.

@@ -1,3 +1,4 @@
+import type {StateCoverageGoal} from '../core/stateCoverage';
 import {renderStateCheck} from './stateChecks';
 import {z} from 'zod';
 import {writeFile} from 'node:fs/promises';
@@ -13,16 +14,18 @@ const pins=z.strictObject({data:identifier,valid:identifier,ready:identifier});
 export const checkBindingsSchema=z.strictObject({schemaVersion:z.literal(1),testbench:identifier,bindings:z.array(z.strictObject({moduleId:idSchema,obligationId:idSchema,instancePath:path,clock:identifier,reset:identifier,interfaces:z.record(idSchema,pins),state:identifier.optional(),signals:z.array(z.strictObject({endpoint:endpointSchema,pin:identifier})).max(4096).optional()})).min(1).max(256)});
 export type CheckBindings=z.infer<typeof checkBindingsSchema>;
 export function renderChecks(model:Model,input:unknown){
- const manifest=checkBindingsSchema.parse(input),seen=new Set<string>(),items:{moduleId:string;obligationId:string;fingerprint:string;marker:string}[]=[];
+ const manifest=checkBindingsSchema.parse(input),seen=new Set<string>(),items:{moduleId:string;obligationId:string;fingerprint:string;marker:string;requirements:{id:string;text:string;acceptance:string;hash:string}[];coverage?:{marker:string;goals:StateCoverageGoal[]}}[]=[];
  if(validateModel(model).some(i=>i.blocks.includes('commit')))throw new ToolError('CHECK_MODEL_INVALID','请先修复模型结构错误');
  const blocks=manifest.bindings.map((b,n)=>{
   const m=model.modules.find(m=>m.id===b.moduleId),o=m?.contract.obligations?.find(o=>o.id===b.obligationId),key=b.moduleId+'/'+b.obligationId;
   if(!m||!o||seen.has(key))throw new ToolError('CHECK_BINDING_INVALID','义务不存在或重复绑定：'+key);seen.add(key);
+  const requirements=(o.requirementIds??[]).map(id=>{const r=model.specification!.requirements.find(r=>r.id===id)!;return {id:r.id,text:r.text,acceptance:r.acceptance,hash:hashValue(r)};});
   if(o.kind==='state_transition'){
    if(b.instancePath.split('.')[0]!==manifest.testbench)throw new ToolError('CHECK_BINDING_INVALID','instancePath 必须从 testbench 开始');
    const fingerprint=hashValue({modelHash:modelHash(model),obligation:o,binding:b}),marker=`RTLARCH_OBL_PASS ${b.moduleId}/${o.id} ${fingerprint}`;
-   items.push({moduleId:b.moduleId,obligationId:o.id,fingerprint,marker});
-   return renderStateCheck(model,b,o.localSignalId,n,marker);
+   const rendered=renderStateCheck(model,b,o,n,marker);
+   items.push({moduleId:b.moduleId,obligationId:o.id,fingerprint,marker,requirements,coverage:{marker:rendered.coverageMarker,goals:rendered.goals}});
+   return rendered.source;
   }
   const clock=model.clocks.find(c=>c.id===m.clock),reset=model.resets.find(r=>r.id===m.reset);
   if(m.instances||!clock||!reset||!reset.synchronous||reset.clock!==clock.id)throw new ToolError('CHECK_UNSUPPORTED','检查器仅支持单实例、同域同步复位；未生成近似替代');
@@ -30,7 +33,7 @@ export function renderChecks(model:Model,input:unknown){
   const pin=(id:string)=>{const p=b.interfaces[id];if(!p)throw new ToolError('CHECK_BINDING_INVALID','缺少接口映射：'+id);return Object.fromEntries(Object.entries(p).map(([k,v])=>[k,`${b.instancePath}.${v}`])) as Record<'data'|'valid'|'ready',string>;};
   const outId=o.kind==='fifo_ordering'?o.outputInterfaceId:o.interfaceId,out=pin(outId),width=widthValue(model,m,m.interfaces.find(p=>p.id===outId)!.width);
   const fingerprint=hashValue({module:m,obligation:o,binding:b,clock,reset}),marker=`RTLARCH_OBL_PASS ${b.moduleId}/${b.obligationId} ${fingerprint}`;
-  items.push({moduleId:b.moduleId,obligationId:o.id,fingerprint,marker});
+  items.push({moduleId:b.moduleId,obligationId:o.id,fingerprint,marker,requirements});
   const fail=(why:string)=>`$fatal(1, "RTLARCH_OBL_FAIL ${key}: ${why}");`,rst=`${b.instancePath}.${b.reset} === 1'b${reset.activeLevel==='low'?'0':'1'}`;
   let declarations='',resetBody='',body='',end='';
   const pinChecks=[`$bits(${out.data}) != ${width}`,`$bits(${out.valid}) != 1`,`$bits(${out.ready}) != 1`,`$bits(${b.instancePath}.${b.clock}) != 1`,`$bits(${b.instancePath}.${b.reset}) != 1`];
@@ -68,7 +71,7 @@ end`;
  });
  const stateMode=manifest.bindings.some(b=>model.modules.find(m=>m.id===b.moduleId)?.contract.obligations?.some(o=>o.id===b.obligationId&&o.kind==='state_transition'));
  const source='`timescale 1ns/1ps\n// Instantiate rtlarch_contract_checks checks(); inside the declared testbench.\n'+(stateMode?'// State checks capture at the active edge and compare at the opposite edge; finish after comparison.':'// Sample before sequential NBA updates; reset must be sampled before checks start.')+'\nmodule rtlarch_contract_checks;\ngenerate\n'+blocks.join('\n')+'\nendgenerate\nendmodule\n';
- return {source,metadata:{schemaVersion:1 as const,modelHash:modelHash(model),manifest,items,sourceHash:hashValue(source),scope:stateMode?'Finite state monitors: capture at active edge, compare at opposite edge; every declared branch/reset/hold must be exercised; no formal or continuous-time proof.':'Finite simulation monitors; sampled synchronous reset required; no formal, liveness or CDC proof.'}};
+ return {source,metadata:{schemaVersion:1 as const,modelHash:modelHash(model),manifest,items,sourceHash:hashValue(source),scope:stateMode?'Finite state monitors: capture at active edge, compare at opposite edge; coverage goals distinguish literal-unreachable paths and missing stimulus; declared priority pairs require simultaneous distinct writes; no formal or continuous-time proof.':'Finite simulation monitors; sampled synchronous reset required; no formal, liveness or CDC proof.'}};
 }
 export async function generateChecks(workspace:string,input:unknown,destination:string){
  const model=modelSchema.parse(JSON.parse((await inputFile(workspace,'architecture/model.json')).bytes.toString())),result=renderChecks(model,input),dir=await newArtifactDirectory(workspace,destination);

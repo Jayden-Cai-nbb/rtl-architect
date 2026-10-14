@@ -1,0 +1,201 @@
+{
+  "schemaVersion": 1,
+  "testbench": "tb",
+  "bindings": [
+    {
+      "moduleId": "top",
+      "obligationId": "scaled_update",
+      "instancePath": "tb.dut",
+      "clock": "clk",
+      "reset": "rst_n",
+      "interfaces": {},
+      "state": "scaled",
+      "signals": [
+        {
+          "endpoint": {
+            "moduleId": "top",
+            "interfaceId": "sample"
+          },
+          "pin": "sample"
+        },
+        {
+          "endpoint": {
+            "moduleId": "top",
+            "interfaceId": "shift"
+          },
+          "pin": "shift"
+        },
+        {
+          "endpoint": {
+            "moduleId": "top",
+            "interfaceId": "enable"
+          },
+          "pin": "enable"
+        },
+        {
+          "endpoint": {
+            "moduleId": "top",
+            "interfaceId": "rst_n"
+          },
+          "pin": "rst_n"
+        }
+      ]
+    },
+    {
+      "moduleId": "top",
+      "obligationId": "packed_value_update",
+      "instancePath": "tb.dut",
+      "clock": "clk",
+      "reset": "rst_n",
+      "interfaces": {},
+      "state": "packed_value",
+      "signals": [
+        {
+          "endpoint": {
+            "moduleId": "top",
+            "interfaceId": "sample"
+          },
+          "pin": "sample"
+        },
+        {
+          "endpoint": {
+            "moduleId": "top",
+            "interfaceId": "shift"
+          },
+          "pin": "shift"
+        },
+        {
+          "endpoint": {
+            "moduleId": "top",
+            "interfaceId": "enable"
+          },
+          "pin": "enable"
+        },
+        {
+          "endpoint": {
+            "moduleId": "top",
+            "interfaceId": "rst_n"
+          },
+          "pin": "rst_n"
+        }
+      ]
+    },
+    {
+      "moduleId": "top",
+      "obligationId": "logical_value_update",
+      "instancePath": "tb.dut",
+      "clock": "clk",
+      "reset": "rst_n",
+      "interfaces": {},
+      "state": "logical_value",
+      "signals": [
+        {
+          "endpoint": {
+            "moduleId": "top",
+            "interfaceId": "sample"
+          },
+          "pin": "sample"
+        },
+        {
+          "endpoint": {
+            "moduleId": "top",
+            "interfaceId": "shift"
+          },
+          "pin": "shift"
+        },
+        {
+          "endpoint": {
+            "moduleId": "top",
+            "interfaceId": "enable"
+          },
+          "pin": "enable"
+        },
+        {
+          "endpoint": {
+            "moduleId": "top",
+            "interfaceId": "rst_n"
+          },
+          "pin": "rst_n"
+        }
+      ]
+    },
+    {
+      "moduleId": "top",
+      "obligationId": "negative_update",
+      "instancePath": "tb.dut",
+      "clock": "clk",
+      "reset": "rst_n",
+      "interfaces": {},
+      "state": "negative",
+      "signals": [
+        {
+          "endpoint": {
+            "moduleId": "top",
+            "interfaceId": "sample"
+          },
+          "pin": "sample"
+        },
+        {
+          "endpoint": {
+            "moduleId": "top",
+            "interfaceId": "shift"
+          },
+          "pin": "shift"
+        },
+        {
+          "endpoint": {
+            "moduleId": "top",
+            "interfaceId": "enable"
+          },
+          "pin": "enable"
+        },
+        {
+          "endpoint": {
+            "moduleId": "top",
+            "interfaceId": "rst_n"
+          },
+          "pin": "rst_n"
+        }
+      ]
+    },
+    {
+      "moduleId": "top",
+      "obligationId": "parity_update",
+      "instancePath": "tb.dut",
+      "clock": "clk",
+      "reset": "rst_n",
+      "interfaces": {},
+      "state": "parity",
+      "signals": [
+        {
+          "endpoint": {
+            "moduleId": "top",
+            "interfaceId": "sample"
+          },
+          "pin": "sample"
+        },
+        {
+          "endpoint": {
+            "moduleId": "top",
+            "interfaceId": "shift"
+          },
+          "pin": "shift"
+        },
+        {
+          "endpoint": {
+            "moduleId": "top",
+            "interfaceId": "enable"
+          },
+          "pin": "enable"
+        },
+        {
+          "endpoint": {
+            "moduleId": "top",
+            "interfaceId": "rst_n"
+          },
+          "pin": "rst_n"
+        }
+      ]
+    }
+  ]
+}

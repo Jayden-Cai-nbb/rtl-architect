@@ -6,7 +6,9 @@ self.onmessage=async(event:MessageEvent<{id:number;model:Model;scope:string;hash
  const {id,model,scope,hash,options,arrange}=event.data;
  try{
   if(options.reading&&options.reading.modelHash!==hash)throw new Error('阅读布局对应旧模型，请核对后重新导入。');
-  const positions=arrange?await arrangeScope(model,scope,hash,options.reading,options):options.positions;
+  const required=scopeDiagram(model,scope,{...options,measureOnly:true}).nodes.filter(n=>!n.data.boundary);
+  const missing=!options.positions||required.some(n=>!options.positions?.[n.id]);
+  const positions=arrange||missing?await arrangeScope(model,scope,hash,options.reading,options):options.positions;
   const graph=scopeDiagram(model,scope,{...options,positions});
   self.postMessage({id,graph,quality:diagramQuality(graph),positions});
  }catch(e){self.postMessage({id,error:e instanceof Error?e.message:String(e)})}

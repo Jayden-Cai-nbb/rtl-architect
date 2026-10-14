@@ -1,0 +1,334 @@
+{
+  "schemaVersion": 2,
+  "runId": "run_0_00000000000000000000000000000000",
+  "netlist": "state.json",
+  "top": "axis_pair",
+  "scopes": [
+    {
+      "instancePath": [
+        "stage0"
+      ],
+      "mappings": [
+        {
+          "moduleId": "stage0",
+          "localSignalId": "stage0_data_q",
+          "state": "m_axis_tdata",
+          "clock": "clk",
+          "signals": [
+            {
+              "endpoint": {
+                "moduleId": "stage0",
+                "interfaceId": "s_axis_tdata"
+              },
+              "pin": "s_axis_tdata"
+            },
+            {
+              "endpoint": {
+                "moduleId": "stage0",
+                "interfaceId": "s_axis_tvalid"
+              },
+              "pin": "s_axis_tvalid"
+            },
+            {
+              "endpoint": {
+                "moduleId": "stage0",
+                "interfaceId": "m_axis_tready"
+              },
+              "pin": "m_axis_tready"
+            },
+            {
+              "endpoint": {
+                "moduleId": "stage0",
+                "interfaceId": "rst"
+              },
+              "pin": "rst"
+            },
+            {
+              "endpoint": {
+                "moduleId": "stage0",
+                "interfaceId": "stage0_valid_q",
+                "local": true
+              },
+              "pin": "m_axis_tvalid"
+            },
+            {
+              "endpoint": {
+                "moduleId": "stage0",
+                "interfaceId": "stage0_ready_q",
+                "local": true
+              },
+              "pin": "s_axis_tready"
+            }
+          ]
+        },
+        {
+          "moduleId": "stage0",
+          "localSignalId": "stage0_valid_q",
+          "state": "m_axis_tvalid",
+          "clock": "clk",
+          "signals": [
+            {
+              "endpoint": {
+                "moduleId": "stage0",
+                "interfaceId": "s_axis_tdata"
+              },
+              "pin": "s_axis_tdata"
+            },
+            {
+              "endpoint": {
+                "moduleId": "stage0",
+                "interfaceId": "s_axis_tvalid"
+              },
+              "pin": "s_axis_tvalid"
+            },
+            {
+              "endpoint": {
+                "moduleId": "stage0",
+                "interfaceId": "m_axis_tready"
+              },
+              "pin": "m_axis_tready"
+            },
+            {
+              "endpoint": {
+                "moduleId": "stage0",
+                "interfaceId": "rst"
+              },
+              "pin": "rst"
+            },
+            {
+              "endpoint": {
+                "moduleId": "stage0",
+                "interfaceId": "stage0_data_q",
+                "local": true
+              },
+              "pin": "m_axis_tdata"
+            },
+            {
+              "endpoint": {
+                "moduleId": "stage0",
+                "interfaceId": "stage0_ready_q",
+                "local": true
+              },
+              "pin": "s_axis_tready"
+            }
+          ]
+        },
+        {
+          "moduleId": "stage0",
+          "localSignalId": "stage0_ready_q",
+          "state": "s_axis_tready",
+          "clock": "clk",
+          "signals": [
+            {
+              "endpoint": {
+                "moduleId": "stage0",
+                "interfaceId": "s_axis_tdata"
+              },
+              "pin": "s_axis_tdata"
+            },
+            {
+              "endpoint": {
+                "moduleId": "stage0",
+                "interfaceId": "s_axis_tvalid"
+              },
+              "pin": "s_axis_tvalid"
+            },
+            {
+              "endpoint": {
+                "moduleId": "stage0",
+                "interfaceId": "m_axis_tready"
+              },
+              "pin": "m_axis_tready"
+            },
+            {
+              "endpoint": {
+                "moduleId": "stage0",
+                "interfaceId": "rst"
+              },
+              "pin": "rst"
+            },
+            {
+              "endpoint": {
+                "moduleId": "stage0",
+                "interfaceId": "stage0_data_q",
+                "local": true
+              },
+              "pin": "m_axis_tdata"
+            },
+            {
+              "endpoint": {
+                "moduleId": "stage0",
+                "interfaceId": "stage0_valid_q",
+                "local": true
+              },
+              "pin": "m_axis_tvalid"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "instancePath": [
+        "stage1"
+      ],
+      "mappings": [
+        {
+          "moduleId": "stage1",
+          "localSignalId": "stage1_data_q",
+          "state": "m_axis_tdata",
+          "clock": "clk",
+          "signals": [
+            {
+              "endpoint": {
+                "moduleId": "stage1",
+                "interfaceId": "s_axis_tdata"
+              },
+              "pin": "s_axis_tdata"
+            },
+            {
+              "endpoint": {
+                "moduleId": "stage1",
+                "interfaceId": "s_axis_tvalid"
+              },
+              "pin": "s_axis_tvalid"
+            },
+            {
+              "endpoint": {
+                "moduleId": "stage1",
+                "interfaceId": "m_axis_tready"
+              },
+              "pin": "m_axis_tready"
+            },
+            {
+              "endpoint": {
+                "moduleId": "stage1",
+                "interfaceId": "rst"
+              },
+              "pin": "rst"
+            },
+            {
+              "endpoint": {
+                "moduleId": "stage1",
+                "interfaceId": "stage1_valid_q",
+                "local": true
+              },
+              "pin": "m_axis_tvalid"
+            },
+            {
+              "endpoint": {
+                "moduleId": "stage1",
+                "interfaceId": "stage1_ready_q",
+                "local": true
+              },
+              "pin": "s_axis_tready"
+            }
+          ]
+        },
+        {
+          "moduleId": "stage1",
+          "localSignalId": "stage1_valid_q",
+          "state": "m_axis_tvalid",
+          "clock": "clk",
+          "signals": [
+            {
+              "endpoint": {
+                "moduleId": "stage1",
+                "interfaceId": "s_axis_tdata"
+              },
+              "pin": "s_axis_tdata"
+            },
+            {
+              "endpoint": {
+                "moduleId": "stage1",
+                "interfaceId": "s_axis_tvalid"
+              },
+              "pin": "s_axis_tvalid"
+            },
+            {
+              "endpoint": {
+                "moduleId": "stage1",
+                "interfaceId": "m_axis_tready"
+              },
+              "pin": "m_axis_tready"
+            },
+            {
+              "endpoint": {
+                "moduleId": "stage1",
+                "interfaceId": "rst"
+              },
+              "pin": "rst"
+            },
+            {
+              "endpoint": {
+                "moduleId": "stage1",
+                "interfaceId": "stage1_data_q",
+                "local": true
+              },
+              "pin": "m_axis_tdata"
+            },
+            {
+              "endpoint": {
+                "moduleId": "stage1",
+                "interfaceId": "stage1_ready_q",
+                "local": true
+              },
+              "pin": "s_axis_tready"
+            }
+          ]
+        },
+        {
+          "moduleId": "stage1",
+          "localSignalId": "stage1_ready_q",
+          "state": "s_axis_tready",
+          "clock": "clk",
+          "signals": [
+            {
+              "endpoint": {
+                "moduleId": "stage1",
+                "interfaceId": "s_axis_tdata"
+              },
+              "pin": "s_axis_tdata"
+            },
+            {
+              "endpoint": {
+                "moduleId": "stage1",
+                "interfaceId": "s_axis_tvalid"
+              },
+              "pin": "s_axis_tvalid"
+            },
+            {
+              "endpoint": {
+                "moduleId": "stage1",
+                "interfaceId": "m_axis_tready"
+              },
+              "pin": "m_axis_tready"
+            },
+            {
+              "endpoint": {
+                "moduleId": "stage1",
+                "interfaceId": "rst"
+              },
+              "pin": "rst"
+            },
+            {
+              "endpoint": {
+                "moduleId": "stage1",
+                "interfaceId": "stage1_data_q",
+                "local": true
+              },
+              "pin": "m_axis_tdata"
+            },
+            {
+              "endpoint": {
+                "moduleId": "stage1",
+                "interfaceId": "stage1_valid_q",
+                "local": true
+              },
+              "pin": "m_axis_tvalid"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,139 @@
+{
+  "modelHash": "2cd22e38e8248095a270a45eb113ea2d37b9edd87872ccb66ecbd362c886f4bf",
+  "scope": "top",
+  "layoutHash": "707e635e7168eab2b15897e2ca7a3f46e9066364fde018a75d40cd0a2df0b9fe",
+  "readingConstraints": {
+    "status": "satisfied",
+    "issues": [],
+    "counts": {
+      "parallel": 1,
+      "shared": 0,
+      "feedback": 0
+    },
+    "note": "只核对展示约束，不证明并行时序、资源仲裁、反馈可达性或 RTL 正确性。"
+  },
+  "structuralFidelity": {
+    "status": "passed",
+    "missing": [],
+    "extra": [],
+    "duplicates": [],
+    "wrongEndpoints": [],
+    "omissions": [],
+    "note": "仅检查当前视图对应模型连接；折叠有明确原因，不证明 RTL 覆盖。"
+  },
+  "semanticClarity": {
+    "status": "needs_review",
+    "issues": [
+      {
+        "code": "PARTIAL_MODEL",
+        "target": "top",
+        "reason": "模型尚未完整；图中没有显示的结构不代表 RTL 中不存在。"
+      }
+    ],
+    "humanReview": "not_run"
+  },
+  "geometricReadability": {
+    "status": "needs_review",
+    "note": "交叉、共线和隐藏线名与基本几何完整性分开；仍需沿真实事务人工阅读。"
+  },
+  "sharedLabels": [],
+  "labelStatus": "needs_attention",
+  "status": "passed",
+  "overlaps": [],
+  "nodeHits": [],
+  "unrouted": [],
+  "crossings": 28,
+  "unrelatedSharedLength": 1323.2,
+  "bends": 30,
+  "wireLength": 9748.599999999999,
+  "hiddenLabels": [
+    "dependency:top>logical_value_q/load_control/state_condition",
+    "dependency:top>logical_value_q/sample_data/state_data",
+    "dependency:top>packed_value_q/load_control/state_condition",
+    "dependency:top>packed_value_q/sample_data/state_data",
+    "dependency:top>packed_value_q/shift_control/state_data"
+  ],
+  "folded": {
+    "auxiliary": 0,
+    "local": 0
+  },
+  "connections": [
+    {
+      "id": "scaled_out",
+      "from": {
+        "moduleId": "top",
+        "interfaceId": "scaled_q",
+        "local": true
+      },
+      "to": {
+        "moduleId": "top",
+        "interfaceId": "scaled"
+      },
+      "visibleIn": [
+        "relation:local:top:scaled_q>rack:top:producer/local:top:scaled_q/scaled_result/scaled_result/wire"
+      ]
+    },
+    {
+      "id": "packed_value_out",
+      "from": {
+        "moduleId": "top",
+        "interfaceId": "packed_value_q",
+        "local": true
+      },
+      "to": {
+        "moduleId": "top",
+        "interfaceId": "packed_value"
+      },
+      "visibleIn": [
+        "relation:local:top:packed_value_q>rack:top:producer/local:top:packed_value_q/packed_value_result/packed_value_result/wire"
+      ]
+    },
+    {
+      "id": "logical_value_out",
+      "from": {
+        "moduleId": "top",
+        "interfaceId": "logical_value_q",
+        "local": true
+      },
+      "to": {
+        "moduleId": "top",
+        "interfaceId": "logical_value"
+      },
+      "visibleIn": [
+        "relation:local:top:logical_value_q>rack:top:producer/local:top:logical_value_q/logical_value_result/logical_value_result/wire"
+      ]
+    },
+    {
+      "id": "negative_out",
+      "from": {
+        "moduleId": "top",
+        "interfaceId": "negative_q",
+        "local": true
+      },
+      "to": {
+        "moduleId": "top",
+        "interfaceId": "negative"
+      },
+      "visibleIn": [
+        "relation:local:top:negative_q>rack:top:producer/local:top:negative_q/negative_result/negative_result/wire"
+      ]
+    },
+    {
+      "id": "parity_out",
+      "from": {
+        "moduleId": "top",
+        "interfaceId": "parity_q",
+        "local": true
+      },
+      "to": {
+        "moduleId": "top",
+        "interfaceId": "parity"
+      },
+      "visibleIn": [
+        "relation:local:top:parity_q>rack:top:producer/local:top:parity_q/parity_result/parity_result/wire"
+      ]
+    }
+  ],
+  "visualReview": "not_run",
+  "note": "几何检查不证明文字可读、硬件正确或所有交叉可辨认。"
+}

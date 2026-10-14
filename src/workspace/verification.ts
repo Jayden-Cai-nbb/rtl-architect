@@ -1,3 +1,5 @@
+import {readStateCoverage} from '../core/stateCoverage';
+import {verificationBasis} from './verificationBasis';
 import {loadChecks} from './contractChecks';
 import {z} from 'zod';
 import {spawn,execFile} from 'node:child_process';
@@ -30,6 +32,7 @@ export async function runVerification(workspace:string,input:unknown){
  if(new Set(profile.inputs).size!==profile.inputs.length)throw new ToolError('INPUT_DUPLICATE','验证输入清单含重复文件');
  if(profile.checks.some(c=>c.kind==='obligations')&&profile.stage!=='simulation')throw new ToolError('CHECK_STAGE_INVALID','过程监视器仅作为 simulation 场景证据');
  const obligationTargets=[];for(const c of profile.checks)if(c.kind==='obligations'){const meta=await loadChecks(workspace,c.metadata,profile.inputs);for(const item of meta.items){if(!profile.moduleIds.includes(item.moduleId))throw new ToolError('CHECK_SCOPE_INVALID','验证清单需包含每个监视器所属模块');obligationTargets.push(item);}}
+ const basis=await verificationBasis(workspace,model);
  const before=await snapshot(workspace,profile.inputs),id=`run_${Date.now()}_${randomUUID().replaceAll('-','')}`;
  // Resolve the evidence parent before accepting it as a workspace-owned destination.
  await mkdir(join(workspace,'evidence'),{recursive:true});await workspacePath(workspace,'evidence');await mkdir(join(workspace,'evidence/runs'),{recursive:true});await workspacePath(workspace,'evidence/runs');
@@ -49,7 +52,17 @@ export async function runVerification(workspace:string,input:unknown){
   if(check.kind==='exit_code'){checks.push({...check,passed:true});continue;}
   const content=await inputFile(dir,check.file,8*1024*1024);artifacts.push({file:check.file,sha256:content.sha256});
   if(check.kind==='artifact'){checks.push({...check,passed:true});}
-  else if(check.kind==='obligations'){const meta=await loadChecks(workspace,check.metadata,profile.inputs);const log=content.bytes.toString();const results=meta.items.map(item=>({...item,passed:log.split(/\r?\n/).some(line=>line.startsWith(item.marker+' hits=')&&/hits=[1-9][0-9]*$/.test(line))}));const passed=results.every(r=>r.passed);checks.push({...check,results,passed});if(!passed)failure='obligation_not_exercised';}
+  else if(check.kind==='obligations'){
+   const meta=await loadChecks(workspace,check.metadata,profile.inputs),log=content.bytes.toString();
+   const results=meta.items.map(item=>{
+    const coverage=item.coverage?readStateCoverage(log,item.coverage.marker,item.coverage.goals):undefined;
+    const observed=log.split(/\r?\n/).some(line=>line.startsWith(item.marker+' hits=')&&/hits=[1-9][0-9]*$/.test(line));
+    return {...item,...(coverage?{coverage}:{}),passed:(!coverage||coverage.status==='COMPLETE')&&observed};
+   });
+   const passed=results.every(r=>r.passed);checks.push({...check,results,passed});
+   // Coverage gaps must not downgrade another failed check, regardless of manifest order.
+   if(!passed&&failure!=='check_failed')failure=results.some(r=>!r.passed&&!r.coverage)?'obligation_not_exercised':failure??'coverage_incomplete';
+  }
   else if(check.kind==='contains'){const passed=content.bytes.toString().includes(check.text);checks.push({...check,passed});if(!passed)failure='check_failed';}
   else {
    const script="import json,sys,xml.etree.ElementTree as E\ns=open(sys.argv[1],encoding='utf-8').read()\nif '<!DOCTYPE' in s.upper() or '<!ENTITY' in s.upper(): raise ValueError('DTD/entity declarations are not supported')\nr=E.fromstring(s)\nc=[e for e in r.iter() if e.tag.split('}')[-1]=='testcase']\nf=sum(any(n.tag.split('}')[-1] in ('failure','error') for n in e) for e in c)\nsuite_problem=any(any(int(e.get(k,'0'))!=0 for k in ('failures','errors','skipped','disabled')) for e in r.iter() if e.tag.split('}')[-1] in ('testsuite','testsuites'))\nsk=sum(any(n.tag.split('}')[-1]=='skipped' for n in e) for e in c)\nreport_problem=suite_problem or any(e.tag.split('}')[-1] in ('failure','error','skipped') for e in r.iter())\nprint(json.dumps(dict(tests=len(c),failed=f,skipped=sk,reportProblem=report_problem)))";
@@ -60,7 +73,7 @@ export async function runVerification(workspace:string,input:unknown){
  let after:typeof before=[];try{after=await snapshot(workspace,profile.inputs);if(hashValue(after)!==hashValue(before))failure='inputs_changed';}catch(e){failure='inputs_unavailable';}
  try{if(modelHash(modelSchema.parse(JSON.parse((await inputFile(workspace,'architecture/model.json')).bytes.toString())))!==hash)failure='model_changed';}catch{failure='model_unavailable';}
  if(Date.now()-start>profile.timeoutMs&&!failure)failure='timeout';
- const record={schemaVersion:1,id,name:profile.name,stage:profile.stage,moduleIds:profile.moduleIds,modelHash:hash,profileHash:hashValue(profile),profile,startedAt,finishedAt:new Date().toISOString(),durationMs:Date.now()-start,status:failure??'passed',inputs:before,inputsAfter:after,steps,checks,artifacts,obligationTargets,note:'只证明声明命令和检查在本次显式输入下的结果；未自动发现依赖，不改变架构批准或模型验证声明。'};
+ const record={schemaVersion:1,id,name:profile.name,stage:profile.stage,moduleIds:profile.moduleIds,modelHash:hash,profileHash:hashValue(profile),profile,startedAt,finishedAt:new Date().toISOString(),durationMs:Date.now()-start,status:failure??'passed',inputs:before,inputsAfter:after,steps,checks,artifacts,obligationTargets,basis,note:'只证明声明命令和检查在本次显式输入下的结果；未自动发现依赖，不改变架构批准或模型验证声明。'};
  await writeFile(join(dir,'run.json'),json(record),{flag:'wx'});return {...record,directory:dir};
 }
 const runSchema=z.object({schemaVersion:z.literal(1),id:idSchema,name:text,stage:text,moduleIds:z.array(idSchema),modelHash:hashSchema,status:text,finishedAt:text,durationMs:z.number(),inputs:z.array(z.object({file:text,sha256:hashSchema})),artifacts:z.array(z.object({file:text,sha256:hashSchema}))});

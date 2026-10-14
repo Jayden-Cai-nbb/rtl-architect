@@ -1,0 +1,14 @@
+
+> rtl-architect@2.0.0 check:feedback
+> node --import tsx scripts/check-feedback.ts
+
+PASS 1: default overview retains register boundaries; opt-out and internal detail are explicit
+PASS 2: selection changes styles only and preserves exact route/port objects and model identity
+PASS 3: default dependency trace stops at state, explicit crossing is bounded and deduplicated
+PASS 4: local positions and stage regions are presentation only; online and SVG share geometry
+  dense routing 105.1 ms, 60 edges
+PASS 5: dense small graphs have bounded search without obstacle penetration
+PASS 6: dependency bundles preserve categories, unknown ports and distinct bit ranges without claiming a physical bus
+PASS 7: parallel state and compute nodes with different widths remain separate in one topology layer
+PASS 8: stage constraints preserve ordered regions, every RTL instance and exact dependency members
+完成 8 组真实反馈对应检查。

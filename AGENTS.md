@@ -1,4 +1,4 @@
-# RTL Architect 1.5.0
+# RTL Architect 2.0.0
 
 - 先读 README。当前任务是可在本机多个 RTL 项目复用的 skill 与审阅工具，用户指令优先于设计文档。
 - `bin/rtlarch` 是统一入口，保留调用方 cwd；技能脚本通过真实路径定位它。机器调用使用 --json；npm run arch 只是兼容入口。
@@ -76,5 +76,24 @@
 - 小图自动布局最多试一次间距调整，仅改善优先质量指标才采用；显式 reading、大图、手动位置不自动试探。模式位置为会话状态，普通选择不重画。新增 check:hardware-view 与有源码依据的通用 examples/hardware-views；保持 partial。
 
 - 1.5 register.update 为可选整向量同步优先级规则，旧输入集合不自动补规则；inputs 与规则依赖必须一致，条件 1 位、值等宽，默认保持。图、Spec、检查器共用规则；sourceText 不执行。
-- state_transition 复用 checks/verify/assurance；显式状态/信号映射，组合 AST 内联，有限有效沿采样/相反沿比较。每个声明分支、复位和保持须被触发；相同数据重复写入可能掩盖保持错误，维护须用故障注入验证。
+- state_transition 复用 checks/verify/assurance；显式状态/信号映射，组合 AST 内联，有限有效沿采样/相反沿比较。复位及未被常量规则证明不可达的分支/保持须被触发；相同数据重复写入可能掩盖保持错误，维护须用故障注入验证。
 - 数据/控制问题仅按明确规则追踪，上游状态默认停止，不删背景连接。check:state-updates 与 examples/state-updates 均用通用 RTL；没有自动 RTL 行为提取或异步/部分位更新支持。
+
+- 1.6 状态覆盖由 core/stateCoverage 生成并解析：仅字面常量可证明不可达，其他情况继续要求激励；缺覆盖与 RTL 行为失败分开。priorityPairs 为显式语义，要求高优先级实际被选中、两条件同时成立且右值不同；未声明的竞争不算已检查。
+- verify 保存运行前的本地批准依据、需求快照及检查器指纹；assurance 分开还原一致性和已批准设计声明。事后批准不提升旧运行，无关联义务的需求保持未核验；不声称自然语言需求与规则自动等价。
+- check:reliability 使用临时通用 RTL 验证常量路径、区分性竞争和独立需求反例；CI 固定 Node/npm、EDA 日期与下载摘要，执行 build/check/rtl:test/check:workflow。未运行远端 CI 不能声称远端通过。
+
+- 1.7 observe-state 只读显式 verify 展开产物，独立保存状态观察快照；core/stateObservation 与 bitFunctions 只做有限二态单步函数。完整 $dff、单作用域、明确输入/状态映射；未驱动、未知单元、X/Z、跨时钟及预算超限为 UNKNOWN。不得把不同 AST 判为行为差异。
+- 状态差异附单步反例，未证明可达性；MATCH 不证明完整时序等价、初始状态或需求。保持 as_built / design 依据区别，刷新不提升已保存比较的批准依据。不得静默反写 register.update 或自动批准。
+- 1.7 的比较只支持 unsigned；1.9 扩展见下，旧表达式含义保持。check:state-observation 使用真实 Yosys 和独立 Verilator 反例回放。
+
+- 1.8 锚点归属端口所在模块的 interfaceGroup，不借用对端组 ID 合并不同操作数；原始端口和真实连接 ID 保留。
+- 1.8 reading.parallel/shared/feedback 仅约束独立 layout；并排节点在排序时临时收成单元，实际节点与连接全部保留。共享资源不复制，返回只引用现有有向关系，不推断协议或时序。
+- readingAudit 核对主线、主体分区、并排、共享位置及外侧返回；手动位置不自动修复。几何、连接对应、约束、拥挤与人工阅读结论分别报告。diagram-quality 只读，不启动服务、不修改 IR/批准。
+- check:layout-constraints 使用六类随附通用 RTL、真实 Yosys 层级/端点核对和三种视图；不把维护样例或几何通过称为用户阅读验收。局部状态-only 作用域也按完整可见节点检查位置集。
+
+- 1.9 SignalValue.cast 明确转换方式与结果 width/signed；端点/切片/拼接是 unsigned 位向量，组合端点也不自动继承内部 signed。算术/位运算/比较与 MUX 数据须同宽同符号，移位量 unsigned。旧模型不补字段。
+- 显式扩展/截断发生在该 AST 节点；monitor 必须保留每步位宽与符号，不能让外部赋值上下文扩大中间运算。四态、未知单元和预算超限不近似通过；check:expression-types 用真实 RTL、故障和独立整数穷举验证。
+
+- 2.0 状态证据按每个声明 update 聚合最新记录，不使用最新文件覆盖全局。局部重测、空映射发现、过滤模块不得隐藏其他失败；旧比较器版本为 STALE。多实例 v2 显式 scopes，最多 16 域/32 映射/64 发现，逐实例比较，不跨层拼接逻辑锥。
+- 外部 MIT axis_register 固定提交/摘要，原文件不可改作自编样例；故障仅在临时副本注入。opt_muxtree 仅显式删除不可能选中的分支，不能任意替换 X。端到端仿真与局部比较分别判定，抵消故障是有效反例。

@@ -1,4 +1,5 @@
 import {stageLayout} from './stageLayout';
+import {constrainedLayout} from './constrainedLayout';
 import type { Model, ScopeLayout } from '../../core/schema';
 import { scopeDiagram, type Positions,type DiagramOptions } from './scopeDiagram';
 import {wireSpacing} from './ports';
@@ -10,6 +11,7 @@ export async function arrangeScope(model: Model, scope: string, hash: string, re
   const ids = new Set(nodes.map(n => n.id));
   if (!reading) return autoReadingLayout(model, scope,options);
   if (reading.modelHash !== hash) throw new Error('阅读布局对应旧模型；核对展示约束并更新布局版本后重试。');
+  if(reading.parallel?.length||reading.shared?.length||reading.feedback?.length)return constrainedLayout(model,scope,reading,options);
   if(reading.stages?.length)return stageLayout(model,scope,reading,options);
   const controls=new Set(reading.control);
   const controlNets=new Set(diagram.edges.filter(e=>(controls.has(e.source)&&ids.has(e.target))||(controls.has(e.target)&&ids.has(e.source))).map(e=>e.data?.netKey??e.id));

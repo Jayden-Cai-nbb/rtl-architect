@@ -27,8 +27,11 @@ export function expandLink(model:Model,link:Link,selection?:{moduleId:string;ind
   links.push({...link,from:mapped(a),to:mapped(b)});
  }return links;
 }
+export function signalChildren(value:SignalValue):SignalValue[]{
+ return value.kind==='concat'?value.parts:value.kind==='operator'?value.operands:value.kind==='cast'?[value.value]:[];
+}
 export function signalReads(value:SignalValue):Endpoint[]{
- return value.kind==='endpoint'?[value.endpoint]:value.kind==='constant'?[]:(value.kind==='concat'?value.parts:value.operands).flatMap(signalReads);
+ return value.kind==='endpoint'?[value.endpoint]:signalChildren(value).flatMap(signalReads);
 }
 export function stateUpdateReads(update:StateUpdate,purpose?:'data'|'control'):Endpoint[]{
  return [...(update.reset?(purpose==='data'?signalReads(update.reset.value):purpose==='control'?[update.reset.signal]:[update.reset.signal,...signalReads(update.reset.value)]):[]),...update.branches.flatMap(b=>purpose==='data'?signalReads(b.value):purpose==='control'?signalReads(b.condition):[...signalReads(b.condition),...signalReads(b.value)])];
@@ -62,25 +65,37 @@ export function localSignalAnalysis(model:Model,resolve:(scope:string,e:Endpoint
    memo.set(id,result);return result;
   }finally{visiting.delete(id)}
  }
- function value(scope:string,v:SignalValue,depth=0):{width:number;reads:Endpoint[]}{
+ function value(scope:string,v:SignalValue,depth=0):{width:number;signed:boolean;reads:Endpoint[]}{
   if(++budget>100000||depth>64)throw new Error('局部表达式超过支持的大小或深度');
-  if(v.kind==='constant'){const number=BigInt(v.value);if(number<0n||number.toString(2).length>v.width)throw new Error('常量超过声明位宽，禁止静默截断');return {width:v.width,reads:[]};}
+  if(v.kind==='constant'){const number=BigInt(v.value);if(number<0n||number.toString(2).length>v.width)throw new Error('常量超过声明位宽，禁止静默截断');return {width:v.width,signed:false,reads:[]};}
   if(v.kind==='endpoint'){
    if(v.endpoint.sliceMapping)throw new Error('局部表达式使用具体切片；索引切片规则只用于连接');
    if(v.endpoint.index==='all')throw new Error('局部表达式需明确数组单元素索引');
    const resolved=resolve(scope,v.endpoint);if(!resolved||resolved.direction!=='source'||resolved.intf.protocol!=='signal'||!resolved.width)throw new Error('表达式输入须为本 scope 的 signal source');
    if(v.endpoint.local){const item=model.localSignals?.find(x=>x.id===v.endpoint.interfaceId);if(item?.driver.kind==='comb')local(item.id);}
-   return {width:resolved.width,reads:[v.endpoint]};
+   return {width:resolved.width,signed:false,reads:[v.endpoint]};
   }
-  const args=(v.kind==='concat'?v.parts:v.operands).map(x=>value(scope,x,depth+1));
-  const reads=args.flatMap(x=>x.reads);let width:number;
+  const args=signalChildren(v).map(x=>value(scope,x,depth+1));
+  const reads=args.flatMap(x=>x.reads);let width:number,signed=false;
   if(v.kind==='concat')width=args.reduce((n,a)=>n+a.width,0);
-  else {
-   const unary=['~','!'].includes(v.operator),mux=v.operator==='mux';if(args.length!==(unary?1:mux?3:2))throw new Error('局部运算符操作数数量不符');
-   if(!['!','&&','||'].includes(v.operator)&&(!mux?args.some(a=>a.width!==args[0].width):args[0].width!==1||args[1].width!==args[2].width))throw new Error('局部运算宽度不匹配，需显式切片/拼接');
-   width=['!','&&','||'].includes(v.operator)?1:mux?args[1].width:args[0].width;
+  else if(v.kind==='cast'){
+   const input=args[0].width;
+   if(v.mode==='reinterpret'?v.width!==input:v.mode==='truncate'?v.width>=input:v.width<=input)throw new Error('转换位宽不符：reinterpret 须等宽，extend 须增宽，truncate 须减宽');
+   width=v.width;signed=v.signed;
   }
-  if(width<1||width>65536)throw new Error('局部表达式位宽超出1..65536');return {width,reads};
+  else {
+   const reduction=v.operator.startsWith('reduce_'),unary=['~','!'].includes(v.operator)||reduction,mux=v.operator==='mux',shift=['<<','>>','>>>'].includes(v.operator),logical=['!','&&','||'].includes(v.operator),comparison=['==','!=','<','<=','>','>='].includes(v.operator);
+   if(args.length!==(unary?1:mux?3:2))throw new Error('局部运算符操作数数量不符');
+   if(shift){if(args[1].signed)throw new Error('移位量须为无符号值，请显式转换');}
+   else if(!logical&&!reduction){
+    const data=mux?args.slice(1):args;
+    if(mux&&args[0].width!==1||data.some(a=>a.width!==data[0].width))throw new Error('局部运算宽度不匹配，需显式转换/切片/拼接');
+    if(data.some(a=>a.signed!==data[0].signed))throw new Error('混合 signed/unsigned 运算须显式转换为同一类型');
+   }
+   width=logical||comparison||reduction?1:mux?args[1].width:args[0].width;
+   signed=logical||comparison||reduction?false:mux?args[1].signed:args[0].signed;
+  }
+  if(width<1||width>65536)throw new Error('局部表达式位宽超出1..65536');return {width,signed,reads};
  }
  return {local,value};
 }
@@ -91,5 +106,7 @@ export function signalText(value:SignalValue):string {
  if(value.kind==='endpoint'){const e=value.endpoint;return `${e.local?'local':e.moduleId}.${e.interfaceId}${e.index!==undefined?`[${e.index}]`:''}${e.slice?`[${e.slice.msb}:${e.slice.lsb}]`:''}`}
  if(value.kind==='constant')return `${value.width}bit(${value.value})`;
  if(value.kind==='concat')return `{${value.parts.map(signalText).join(', ')}}`;
+ if(value.kind==='cast')return `${{reinterpret:'重解释',zero_extend:'零扩展',sign_extend:'符号扩展',truncate:'截取低位'}[value.mode]}→${value.width} 位${value.signed?'有符号':'无符号'}(${signalText(value.value)})`;
+ if(value.operator.startsWith('reduce_'))return `${{reduce_and:'归约与',reduce_or:'归约或',reduce_xor:'归约异或'}[value.operator as 'reduce_and']}(${signalText(value.operands[0])})`;
  const args=value.operands.map(signalText);return value.operator==='mux'?`(${args[0]} ? ${args[1]} : ${args[2]})`:args.length===1?`${value.operator}${args[0]}`:`(${args.join(' '+value.operator+' ')})`;
 }

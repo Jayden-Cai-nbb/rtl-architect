@@ -20,7 +20,8 @@ export function linkGroup(model:Model,link:Link){
 /** Detail mode gives each recorded port its own anchor, without inventing RTL pins for an RV interface. */
 export function linkAnchorGroup(model:Model,scope:string,end:Endpoint,link:Link,individual=false){
  if(end.moduleId===scope&&!end.local)return interfaceGroup(model,end).id;
- return individual?`raw:${end.moduleId}:${end.local?'local:':''}${end.interfaceId}`:linkGroup(model,link).id;
+ // A peer's group ID has no identity in this module. Reusing it can join distinct operands.
+ return individual?`raw:${end.moduleId}:${end.local?'local:':''}${end.interfaceId}`:interfaceGroup(model,end).id;
 }
 const endpointMatches=(a:Endpoint,b:Endpoint)=>a.moduleId===b.moduleId&&a.interfaceId===b.interfaceId&&!!a.local===!!b.local&&(a.index===undefined||b.index===undefined||a.index==='all'||b.index==='all'||a.index===b.index);
 export function inspectScope(model:Model,scope:string,inspection?:Inspection){

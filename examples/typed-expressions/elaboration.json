@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "name": "显式类型缩放：elaboration.json",
+  "stage": "elaboration",
+  "moduleIds": [
+    "top"
+  ],
+  "inputs": [
+    "rtl/signed_scaler.sv",
+    "elaboration.json"
+  ],
+  "inputClosure": {
+    "status": "declared_complete",
+    "note": "Standalone signed_scaler; fixed widths; explicit testbench/monitor when simulating; no includes or macros."
+  },
+  "timeoutMs": 30000,
+  "commands": [
+    {
+      "program": "yosys",
+      "versionArgs": [
+        "-V"
+      ],
+      "args": [
+        "-Q",
+        "-T",
+        "-p",
+        "read_verilog -sv rtl/signed_scaler.sv; hierarchy -check -top signed_scaler; proc; check -assert; write_json {runDir}/state.json"
+      ]
+    }
+  ],
+  "checks": [
+    {
+      "kind": "artifact",
+      "file": "state.json"
+    }
+  ]
+}

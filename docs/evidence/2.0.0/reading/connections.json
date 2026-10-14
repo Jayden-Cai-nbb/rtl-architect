@@ -1,0 +1,480 @@
+{
+  "modelHash": "2cd22e38e8248095a270a45eb113ea2d37b9edd87872ccb66ecbd362c886f4bf",
+  "connections": [
+    {
+      "id": "scaled_out",
+      "scope": "top",
+      "from": {
+        "moduleId": "top",
+        "interfaceId": "scaled_q",
+        "local": true
+      },
+      "to": {
+        "moduleId": "top",
+        "interfaceId": "scaled"
+      }
+    },
+    {
+      "id": "packed_value_out",
+      "scope": "top",
+      "from": {
+        "moduleId": "top",
+        "interfaceId": "packed_value_q",
+        "local": true
+      },
+      "to": {
+        "moduleId": "top",
+        "interfaceId": "packed_value"
+      }
+    },
+    {
+      "id": "logical_value_out",
+      "scope": "top",
+      "from": {
+        "moduleId": "top",
+        "interfaceId": "logical_value_q",
+        "local": true
+      },
+      "to": {
+        "moduleId": "top",
+        "interfaceId": "logical_value"
+      }
+    },
+    {
+      "id": "negative_out",
+      "scope": "top",
+      "from": {
+        "moduleId": "top",
+        "interfaceId": "negative_q",
+        "local": true
+      },
+      "to": {
+        "moduleId": "top",
+        "interfaceId": "negative"
+      }
+    },
+    {
+      "id": "parity_out",
+      "scope": "top",
+      "from": {
+        "moduleId": "top",
+        "interfaceId": "parity_q",
+        "local": true
+      },
+      "to": {
+        "moduleId": "top",
+        "interfaceId": "parity"
+      }
+    }
+  ],
+  "localSignals": [
+    {
+      "id": "scaled_q",
+      "scope": "top",
+      "name": "符号扩展到 12 位后算术右移",
+      "width": 12,
+      "description": "符号扩展到 12 位后算术右移；同步复位优先，使能无效保持。",
+      "driver": {
+        "kind": "register",
+        "inputs": [
+          {
+            "moduleId": "top",
+            "interfaceId": "rst_n"
+          },
+          {
+            "moduleId": "top",
+            "interfaceId": "enable"
+          },
+          {
+            "moduleId": "top",
+            "interfaceId": "sample"
+          },
+          {
+            "moduleId": "top",
+            "interfaceId": "shift"
+          }
+        ],
+        "sourceText": "scaled <= extended_sample >>> shift;",
+        "update": {
+          "reset": {
+            "signal": {
+              "moduleId": "top",
+              "interfaceId": "rst_n"
+            },
+            "activeLevel": "low",
+            "value": {
+              "kind": "constant",
+              "width": 12,
+              "value": "0"
+            }
+          },
+          "branches": [
+            {
+              "id": "load",
+              "condition": {
+                "kind": "endpoint",
+                "endpoint": {
+                  "moduleId": "top",
+                  "interfaceId": "enable"
+                }
+              },
+              "value": {
+                "kind": "operator",
+                "operator": ">>>",
+                "operands": [
+                  {
+                    "kind": "cast",
+                    "mode": "sign_extend",
+                    "width": 12,
+                    "signed": true,
+                    "value": {
+                      "kind": "endpoint",
+                      "endpoint": {
+                        "moduleId": "top",
+                        "interfaceId": "sample"
+                      }
+                    }
+                  },
+                  {
+                    "kind": "endpoint",
+                    "endpoint": {
+                      "moduleId": "top",
+                      "interfaceId": "shift"
+                    }
+                  }
+                ]
+              }
+            }
+          ],
+          "otherwise": "hold"
+        }
+      },
+      "evidenceIds": [
+        "rtl"
+      ]
+    },
+    {
+      "id": "packed_value_q",
+      "scope": "top",
+      "name": "明确截取算术结果低 8 位",
+      "width": 8,
+      "description": "明确截取算术结果低 8 位；同步复位优先，使能无效保持。",
+      "driver": {
+        "kind": "register",
+        "inputs": [
+          {
+            "moduleId": "top",
+            "interfaceId": "rst_n"
+          },
+          {
+            "moduleId": "top",
+            "interfaceId": "enable"
+          },
+          {
+            "moduleId": "top",
+            "interfaceId": "sample"
+          },
+          {
+            "moduleId": "top",
+            "interfaceId": "shift"
+          }
+        ],
+        "sourceText": "packed_value <= 8'(extended_sample >>> shift);",
+        "update": {
+          "reset": {
+            "signal": {
+              "moduleId": "top",
+              "interfaceId": "rst_n"
+            },
+            "activeLevel": "low",
+            "value": {
+              "kind": "constant",
+              "width": 8,
+              "value": "0"
+            }
+          },
+          "branches": [
+            {
+              "id": "load",
+              "condition": {
+                "kind": "endpoint",
+                "endpoint": {
+                  "moduleId": "top",
+                  "interfaceId": "enable"
+                }
+              },
+              "value": {
+                "kind": "cast",
+                "mode": "truncate",
+                "width": 8,
+                "signed": false,
+                "value": {
+                  "kind": "operator",
+                  "operator": ">>>",
+                  "operands": [
+                    {
+                      "kind": "cast",
+                      "mode": "sign_extend",
+                      "width": 12,
+                      "signed": true,
+                      "value": {
+                        "kind": "endpoint",
+                        "endpoint": {
+                          "moduleId": "top",
+                          "interfaceId": "sample"
+                        }
+                      }
+                    },
+                    {
+                      "kind": "endpoint",
+                      "endpoint": {
+                        "moduleId": "top",
+                        "interfaceId": "shift"
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          ],
+          "otherwise": "hold"
+        }
+      },
+      "evidenceIds": [
+        "rtl"
+      ]
+    },
+    {
+      "id": "logical_value_q",
+      "scope": "top",
+      "name": "按无符号位向量逻辑右移",
+      "width": 8,
+      "description": "按无符号位向量逻辑右移；同步复位优先，使能无效保持。",
+      "driver": {
+        "kind": "register",
+        "inputs": [
+          {
+            "moduleId": "top",
+            "interfaceId": "rst_n"
+          },
+          {
+            "moduleId": "top",
+            "interfaceId": "enable"
+          },
+          {
+            "moduleId": "top",
+            "interfaceId": "sample"
+          },
+          {
+            "moduleId": "top",
+            "interfaceId": "shift"
+          }
+        ],
+        "sourceText": "logical_value <= $unsigned(sample) >> shift;",
+        "update": {
+          "reset": {
+            "signal": {
+              "moduleId": "top",
+              "interfaceId": "rst_n"
+            },
+            "activeLevel": "low",
+            "value": {
+              "kind": "constant",
+              "width": 8,
+              "value": "0"
+            }
+          },
+          "branches": [
+            {
+              "id": "load",
+              "condition": {
+                "kind": "endpoint",
+                "endpoint": {
+                  "moduleId": "top",
+                  "interfaceId": "enable"
+                }
+              },
+              "value": {
+                "kind": "operator",
+                "operator": ">>",
+                "operands": [
+                  {
+                    "kind": "endpoint",
+                    "endpoint": {
+                      "moduleId": "top",
+                      "interfaceId": "sample"
+                    }
+                  },
+                  {
+                    "kind": "endpoint",
+                    "endpoint": {
+                      "moduleId": "top",
+                      "interfaceId": "shift"
+                    }
+                  }
+                ]
+              }
+            }
+          ],
+          "otherwise": "hold"
+        }
+      },
+      "evidenceIds": [
+        "rtl"
+      ]
+    },
+    {
+      "id": "negative_q",
+      "scope": "top",
+      "name": "按有符号数判断负值",
+      "width": 1,
+      "description": "按有符号数判断负值；同步复位优先，使能无效保持。",
+      "driver": {
+        "kind": "register",
+        "inputs": [
+          {
+            "moduleId": "top",
+            "interfaceId": "rst_n"
+          },
+          {
+            "moduleId": "top",
+            "interfaceId": "enable"
+          },
+          {
+            "moduleId": "top",
+            "interfaceId": "sample"
+          }
+        ],
+        "sourceText": "negative <= sample < 8'sd0;",
+        "update": {
+          "reset": {
+            "signal": {
+              "moduleId": "top",
+              "interfaceId": "rst_n"
+            },
+            "activeLevel": "low",
+            "value": {
+              "kind": "constant",
+              "width": 1,
+              "value": "0"
+            }
+          },
+          "branches": [
+            {
+              "id": "load",
+              "condition": {
+                "kind": "endpoint",
+                "endpoint": {
+                  "moduleId": "top",
+                  "interfaceId": "enable"
+                }
+              },
+              "value": {
+                "kind": "operator",
+                "operator": "<",
+                "operands": [
+                  {
+                    "kind": "cast",
+                    "mode": "reinterpret",
+                    "width": 8,
+                    "signed": true,
+                    "value": {
+                      "kind": "endpoint",
+                      "endpoint": {
+                        "moduleId": "top",
+                        "interfaceId": "sample"
+                      }
+                    }
+                  },
+                  {
+                    "kind": "cast",
+                    "mode": "reinterpret",
+                    "width": 8,
+                    "signed": true,
+                    "value": {
+                      "kind": "constant",
+                      "width": 8,
+                      "value": "0"
+                    }
+                  }
+                ]
+              }
+            }
+          ],
+          "otherwise": "hold"
+        }
+      },
+      "evidenceIds": [
+        "rtl"
+      ]
+    },
+    {
+      "id": "parity_q",
+      "scope": "top",
+      "name": "输入的逐位异或归约",
+      "width": 1,
+      "description": "输入的逐位异或归约；同步复位优先，使能无效保持。",
+      "driver": {
+        "kind": "register",
+        "inputs": [
+          {
+            "moduleId": "top",
+            "interfaceId": "rst_n"
+          },
+          {
+            "moduleId": "top",
+            "interfaceId": "enable"
+          },
+          {
+            "moduleId": "top",
+            "interfaceId": "sample"
+          }
+        ],
+        "sourceText": "parity <= ^sample;",
+        "update": {
+          "reset": {
+            "signal": {
+              "moduleId": "top",
+              "interfaceId": "rst_n"
+            },
+            "activeLevel": "low",
+            "value": {
+              "kind": "constant",
+              "width": 1,
+              "value": "0"
+            }
+          },
+          "branches": [
+            {
+              "id": "load",
+              "condition": {
+                "kind": "endpoint",
+                "endpoint": {
+                  "moduleId": "top",
+                  "interfaceId": "enable"
+                }
+              },
+              "value": {
+                "kind": "operator",
+                "operator": "reduce_xor",
+                "operands": [
+                  {
+                    "kind": "endpoint",
+                    "endpoint": {
+                      "moduleId": "top",
+                      "interfaceId": "sample"
+                    }
+                  }
+                ]
+              }
+            }
+          ],
+          "otherwise": "hold"
+        }
+      },
+      "evidenceIds": [
+        "rtl"
+      ]
+    }
+  ]
+}

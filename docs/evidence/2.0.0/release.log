@@ -1,0 +1,18 @@
+
+> rtl-architect@2.0.0 check:release
+> node --import tsx scripts/check-release.ts
+
+{
+  "passed": true,
+  "version": "2.0.0",
+  "lockfileInstall": true,
+  "inheritedNodeModules": false,
+  "inheritedRuntime": false,
+  "inheritedDist": false,
+  "workspaceWithSpaces": true,
+  "skillInstall": true,
+  "pageServed": true,
+  "modelUnchanged": true,
+  "platform": "linux",
+  "remoteCI": "not_run"
+}

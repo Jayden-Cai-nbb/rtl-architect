@@ -1,0 +1,323 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>有符号缩放：位宽、移位与标志 · 当前成果快照</title>
+<style>body{font:16px/1.65 system-ui,sans-serif;color:#203849;background:#f5f8fa;margin:0}main{max-width:1720px;margin:auto;padding:28px}h1{font-size:28px}h2{margin-top:32px}a{color:#17658b}section,details{background:white;border:1px solid #d5e0e7;border-radius:8px;padding:18px;margin:14px 0}summary{cursor:pointer;font-weight:600}.states{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}.states section{margin:0}table{border-collapse:collapse;width:100%}td,th{padding:9px;border-bottom:1px solid #dbe5ea;text-align:left;vertical-align:top;overflow-wrap:anywhere}th{background:#edf3f7}.scroll{overflow:auto}p,td{white-space:pre-wrap}code{overflow-wrap:anywhere}img{width:100%;height:auto}.diagram-scroll{overflow:auto}.diagram-scroll img{width:auto;max-width:none}.muted{color:#5b6e7b}li{margin:5px 0}
+.diagram-reader{padding:0;overflow:hidden}.diagram-bar{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:12px 18px;background:#f8fafc;border-bottom:1px solid #e3e9ee}.scope-tabs,.diagram-actions{display:flex;gap:6px;flex-wrap:wrap}button{font:inherit;font-size:13px;padding:6px 12px;cursor:pointer;color:#38566b;background:#fff;border:1px solid #d3dfe6;border-radius:4px}button[aria-selected=true],button[aria-pressed=true]{background:#eaf2f7;border-color:#6f94aa;color:#174761}.reader-hint{font-size:13px;color:#647b8b;margin:10px 20px}.diagram-stage{overflow:auto;background:#fff;height:68vh;min-height:340px;overscroll-behavior:contain;scrollbar-gutter:stable}.diagram-stage svg{display:block;width:100%;height:100%;max-height:none}.diagram-stage.native svg{width:auto;max-width:none;height:auto;max-height:none}.diagram-stage [data-node-id]{user-select:none}.diagram-stage [role=button],.diagram-stage [data-wire-label]{cursor:pointer}.diagram-stage [data-edge-id]{pointer-events:stroke;stroke-width:2}.diagram-stage [data-edge-id].traced{stroke-width:2.7}.diagram-stage [role=button]:focus{outline:2px solid #bd883d}.diagram-caption{font-size:12px;margin:6px 20px}.diagram-reader.focus{position:fixed;inset:0;z-index:100;display:flex;flex-direction:column;margin:0;border-radius:0}.diagram-reader.focus .diagram-panel:not([hidden]){display:flex;flex:1;min-height:0;flex-direction:column}.diagram-reader.focus .diagram-stage{flex:1;min-height:0}.diagram-reader.focus .diagram-stage svg{height:100%;max-height:none}.diagram-reader.focus .diagram-stage.native svg{height:auto}.diagram-reader.focus #diagram-trace{flex:0 0 130px;max-height:130px}#diagram-zoom{font-size:12px;min-width:42px;align-self:center;text-align:center}#diagram-trace{border-top:1px solid #e4ebf0;background:#f8fafc;padding:14px 20px;font-size:13px;max-height:240px;overflow:auto}#diagram-trace p{margin:4px 0}#diagram-trace ul{font-family:ui-monospace,monospace;font-size:12px;padding-left:18px;overflow-wrap:anywhere}.states{font-size:13px}.states section{padding:10px 14px}.states p{margin:3px 0}h1{margin:0 0 8px;font-size:24px}.design-purpose{padding:0;border:0;background:transparent;margin:6px 0;font-size:14px}.design-purpose summary{font-weight:400}.design-purpose p{max-width:1200px}.muted{font-size:12px;margin:8px 0}main>p{max-width:1200px}@media(max-width:800px){main{padding:12px}.diagram-bar{align-items:flex-start;flex-direction:column}}
+</style><main>
+<h1>有符号缩放：位宽、移位与标志</h1><details class="design-purpose"><summary>设计用途与说明</summary><p>使能时采样 signed 8 位数据，同时保存 12 位算术缩放、低位打包、逻辑右移与标志。</p></details>
+<p class="muted">当前工作区快照 · 2cd22e38e824 · 工具 2.0.0</p>
+<div class="states"><section><strong>架构批准</strong><p>草稿，待审阅</p></section><section><strong>来源新鲜度</strong><p>声明文件全部匹配 · 共 1 项</p></section><section><strong>实现验证</strong><p>本次未核验</p></section><section><strong>器件验收</strong><p>本次未核验</p></section></div>
+<section class="diagram-reader" aria-label="架构框图"><div class="diagram-bar"><div class="scope-tabs" role="tablist" aria-label="层级"><button type="button" role="tab" id="diagram-tab-0" aria-controls="diagram-panel-0" aria-selected="true" data-scope-tab="0">有符号缩放寄存级</button></div><div class="diagram-actions"><button type="button" id="diagram-fit" aria-pressed="true">全图</button><button type="button" id="diagram-native" aria-pressed="false">原尺寸</button><button type="button" id="diagram-zoom-out" aria-label="缩小框图">−</button><output id="diagram-zoom" aria-label="当前缩放">全图</output><button type="button" id="diagram-zoom-in" aria-label="放大框图">＋</button><button type="button" id="diagram-focus" aria-pressed="false">专注看图</button><button type="button" id="diagram-clear">退出追踪</button></div></div>
+ <p class="reader-hint">大图从可读比例开始；滚轮滚动，Ctrl+滚轮缩放，“全图”查看总览；双击模块放大。放大后显示接口名，可点名称追踪。“N 项”是可展开的依赖集合，不是物理总线。实心点是同源分叉，留白交叉不相连。</p>
+ <div class="diagram-panel" role="tabpanel" id="diagram-panel-0" aria-labelledby="diagram-tab-0" ><div class="diagram-stage"><svg xmlns="http://www.w3.org/2000/svg" viewBox="-447.5 -90 1135 1854" width="1135" height="1854" role="img" class="show-port-names" data-port-detail-zoom="0.9" data-model-hash="2cd22e38e8248095a270a45eb113ea2d37b9edd87872ccb66ecbd362c886f4bf" data-view-mode="architecture" data-scope="top" aria-label="有符号缩放寄存级结构图"><title>有符号缩放寄存级 · RTL 结构图</title><desc>使能时采样 signed 8 位数据，同时保存 12 位算术缩放、低位打包、逻辑右移与标志。。模型尚未完整。</desc><defs><marker id="arrow-dependency" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M 1 1 L 9 5 L 1 9" fill="none" stroke="#64758b" stroke-width="1.5"/></marker><marker id="arrow-data" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#326ea1"/></marker><marker id="arrow-request" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#7c61ab"/></marker><marker id="arrow-response" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#267e80"/></marker><marker id="arrow-writeback" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#b07435"/></marker><marker id="arrow-configuration" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#82919c"/></marker><marker id="arrow-clock_reset" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#82919c"/></marker><marker id="arrow-control" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#64758b"/></marker><marker id="arrow-other" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#64758b"/></marker></defs><style>.port-details{display:none}.show-port-names .port-details{display:inline}</style><g font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif"><rect x="-447.5" y="-90" width="1135" height="1854" fill="#fff"/>
+<text x="-423.5" y="-58" font-size="21" fill="#29465a">有符号缩放寄存级</text>
+<text x="-423.5" y="-35" font-size="12" fill="#29465a">尚未完整 · 架构通路 · 5 条已记录连接 · 2cd22e38e824</text>
+<rect x="-423.5" y="-8" width="1087" height="1692" rx="0" fill="#fff" stroke="#dce3e8"/>
+<path data-edge-id="relation:local:top:logical_value_q&gt;rack:top:producer/local:top:logical_value_q/logical_value_result/logical_value_result/wire" data-source="local:top:logical_value_q" data-target="rack:top:producer" d="M 207.20000000000005 896 L 489.5 896" fill="none" stroke="#326ea1" stroke-width="1.7" marker-end="url(#arrow-data)"><title>逻辑右移：按无符号位向量逻辑右移 → 输出
+logical_value_out
+独立并行计算的输出。
+模型记录的直接连接；业务分类不代表协议成员关系。</title></path>
+<path data-edge-id="relation:local:top:negative_q&gt;rack:top:producer/local:top:negative_q/negative_result/negative_result/wire" data-source="local:top:negative_q" data-target="rack:top:producer" d="M 180 1246 L 489.5 1246" fill="none" stroke="#326ea1" stroke-width="1.7" marker-end="url(#arrow-data)"><title>负数标志：按有符号数判断负值 → 输出
+negative_out
+独立并行计算的输出。
+模型记录的直接连接；业务分类不代表协议成员关系。</title></path>
+<path data-edge-id="relation:local:top:packed_value_q&gt;rack:top:producer/local:top:packed_value_q/packed_value_result/packed_value_result/wire" data-source="local:top:packed_value_q" data-target="rack:top:producer" d="M 200.00000000000003 546 L 489.5 546" fill="none" stroke="#326ea1" stroke-width="1.7" marker-end="url(#arrow-data)"><title>低位打包：明确截取算术结果低 8 位 → 输出
+packed_value_out
+独立并行计算的输出。
+模型记录的直接连接；业务分类不代表协议成员关系。</title></path>
+<path data-edge-id="relation:local:top:parity_q&gt;rack:top:producer/local:top:parity_q/parity_result/parity_result/wire" data-source="local:top:parity_q" data-target="rack:top:producer" d="M 180 1560 L 489.5 1560" fill="none" stroke="#326ea1" stroke-width="1.7" marker-end="url(#arrow-data)"><title>异或校验：输入的逐位异或归约 → 输出
+parity_out
+独立并行计算的输出。
+模型记录的直接连接；业务分类不代表协议成员关系。</title></path>
+<path data-edge-id="relation:local:top:scaled_q&gt;rack:top:producer/local:top:scaled_q/scaled_result/scaled_result/wire" data-source="local:top:scaled_q" data-target="rack:top:producer" d="M 180 196 L 489.5 196" fill="none" stroke="#326ea1" stroke-width="1.7" marker-end="url(#arrow-data)"><title>算术缩放：符号扩展到 12 位后算术右移 → 输出
+scaled_out
+独立并行计算的输出。
+模型记录的直接连接；业务分类不代表协议成员关系。</title></path>
+<path data-edge-id="dependency:top&gt;logical_value_q/load_control/state_condition" data-source="rack:top:consumer" data-target="local:top:logical_value_q" d="M -249.5 946.4 L -20 946.4 L -20 968 L 12 968" fill="none" stroke="#64758b" stroke-width="1.8" marker-end="url(#arrow-dependency)"><title>更新条件 · 采样使能：输入 → 按无符号位向量逻辑右移
+
+模型表达式依赖；不是一条直接物理线
+top.enable</title></path>
+<path data-edge-id="dependency:top&gt;logical_value_q/sample_data/state_data" data-source="rack:top:consumer" data-target="local:top:logical_value_q" d="M -249.5 888.8 L -217.5 888.8 L -217.5 896 L 12 896" fill="none" stroke="#326ea1" stroke-width="1.8" marker-end="url(#arrow-dependency)"><title>写入值 · 采样数据：输入 → 按无符号位向量逻辑右移
+
+模型表达式依赖；不是一条直接物理线
+top.sample</title></path>
+<circle cx="-20" cy="896" r="3.5" fill="#fff"/>
+<path data-edge-id="dependency:top&gt;logical_value_q/shift_control/state_data" data-source="rack:top:consumer" data-target="local:top:logical_value_q" d="M -249.5 582 L -20 582 L -20 932 L 12 932" fill="none" stroke="#64758b" stroke-width="1.8" marker-end="url(#arrow-dependency)"><title>写入值 · 移位量：输入 → 按无符号位向量逻辑右移
+
+模型表达式依赖；不是一条直接物理线
+top.shift</title></path>
+<circle cx="-217.5" cy="946.4" r="3.5" fill="#fff"/>
+<path data-edge-id="dependency:top&gt;negative_q/load_control/state_condition" data-source="rack:top:consumer" data-target="local:top:negative_q" d="M -249.5 946.4 L -217.5 946.4 L -217.5 978.4 L -20 978.4 L -20 1282 L 12 1282" fill="none" stroke="#64758b" stroke-width="1.8" marker-end="url(#arrow-dependency)"><title>更新条件 · 采样使能：输入 → 按有符号数判断负值
+
+模型表达式依赖；不是一条直接物理线
+top.enable</title></path>
+<circle cx="-217.5" cy="888.8" r="3.5" fill="#fff"/>
+<circle cx="-217.5" cy="946.4" r="3.5" fill="#fff"/>
+<circle cx="-217.5" cy="896" r="3.5" fill="#fff"/>
+<circle cx="-217.5" cy="978.4" r="3.5" fill="#fff"/>
+<circle cx="-20" cy="1246" r="3.5" fill="#fff"/>
+<path data-edge-id="dependency:top&gt;negative_q/sample_data/state_data" data-source="rack:top:consumer" data-target="local:top:negative_q" d="M -249.5 888.8 L -217.5 888.8 L -217.5 1246 L 12 1246" fill="none" stroke="#326ea1" stroke-width="1.8" marker-end="url(#arrow-dependency)"><title>写入值 · 采样数据：输入 → 按有符号数判断负值
+
+模型表达式依赖；不是一条直接物理线
+top.sample</title></path>
+<circle cx="-217.5" cy="946.4" r="3.5" fill="#fff"/>
+<circle cx="-153.5" cy="946.4" r="3.5" fill="#fff"/>
+<circle cx="-153.5" cy="896" r="3.5" fill="#fff"/>
+<circle cx="-20" cy="618" r="3.5" fill="#fff"/>
+<path data-edge-id="dependency:top&gt;packed_value_q/load_control/state_condition" data-source="rack:top:consumer" data-target="local:top:packed_value_q" d="M -249.5 946.4 L -153.5 946.4 L -153.5 618 L 12 618" fill="none" stroke="#64758b" stroke-width="1.8" marker-end="url(#arrow-dependency)"><title>更新条件 · 采样使能：输入 → 明确截取算术结果低 8 位
+
+模型表达式依赖；不是一条直接物理线
+top.enable</title></path>
+<circle cx="-217.5" cy="888.8" r="3.5" fill="#fff"/>
+<circle cx="-217.5" cy="582" r="3.5" fill="#fff"/>
+<path data-edge-id="dependency:top&gt;packed_value_q/sample_data/state_data" data-source="rack:top:consumer" data-target="local:top:packed_value_q" d="M -249.5 888.8 L -217.5 888.8 L -217.5 546 L 12 546" fill="none" stroke="#326ea1" stroke-width="1.8" marker-end="url(#arrow-dependency)"><title>写入值 · 采样数据：输入 → 明确截取算术结果低 8 位
+
+模型表达式依赖；不是一条直接物理线
+top.sample</title></path>
+<circle cx="-217.5" cy="582" r="3.5" fill="#fff"/>
+<circle cx="-217.5" cy="550" r="3.5" fill="#fff"/>
+<circle cx="-20" cy="582" r="3.5" fill="#fff"/>
+<path data-edge-id="dependency:top&gt;packed_value_q/shift_control/state_data" data-source="rack:top:consumer" data-target="local:top:packed_value_q" d="M -249.5 582 L -217.5 582 L -217.5 550 L -20 550 L -20 582 L 12 582" fill="none" stroke="#64758b" stroke-width="1.8" marker-end="url(#arrow-dependency)"><title>写入值 · 移位量：输入 → 明确截取算术结果低 8 位
+
+模型表达式依赖；不是一条直接物理线
+top.shift</title></path>
+<circle cx="-217.5" cy="946.4" r="3.5" fill="#fff"/>
+<circle cx="-153.5" cy="946.4" r="3.5" fill="#fff"/>
+<circle cx="-153.5" cy="978.4" r="3.5" fill="#fff"/>
+<circle cx="-153.5" cy="1246" r="3.5" fill="#fff"/>
+<path data-edge-id="dependency:top&gt;parity_q/load_control/state_condition" data-source="rack:top:consumer" data-target="local:top:parity_q" d="M -249.5 946.4 L -153.5 946.4 L -153.5 1596 L 12 1596" fill="none" stroke="#64758b" stroke-width="1.8" marker-end="url(#arrow-dependency)"><title>更新条件 · 采样使能：输入 → 输入的逐位异或归约
+
+模型表达式依赖；不是一条直接物理线
+top.enable</title></path>
+<circle cx="-217.5" cy="888.8" r="3.5" fill="#fff"/>
+<circle cx="-185.5" cy="946.4" r="3.5" fill="#fff"/>
+<circle cx="-185.5" cy="896" r="3.5" fill="#fff"/>
+<circle cx="-185.5" cy="978.4" r="3.5" fill="#fff"/>
+<circle cx="-185.5" cy="1246" r="3.5" fill="#fff"/>
+<circle cx="-153.5" cy="1560" r="3.5" fill="#fff"/>
+<path data-edge-id="dependency:top&gt;parity_q/sample_data/state_data" data-source="rack:top:consumer" data-target="local:top:parity_q" d="M -249.5 888.8 L -185.5 888.8 L -185.5 1560 L 12 1560" fill="none" stroke="#326ea1" stroke-width="1.8" marker-end="url(#arrow-dependency)"><title>写入值 · 采样数据：输入 → 输入的逐位异或归约
+
+模型表达式依赖；不是一条直接物理线
+top.sample</title></path>
+<circle cx="-217.5" cy="946.4" r="3.5" fill="#fff"/>
+<circle cx="-153.5" cy="946.4" r="3.5" fill="#fff"/>
+<circle cx="-185.5" cy="946.4" r="3.5" fill="#fff"/>
+<circle cx="-121.5" cy="946.4" r="3.5" fill="#fff"/>
+<circle cx="-121.5" cy="896" r="3.5" fill="#fff"/>
+<circle cx="-121.5" cy="582" r="3.5" fill="#fff"/>
+<circle cx="-121.5" cy="618" r="3.5" fill="#fff"/>
+<circle cx="-121.5" cy="546" r="3.5" fill="#fff"/>
+<circle cx="-121.5" cy="550" r="3.5" fill="#fff"/>
+<path data-edge-id="dependency:top&gt;scaled_q/load_control/state_condition" data-source="rack:top:consumer" data-target="local:top:scaled_q" d="M -249.5 946.4 L -121.5 946.4 L -121.5 268 L 12 268" fill="none" stroke="#64758b" stroke-width="1.8" marker-end="url(#arrow-dependency)"><title>更新条件 · 采样使能：输入 → 符号扩展到 12 位后算术右移
+
+模型表达式依赖；不是一条直接物理线
+top.enable</title></path>
+<circle cx="-217.5" cy="888.8" r="3.5" fill="#fff"/>
+<circle cx="-185.5" cy="888.8" r="3.5" fill="#fff"/>
+<circle cx="-185.5" cy="582" r="3.5" fill="#fff"/>
+<circle cx="-185.5" cy="546" r="3.5" fill="#fff"/>
+<circle cx="-185.5" cy="550" r="3.5" fill="#fff"/>
+<path data-edge-id="dependency:top&gt;scaled_q/sample_data/state_data" data-source="rack:top:consumer" data-target="local:top:scaled_q" d="M -249.5 888.8 L -185.5 888.8 L -185.5 196 L 12 196" fill="none" stroke="#326ea1" stroke-width="1.8" marker-end="url(#arrow-dependency)"><title>写入值 · 采样数据：输入 → 符号扩展到 12 位后算术右移
+
+模型表达式依赖；不是一条直接物理线
+top.sample</title></path>
+<circle cx="-217.5" cy="582" r="3.5" fill="#fff"/>
+<circle cx="-217.5" cy="546" r="3.5" fill="#fff"/>
+<circle cx="-217.5" cy="550" r="3.5" fill="#fff"/>
+<circle cx="-185.5" cy="232" r="3.5" fill="#fff"/>
+<path data-edge-id="dependency:top&gt;scaled_q/shift_control/state_data" data-source="rack:top:consumer" data-target="local:top:scaled_q" d="M -249.5 582 L -217.5 582 L -217.5 232 L 12 232" fill="none" stroke="#64758b" stroke-width="1.8" marker-end="url(#arrow-dependency)"><title>写入值 · 移位量：输入 → 符号扩展到 12 位后算术右移
+
+模型表达式依赖；不是一条直接物理线
+top.shift</title></path>
+<text x="348.35" y="896" dominant-baseline="central" text-anchor="middle" data-wire-label="relation:local:top:logical_value_q&gt;rack:top:producer/local:top:logical_value_q/logical_value_result/logical_value_result/wire" font-size="16" fill="#29465a" stroke="#fff" stroke-width="5" paint-order="stroke">逻辑右移</text>
+<text x="334.75" y="1246" dominant-baseline="central" text-anchor="middle" data-wire-label="relation:local:top:negative_q&gt;rack:top:producer/local:top:negative_q/negative_result/negative_result/wire" font-size="16" fill="#29465a" stroke="#fff" stroke-width="5" paint-order="stroke">负数标志</text>
+<text x="344.75" y="546" dominant-baseline="central" text-anchor="middle" data-wire-label="relation:local:top:packed_value_q&gt;rack:top:producer/local:top:packed_value_q/packed_value_result/packed_value_result/wire" font-size="16" fill="#29465a" stroke="#fff" stroke-width="5" paint-order="stroke">低位打包</text>
+<text x="334.75" y="1560" dominant-baseline="central" text-anchor="middle" data-wire-label="relation:local:top:parity_q&gt;rack:top:producer/local:top:parity_q/parity_result/parity_result/wire" font-size="16" fill="#29465a" stroke="#fff" stroke-width="5" paint-order="stroke">异或校验</text>
+<text x="334.75" y="196" dominant-baseline="central" text-anchor="middle" data-wire-label="relation:local:top:scaled_q&gt;rack:top:producer/local:top:scaled_q/scaled_result/scaled_result/wire" font-size="16" fill="#29465a" stroke="#fff" stroke-width="5" paint-order="stroke">算术缩放</text>
+<text x="53.75" y="757" dominant-baseline="central" text-anchor="middle" data-wire-label="dependency:top&gt;logical_value_q/shift_control/state_data" font-size="16" fill="#29465a" stroke="#fff" stroke-width="5" paint-order="stroke">写入值 · 移位量</text>
+<text x="69.75" y="1124.128" dominant-baseline="central" text-anchor="middle" data-wire-label="dependency:top&gt;negative_q/load_control/state_condition" font-size="16" fill="#29465a" stroke="#fff" stroke-width="5" paint-order="stroke">更新条件 · 采样使能</text>
+<text x="-299.25" y="1067.4" dominant-baseline="central" text-anchor="middle" data-wire-label="dependency:top&gt;negative_q/sample_data/state_data" font-size="16" fill="#29465a" stroke="#fff" stroke-width="5" paint-order="stroke">写入值 · 采样数据</text>
+<text x="-63.75" y="1362.144" dominant-baseline="central" text-anchor="middle" data-wire-label="dependency:top&gt;parity_q/load_control/state_condition" font-size="16" fill="#29465a" stroke="#fff" stroke-width="5" paint-order="stroke">更新条件 · 采样使能</text>
+<text x="-74.89999999999999" y="1560" dominant-baseline="central" text-anchor="middle" data-wire-label="dependency:top&gt;parity_q/sample_data/state_data" font-size="16" fill="#29465a" stroke="#fff" stroke-width="5" paint-order="stroke">写入值 · 采样数据</text>
+<text x="-31.75" y="403.67999999999995" dominant-baseline="central" text-anchor="middle" data-wire-label="dependency:top&gt;scaled_q/load_control/state_condition" font-size="16" fill="#29465a" stroke="#fff" stroke-width="5" paint-order="stroke">更新条件 · 采样使能</text>
+<text x="-86.75" y="196" dominant-baseline="central" text-anchor="middle" data-wire-label="dependency:top&gt;scaled_q/sample_data/state_data" font-size="16" fill="#29465a" stroke="#fff" stroke-width="5" paint-order="stroke">写入值 · 采样数据</text>
+<text x="-102.75" y="232" dominant-baseline="central" text-anchor="middle" data-wire-label="dependency:top&gt;scaled_q/shift_control/state_data" font-size="16" fill="#29465a" stroke="#fff" stroke-width="5" paint-order="stroke">写入值 · 移位量</text>
+<g data-node-id="local:top:scaled_q"><title>符号扩展到 12 位后算术右移；同步复位优先，使能无效保持。
+top.rst_n = 0 → 12bit(0)
+top.enable → (符号扩展→12 位有符号(top.sample) &gt;&gt;&gt; top.shift)
+以上条件均不成立 → 保持原值
+使能时采样 signed 8 位数据，同时保存 12 位算术缩放、低位打包、逻辑右移与标志。</title><rect x="12" y="100" width="168" height="222" rx="3" fill="#f3f8f2" stroke="#859977"/>
+<text x="28" y="124" font-size="11" fill="#667a89">条件装载寄存器</text>
+<text x="28" y="149" font-size="18" fill="#29465a">符号扩展到 12 </text>
+<text x="28" y="172" font-size="18" fill="#29465a">位后算术右移</text>
+<g class="port-details" font-family="ui-monospace, monospace" font-size="12">
+<text data-port-id="in:dep:dependency:top&gt;scaled_q/load_control/state_condition" data-port-direction="target" x="22" y="272" text-anchor="start" fill="#64758b"><title>输入：enable</title>enable</text>
+<text data-port-id="in:dep:dependency:top&gt;scaled_q/sample_data/state_data" data-port-direction="target" x="22" y="200" text-anchor="start" fill="#326ea1"><title>输入：sample</title>sample</text>
+<text data-port-id="in:dep:dependency:top&gt;scaled_q/shift_control/state_data" data-port-direction="target" x="22" y="236" text-anchor="start" fill="#64758b"><title>输入：shift</title>shift</text>
+<text data-port-id="out:local:top:scaled_q" data-port-direction="source" x="170" y="200" text-anchor="end" fill="#326ea1"><title>输出：scaled_q</title>scaled_q</text>
+</g>
+<circle cx="12" cy="268" r="2" fill="#718da2"/>
+<circle cx="12" cy="196" r="2" fill="#718da2"/>
+<circle cx="12" cy="232" r="2" fill="#718da2"/>
+<circle cx="180" cy="196" r="2" fill="#718da2"/>
+</g>
+<g data-node-id="local:top:packed_value_q"><title>明确截取算术结果低 8 位；同步复位优先，使能无效保持。
+top.rst_n = 0 → 8bit(0)
+top.enable → 截取低位→8 位无符号((符号扩展→12 位有符号(top.sample) &gt;&gt;&gt; top.shift))
+以上条件均不成立 → 保持原值
+使能时采样 signed 8 位数据，同时保存 12 位算术缩放、低位打包、逻辑右移与标志。</title><rect x="12" y="450" width="188.00000000000003" height="222" rx="3" fill="#f3f8f2" stroke="#859977"/>
+<text x="28" y="474" font-size="11" fill="#667a89">条件装载寄存器</text>
+<text x="28" y="499" font-size="18" fill="#29465a">明确截取算术结果</text>
+<text x="28" y="522" font-size="18" fill="#29465a">低 8 位</text>
+<g class="port-details" font-family="ui-monospace, monospace" font-size="12">
+<text data-port-id="in:dep:dependency:top&gt;packed_value_q/load_control/state_condition" data-port-direction="target" x="22" y="622" text-anchor="start" fill="#64758b"><title>输入：enable</title>enable</text>
+<text data-port-id="in:dep:dependency:top&gt;packed_value_q/sample_data/state_data" data-port-direction="target" x="22" y="550" text-anchor="start" fill="#326ea1"><title>输入：sample</title>sample</text>
+<text data-port-id="in:dep:dependency:top&gt;packed_value_q/shift_control/state_data" data-port-direction="target" x="22" y="586" text-anchor="start" fill="#64758b"><title>输入：shift</title>shift</text>
+<text data-port-id="out:local:top:packed_value_q" data-port-direction="source" x="190.00000000000003" y="550" text-anchor="end" fill="#326ea1"><title>输出：packed_value_q</title>packed_value_q</text>
+</g>
+<circle cx="12" cy="618" r="2" fill="#718da2"/>
+<circle cx="12" cy="546" r="2" fill="#718da2"/>
+<circle cx="12" cy="582" r="2" fill="#718da2"/>
+<circle cx="200.00000000000003" cy="546" r="2" fill="#718da2"/>
+</g>
+<g data-node-id="local:top:logical_value_q"><title>按无符号位向量逻辑右移；同步复位优先，使能无效保持。
+top.rst_n = 0 → 8bit(0)
+top.enable → (top.sample &gt;&gt; top.shift)
+以上条件均不成立 → 保持原值
+使能时采样 signed 8 位数据，同时保存 12 位算术缩放、低位打包、逻辑右移与标志。</title><rect x="12" y="800" width="195.20000000000005" height="222" rx="3" fill="#f3f8f2" stroke="#859977"/>
+<text x="28" y="824" font-size="11" fill="#667a89">条件装载寄存器</text>
+<text x="28" y="849" font-size="18" fill="#29465a">按无符号位向量逻辑</text>
+<text x="28" y="872" font-size="18" fill="#29465a">右移</text>
+<g class="port-details" font-family="ui-monospace, monospace" font-size="12">
+<text data-port-id="in:dep:dependency:top&gt;logical_value_q/load_control/state_condition" data-port-direction="target" x="22" y="972" text-anchor="start" fill="#64758b"><title>输入：enable</title>enable</text>
+<text data-port-id="in:dep:dependency:top&gt;logical_value_q/sample_data/state_data" data-port-direction="target" x="22" y="900" text-anchor="start" fill="#326ea1"><title>输入：sample</title>sample</text>
+<text data-port-id="in:dep:dependency:top&gt;logical_value_q/shift_control/state_data" data-port-direction="target" x="22" y="936" text-anchor="start" fill="#64758b"><title>输入：shift</title>shift</text>
+<text data-port-id="out:local:top:logical_value_q" data-port-direction="source" x="197.20000000000005" y="900" text-anchor="end" fill="#326ea1"><title>输出：logical_value_q</title>logical_value_q</text>
+</g>
+<circle cx="12" cy="968" r="2" fill="#718da2"/>
+<circle cx="12" cy="896" r="2" fill="#718da2"/>
+<circle cx="12" cy="932" r="2" fill="#718da2"/>
+<circle cx="207.20000000000005" cy="896" r="2" fill="#718da2"/>
+</g>
+<g data-node-id="local:top:negative_q"><title>按有符号数判断负值；同步复位优先，使能无效保持。
+top.rst_n = 0 → 1bit(0)
+top.enable → (重解释→8 位有符号(top.sample) &lt; 重解释→8 位有符号(8bit(0)))
+以上条件均不成立 → 保持原值
+使能时采样 signed 8 位数据，同时保存 12 位算术缩放、低位打包、逻辑右移与标志。</title><rect x="12" y="1150" width="168" height="186" rx="3" fill="#f3f8f2" stroke="#859977"/>
+<text x="28" y="1174" font-size="11" fill="#667a89">条件装载寄存器</text>
+<text x="28" y="1199" font-size="18" fill="#29465a">按有符号数判断</text>
+<text x="28" y="1222" font-size="18" fill="#29465a">负值</text>
+<g class="port-details" font-family="ui-monospace, monospace" font-size="12">
+<text data-port-id="in:dep:dependency:top&gt;negative_q/load_control/state_condition" data-port-direction="target" x="22" y="1286" text-anchor="start" fill="#64758b"><title>输入：enable</title>enable</text>
+<text data-port-id="in:dep:dependency:top&gt;negative_q/sample_data/state_data" data-port-direction="target" x="22" y="1250" text-anchor="start" fill="#326ea1"><title>输入：sample</title>sample</text>
+<text data-port-id="out:local:top:negative_q" data-port-direction="source" x="170" y="1250" text-anchor="end" fill="#326ea1"><title>输出：negative_q</title>negative_q</text>
+</g>
+<circle cx="12" cy="1282" r="2" fill="#718da2"/>
+<circle cx="12" cy="1246" r="2" fill="#718da2"/>
+<circle cx="180" cy="1246" r="2" fill="#718da2"/>
+</g>
+<g data-node-id="local:top:parity_q"><title>输入的逐位异或归约；同步复位优先，使能无效保持。
+top.rst_n = 0 → 1bit(0)
+top.enable → 归约异或(top.sample)
+以上条件均不成立 → 保持原值
+使能时采样 signed 8 位数据，同时保存 12 位算术缩放、低位打包、逻辑右移与标志。</title><rect x="12" y="1464" width="168" height="186" rx="3" fill="#f3f8f2" stroke="#859977"/>
+<text x="28" y="1488" font-size="11" fill="#667a89">条件装载寄存器</text>
+<text x="28" y="1513" font-size="18" fill="#29465a">输入的逐位异或</text>
+<text x="28" y="1536" font-size="18" fill="#29465a">归约</text>
+<g class="port-details" font-family="ui-monospace, monospace" font-size="12">
+<text data-port-id="in:dep:dependency:top&gt;parity_q/load_control/state_condition" data-port-direction="target" x="22" y="1600" text-anchor="start" fill="#64758b"><title>输入：enable</title>enable</text>
+<text data-port-id="in:dep:dependency:top&gt;parity_q/sample_data/state_data" data-port-direction="target" x="22" y="1564" text-anchor="start" fill="#326ea1"><title>输入：sample</title>sample</text>
+<text data-port-id="out:local:top:parity_q" data-port-direction="source" x="170" y="1564" text-anchor="end" fill="#326ea1"><title>输出：parity_q</title>parity_q</text>
+</g>
+<circle cx="12" cy="1596" r="2" fill="#718da2"/>
+<circle cx="12" cy="1560" r="2" fill="#718da2"/>
+<circle cx="180" cy="1560" r="2" fill="#718da2"/>
+</g>
+<g data-node-id="rack:top:consumer"><title>输入
+使能时采样 signed 8 位数据，同时保存 12 位算术缩放、低位打包、逻辑右移与标志。</title><rect x="-405.5" y="70" width="156" height="954.4" rx="3" fill="#f7f9fb" stroke="#9fb8ca"/>
+<text x="-391.5" y="95" font-size="14" fill="#29465a">输入</text>
+<text x="-391.5" y="586" font-size="14" fill="#29465a">移位量</text>
+<text x="-272.5" y="586" font-size="11" fill="#29465a"></text>
+<text x="-391.5" y="892.8" font-size="14" fill="#29465a">采样数据</text>
+<text x="-272.5" y="892.8" font-size="11" fill="#29465a"></text>
+<text x="-391.5" y="950.4" font-size="14" fill="#29465a">采样使能</text>
+<text x="-272.5" y="950.4" font-size="11" fill="#29465a"></text>
+<text x="-391.5" y="994.4" font-size="14" fill="#29465a">时钟与复位</text>
+<text x="-272.5" y="994.4" font-size="11" fill="#29465a">2</text>
+<circle cx="-249.5" cy="888.8" r="2" fill="#718da2"/>
+<circle cx="-249.5" cy="582" r="2" fill="#718da2"/>
+<circle cx="-249.5" cy="946.4" r="2" fill="#718da2"/>
+</g>
+<g data-node-id="rack:top:producer"><title>输出
+使能时采样 signed 8 位数据，同时保存 12 位算术缩放、低位打包、逻辑右移与标志。</title><rect x="489.5" y="70" width="156" height="1524" rx="3" fill="#f7f9fb" stroke="#9fb8ca"/>
+<text x="503.5" y="95" font-size="14" fill="#29465a">输出</text>
+<text x="503.5" y="200" font-size="14" fill="#29465a">算术缩放</text>
+<text x="622.5" y="200" font-size="11" fill="#29465a"></text>
+<text x="503.5" y="550" font-size="14" fill="#29465a">低位打包</text>
+<text x="622.5" y="550" font-size="11" fill="#29465a"></text>
+<text x="503.5" y="900" font-size="14" fill="#29465a">逻辑右移</text>
+<text x="622.5" y="900" font-size="11" fill="#29465a"></text>
+<text x="503.5" y="1250" font-size="14" fill="#29465a">负数标志</text>
+<text x="622.5" y="1250" font-size="11" fill="#29465a"></text>
+<text x="503.5" y="1564" font-size="14" fill="#29465a">异或校验</text>
+<text x="622.5" y="1564" font-size="11" fill="#29465a"></text>
+<circle cx="489.5" cy="196" r="2" fill="#718da2"/>
+<circle cx="489.5" cy="546" r="2" fill="#718da2"/>
+<circle cx="489.5" cy="896" r="2" fill="#718da2"/>
+<circle cx="489.5" cy="1246" r="2" fill="#718da2"/>
+<circle cx="489.5" cy="1560" r="2" fill="#718da2"/>
+</g>
+<text x="-423.5" y="1726" font-size="12" fill="#29465a">时钟 / 配置折叠 0 条 · 内部逻辑折叠 0 条 · 依赖折叠 5 条</text>
+<text x="-423.5" y="1746" font-size="11" fill="#29465a">实心点表示同源分叉，可共用线名；留白交叉不相连。实心箭头为连接、空心箭头为依赖；RV 的 data/valid 正向、ready 反向。输入集合未分角色，更新规则为声明；位置不表示周期。</text>
+</g></svg></div><p class="diagram-caption"><a href="top.svg">打开 / 保存 SVG</a> · <a href="#scope-top">完整连接索引</a></p></div>
+ <aside id="diagram-trace" aria-live="polite"><strong>从一笔事务开始</strong><p>选择输入相邻模块，观察它把数据交给谁；再核对存储往返、完成与取消。框图位置不代表周期。</p></aside>
+ <script type="application/json" id="diagram-metadata">[{"nodes":[{"id":"local:top:scaled_q","name":"符号扩展到 12 位后算术右移","ports":[{"id":"in","direction":"target","side":"WEST","x":0,"y":210},{"id":"in:dep:dependency:top\u003escaled_q/domain/state_reset","direction":"target","side":"WEST","x":0,"y":204,"interfaceIds":["rst_n"],"label":"rst_n","category":"clock_reset","labelX":10,"labelY":208,"textAnchor":"start"},{"id":"in:dep:dependency:top\u003escaled_q/load_control/state_condition","direction":"target","side":"WEST","x":0,"y":168,"interfaceIds":["enable"],"label":"enable","category":"control","labelX":10,"labelY":172,"textAnchor":"start"},{"id":"in:dep:dependency:top\u003escaled_q/sample_data/state_data","direction":"target","side":"WEST","x":0,"y":96,"interfaceIds":["sample"],"label":"sample","category":"data","labelX":10,"labelY":100,"textAnchor":"start"},{"id":"in:dep:dependency:top\u003escaled_q/shift_control/state_data","direction":"target","side":"WEST","x":0,"y":132,"interfaceIds":["shift"],"label":"shift","category":"control","labelX":10,"labelY":136,"textAnchor":"start"},{"id":"out","direction":"source","side":"EAST","x":168,"y":210},{"id":"out:local:top:scaled_q","direction":"source","side":"EAST","x":168,"y":96,"interfaceIds":["scaled_q"],"label":"scaled_q","category":"data","labelX":158,"labelY":100,"textAnchor":"end"}],"detail":"符号扩展到 12 位后算术右移；同步复位优先，使能无效保持。"},{"id":"local:top:packed_value_q","name":"明确截取算术结果低 8 位","ports":[{"id":"in","direction":"target","side":"WEST","x":0,"y":210},{"id":"in:dep:dependency:top\u003epacked_value_q/domain/state_reset","direction":"target","side":"WEST","x":0,"y":204,"interfaceIds":["rst_n"],"label":"rst_n","category":"clock_reset","labelX":10,"labelY":208,"textAnchor":"start"},{"id":"in:dep:dependency:top\u003epacked_value_q/load_control/state_condition","direction":"target","side":"WEST","x":0,"y":168,"interfaceIds":["enable"],"label":"enable","category":"control","labelX":10,"labelY":172,"textAnchor":"start"},{"id":"in:dep:dependency:top\u003epacked_value_q/sample_data/state_data","direction":"target","side":"WEST","x":0,"y":96,"interfaceIds":["sample"],"label":"sample","category":"data","labelX":10,"labelY":100,"textAnchor":"start"},{"id":"in:dep:dependency:top\u003epacked_value_q/shift_control/state_data","direction":"target","side":"WEST","x":0,"y":132,"interfaceIds":["shift"],"label":"shift","category":"control","labelX":10,"labelY":136,"textAnchor":"start"},{"id":"out","direction":"source","side":"EAST","x":188.00000000000003,"y":210},{"id":"out:local:top:packed_value_q","direction":"source","side":"EAST","x":188.00000000000003,"y":96,"interfaceIds":["packed_value_q"],"label":"packed_value_q","category":"data","labelX":178.00000000000003,"labelY":100,"textAnchor":"end"}],"detail":"明确截取算术结果低 8 位；同步复位优先，使能无效保持。"},{"id":"local:top:logical_value_q","name":"按无符号位向量逻辑右移","ports":[{"id":"in","direction":"target","side":"WEST","x":0,"y":210},{"id":"in:dep:dependency:top\u003elogical_value_q/domain/state_reset","direction":"target","side":"WEST","x":0,"y":204,"interfaceIds":["rst_n"],"label":"rst_n","category":"clock_reset","labelX":10,"labelY":208,"textAnchor":"start"},{"id":"in:dep:dependency:top\u003elogical_value_q/load_control/state_condition","direction":"target","side":"WEST","x":0,"y":168,"interfaceIds":["enable"],"label":"enable","category":"control","labelX":10,"labelY":172,"textAnchor":"start"},{"id":"in:dep:dependency:top\u003elogical_value_q/sample_data/state_data","direction":"target","side":"WEST","x":0,"y":96,"interfaceIds":["sample"],"label":"sample","category":"data","labelX":10,"labelY":100,"textAnchor":"start"},{"id":"in:dep:dependency:top\u003elogical_value_q/shift_control/state_data","direction":"target","side":"WEST","x":0,"y":132,"interfaceIds":["shift"],"label":"shift","category":"control","labelX":10,"labelY":136,"textAnchor":"start"},{"id":"out","direction":"source","side":"EAST","x":195.20000000000005,"y":210},{"id":"out:local:top:logical_value_q","direction":"source","side":"EAST","x":195.20000000000005,"y":96,"interfaceIds":["logical_value_q"],"label":"logical_value_q","category":"data","labelX":185.20000000000005,"labelY":100,"textAnchor":"end"}],"detail":"按无符号位向量逻辑右移；同步复位优先，使能无效保持。"},{"id":"local:top:negative_q","name":"按有符号数判断负值","ports":[{"id":"in","direction":"target","side":"WEST","x":0,"y":174},{"id":"in:dep:dependency:top\u003enegative_q/domain/state_reset","direction":"target","side":"WEST","x":0,"y":168,"interfaceIds":["rst_n"],"label":"rst_n","category":"clock_reset","labelX":10,"labelY":172,"textAnchor":"start"},{"id":"in:dep:dependency:top\u003enegative_q/load_control/state_condition","direction":"target","side":"WEST","x":0,"y":132,"interfaceIds":["enable"],"label":"enable","category":"control","labelX":10,"labelY":136,"textAnchor":"start"},{"id":"in:dep:dependency:top\u003enegative_q/sample_data/state_data","direction":"target","side":"WEST","x":0,"y":96,"interfaceIds":["sample"],"label":"sample","category":"data","labelX":10,"labelY":100,"textAnchor":"start"},{"id":"out","direction":"source","side":"EAST","x":168,"y":174},{"id":"out:local:top:negative_q","direction":"source","side":"EAST","x":168,"y":96,"interfaceIds":["negative_q"],"label":"negative_q","category":"data","labelX":158,"labelY":100,"textAnchor":"end"}],"detail":"按有符号数判断负值；同步复位优先，使能无效保持。"},{"id":"local:top:parity_q","name":"输入的逐位异或归约","ports":[{"id":"in","direction":"target","side":"WEST","x":0,"y":174},{"id":"in:dep:dependency:top\u003eparity_q/domain/state_reset","direction":"target","side":"WEST","x":0,"y":168,"interfaceIds":["rst_n"],"label":"rst_n","category":"clock_reset","labelX":10,"labelY":172,"textAnchor":"start"},{"id":"in:dep:dependency:top\u003eparity_q/load_control/state_condition","direction":"target","side":"WEST","x":0,"y":132,"interfaceIds":["enable"],"label":"enable","category":"control","labelX":10,"labelY":136,"textAnchor":"start"},{"id":"in:dep:dependency:top\u003eparity_q/sample_data/state_data","direction":"target","side":"WEST","x":0,"y":96,"interfaceIds":["sample"],"label":"sample","category":"data","labelX":10,"labelY":100,"textAnchor":"start"},{"id":"out","direction":"source","side":"EAST","x":168,"y":174},{"id":"out:local:top:parity_q","direction":"source","side":"EAST","x":168,"y":96,"interfaceIds":["parity_q"],"label":"parity_q","category":"data","labelX":158,"labelY":100,"textAnchor":"end"}],"detail":"输入的逐位异或归约；同步复位优先，使能无效保持。"},{"id":"rack:top:consumer","name":"输入","ports":[{"id":"out:sample_data","direction":"source","side":"EAST","x":156,"y":818.8},{"id":"out:shift_control","direction":"source","side":"EAST","x":156,"y":512},{"id":"out:load_control","direction":"source","side":"EAST","x":156,"y":876.4},{"id":"out:domain","direction":"source","side":"EAST","x":156,"y":920.4},{"id":"out","direction":"source","side":"EAST","x":156,"y":42}],"detail":"当前层级接口"},{"id":"rack:top:producer","name":"输出","ports":[{"id":"in:scaled_result","direction":"target","side":"WEST","x":0,"y":126},{"id":"in:packed_value_result","direction":"target","side":"WEST","x":0,"y":476},{"id":"in:logical_value_result","direction":"target","side":"WEST","x":0,"y":826},{"id":"in:negative_result","direction":"target","side":"WEST","x":0,"y":1176},{"id":"in:parity_result","direction":"target","side":"WEST","x":0,"y":1490},{"id":"in","direction":"target","side":"WEST","x":0,"y":42}],"detail":"当前层级接口"}],"edges":[{"id":"relation:local:top:logical_value_q\u003erack:top:producer/local:top:logical_value_q/logical_value_result/logical_value_result/wire","name":"逻辑右移","source":"local:top:logical_value_q","target":"rack:top:producer","sourceHandle":"out:local:top:logical_value_q","targetHandle":"in:logical_value_result","detail":"独立并行计算的输出。\n模型记录的直接连接；业务分类不代表协议成员关系。","dependencies":[],"links":[{"id":"logical_value_out","name":"逻辑右移","from":"top.logical_value_q (内部逻辑)","to":"top.logical_value"}]},{"id":"relation:local:top:negative_q\u003erack:top:producer/local:top:negative_q/negative_result/negative_result/wire","name":"负数标志","source":"local:top:negative_q","target":"rack:top:producer","sourceHandle":"out:local:top:negative_q","targetHandle":"in:negative_result","detail":"独立并行计算的输出。\n模型记录的直接连接；业务分类不代表协议成员关系。","dependencies":[],"links":[{"id":"negative_out","name":"负数标志","from":"top.negative_q (内部逻辑)","to":"top.negative"}]},{"id":"relation:local:top:packed_value_q\u003erack:top:producer/local:top:packed_value_q/packed_value_result/packed_value_result/wire","name":"低位打包","source":"local:top:packed_value_q","target":"rack:top:producer","sourceHandle":"out:local:top:packed_value_q","targetHandle":"in:packed_value_result","detail":"独立并行计算的输出。\n模型记录的直接连接；业务分类不代表协议成员关系。","dependencies":[],"links":[{"id":"packed_value_out","name":"低位打包","from":"top.packed_value_q (内部逻辑)","to":"top.packed_value"}]},{"id":"relation:local:top:parity_q\u003erack:top:producer/local:top:parity_q/parity_result/parity_result/wire","name":"异或校验","source":"local:top:parity_q","target":"rack:top:producer","sourceHandle":"out:local:top:parity_q","targetHandle":"in:parity_result","detail":"独立并行计算的输出。\n模型记录的直接连接；业务分类不代表协议成员关系。","dependencies":[],"links":[{"id":"parity_out","name":"异或校验","from":"top.parity_q (内部逻辑)","to":"top.parity"}]},{"id":"relation:local:top:scaled_q\u003erack:top:producer/local:top:scaled_q/scaled_result/scaled_result/wire","name":"算术缩放","source":"local:top:scaled_q","target":"rack:top:producer","sourceHandle":"out:local:top:scaled_q","targetHandle":"in:scaled_result","detail":"独立并行计算的输出。\n模型记录的直接连接；业务分类不代表协议成员关系。","dependencies":[],"links":[{"id":"scaled_out","name":"算术缩放","from":"top.scaled_q (内部逻辑)","to":"top.scaled"}]},{"id":"dependency:top\u003elogical_value_q/load_control/state_condition","name":"更新条件 · 采样使能","source":"rack:top:consumer","target":"local:top:logical_value_q","sourceHandle":"out:load_control","targetHandle":"in:dep:dependency:top\u003elogical_value_q/load_control/state_condition","detail":"模型表达式依赖；不是一条直接物理线\ntop.enable","dependencies":["top.enable"],"links":[]},{"id":"dependency:top\u003elogical_value_q/sample_data/state_data","name":"写入值 · 采样数据","source":"rack:top:consumer","target":"local:top:logical_value_q","sourceHandle":"out:sample_data","targetHandle":"in:dep:dependency:top\u003elogical_value_q/sample_data/state_data","detail":"模型表达式依赖；不是一条直接物理线\ntop.sample","dependencies":["top.sample"],"links":[]},{"id":"dependency:top\u003elogical_value_q/shift_control/state_data","name":"写入值 · 移位量","source":"rack:top:consumer","target":"local:top:logical_value_q","sourceHandle":"out:shift_control","targetHandle":"in:dep:dependency:top\u003elogical_value_q/shift_control/state_data","detail":"模型表达式依赖；不是一条直接物理线\ntop.shift","dependencies":["top.shift"],"links":[]},{"id":"dependency:top\u003enegative_q/load_control/state_condition","name":"更新条件 · 采样使能","source":"rack:top:consumer","target":"local:top:negative_q","sourceHandle":"out:load_control","targetHandle":"in:dep:dependency:top\u003enegative_q/load_control/state_condition","detail":"模型表达式依赖；不是一条直接物理线\ntop.enable","dependencies":["top.enable"],"links":[]},{"id":"dependency:top\u003enegative_q/sample_data/state_data","name":"写入值 · 采样数据","source":"rack:top:consumer","target":"local:top:negative_q","sourceHandle":"out:sample_data","targetHandle":"in:dep:dependency:top\u003enegative_q/sample_data/state_data","detail":"模型表达式依赖；不是一条直接物理线\ntop.sample","dependencies":["top.sample"],"links":[]},{"id":"dependency:top\u003epacked_value_q/load_control/state_condition","name":"更新条件 · 采样使能","source":"rack:top:consumer","target":"local:top:packed_value_q","sourceHandle":"out:load_control","targetHandle":"in:dep:dependency:top\u003epacked_value_q/load_control/state_condition","detail":"模型表达式依赖；不是一条直接物理线\ntop.enable","dependencies":["top.enable"],"links":[]},{"id":"dependency:top\u003epacked_value_q/sample_data/state_data","name":"写入值 · 采样数据","source":"rack:top:consumer","target":"local:top:packed_value_q","sourceHandle":"out:sample_data","targetHandle":"in:dep:dependency:top\u003epacked_value_q/sample_data/state_data","detail":"模型表达式依赖；不是一条直接物理线\ntop.sample","dependencies":["top.sample"],"links":[]},{"id":"dependency:top\u003epacked_value_q/shift_control/state_data","name":"写入值 · 移位量","source":"rack:top:consumer","target":"local:top:packed_value_q","sourceHandle":"out:shift_control","targetHandle":"in:dep:dependency:top\u003epacked_value_q/shift_control/state_data","detail":"模型表达式依赖；不是一条直接物理线\ntop.shift","dependencies":["top.shift"],"links":[]},{"id":"dependency:top\u003eparity_q/load_control/state_condition","name":"更新条件 · 采样使能","source":"rack:top:consumer","target":"local:top:parity_q","sourceHandle":"out:load_control","targetHandle":"in:dep:dependency:top\u003eparity_q/load_control/state_condition","detail":"模型表达式依赖；不是一条直接物理线\ntop.enable","dependencies":["top.enable"],"links":[]},{"id":"dependency:top\u003eparity_q/sample_data/state_data","name":"写入值 · 采样数据","source":"rack:top:consumer","target":"local:top:parity_q","sourceHandle":"out:sample_data","targetHandle":"in:dep:dependency:top\u003eparity_q/sample_data/state_data","detail":"模型表达式依赖；不是一条直接物理线\ntop.sample","dependencies":["top.sample"],"links":[]},{"id":"dependency:top\u003escaled_q/load_control/state_condition","name":"更新条件 · 采样使能","source":"rack:top:consumer","target":"local:top:scaled_q","sourceHandle":"out:load_control","targetHandle":"in:dep:dependency:top\u003escaled_q/load_control/state_condition","detail":"模型表达式依赖；不是一条直接物理线\ntop.enable","dependencies":["top.enable"],"links":[]},{"id":"dependency:top\u003escaled_q/sample_data/state_data","name":"写入值 · 采样数据","source":"rack:top:consumer","target":"local:top:scaled_q","sourceHandle":"out:sample_data","targetHandle":"in:dep:dependency:top\u003escaled_q/sample_data/state_data","detail":"模型表达式依赖；不是一条直接物理线\ntop.sample","dependencies":["top.sample"],"links":[]},{"id":"dependency:top\u003escaled_q/shift_control/state_data","name":"写入值 · 移位量","source":"rack:top:consumer","target":"local:top:scaled_q","sourceHandle":"out:shift_control","targetHandle":"in:dep:dependency:top\u003escaled_q/shift_control/state_data","detail":"模型表达式依赖；不是一条直接物理线\ntop.shift","dependencies":["top.shift"],"links":[]}]}]</script>
+ <script>(()=>{
+ const data=JSON.parse(document.getElementById('diagram-metadata').textContent);let current=0;
+ const panels=[...document.querySelectorAll('.diagram-panel')],tabs=[...document.querySelectorAll('[data-scope-tab]')],trace=document.getElementById('diagram-trace');
+ const reset=()=>{panels[current].querySelectorAll('[data-node-id],[data-edge-id],[data-wire-label]').forEach(el=>{el.style.opacity='';el.classList.remove('traced');});trace.replaceChildren();const p=document.createElement('p');p.textContent='点模块看分工，点连线查看来源、去向与真实接口。';trace.append(p);};
+ tabs.forEach((tab,i)=>tab.addEventListener('click',()=>{reset();current=i;panels.forEach((p,j)=>p.hidden=j!==i);tabs.forEach((t,j)=>t.setAttribute('aria-selected',String(j===i)));reset();requestAnimationFrame(initialZoom);}));
+ const currentStage=()=>panels[current].querySelector('.diagram-stage');
+ const scale=()=>{const m=currentStage().querySelector('svg').getScreenCTM();return m?Math.hypot(m.a,m.b):1;};
+ const refreshZoom=()=>{const stage=currentStage();if(!stage.isConnected)return;const svg=stage.querySelector('svg'),z=scale();svg.classList.toggle('show-port-names',z>=Number(svg.dataset.portDetailZoom));document.getElementById('diagram-zoom').textContent=Math.round(z*100)+'%';document.getElementById('diagram-fit').setAttribute('aria-pressed',String(!stage.classList.contains('native')));document.getElementById('diagram-native').setAttribute('aria-pressed',String(stage.classList.contains('native')&&Math.abs(z-1)<.01));};
+ const zoomTo=(next,anchor)=>{
+  const stage=currentStage(),svg=stage.querySelector('svg'),box=stage.getBoundingClientRect(),old=svg.getScreenCTM();if(!old)return;
+  const client=anchor||{x:box.x+box.width/2,y:box.y+box.height/2},point=new DOMPoint(client.x,client.y).matrixTransform(old.inverse()),z=Math.max(.25,Math.min(2.5,next)),v=svg.viewBox.baseVal;
+  stage.classList.add('native');svg.style.width=v.width*z+'px';svg.style.height=v.height*z+'px';
+  const mapped=point.matrixTransform(svg.getScreenCTM());stage.scrollLeft+=mapped.x-client.x;stage.scrollTop+=mapped.y-client.y;refreshZoom();
+ };
+ document.getElementById('diagram-fit').addEventListener('click',()=>{const stage=currentStage(),svg=stage.querySelector('svg');stage.classList.remove('native');svg.style.width='';svg.style.height='';stage.scrollLeft=stage.scrollTop=0;refreshZoom();});
+ document.getElementById('diagram-native').addEventListener('click',()=>zoomTo(1));
+ document.getElementById('diagram-zoom-in').addEventListener('click',()=>zoomTo(scale()*1.25));
+ document.getElementById('diagram-zoom-out').addEventListener('click',()=>zoomTo(scale()/1.25));
+ const initialZoom=()=>{const stage=currentStage();if(!stage.dataset.initialized){stage.dataset.initialized='true';if(scale()<.65){const box=stage.getBoundingClientRect();zoomTo(.65,{x:box.x,y:box.y});stage.scrollLeft=stage.scrollTop=0;}}refreshZoom();};
+ const observer=new ResizeObserver(()=>refreshZoom());panels.forEach(panel=>observer.observe(panel.querySelector('.diagram-stage')));requestAnimationFrame(initialZoom);
+ document.getElementById('diagram-clear').addEventListener('click',reset);
+ const focus=document.getElementById('diagram-focus');focus.addEventListener('click',()=>{const active=document.querySelector('.diagram-reader').classList.toggle('focus');focus.setAttribute('aria-pressed',String(active));focus.textContent=active?'返回页面':'专注看图';});
+ const paragraph=text=>{const p=document.createElement('p');p.textContent=text;trace.append(p);};
+ panels.forEach((panel,i)=>{
+  const activate=(el,portId)=>{
+   if(!el)return;const node=el.getAttribute('data-node-id'),edgeId=el.getAttribute('data-edge-id')||el.getAttribute('data-wire-label'),d=data[i];
+   const selected=node?d.nodes.find(n=>n.id===node):d.edges.find(e=>e.id===edgeId);if(!selected)return;
+   const edges=node?d.edges.filter(e=>(e.source===node&&(!portId||e.sourceHandle===portId))||(e.target===node&&(!portId||e.targetHandle===portId))):d.edges.filter(e=>e.id===edgeId),ids=new Set(edges.map(e=>e.id)),nodes=new Set(edges.flatMap(e=>[e.source,e.target]));if(node)nodes.add(node);
+   // Keep the shared fanout name readable when inspecting an individual branch.
+   edges.forEach(e=>{if(e.sharedWith)ids.add(e.sharedWith);});
+   panel.querySelectorAll('[data-edge-id],[data-wire-label]').forEach(e=>{const active=ids.has(e.getAttribute('data-edge-id')||e.getAttribute('data-wire-label'));e.style.opacity=active?'1':'.3';e.classList.toggle('traced',active);});
+   panel.querySelectorAll('[data-node-id]').forEach(n=>n.style.opacity=nodes.has(n.getAttribute('data-node-id'))?'1':'.75');
+   trace.replaceChildren();const title=document.createElement('strong');title.textContent=selected.name+(portId?' · '+(selected.ports.find(p=>p.id===portId)?.label||portId):'');trace.append(title);if(selected.detail)paragraph(selected.detail);
+   for(const e of edges){paragraph((d.nodes.find(n=>n.id===e.source)?.name||e.source)+' → '+(d.nodes.find(n=>n.id===e.target)?.name||e.target)+' · '+e.name);const list=document.createElement('ul');for(const link of e.links){const item=document.createElement('li');item.textContent=link.from+' → '+link.to+'  ['+link.id+']';list.append(item);}for(const source of e.dependencies){const item=document.createElement('li');item.textContent=source;list.append(item);}if(e.dependencies.length>1)paragraph('以下是此关系包含的真实输入依赖；不表示同一物理网络或已拆解寄存字段。');trace.append(list);}
+  };
+  panel.querySelectorAll('[data-node-id],[data-edge-id]').forEach(el=>{el.setAttribute('tabindex','0');el.setAttribute('role','button');el.setAttribute('aria-label',el.querySelector('title')?.textContent||'查看关系');});
+  panel.addEventListener('click',event=>activate(event.target.closest('[data-node-id],[data-edge-id],[data-wire-label]'),event.target.closest('[data-port-id]')?.getAttribute('data-port-id')));
+  panel.querySelector('.diagram-stage').addEventListener('wheel',event=>{if(event.ctrlKey||event.metaKey){event.preventDefault();zoomTo(scale()*Math.exp(-Math.max(-100,Math.min(100,event.deltaY))*.004),{x:event.clientX,y:event.clientY});}},{passive:false});
+  panel.addEventListener('dblclick',event=>{const node=event.target.closest('[data-node-id]');if(!node)return;const rect=node.getBoundingClientRect();zoomTo(1.1,{x:rect.x+rect.width/2,y:rect.y+rect.height/2});const stage=currentStage(),box=stage.getBoundingClientRect(),after=node.getBoundingClientRect();stage.scrollLeft+=after.x+after.width/2-box.x-box.width/2;stage.scrollTop+=after.y+after.height/2-box.y-box.height/2;});
+  panel.addEventListener('keydown',event=>{if(event.key==='Escape')reset();if(event.key==='Enter'||event.key===' '){const el=event.target.closest('[data-node-id],[data-edge-id]');if(el){event.preventDefault();activate(el);}}});
+ });
+ })();</script></section>
+<section><h2>文档与依据</h2><ul><li><a href="top.svg">有符号缩放寄存级结构图</a> · <a href="#scope-top">连接索引</a> · <a href="top.quality.json">几何检查：通过</a></li><li><a href="spec.md">完整 Spec</a> · <a href="contract.json">合同副本</a> · <a href="evidence.json">来源核验</a> · <a href="manifest.json">版本与产物摘要</a></li></ul><p>先沿输入追踪状态保存与输出，再核对阻塞、复位和完成条件。图中位置不表示周期；合同副本不取代正式 handoff。</p></section>
+<h2>现在需要处理什么</h2><p>模型没有记录待定设计问题；请继续核对验证及集成义务。</p>
+
+<div class="scroll"><table><thead><tr><th>对象</th><th>检查</th><th>影响</th></tr></thead><tbody><tr><td>provenance</td><td>现状还原仅供审阅和保存草稿；转为实现设计须另提方案并审阅</td><td>review</td></tr><tr><td>provenance</td><td>架构为不完整投影，不能批准或导出实现合同</td><td>review</td></tr><tr><td>top</td><td>limits: 只核对有限二态状态更新；未证明四态、初始状态和任意时序需求。</td><td>review</td></tr></tbody></table></div>
+<h2>为什么这样设计</h2><p>尚未记录设计取舍。</p>
+<h2>目标与验收办法</h2><div class="scroll"><table><thead><tr><th>目标</th><th>验收条件</th><th>负责模块</th></tr></thead><tbody></tbody></table></div>
+<h2>已有验证声明</h2><p>保留原始时态与条件。本次只生成交付快照，没有重新运行或独立核验以下验证。</p><div class="scroll"><table><thead><tr><th>阶段</th><th>声明状态</th><th>目标 / 时间</th><th>范围与依据</th></tr></thead><tbody></tbody></table></div>
+<section id="scope-top"><h2>有符号缩放寄存级</h2><p>使能时采样 signed 8 位数据，同时保存 12 位算术缩放、低位打包、逻辑右移与标志。</p><p><a href="top.svg">完整矢量图</a> · <a href="top.quality.json">几何与标签检查</a>。几何检查通过；未排下线名 5。连接对应完整；语义待核对；阅读需留意。阅读约束已满足。视觉可读性仍需实际审阅。</p><div class="scroll"><table><thead><tr><th>模块</th><th>职责</th></tr></thead><tbody></tbody></table></div><details><summary>完整连接索引（含折叠项）</summary><div class="scroll"><table><thead><tr><th>ID</th><th>来源</th><th>去向</th></tr></thead><tbody><tr><td>scaled_out</td><td>top.scaled_q (局部驱动)</td><td>top.scaled</td></tr><tr><td>packed_value_out</td><td>top.packed_value_q (局部驱动)</td><td>top.packed_value</td></tr><tr><td>logical_value_out</td><td>top.logical_value_q (局部驱动)</td><td>top.logical_value</td></tr><tr><td>negative_out</td><td>top.negative_q (局部驱动)</td><td>top.negative</td></tr><tr><td>parity_out</td><td>top.parity_q (局部驱动)</td><td>top.parity</td></tr></tbody></table></div></details></section>
+<footer><p>完整模型版本：<code>2cd22e38e8248095a270a45eb113ea2d37b9edd87872ccb66ecbd362c886f4bf</code></p><p>离线快照不会自动追随项目变化。模型/Spec/合同来自同一输入；图形和批准不构成 RTL 验证。</p></footer></main></html>

@@ -2,6 +2,8 @@
 
 工具维护可核对的架构，skill 负责从需求或源码整理事实、解释设计并组织审阅。两者通过同一 IR 和 preview/commit 协议协作。界面不能创造一套正式模型之外的硬件含义，skill 也不能绕过提交及确认规则。
 
+1.8 的 `constrainedLayout` 只在可选 parallel/shared/feedback 存在时介入：验证引用，临时收拢并排成员供 ELK 排序，再展开及测量实际端口。硬约束顺序与电路边分开；所有真实边仍由 scopeDiagram 产生。readingAudit 核对主线、主体分区、并排、共享与指定外侧通道，quality 保留独立状态。prepareDiagram 让 CLI 与 bundle 共用可见节点完整性判断，包括没有子模块的局部状态层。diagram-quality 不启动服务或保存模型。
+
 ## 阅读整理与时序方法的实现边界
 
 skill 主入口按还原、阅读整理、设计、时序审阅和实现交接路由。`references/reading-refinement.md` 规定只整理名称、职责与业务组的候选；`scripts/check_reading.py` 以稳定ID比较具名对象，剔除明确允许字段后逐项报告其余变化。该脚本只读、不依赖项目环境或服务；不是自然语言等价检查器，也不替代Schema校验。
@@ -125,3 +127,27 @@ autoReadingLayout 用已声明关系限制控制器上置和存储贴附；layou
 IR 3 的 register.update 为可选语义；signals 校验条件/值位宽、复位域和完整输入集合。stateUpdates 生成同源优先级表，hardwareView 依据规则细分依赖角色；普通输入集合继续标未知。inspection 的 data/control 目的只改变明确追踪的范围，默认在上游状态停止。
 
 stateChecks 将规则与递归组合 AST 转成有限 SystemVerilog 监视器，实际状态和叶输入用显式映射。它接入既有 contractChecks、verify 与 assurance 的输入摘要及重生成检查；不新建第二份权威合同或执行网页命令。有效沿采样、相反沿观察，所有声明分支/复位/保持都需实际覆盖。未知值、缺映射、超出支持范围或检查器过期不生成近似通过。人工逐行整理示例，未实现自动解析任意 always_ff。
+
+## 1.6 检查依据与状态覆盖
+
+core/stateCoverage 生成有限覆盖目标并解析绑定指纹的计数；只用字面常量证明分支/保持不可达，不执行 HDL 文本或推断输入约束。state_transition 的可选 priorityPairs 参与模型差异与批准失效；监视器要求高优先级被选中、同时条件及不同右值。缺少覆盖单独报告，真实状态不符仍中止仿真。旧模型不补字段。
+
+core/reviewImpact 的 reviewState 统一仓库与验证的批准解释，workspace/verificationBasis 只读取并冻结运行前依据。checks 固定关联需求及生成源码摘要，verify 保存依据和计数；assurance 区分还原一致性、未批准设计与已批准设计声明，并列出无义务需求。UI 按需展开，未认证身份和自然语言对应关系不因本地批准变成证明。事后批准不会提升旧运行。
+
+check:reliability 在临时副本运行独立需求反例和竞争场景；CI 固定已发布 EDA 包与摘要，记录实际版本并运行完整检查。通过记录只限实际场景，四态仿真、形式可达性、任意 RTL 提取和自动需求等价仍未实现。
+
+## 1.7 状态观察层
+
+`workspace/stateObservation` 只读取当前 verify 的展开产物，校验输入、模型与报告摘要，保存 `evidence/state-observation/state_*/report.json`。观察清单可独立于设计规则发现状态；映射比较不修改 authority。
+
+`core/stateObservation` 解释显式支持的 Yosys 字级单元，提取寄存器 D 端逻辑及来源。`core/bitFunctions` 以有节点/运算预算的规范二态布尔函数比较下一拍值，支持具体反例；未知单元与预算超限不近似通过。模型、Spec、监视器共用 SignalValue 的显式位宽与符号规则；1.9 cast 控制扩展/截断，端点仍按 unsigned 位向量读取。比较要求同宽同符号，移位量须 unsigned。每个生成节点固定类型，避免外层赋值改变中间运算。这里不进行完整时序等价或可达性分析。
+
+网页与 CLI assurance 读取同一比较器，新鲜度变化即时失效；刷新不会提高保存比较的批准依据。当前最高 64 个观察状态 / 32 个映射，超出观察数显示 truncated。旧模型 hash 无迁移。
+
+## 2.0 逐状态证据与多实例范围
+
+`workspace/stateObservation` 同时接受 v1 单域及 v2 scopes 清单；每个实例单独解析定义、校验物理别名与模型目标，整个报告共享 16 域/32 映射/64 发现预算。即使实例共用定义，局部 bit ID 也不会跨域合并。比较器 v2 使旧报告过期，不更改模型或批准格式。
+
+`latestStateObservation` 按声明了 update 的模型寄存器聚合最新相关记录；局部重测和空映射发现不清除其他状态。每行重新核对当前生产输入、映射摘要、模型 hash、比较器版本和当时审阅依据。缺失记录为未比较，损坏记录不能复用旧通过；面板将差异/过期/未知排在通过前面，逐状态保留记录和实例路径。
+
+边界组按真实连接端口的几何位置分布，不拆分物理模块或杜撰总线。组的网页行与 SVG 行使用同一端口坐标；选择与缩放不改变布局。输出边界跟随实际节点边界，初始可读视野优先展示主线起点；稠密图仍显示隐藏线名与交叉问题。

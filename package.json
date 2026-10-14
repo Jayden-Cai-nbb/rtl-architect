@@ -1,6 +1,6 @@
 {
   "name": "rtl-architect",
-  "version": "1.5.0",
+  "version": "2.0.0",
   "private": true,
   "type": "module",
   "engines": {
@@ -16,7 +16,7 @@
     "rtl:test": "node --import tsx scripts/rtl-test.ts",
     "arch": "node --import tsx scripts/cli.ts",
     "server": "node --import tsx src/server/index.ts",
-    "check": "npm run check:core && npm run check:skill && npm run check:import && npm run check:explore && npm run check:review && npm run check:reading && npm run check:reading-skill && npm run check:delivery && npm run check:auto-reading && npm run check:milestone && npm run check:open && npm run check:feedback && npm run check:assurance && npm run check:hardware-view && npm run check:state-updates",
+    "check": "npm run check:core && npm run check:skill && npm run check:import && npm run check:explore && npm run check:review && npm run check:reading && npm run check:reading-skill && npm run check:delivery && npm run check:auto-reading && npm run check:milestone && npm run check:open && npm run check:feedback && npm run check:assurance && npm run check:hardware-view && npm run check:state-updates && npm run check:reliability && npm run check:state-observation && npm run check:layout-constraints && npm run check:expression-types && npm run check:external-axis",
     "check:core": "node --import tsx scripts/check.ts",
     "check:skill": "node --import tsx scripts/check-skill.ts",
     "setup": "bash bin/rtlarch install --user --json",
@@ -33,7 +33,13 @@
     "check:feedback": "node --import tsx scripts/check-feedback.ts",
     "check:assurance": "node --import tsx scripts/check-assurance.ts",
     "check:hardware-view": "node --import tsx scripts/check-hardware-view.ts",
-    "check:state-updates": "node --import tsx scripts/check-state-updates.ts"
+    "check:state-updates": "node --import tsx scripts/check-state-updates.ts",
+    "check:reliability": "node --import tsx scripts/check-reliability.ts",
+    "check:state-observation": "node --import tsx scripts/check-state-observation.ts",
+    "check:layout-constraints": "node --import tsx scripts/check-layout-constraints.ts",
+    "check:expression-types": "node --import tsx scripts/check-expression-types.ts",
+    "check:external-axis": "node --import tsx scripts/check-external-axis.ts",
+    "check:release": "node --import tsx scripts/check-release.ts"
   },
   "dependencies": {
     "@xyflow/react": "12.10.0",

@@ -1,0 +1,735 @@
+{
+  "schemaVersion": 3,
+  "provenance": {
+    "origin": "as_built",
+    "fidelity": "partial",
+    "scope": "固定 8 位输入 / 12 位缩放 / 4 位移位量的五个完整寄存器",
+    "sourceDigest": "0b7424483adcb3cf6f860754c70cc6fdbf2d3cd170a115fc717a1bc719761cfe",
+    "configuration": "Standalone signed_scaler; no parameters or includes",
+    "coverage": {
+      "elaboratedInstances": 1,
+      "representedInstances": 1
+    },
+    "evidence": [
+      {
+        "id": "rtl",
+        "file": "rtl/signed_scaler.sv",
+        "fileHash": "0b7424483adcb3cf6f860754c70cc6fdbf2d3cd170a115fc717a1bc719761cfe",
+        "sourceKind": "code",
+        "targets": [
+          {
+            "kind": "module",
+            "moduleId": "top"
+          }
+        ]
+      }
+    ],
+    "findings": [
+      {
+        "id": "limits",
+        "classification": "unknown",
+        "moduleIds": [
+          "top"
+        ],
+        "text": "只核对有限二态状态更新；未证明四态、初始状态和任意时序需求。",
+        "evidenceIds": []
+      }
+    ],
+    "unsupportedStructures": [],
+    "verification": []
+  },
+  "design": {
+    "id": "typed_expressions",
+    "name": "有符号缩放：位宽、移位与标志",
+    "top": "top"
+  },
+  "clocks": [
+    {
+      "id": "clk",
+      "edge": "rising"
+    }
+  ],
+  "resets": [
+    {
+      "id": "rst_n",
+      "clock": "clk",
+      "activeLevel": "low",
+      "synchronous": true
+    }
+  ],
+  "modules": [
+    {
+      "id": "top",
+      "name": "有符号缩放寄存级",
+      "parent": null,
+      "kind": "subsystem",
+      "rtlModule": "signed_scaler",
+      "clock": "clk",
+      "reset": "rst_n",
+      "parameters": {},
+      "interfaces": [
+        {
+          "id": "sample",
+          "role": "consumer",
+          "protocol": "signal",
+          "width": 8,
+          "required": false,
+          "group": "sample_data"
+        },
+        {
+          "id": "shift",
+          "role": "consumer",
+          "protocol": "signal",
+          "width": 4,
+          "required": false,
+          "group": "shift_control"
+        },
+        {
+          "id": "enable",
+          "role": "consumer",
+          "protocol": "signal",
+          "width": 1,
+          "required": false,
+          "group": "load_control"
+        },
+        {
+          "id": "clk",
+          "role": "consumer",
+          "protocol": "signal",
+          "width": 1,
+          "required": false,
+          "group": "domain"
+        },
+        {
+          "id": "rst_n",
+          "role": "consumer",
+          "protocol": "signal",
+          "width": 1,
+          "required": false,
+          "group": "domain"
+        },
+        {
+          "id": "scaled",
+          "role": "producer",
+          "protocol": "signal",
+          "width": 12,
+          "required": false,
+          "group": "scaled_result"
+        },
+        {
+          "id": "packed_value",
+          "role": "producer",
+          "protocol": "signal",
+          "width": 8,
+          "required": false,
+          "group": "packed_value_result"
+        },
+        {
+          "id": "logical_value",
+          "role": "producer",
+          "protocol": "signal",
+          "width": 8,
+          "required": false,
+          "group": "logical_value_result"
+        },
+        {
+          "id": "negative",
+          "role": "producer",
+          "protocol": "signal",
+          "width": 1,
+          "required": false,
+          "group": "negative_result"
+        },
+        {
+          "id": "parity",
+          "role": "producer",
+          "protocol": "signal",
+          "width": 1,
+          "required": false,
+          "group": "parity_result"
+        }
+      ],
+      "interfaceGroups": [
+        {
+          "id": "sample_data",
+          "label": "采样数据",
+          "category": "data",
+          "description": "明确的 8 位输入位向量，运算中的 signed 解释由转换规则声明。"
+        },
+        {
+          "id": "shift_control",
+          "label": "移位量",
+          "category": "control",
+          "description": "4 位 unsigned 移位量。"
+        },
+        {
+          "id": "load_control",
+          "label": "采样使能",
+          "category": "control",
+          "description": "有效沿采样条件。"
+        },
+        {
+          "id": "domain",
+          "label": "时钟与复位",
+          "category": "clock_reset",
+          "description": "源码声明的时钟和同步低有效复位。"
+        },
+        {
+          "id": "scaled_result",
+          "label": "算术缩放",
+          "category": "data",
+          "description": "独立并行计算的输出。"
+        },
+        {
+          "id": "packed_value_result",
+          "label": "低位打包",
+          "category": "data",
+          "description": "独立并行计算的输出。"
+        },
+        {
+          "id": "logical_value_result",
+          "label": "逻辑右移",
+          "category": "data",
+          "description": "独立并行计算的输出。"
+        },
+        {
+          "id": "negative_result",
+          "label": "负数标志",
+          "category": "data",
+          "description": "独立并行计算的输出。"
+        },
+        {
+          "id": "parity_result",
+          "label": "异或校验",
+          "category": "data",
+          "description": "独立并行计算的输出。"
+        }
+      ],
+      "contract": {
+        "responsibility": "使能时采样 signed 8 位数据，同时保存 12 位算术缩放、低位打包、逻辑右移与标志。",
+        "latencyMinCycles": 1,
+        "latencyCondition": "有效沿前输入在该沿后更新；按相邻采样沿计 1 周期。",
+        "backpressure": "无 ready/valid；enable=0 时全部寄存器保持。",
+        "resetBehavior": "posedge clk 同步低有效 rst_n，全部状态清零。",
+        "invariants": [
+          "移位量为 0..15，超宽算术右移保留符号，逻辑右移补零。",
+          "signed 是表达式解释，端口/状态存储仍为位向量。"
+        ],
+        "verificationPlan": [
+          "穷举 256 个输入编码和 16 个移位量，另测复位与保持。",
+          "比较显式状态映射，保留二态单步与实际场景证据的边界。"
+        ],
+        "openQuestions": [],
+        "obligations": [
+          {
+            "id": "scaled_update",
+            "description": "符号扩展到 12 位后算术右移",
+            "kind": "state_transition",
+            "localSignalId": "scaled_q"
+          },
+          {
+            "id": "packed_value_update",
+            "description": "明确截取算术结果低 8 位",
+            "kind": "state_transition",
+            "localSignalId": "packed_value_q"
+          },
+          {
+            "id": "logical_value_update",
+            "description": "按无符号位向量逻辑右移",
+            "kind": "state_transition",
+            "localSignalId": "logical_value_q"
+          },
+          {
+            "id": "negative_update",
+            "description": "按有符号数判断负值",
+            "kind": "state_transition",
+            "localSignalId": "negative_q"
+          },
+          {
+            "id": "parity_update",
+            "description": "输入的逐位异或归约",
+            "kind": "state_transition",
+            "localSignalId": "parity_q"
+          }
+        ]
+      }
+    }
+  ],
+  "connections": [
+    {
+      "id": "scaled_out",
+      "scope": "top",
+      "from": {
+        "moduleId": "top",
+        "interfaceId": "scaled_q",
+        "local": true
+      },
+      "to": {
+        "moduleId": "top",
+        "interfaceId": "scaled"
+      }
+    },
+    {
+      "id": "packed_value_out",
+      "scope": "top",
+      "from": {
+        "moduleId": "top",
+        "interfaceId": "packed_value_q",
+        "local": true
+      },
+      "to": {
+        "moduleId": "top",
+        "interfaceId": "packed_value"
+      }
+    },
+    {
+      "id": "logical_value_out",
+      "scope": "top",
+      "from": {
+        "moduleId": "top",
+        "interfaceId": "logical_value_q",
+        "local": true
+      },
+      "to": {
+        "moduleId": "top",
+        "interfaceId": "logical_value"
+      }
+    },
+    {
+      "id": "negative_out",
+      "scope": "top",
+      "from": {
+        "moduleId": "top",
+        "interfaceId": "negative_q",
+        "local": true
+      },
+      "to": {
+        "moduleId": "top",
+        "interfaceId": "negative"
+      }
+    },
+    {
+      "id": "parity_out",
+      "scope": "top",
+      "from": {
+        "moduleId": "top",
+        "interfaceId": "parity_q",
+        "local": true
+      },
+      "to": {
+        "moduleId": "top",
+        "interfaceId": "parity"
+      }
+    }
+  ],
+  "localSignals": [
+    {
+      "id": "scaled_q",
+      "scope": "top",
+      "name": "符号扩展到 12 位后算术右移",
+      "width": 12,
+      "description": "符号扩展到 12 位后算术右移；同步复位优先，使能无效保持。",
+      "driver": {
+        "kind": "register",
+        "inputs": [
+          {
+            "moduleId": "top",
+            "interfaceId": "rst_n"
+          },
+          {
+            "moduleId": "top",
+            "interfaceId": "enable"
+          },
+          {
+            "moduleId": "top",
+            "interfaceId": "sample"
+          },
+          {
+            "moduleId": "top",
+            "interfaceId": "shift"
+          }
+        ],
+        "sourceText": "scaled <= extended_sample >>> shift;",
+        "update": {
+          "reset": {
+            "signal": {
+              "moduleId": "top",
+              "interfaceId": "rst_n"
+            },
+            "activeLevel": "low",
+            "value": {
+              "kind": "constant",
+              "width": 12,
+              "value": "0"
+            }
+          },
+          "branches": [
+            {
+              "id": "load",
+              "condition": {
+                "kind": "endpoint",
+                "endpoint": {
+                  "moduleId": "top",
+                  "interfaceId": "enable"
+                }
+              },
+              "value": {
+                "kind": "operator",
+                "operator": ">>>",
+                "operands": [
+                  {
+                    "kind": "cast",
+                    "mode": "sign_extend",
+                    "width": 12,
+                    "signed": true,
+                    "value": {
+                      "kind": "endpoint",
+                      "endpoint": {
+                        "moduleId": "top",
+                        "interfaceId": "sample"
+                      }
+                    }
+                  },
+                  {
+                    "kind": "endpoint",
+                    "endpoint": {
+                      "moduleId": "top",
+                      "interfaceId": "shift"
+                    }
+                  }
+                ]
+              }
+            }
+          ],
+          "otherwise": "hold"
+        }
+      },
+      "evidenceIds": [
+        "rtl"
+      ]
+    },
+    {
+      "id": "packed_value_q",
+      "scope": "top",
+      "name": "明确截取算术结果低 8 位",
+      "width": 8,
+      "description": "明确截取算术结果低 8 位；同步复位优先，使能无效保持。",
+      "driver": {
+        "kind": "register",
+        "inputs": [
+          {
+            "moduleId": "top",
+            "interfaceId": "rst_n"
+          },
+          {
+            "moduleId": "top",
+            "interfaceId": "enable"
+          },
+          {
+            "moduleId": "top",
+            "interfaceId": "sample"
+          },
+          {
+            "moduleId": "top",
+            "interfaceId": "shift"
+          }
+        ],
+        "sourceText": "packed_value <= 8'(extended_sample >>> shift);",
+        "update": {
+          "reset": {
+            "signal": {
+              "moduleId": "top",
+              "interfaceId": "rst_n"
+            },
+            "activeLevel": "low",
+            "value": {
+              "kind": "constant",
+              "width": 8,
+              "value": "0"
+            }
+          },
+          "branches": [
+            {
+              "id": "load",
+              "condition": {
+                "kind": "endpoint",
+                "endpoint": {
+                  "moduleId": "top",
+                  "interfaceId": "enable"
+                }
+              },
+              "value": {
+                "kind": "cast",
+                "mode": "truncate",
+                "width": 8,
+                "signed": false,
+                "value": {
+                  "kind": "operator",
+                  "operator": ">>>",
+                  "operands": [
+                    {
+                      "kind": "cast",
+                      "mode": "sign_extend",
+                      "width": 12,
+                      "signed": true,
+                      "value": {
+                        "kind": "endpoint",
+                        "endpoint": {
+                          "moduleId": "top",
+                          "interfaceId": "sample"
+                        }
+                      }
+                    },
+                    {
+                      "kind": "endpoint",
+                      "endpoint": {
+                        "moduleId": "top",
+                        "interfaceId": "shift"
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          ],
+          "otherwise": "hold"
+        }
+      },
+      "evidenceIds": [
+        "rtl"
+      ]
+    },
+    {
+      "id": "logical_value_q",
+      "scope": "top",
+      "name": "按无符号位向量逻辑右移",
+      "width": 8,
+      "description": "按无符号位向量逻辑右移；同步复位优先，使能无效保持。",
+      "driver": {
+        "kind": "register",
+        "inputs": [
+          {
+            "moduleId": "top",
+            "interfaceId": "rst_n"
+          },
+          {
+            "moduleId": "top",
+            "interfaceId": "enable"
+          },
+          {
+            "moduleId": "top",
+            "interfaceId": "sample"
+          },
+          {
+            "moduleId": "top",
+            "interfaceId": "shift"
+          }
+        ],
+        "sourceText": "logical_value <= $unsigned(sample) >> shift;",
+        "update": {
+          "reset": {
+            "signal": {
+              "moduleId": "top",
+              "interfaceId": "rst_n"
+            },
+            "activeLevel": "low",
+            "value": {
+              "kind": "constant",
+              "width": 8,
+              "value": "0"
+            }
+          },
+          "branches": [
+            {
+              "id": "load",
+              "condition": {
+                "kind": "endpoint",
+                "endpoint": {
+                  "moduleId": "top",
+                  "interfaceId": "enable"
+                }
+              },
+              "value": {
+                "kind": "operator",
+                "operator": ">>",
+                "operands": [
+                  {
+                    "kind": "endpoint",
+                    "endpoint": {
+                      "moduleId": "top",
+                      "interfaceId": "sample"
+                    }
+                  },
+                  {
+                    "kind": "endpoint",
+                    "endpoint": {
+                      "moduleId": "top",
+                      "interfaceId": "shift"
+                    }
+                  }
+                ]
+              }
+            }
+          ],
+          "otherwise": "hold"
+        }
+      },
+      "evidenceIds": [
+        "rtl"
+      ]
+    },
+    {
+      "id": "negative_q",
+      "scope": "top",
+      "name": "按有符号数判断负值",
+      "width": 1,
+      "description": "按有符号数判断负值；同步复位优先，使能无效保持。",
+      "driver": {
+        "kind": "register",
+        "inputs": [
+          {
+            "moduleId": "top",
+            "interfaceId": "rst_n"
+          },
+          {
+            "moduleId": "top",
+            "interfaceId": "enable"
+          },
+          {
+            "moduleId": "top",
+            "interfaceId": "sample"
+          }
+        ],
+        "sourceText": "negative <= sample < 8'sd0;",
+        "update": {
+          "reset": {
+            "signal": {
+              "moduleId": "top",
+              "interfaceId": "rst_n"
+            },
+            "activeLevel": "low",
+            "value": {
+              "kind": "constant",
+              "width": 1,
+              "value": "0"
+            }
+          },
+          "branches": [
+            {
+              "id": "load",
+              "condition": {
+                "kind": "endpoint",
+                "endpoint": {
+                  "moduleId": "top",
+                  "interfaceId": "enable"
+                }
+              },
+              "value": {
+                "kind": "operator",
+                "operator": "<",
+                "operands": [
+                  {
+                    "kind": "cast",
+                    "mode": "reinterpret",
+                    "width": 8,
+                    "signed": true,
+                    "value": {
+                      "kind": "endpoint",
+                      "endpoint": {
+                        "moduleId": "top",
+                        "interfaceId": "sample"
+                      }
+                    }
+                  },
+                  {
+                    "kind": "cast",
+                    "mode": "reinterpret",
+                    "width": 8,
+                    "signed": true,
+                    "value": {
+                      "kind": "constant",
+                      "width": 8,
+                      "value": "0"
+                    }
+                  }
+                ]
+              }
+            }
+          ],
+          "otherwise": "hold"
+        }
+      },
+      "evidenceIds": [
+        "rtl"
+      ]
+    },
+    {
+      "id": "parity_q",
+      "scope": "top",
+      "name": "输入的逐位异或归约",
+      "width": 1,
+      "description": "输入的逐位异或归约；同步复位优先，使能无效保持。",
+      "driver": {
+        "kind": "register",
+        "inputs": [
+          {
+            "moduleId": "top",
+            "interfaceId": "rst_n"
+          },
+          {
+            "moduleId": "top",
+            "interfaceId": "enable"
+          },
+          {
+            "moduleId": "top",
+            "interfaceId": "sample"
+          }
+        ],
+        "sourceText": "parity <= ^sample;",
+        "update": {
+          "reset": {
+            "signal": {
+              "moduleId": "top",
+              "interfaceId": "rst_n"
+            },
+            "activeLevel": "low",
+            "value": {
+              "kind": "constant",
+              "width": 1,
+              "value": "0"
+            }
+          },
+          "branches": [
+            {
+              "id": "load",
+              "condition": {
+                "kind": "endpoint",
+                "endpoint": {
+                  "moduleId": "top",
+                  "interfaceId": "enable"
+                }
+              },
+              "value": {
+                "kind": "operator",
+                "operator": "reduce_xor",
+                "operands": [
+                  {
+                    "kind": "endpoint",
+                    "endpoint": {
+                      "moduleId": "top",
+                      "interfaceId": "sample"
+                    }
+                  }
+                ]
+              }
+            }
+          ],
+          "otherwise": "hold"
+        }
+      },
+      "evidenceIds": [
+        "rtl"
+      ]
+    }
+  ]
+}

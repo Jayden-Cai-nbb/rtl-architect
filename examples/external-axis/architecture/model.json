@@ -1,0 +1,1107 @@
+{
+  "schemaVersion": 3,
+  "design": {
+    "id": "external_axis",
+    "name": "外部开源 RTL 双实例验证",
+    "top": "top"
+  },
+  "clocks": [
+    {
+      "id": "clk",
+      "edge": "rising"
+    }
+  ],
+  "resets": [
+    {
+      "id": "rst",
+      "clock": "clk",
+      "activeLevel": "high",
+      "synchronous": true
+    }
+  ],
+  "modules": [
+    {
+      "id": "top",
+      "name": "外部 RTL：双级流寄存器",
+      "parent": null,
+      "kind": "subsystem",
+      "rtlModule": "axis_pair",
+      "clock": "clk",
+      "reset": "rst",
+      "parameters": {},
+      "interfaces": [
+        {
+          "id": "s_axis_tdata",
+          "width": 8,
+          "role": "consumer",
+          "protocol": "signal",
+          "required": false,
+          "group": "payload"
+        },
+        {
+          "id": "s_axis_tvalid",
+          "width": 1,
+          "role": "consumer",
+          "protocol": "signal",
+          "required": false,
+          "group": "control"
+        },
+        {
+          "id": "s_axis_tready",
+          "width": 1,
+          "role": "producer",
+          "protocol": "signal",
+          "required": false,
+          "group": "control"
+        },
+        {
+          "id": "m_axis_tdata",
+          "width": 8,
+          "role": "producer",
+          "protocol": "signal",
+          "required": false,
+          "group": "payload"
+        },
+        {
+          "id": "m_axis_tvalid",
+          "width": 1,
+          "role": "producer",
+          "protocol": "signal",
+          "required": false,
+          "group": "control"
+        },
+        {
+          "id": "m_axis_tready",
+          "width": 1,
+          "role": "consumer",
+          "protocol": "signal",
+          "required": false,
+          "group": "control"
+        },
+        {
+          "id": "clk",
+          "width": 1,
+          "role": "consumer",
+          "protocol": "signal",
+          "required": false,
+          "group": "domain"
+        },
+        {
+          "id": "rst",
+          "width": 1,
+          "role": "consumer",
+          "protocol": "signal",
+          "required": false,
+          "group": "domain"
+        }
+      ],
+      "interfaceGroups": [
+        {
+          "id": "payload",
+          "label": "数据",
+          "category": "data",
+          "description": "数据"
+        },
+        {
+          "id": "control",
+          "label": "握手控制",
+          "category": "control",
+          "description": "握手控制"
+        },
+        {
+          "id": "domain",
+          "label": "时钟复位",
+          "category": "clock_reset",
+          "description": "时钟复位"
+        }
+      ],
+      "contract": {
+        "responsibility": "串接两个固定配置的简单流寄存级，按序传递未被复位取消的数据。",
+        "latencyMinCycles": 2,
+        "latencyCondition": "输入握手采样沿至对应输出握手采样沿：两级各至少一拍，无复位和下游持续 ready 时最小两拍；每级插入空拍，不声明每拍吞吐。",
+        "backpressure": "发送方保持 valid/data 直到握手；下游背压时保持有效输出。",
+        "resetBehavior": "同步高有效复位清 valid/ready；数据寄存器没有复位。",
+        "invariants": [],
+        "verificationPlan": [
+          "独立事务队列核对双级数据顺序、停顿、复位取消。",
+          "逐实例比较 data/valid/ready；不检查初值和禁用 sideband。"
+        ],
+        "openQuestions": []
+      }
+    },
+    {
+      "id": "stage0",
+      "name": "输入寄存级",
+      "parent": "top",
+      "kind": "subsystem",
+      "rtlModule": "axis_register",
+      "clock": "clk",
+      "reset": "rst",
+      "parameters": {},
+      "interfaces": [
+        {
+          "id": "s_axis_tdata",
+          "width": 8,
+          "role": "consumer",
+          "protocol": "signal",
+          "required": false,
+          "group": "payload"
+        },
+        {
+          "id": "s_axis_tvalid",
+          "width": 1,
+          "role": "consumer",
+          "protocol": "signal",
+          "required": false,
+          "group": "control"
+        },
+        {
+          "id": "s_axis_tready",
+          "width": 1,
+          "role": "producer",
+          "protocol": "signal",
+          "required": false,
+          "group": "control"
+        },
+        {
+          "id": "m_axis_tdata",
+          "width": 8,
+          "role": "producer",
+          "protocol": "signal",
+          "required": false,
+          "group": "payload"
+        },
+        {
+          "id": "m_axis_tvalid",
+          "width": 1,
+          "role": "producer",
+          "protocol": "signal",
+          "required": false,
+          "group": "control"
+        },
+        {
+          "id": "m_axis_tready",
+          "width": 1,
+          "role": "consumer",
+          "protocol": "signal",
+          "required": false,
+          "group": "control"
+        },
+        {
+          "id": "clk",
+          "width": 1,
+          "role": "consumer",
+          "protocol": "signal",
+          "required": false,
+          "group": "domain"
+        },
+        {
+          "id": "rst",
+          "width": 1,
+          "role": "consumer",
+          "protocol": "signal",
+          "required": false,
+          "group": "domain"
+        }
+      ],
+      "interfaceGroups": [
+        {
+          "id": "payload",
+          "label": "数据",
+          "category": "data",
+          "description": "数据"
+        },
+        {
+          "id": "control",
+          "label": "握手控制",
+          "category": "control",
+          "description": "握手控制"
+        },
+        {
+          "id": "domain",
+          "label": "时钟复位",
+          "category": "clock_reset",
+          "description": "时钟复位"
+        }
+      ],
+      "contract": {
+        "responsibility": "固定配置的 AXI Stream 简单寄存级；插入空拍。",
+        "latencyMinCycles": 1,
+        "latencyCondition": "无复位及背压时，每级至少一拍；不声明每拍吞吐。",
+        "backpressure": "发送方保持 valid/data 直到握手；下游背压时保持有效输出。",
+        "resetBehavior": "同步高有效复位清 valid/ready；数据寄存器没有复位。",
+        "invariants": [],
+        "verificationPlan": [
+          "独立事务队列核对双级数据顺序、停顿、复位取消。",
+          "逐实例比较 data/valid/ready；不检查初值和禁用 sideband。"
+        ],
+        "openQuestions": []
+      }
+    },
+    {
+      "id": "stage1",
+      "name": "输出寄存级",
+      "parent": "top",
+      "kind": "subsystem",
+      "rtlModule": "axis_register",
+      "clock": "clk",
+      "reset": "rst",
+      "parameters": {},
+      "interfaces": [
+        {
+          "id": "s_axis_tdata",
+          "width": 8,
+          "role": "consumer",
+          "protocol": "signal",
+          "required": false,
+          "group": "payload"
+        },
+        {
+          "id": "s_axis_tvalid",
+          "width": 1,
+          "role": "consumer",
+          "protocol": "signal",
+          "required": false,
+          "group": "control"
+        },
+        {
+          "id": "s_axis_tready",
+          "width": 1,
+          "role": "producer",
+          "protocol": "signal",
+          "required": false,
+          "group": "control"
+        },
+        {
+          "id": "m_axis_tdata",
+          "width": 8,
+          "role": "producer",
+          "protocol": "signal",
+          "required": false,
+          "group": "payload"
+        },
+        {
+          "id": "m_axis_tvalid",
+          "width": 1,
+          "role": "producer",
+          "protocol": "signal",
+          "required": false,
+          "group": "control"
+        },
+        {
+          "id": "m_axis_tready",
+          "width": 1,
+          "role": "consumer",
+          "protocol": "signal",
+          "required": false,
+          "group": "control"
+        },
+        {
+          "id": "clk",
+          "width": 1,
+          "role": "consumer",
+          "protocol": "signal",
+          "required": false,
+          "group": "domain"
+        },
+        {
+          "id": "rst",
+          "width": 1,
+          "role": "consumer",
+          "protocol": "signal",
+          "required": false,
+          "group": "domain"
+        }
+      ],
+      "interfaceGroups": [
+        {
+          "id": "payload",
+          "label": "数据",
+          "category": "data",
+          "description": "数据"
+        },
+        {
+          "id": "control",
+          "label": "握手控制",
+          "category": "control",
+          "description": "握手控制"
+        },
+        {
+          "id": "domain",
+          "label": "时钟复位",
+          "category": "clock_reset",
+          "description": "时钟复位"
+        }
+      ],
+      "contract": {
+        "responsibility": "固定配置的 AXI Stream 简单寄存级；插入空拍。",
+        "latencyMinCycles": 1,
+        "latencyCondition": "无复位及背压时，每级至少一拍；不声明每拍吞吐。",
+        "backpressure": "发送方保持 valid/data 直到握手；下游背压时保持有效输出。",
+        "resetBehavior": "同步高有效复位清 valid/ready；数据寄存器没有复位。",
+        "invariants": [],
+        "verificationPlan": [
+          "独立事务队列核对双级数据顺序、停顿、复位取消。",
+          "逐实例比较 data/valid/ready；不检查初值和禁用 sideband。"
+        ],
+        "openQuestions": []
+      }
+    }
+  ],
+  "connections": [
+    {
+      "id": "stage0_data_q",
+      "scope": "stage0",
+      "from": {
+        "moduleId": "stage0",
+        "interfaceId": "stage0_data_q",
+        "local": true
+      },
+      "to": {
+        "moduleId": "stage0",
+        "interfaceId": "m_axis_tdata"
+      }
+    },
+    {
+      "id": "stage0_valid_q",
+      "scope": "stage0",
+      "from": {
+        "moduleId": "stage0",
+        "interfaceId": "stage0_valid_q",
+        "local": true
+      },
+      "to": {
+        "moduleId": "stage0",
+        "interfaceId": "m_axis_tvalid"
+      }
+    },
+    {
+      "id": "stage0_ready_q",
+      "scope": "stage0",
+      "from": {
+        "moduleId": "stage0",
+        "interfaceId": "stage0_ready_q",
+        "local": true
+      },
+      "to": {
+        "moduleId": "stage0",
+        "interfaceId": "s_axis_tready"
+      }
+    },
+    {
+      "id": "stage1_data_q",
+      "scope": "stage1",
+      "from": {
+        "moduleId": "stage1",
+        "interfaceId": "stage1_data_q",
+        "local": true
+      },
+      "to": {
+        "moduleId": "stage1",
+        "interfaceId": "m_axis_tdata"
+      }
+    },
+    {
+      "id": "stage1_valid_q",
+      "scope": "stage1",
+      "from": {
+        "moduleId": "stage1",
+        "interfaceId": "stage1_valid_q",
+        "local": true
+      },
+      "to": {
+        "moduleId": "stage1",
+        "interfaceId": "m_axis_tvalid"
+      }
+    },
+    {
+      "id": "stage1_ready_q",
+      "scope": "stage1",
+      "from": {
+        "moduleId": "stage1",
+        "interfaceId": "stage1_ready_q",
+        "local": true
+      },
+      "to": {
+        "moduleId": "stage1",
+        "interfaceId": "s_axis_tready"
+      }
+    },
+    {
+      "id": "boundary_s_axis_tdata",
+      "scope": "top",
+      "from": {
+        "moduleId": "top",
+        "interfaceId": "s_axis_tdata"
+      },
+      "to": {
+        "moduleId": "stage0",
+        "interfaceId": "s_axis_tdata"
+      }
+    },
+    {
+      "id": "boundary_s_axis_tvalid",
+      "scope": "top",
+      "from": {
+        "moduleId": "top",
+        "interfaceId": "s_axis_tvalid"
+      },
+      "to": {
+        "moduleId": "stage0",
+        "interfaceId": "s_axis_tvalid"
+      }
+    },
+    {
+      "id": "boundary_s_axis_tready",
+      "scope": "top",
+      "from": {
+        "moduleId": "stage0",
+        "interfaceId": "s_axis_tready"
+      },
+      "to": {
+        "moduleId": "top",
+        "interfaceId": "s_axis_tready"
+      }
+    },
+    {
+      "id": "boundary_m_axis_tdata",
+      "scope": "top",
+      "from": {
+        "moduleId": "stage1",
+        "interfaceId": "m_axis_tdata"
+      },
+      "to": {
+        "moduleId": "top",
+        "interfaceId": "m_axis_tdata"
+      }
+    },
+    {
+      "id": "boundary_m_axis_tvalid",
+      "scope": "top",
+      "from": {
+        "moduleId": "stage1",
+        "interfaceId": "m_axis_tvalid"
+      },
+      "to": {
+        "moduleId": "top",
+        "interfaceId": "m_axis_tvalid"
+      }
+    },
+    {
+      "id": "boundary_m_axis_tready",
+      "scope": "top",
+      "from": {
+        "moduleId": "top",
+        "interfaceId": "m_axis_tready"
+      },
+      "to": {
+        "moduleId": "stage1",
+        "interfaceId": "m_axis_tready"
+      }
+    },
+    {
+      "id": "stage0_clk",
+      "scope": "top",
+      "from": {
+        "moduleId": "top",
+        "interfaceId": "clk"
+      },
+      "to": {
+        "moduleId": "stage0",
+        "interfaceId": "clk"
+      }
+    },
+    {
+      "id": "stage1_clk",
+      "scope": "top",
+      "from": {
+        "moduleId": "top",
+        "interfaceId": "clk"
+      },
+      "to": {
+        "moduleId": "stage1",
+        "interfaceId": "clk"
+      }
+    },
+    {
+      "id": "stage0_rst",
+      "scope": "top",
+      "from": {
+        "moduleId": "top",
+        "interfaceId": "rst"
+      },
+      "to": {
+        "moduleId": "stage0",
+        "interfaceId": "rst"
+      }
+    },
+    {
+      "id": "stage1_rst",
+      "scope": "top",
+      "from": {
+        "moduleId": "top",
+        "interfaceId": "rst"
+      },
+      "to": {
+        "moduleId": "stage1",
+        "interfaceId": "rst"
+      }
+    },
+    {
+      "id": "middle_tdata",
+      "scope": "top",
+      "from": {
+        "moduleId": "stage0",
+        "interfaceId": "m_axis_tdata"
+      },
+      "to": {
+        "moduleId": "stage1",
+        "interfaceId": "s_axis_tdata"
+      }
+    },
+    {
+      "id": "middle_tvalid",
+      "scope": "top",
+      "from": {
+        "moduleId": "stage0",
+        "interfaceId": "m_axis_tvalid"
+      },
+      "to": {
+        "moduleId": "stage1",
+        "interfaceId": "s_axis_tvalid"
+      }
+    },
+    {
+      "id": "middle_tready",
+      "scope": "top",
+      "from": {
+        "moduleId": "stage1",
+        "interfaceId": "s_axis_tready"
+      },
+      "to": {
+        "moduleId": "stage0",
+        "interfaceId": "m_axis_tready"
+      }
+    }
+  ],
+  "localSignals": [
+    {
+      "id": "stage0_data_q",
+      "scope": "stage0",
+      "name": "数据寄存器",
+      "width": 8,
+      "description": "REG_TYPE=1 的整向量更新；来源为固定提交的上游 RTL。",
+      "driver": {
+        "kind": "register",
+        "inputs": [
+          {
+            "moduleId": "stage0",
+            "interfaceId": "stage0_ready_q",
+            "local": true
+          },
+          {
+            "moduleId": "stage0",
+            "interfaceId": "s_axis_tdata"
+          }
+        ],
+        "sourceText": "axis_register.v REG_TYPE == 1, lines 229-266; data has no reset.",
+        "update": {
+          "reset": null,
+          "branches": [
+            {
+              "id": "load",
+              "condition": {
+                "kind": "endpoint",
+                "endpoint": {
+                  "moduleId": "stage0",
+                  "interfaceId": "stage0_ready_q",
+                  "local": true
+                }
+              },
+              "value": {
+                "kind": "endpoint",
+                "endpoint": {
+                  "moduleId": "stage0",
+                  "interfaceId": "s_axis_tdata"
+                }
+              }
+            }
+          ],
+          "otherwise": "hold"
+        }
+      },
+      "evidenceIds": [
+        "upstream"
+      ]
+    },
+    {
+      "id": "stage0_valid_q",
+      "scope": "stage0",
+      "name": "有效状态",
+      "width": 1,
+      "description": "REG_TYPE=1 的整向量更新；来源为固定提交的上游 RTL。",
+      "driver": {
+        "kind": "register",
+        "inputs": [
+          {
+            "moduleId": "stage0",
+            "interfaceId": "stage0_ready_q",
+            "local": true
+          },
+          {
+            "moduleId": "stage0",
+            "interfaceId": "s_axis_tvalid"
+          },
+          {
+            "moduleId": "stage0",
+            "interfaceId": "m_axis_tready"
+          },
+          {
+            "moduleId": "stage0",
+            "interfaceId": "rst"
+          }
+        ],
+        "sourceText": "axis_register.v REG_TYPE == 1, lines 229-266; data has no reset.",
+        "update": {
+          "reset": {
+            "signal": {
+              "moduleId": "stage0",
+              "interfaceId": "rst"
+            },
+            "activeLevel": "high",
+            "value": {
+              "kind": "constant",
+              "width": 1,
+              "value": "0"
+            }
+          },
+          "branches": [
+            {
+              "id": "load",
+              "condition": {
+                "kind": "endpoint",
+                "endpoint": {
+                  "moduleId": "stage0",
+                  "interfaceId": "stage0_ready_q",
+                  "local": true
+                }
+              },
+              "value": {
+                "kind": "endpoint",
+                "endpoint": {
+                  "moduleId": "stage0",
+                  "interfaceId": "s_axis_tvalid"
+                }
+              }
+            },
+            {
+              "id": "drain",
+              "condition": {
+                "kind": "endpoint",
+                "endpoint": {
+                  "moduleId": "stage0",
+                  "interfaceId": "m_axis_tready"
+                }
+              },
+              "value": {
+                "kind": "constant",
+                "width": 1,
+                "value": "0"
+              }
+            }
+          ],
+          "otherwise": "hold"
+        }
+      },
+      "evidenceIds": [
+        "upstream"
+      ]
+    },
+    {
+      "id": "stage0_ready_q",
+      "scope": "stage0",
+      "name": "可接收状态",
+      "width": 1,
+      "description": "REG_TYPE=1 的整向量更新；来源为固定提交的上游 RTL。",
+      "driver": {
+        "kind": "register",
+        "inputs": [
+          {
+            "moduleId": "stage0",
+            "interfaceId": "stage0_ready_q",
+            "local": true
+          },
+          {
+            "moduleId": "stage0",
+            "interfaceId": "s_axis_tvalid"
+          },
+          {
+            "moduleId": "stage0",
+            "interfaceId": "m_axis_tready"
+          },
+          {
+            "moduleId": "stage0",
+            "interfaceId": "stage0_valid_q",
+            "local": true
+          },
+          {
+            "moduleId": "stage0",
+            "interfaceId": "rst"
+          }
+        ],
+        "sourceText": "axis_register.v REG_TYPE == 1, lines 229-266; data has no reset.",
+        "update": {
+          "reset": {
+            "signal": {
+              "moduleId": "stage0",
+              "interfaceId": "rst"
+            },
+            "activeLevel": "high",
+            "value": {
+              "kind": "constant",
+              "width": 1,
+              "value": "0"
+            }
+          },
+          "branches": [
+            {
+              "id": "tick",
+              "condition": {
+                "kind": "constant",
+                "width": 1,
+                "value": "1"
+              },
+              "value": {
+                "kind": "operator",
+                "operator": "!",
+                "operands": [
+                  {
+                    "kind": "operator",
+                    "operator": "mux",
+                    "operands": [
+                      {
+                        "kind": "endpoint",
+                        "endpoint": {
+                          "moduleId": "stage0",
+                          "interfaceId": "stage0_ready_q",
+                          "local": true
+                        }
+                      },
+                      {
+                        "kind": "endpoint",
+                        "endpoint": {
+                          "moduleId": "stage0",
+                          "interfaceId": "s_axis_tvalid"
+                        }
+                      },
+                      {
+                        "kind": "operator",
+                        "operator": "mux",
+                        "operands": [
+                          {
+                            "kind": "endpoint",
+                            "endpoint": {
+                              "moduleId": "stage0",
+                              "interfaceId": "m_axis_tready"
+                            }
+                          },
+                          {
+                            "kind": "constant",
+                            "width": 1,
+                            "value": "0"
+                          },
+                          {
+                            "kind": "endpoint",
+                            "endpoint": {
+                              "moduleId": "stage0",
+                              "interfaceId": "stage0_valid_q",
+                              "local": true
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          ],
+          "otherwise": "hold"
+        }
+      },
+      "evidenceIds": [
+        "upstream"
+      ]
+    },
+    {
+      "id": "stage1_data_q",
+      "scope": "stage1",
+      "name": "数据寄存器",
+      "width": 8,
+      "description": "REG_TYPE=1 的整向量更新；来源为固定提交的上游 RTL。",
+      "driver": {
+        "kind": "register",
+        "inputs": [
+          {
+            "moduleId": "stage1",
+            "interfaceId": "stage1_ready_q",
+            "local": true
+          },
+          {
+            "moduleId": "stage1",
+            "interfaceId": "s_axis_tdata"
+          }
+        ],
+        "sourceText": "axis_register.v REG_TYPE == 1, lines 229-266; data has no reset.",
+        "update": {
+          "reset": null,
+          "branches": [
+            {
+              "id": "load",
+              "condition": {
+                "kind": "endpoint",
+                "endpoint": {
+                  "moduleId": "stage1",
+                  "interfaceId": "stage1_ready_q",
+                  "local": true
+                }
+              },
+              "value": {
+                "kind": "endpoint",
+                "endpoint": {
+                  "moduleId": "stage1",
+                  "interfaceId": "s_axis_tdata"
+                }
+              }
+            }
+          ],
+          "otherwise": "hold"
+        }
+      },
+      "evidenceIds": [
+        "upstream"
+      ]
+    },
+    {
+      "id": "stage1_valid_q",
+      "scope": "stage1",
+      "name": "有效状态",
+      "width": 1,
+      "description": "REG_TYPE=1 的整向量更新；来源为固定提交的上游 RTL。",
+      "driver": {
+        "kind": "register",
+        "inputs": [
+          {
+            "moduleId": "stage1",
+            "interfaceId": "stage1_ready_q",
+            "local": true
+          },
+          {
+            "moduleId": "stage1",
+            "interfaceId": "s_axis_tvalid"
+          },
+          {
+            "moduleId": "stage1",
+            "interfaceId": "m_axis_tready"
+          },
+          {
+            "moduleId": "stage1",
+            "interfaceId": "rst"
+          }
+        ],
+        "sourceText": "axis_register.v REG_TYPE == 1, lines 229-266; data has no reset.",
+        "update": {
+          "reset": {
+            "signal": {
+              "moduleId": "stage1",
+              "interfaceId": "rst"
+            },
+            "activeLevel": "high",
+            "value": {
+              "kind": "constant",
+              "width": 1,
+              "value": "0"
+            }
+          },
+          "branches": [
+            {
+              "id": "load",
+              "condition": {
+                "kind": "endpoint",
+                "endpoint": {
+                  "moduleId": "stage1",
+                  "interfaceId": "stage1_ready_q",
+                  "local": true
+                }
+              },
+              "value": {
+                "kind": "endpoint",
+                "endpoint": {
+                  "moduleId": "stage1",
+                  "interfaceId": "s_axis_tvalid"
+                }
+              }
+            },
+            {
+              "id": "drain",
+              "condition": {
+                "kind": "endpoint",
+                "endpoint": {
+                  "moduleId": "stage1",
+                  "interfaceId": "m_axis_tready"
+                }
+              },
+              "value": {
+                "kind": "constant",
+                "width": 1,
+                "value": "0"
+              }
+            }
+          ],
+          "otherwise": "hold"
+        }
+      },
+      "evidenceIds": [
+        "upstream"
+      ]
+    },
+    {
+      "id": "stage1_ready_q",
+      "scope": "stage1",
+      "name": "可接收状态",
+      "width": 1,
+      "description": "REG_TYPE=1 的整向量更新；来源为固定提交的上游 RTL。",
+      "driver": {
+        "kind": "register",
+        "inputs": [
+          {
+            "moduleId": "stage1",
+            "interfaceId": "stage1_ready_q",
+            "local": true
+          },
+          {
+            "moduleId": "stage1",
+            "interfaceId": "s_axis_tvalid"
+          },
+          {
+            "moduleId": "stage1",
+            "interfaceId": "m_axis_tready"
+          },
+          {
+            "moduleId": "stage1",
+            "interfaceId": "stage1_valid_q",
+            "local": true
+          },
+          {
+            "moduleId": "stage1",
+            "interfaceId": "rst"
+          }
+        ],
+        "sourceText": "axis_register.v REG_TYPE == 1, lines 229-266; data has no reset.",
+        "update": {
+          "reset": {
+            "signal": {
+              "moduleId": "stage1",
+              "interfaceId": "rst"
+            },
+            "activeLevel": "high",
+            "value": {
+              "kind": "constant",
+              "width": 1,
+              "value": "0"
+            }
+          },
+          "branches": [
+            {
+              "id": "tick",
+              "condition": {
+                "kind": "constant",
+                "width": 1,
+                "value": "1"
+              },
+              "value": {
+                "kind": "operator",
+                "operator": "!",
+                "operands": [
+                  {
+                    "kind": "operator",
+                    "operator": "mux",
+                    "operands": [
+                      {
+                        "kind": "endpoint",
+                        "endpoint": {
+                          "moduleId": "stage1",
+                          "interfaceId": "stage1_ready_q",
+                          "local": true
+                        }
+                      },
+                      {
+                        "kind": "endpoint",
+                        "endpoint": {
+                          "moduleId": "stage1",
+                          "interfaceId": "s_axis_tvalid"
+                        }
+                      },
+                      {
+                        "kind": "operator",
+                        "operator": "mux",
+                        "operands": [
+                          {
+                            "kind": "endpoint",
+                            "endpoint": {
+                              "moduleId": "stage1",
+                              "interfaceId": "m_axis_tready"
+                            }
+                          },
+                          {
+                            "kind": "constant",
+                            "width": 1,
+                            "value": "0"
+                          },
+                          {
+                            "kind": "endpoint",
+                            "endpoint": {
+                              "moduleId": "stage1",
+                              "interfaceId": "stage1_valid_q",
+                              "local": true
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          ],
+          "otherwise": "hold"
+        }
+      },
+      "evidenceIds": [
+        "upstream"
+      ]
+    }
+  ],
+  "provenance": {
+    "origin": "as_built",
+    "fidelity": "partial",
+    "scope": "两个 REG_TYPE=1 实例的 data/valid/ready；不包含禁用 sideband 寄存器及初值。",
+    "sourceDigest": "599fde2d6c2d806643bbffb7c444297e69a71871f962d4b741ec1914342e0d39",
+    "configuration": "详见 upstream.json 和 rtl/axis_pair.sv",
+    "coverage": {
+      "elaboratedInstances": 3,
+      "representedInstances": 3
+    },
+    "evidence": [
+      {
+        "id": "upstream",
+        "file": "vendor/axis_register.v",
+        "fileHash": "599fde2d6c2d806643bbffb7c444297e69a71871f962d4b741ec1914342e0d39",
+        "sourceKind": "code"
+      }
+    ],
+    "findings": [],
+    "unsupportedStructures": [],
+    "verification": []
+  }
+}

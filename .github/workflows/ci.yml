@@ -1,0 +1,64 @@
+name: RTL Architect checks
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: checks-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  linux:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: '24.18.1'
+          cache: npm
+      - name: Install pinned EDA archive
+        run: |
+          curl --fail --location --retry 3 \
+            https://github.com/YosysHQ/oss-cad-suite-build/releases/download/2026-09-09/oss-cad-suite-linux-x64-20260909.tgz \
+            -o "$RUNNER_TEMP/rtlarch-eda.tgz"
+          echo "9f09730c7a168c5a0b829354e36f2fd517ed63f32aecebc43c4691528b5c04a8  $RUNNER_TEMP/rtlarch-eda.tgz" | sha256sum --check --strict
+          tar -xzf "$RUNNER_TEMP/rtlarch-eda.tgz" -C "$RUNNER_TEMP"
+          echo "$RUNNER_TEMP/oss-cad-suite/bin" >> "$GITHUB_PATH"
+      - name: Record toolchain and install locked dependencies
+        run: |
+          mkdir -p ci-evidence
+          node --version | tee ci-evidence/toolchain.log
+          npm --version | tee -a ci-evidence/toolchain.log
+          node -e "if(process.version !== 'v24.18.1') process.exit(1)"
+          test "$(npm --version)" = 11.6.2
+          verilator --version | tee -a ci-evidence/toolchain.log
+          yosys -V | tee -a ci-evidence/toolchain.log
+          python3 --version | tee -a ci-evidence/toolchain.log
+          g++ --version | tee -a ci-evidence/toolchain.log
+          npm ci 2>&1 | tee ci-evidence/install.log
+      - name: Build
+        run: npm run build 2>&1 | tee ci-evidence/build.log
+      - name: Core, skill, workspace and fault-injection regressions
+        run: npm run check 2>&1 | tee ci-evidence/check.log
+      - name: Initial RTL fixture
+        run: npm run rtl:test 2>&1 | tee ci-evidence/rtl.log
+      - name: Complete user workflow
+        run: npm run check:workflow 2>&1 | tee ci-evidence/workflow.log
+      - name: Clean installation and page smoke test
+        run: npm run check:release 2>&1 | tee ci-evidence/release.log
+      - name: Save this run's logs
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: linux-checks-${{ github.run_id }}
+          path: ci-evidence/
+          retention-days: 14
+          if-no-files-found: warn

@@ -1,0 +1,20 @@
+{
+  "architecture": {
+    "status": "DRAFT",
+    "modelHash": "2cd22e38e8248095a270a45eb113ea2d37b9edd87872ccb66ecbd362c886f4bf"
+  },
+  "evidence": {
+    "status": "fresh",
+    "checkedAt": "2026-10-14T06:08:53.675Z"
+  },
+  "implementation": {
+    "status": "not_checked",
+    "declaredRecords": [],
+    "note": "以下为模型声明的历史记录；本次未执行 RTL 检查，未自动接入外部运行记录。"
+  },
+  "physical": {
+    "status": "not_checked",
+    "declaredRecords": [],
+    "note": "本次未执行器件验收；历史综合或 timing 字段不自动证明完整 STA。"
+  }
+}

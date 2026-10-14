@@ -1,0 +1,314 @@
+
+> rtl-architect@1.9.0 check
+> npm run check:core && npm run check:skill && npm run check:import && npm run check:explore && npm run check:review && npm run check:reading && npm run check:reading-skill && npm run check:delivery && npm run check:auto-reading && npm run check:milestone && npm run check:open && npm run check:feedback && npm run check:assurance && npm run check:hardware-view && npm run check:state-updates && npm run check:reliability && npm run check:state-observation && npm run check:layout-constraints && npm run check:expression-types
+
+
+> rtl-architect@1.9.0 check:core
+> node --import tsx scripts/check.ts
+
+PASS 1: v1 fixture remains unchanged and generic v2 hierarchy validates
+PASS 2: invalid reference/protocol/width and malformed duplicate hierarchy are rejected without mutation
+PASS 3: preview carries a canonical candidate, does not write files, and stale commits conflict
+PASS 4: generic scalar parameters, interface edits and stable-ID diff
+PASS 5: spec is deterministic, links requirements and renders resolved interfaces
+PASS 6: projection and ELK use generic multiple ports and scope-aware edges
+PASS 7: draft cannot globally approve or hand off; per-module confirmations are independent
+PASS 8: all module confirmations, approval, export and exact-contract handoff
+PASS 9: layout saves leave confirmation valid and stale layout writes fail
+PASS 10: semantic edits invalidate dependent module reviews, retain unrelated reviews and block old handoff
+PASS 11: incomplete requirements and unconnected ports block review but permit drafts
+PASS 12: atomic write failure preserves model and module-review files
+PASS 13: real HTTP and CLI draft produce a proposal without committing or approving
+完成 13 项检查；所有文件写入和确认均在临时目录。
+
+> rtl-architect@1.9.0 check:skill
+> node --import tsx scripts/check-skill.ts
+
+PASS 1: doctor is read-only and reports an uninitialized workspace
+PASS 2: init creates an explicit draft and refuses to overwrite it
+PASS 3: concurrent CLI requests automatically start exactly one service for the workspace
+PASS 4: nested directories and symlinks resolve to the same workspace; module context is scoped
+PASS 5: two projects have isolated services; explicit wrong port and copied runtime record are rejected
+PASS 6: stop releases metadata and dead service locks are recovered on restart
+PASS 7: draft --open registers an immutable proposal and returns a workspace-bound review link without committing
+PASS 8: module context excludes unrelated architecture and unapproved handoff returns a stable error code
+PASS 9: registered proposals become stale after another commit and retain their original baseHash
+PASS 10: an incompatible running tool version is rejected with VERSION_MISMATCH
+PASS 11: project skill installation is idempotent and its entry works from an unrelated cwd
+完成 11 组 skill 入口检查；所有项目及服务均为临时创建。
+
+> rtl-architect@1.9.0 check:import
+> node --import tsx scripts/check-import.ts
+
+PASS 1: legacy hash is preserved; async reset, resetless RAM and combinational modules validate
+PASS 2: physical feedback and broadcast preserve edges; multidriver, width, CDC, scope and rv restrictions remain
+PASS 3: incomplete provenance survives clearing openQuestions, commit/reload, and blocks every approval/export/handoff path
+PASS 4: partial/unsupported/coverage markers independently block a design; invalid evidence is rejected; additions appear in diff
+PASS 5: approved v3 design exports truthful timing and source metadata; provenance edits invalidate reviews
+PASS 6: source inventory is read-only, deterministic, and reports missing assets separately from verification
+PASS 7: offline context ignores service metadata, stays scoped and writes nothing; doctor makes no startup claim
+完成 7 项真实项目反馈回归检查；未改写真实工作区。
+
+> rtl-architect@1.9.0 check:explore
+> node --import tsx scripts/check-explore.ts
+
+PASS 1: compact projection merges boundaries and preserves every real connection in bundles without changing IR
+PASS 2: evidence preview reads only declared workspace source, detects changed content and rejects escaping symlinks
+PASS 3: restricted integer evaluator handles precedence/clog2/literals and rejects execution, overflow, unknown names and cycles
+PASS 4: native 256-element array has exact counts, indexed context, shared contract and per-index width/parameter validation
+PASS 5: local constants/concat/slices and disjoint bit drivers validate; overlaps, gaps, truncation, fake boundaries and comb dependency loops are detected
+PASS 6: index-specific preview is read-only, commit persists only the chosen override, invalidates confirmations and rejects stale replay
+PASS 7: source targets resolve to real items and root causes annotate rather than hide unresolved port warnings
+PASS 8: evidence reads are bound to current or candidate hashes and stale candidate evidence never silently rebases
+PASS 9: stage-specific inventory distinguishes compile inputs from missing simulation assets without claiming execution
+PASS 10: candidate comparison and indexed offline context never start a service or change the commit base
+完成 10 项探索体验检查。
+
+> rtl-architect@1.9.0 check:review
+> node --import tsx scripts/check-review.ts
+
+PASS 1: 45 affine rules represent 11,520 CNU-like connections and resolve indices 0/123/255 exactly
+PASS 2: typed string references preserve ROM paths, trace multi-level dependency, and reject type/cycle errors
+PASS 3: causal ranges group only matching diagnostics; related module evidence does not absorb source/reset/contract unknowns
+PASS 4: more than 15,000 diagnostics retain exact totals while grouping by port and index range
+PASS 5: coverage separates instance paths from bits, drivers, bindings, behavior and actual verification
+PASS 6: main graph excludes boundary modules from layout, preserves all IDs and positions across inspection/auxiliary/local toggles
+PASS 7: array inspection resolves only the selected slice and marks unimported element 124 explicitly
+PASS 8: request budget uses UTF-8 bytes and reports exact size and controlled limit
+PASS 9: real preview accepts compressed full-index mapping; oversized HTTP request gets 413 with byte counts
+PASS 10: proposal creation version is immutable; legacy metadata stays unknown and model hash stays unchanged
+完成 10 组主图与大规模审阅检查。
+
+> rtl-architect@1.9.0 check:reading
+> node --import tsx scripts/check-reading.ts
+
+PASS 1: boundary group selection excludes other inputs while retaining exact connection IDs
+PASS 2: each boundary group has a distinct stable handle; folding never changes model or module geometry
+PASS 3: three local drivers in a narrow subsystem all fit inside the frame and outside boundary racks
+PASS 4: forward and feedback connections avoid an intervening block and preserve arrow direction
+PASS 5: SVG uses routed geometry, escapes user strings, discloses partial/folded state and leaves model untouched
+PASS 6: short previews retain inference qualifiers and full exported evidence follows the behavior
+PASS 7: north/south handles remain stable across selection, and every route terminates at its declared handle
+PASS 8: a grouped port never implies a shared physical source; exact sources remain distinguishable
+PASS 9: status returns approach the facing controller side from left and right, independently of record order
+PASS 10: port names are exact model interfaces inside their blocks; detail export never moves nodes or routes
+PASS 11: long unrelated wires separate into readable lanes even when their endpoint pins are close
+完成 11 组架构阅读与框图检查。
+
+> rtl-architect@1.9.0 check:reading-skill
+> python3 scripts/check-reading-skill.py
+
+PASS reading skill: allowed fields, ID-based ordering, foreign cwd, read-only byte hashes
+PASS reading skill: hierarchy, IDs, parameters, arrays, wiring, local drivers, clock/reset protected
+PASS reading skill: physical port fields and timing/behaviour contract protected
+PASS reading skill: partial, source digest, evidence and unresolved findings cannot disappear
+PASS reading skill: legacy summary addition allowed; requirements, decisions and questions preserved
+PASS reading skill: duplicate keys/IDs, malformed and wrapped inputs rejected
+6 reading skill checks passed.
+
+> rtl-architect@1.9.0 check:delivery
+> node --import tsx scripts/check-delivery.ts
+
+PASS 1: freshness reports matching, changed, missing, external symlink, no evidence without mutating the model
+PASS 2: CLI remains offline, fails on stale/unknown evidence and refuses unrelated flags
+PASS 3: reading constraints preserve semantic hash, order the main path, and reject stale or duplicate assignments
+PASS 4: bundle is self-contained, artifact hashes match, approval is independent of verification, sources remain untouched
+PASS 5: bundle refuses protected directories, symlink aliases and existing output; escaped HTML cannot inject markup
+PASS 6: geometry failures retain a diagnostic package and exit nonzero; every connection keeps exact endpoint mapping
+PASS 7: routing is stable under connection record reordering; no diagram operation mutates the model
+完成 7 组证据、交付与布局检查。
+
+> rtl-architect@1.9.0 check:auto-reading
+> node --import tsx scripts/check-auto-reading.ts
+
+PASS 1: pipeline: geometry, labels, exact connections, deterministic layout and stable selection (0 crossings)
+PASS 2: fork: geometry, labels, exact connections, deterministic layout and stable selection (0 crossings)
+PASS 3: controlled: geometry, labels, exact connections, deterministic layout and stable selection (2 crossings)
+PASS 4: ring: geometry, labels, exact connections, deterministic layout and stable selection (0 crossings)
+PASS 5: mixed: geometry, labels, exact connections, deterministic layout and stable selection (5 crossings)
+PASS 6: unknown: geometry, labels, exact connections, deterministic layout and stable selection (6 crossings)
+PASS 7: shared: geometry, labels, exact connections, deterministic layout and stable selection (8 crossings)
+PASS 8: inline: geometry, labels, exact connections, deterministic layout and stable selection (0 crossings)
+PASS 9: nested: geometry, labels, exact connections, deterministic layout and stable selection (2 crossings)
+完成 9 组默认阅读布局检查。
+
+> rtl-architect@1.9.0 check:milestone
+> node --import tsx scripts/check-milestone.ts
+
+PASS 1: durable questions and agent replies leave architecture untouched; concurrent writes cannot overwrite
+PASS 2: checkpoint, candidate-linked replies and user resolution survive a new repository instance
+PASS 3: budget exposes fractional service bounds, absent ports, buffer insufficiency and overflow
+PASS 4: review retains a disconnected module but invalidates changed modules and parents; legacy remains conservative
+PASS 5: verification records input-bound isolated runs, checks JUnit and rejects stale results
+PASS 6: zero/skipped test reports, timeout, report traversal and live input mutation never pass
+PASS 7: real Yosys elaboration imports RTL topology and preserves unknown behavior with incremental source mapping
+PASS 8: dependency fingerprints cover neighbor contracts, global clocks and ancestor parameters without unrelated churn
+PASS 9: Yosys constants and normalized slices preserve bits while ambiguous and bidirectional drivers stay gaps
+完成 9 组 1.0 共同设计与执行检查。
+
+> rtl-architect@1.9.0 check:open
+> node --import tsx scripts/check-open.ts
+
+PASS 1: same-version stale sources require explicit workspace restart; a second workspace is untouched
+PASS 2: missing web build is rebuilt, identity is current and --json returns a usable URL without browser launch
+PASS 3: failed rebuild reports a saved build log, never a stale success link
+完成 3 组统一打开与升级恢复检查。
+
+> rtl-architect@1.9.0 check:feedback
+> node --import tsx scripts/check-feedback.ts
+
+PASS 1: default overview retains register boundaries; opt-out and internal detail are explicit
+PASS 2: selection changes styles only and preserves exact route/port objects and model identity
+PASS 3: default dependency trace stops at state, explicit crossing is bounded and deduplicated
+PASS 4: local positions and stage regions are presentation only; online and SVG share geometry
+  dense routing 113.7 ms, 60 edges
+PASS 5: dense small graphs have bounded search without obstacle penetration
+PASS 6: dependency bundles preserve categories, unknown ports and distinct bit ranges without claiming a physical bus
+PASS 7: parallel state and compute nodes with different widths remain separate in one topology layer
+PASS 8: stage constraints preserve ordered regions, every RTL instance and exact dependency members
+完成 8 组真实反馈对应检查。
+
+> rtl-architect@1.9.0 check:assurance
+> node --import tsx scripts/check-assurance.ts
+
+{
+  "groups": 25,
+  "passed": true,
+  "scenario": "real Verilator monitors + fault injection + current Yosys structure + DEPTH 4→8 + freshness + compact context",
+  "workspace": "/tmp/rtlarch-assurance-ZxR9Uv"
+}
+
+
+> rtl-architect@1.9.0 check:hardware-view
+> node --import tsx scripts/check-hardware-view.ts
+
+PASS 1: native RV preserves forward data/valid and backward ready without claiming verified RTL
+PASS 2: conflicting categories remain visible and never silently choose clock/config folding
+PASS 3: register input sets stay uncertain; explicit mux selector differs from operands
+PASS 4: fork/architecture: all connections traceable, stable model and exact raw anchors
+PASS 5: fork/microarchitecture: all connections traceable, stable model and exact raw anchors
+PASS 6: fork/signals: all connections traceable, stable model and exact raw anchors
+PASS 7: shared/architecture: all connections traceable, stable model and exact raw anchors
+PASS 8: shared/microarchitecture: all connections traceable, stable model and exact raw anchors
+PASS 9: shared/signals: all connections traceable, stable model and exact raw anchors
+PASS 10: inline/architecture: all connections traceable, stable model and exact raw anchors
+PASS 11: inline/microarchitecture: all connections traceable, stable model and exact raw anchors
+PASS 12: inline/signals: all connections traceable, stable model and exact raw anchors
+PASS 13: unknown/architecture: all connections traceable, stable model and exact raw anchors
+PASS 14: unknown/microarchitecture: all connections traceable, stable model and exact raw anchors
+PASS 15: unknown/signals: all connections traceable, stable model and exact raw anchors
+PASS 16: semantic and connection audits do not borrow geometric PASS
+PASS 17: unknown-role controller remains in main topology
+PASS 18: spacing feedback is bounded, preserves relative order and skips explicit reading plans
+完成 18 组硬件语义视图检查。
+
+> rtl-architect@1.9.0 check:state-updates
+> node --import tsx scripts/check-state-updates.ts
+
+PASS 1: optional state rules preserve old fixture hash and keep source model partial
+PASS 2: invalid condition/value widths, stale input sets, branch IDs and async reset fail
+PASS 3: data/control questions select distinct dependencies and stop at upstream state
+PASS 4: missing, duplicate and shadowed mappings fail instead of guessing pins
+GOOD_RUN run_1791955514103_9c02881f877d48d1be657733da78b074
+PASS 5: actual RTL exercises reset, update, hold, overflow and current assurance
+PASS 6: wrong_data: mutated RTL is rejected and cannot inherit earlier PASS
+PASS 7: wrong_hold: mutated RTL is rejected and cannot inherit earlier PASS
+PASS 8: wrong_reset: mutated RTL is rejected and cannot inherit earlier PASS
+PASS 9: unexercised update/hold cannot count as PASS
+PASS 10: edited checker and changed state semantics invalidate generated artifacts
+PASS 11: two real competing conditions honor first-match priority; reversed RTL fails
+{
+  "groups": 11,
+  "passed": true,
+  "scope": "Declared synchronous whole-vector updates, explicit mapping, real Verilator and mutations; no arbitrary RTL extraction or formal proof."
+}
+
+
+> rtl-architect@1.9.0 check:reliability
+> node --import tsx scripts/check-reliability.ts
+
+PASS 1: free-running register passes; constant-false branch and hold are explicitly unreachable
+PASS 2: wrong increment still fails on an unconditional-update register
+PASS 3: unproved hold cannot be waived; insufficient stimulus is not RTL failure
+PASS 4: another failed check cannot be downgraded to a coverage gap in either manifest order
+PASS 5: priority pair order, identity and uniqueness are validated
+PASS 6: each branch exercised alone does not cover competition
+PASS 7: simultaneous conditions with identical writes do not cover distinguishable priority
+PASS 8: simultaneous distinct writes cover priority; reversed RTL is detected
+PASS 9: x+3 observation can pass, but cannot certify x+5 requirement or unlinked timing
+PASS 10: frozen approved x+5 intent rejects x+3 implementation without changing authority
+PASS 11: correct x+5 passes with requirement, checker, approval and run trace
+PASS 12: approval after a run cannot upgrade historical draft evidence
+PASS 13: requirement edits invalidate approval, checker and previous evidence
+{
+  "groups": 13,
+  "passed": true,
+  "scope": "Finite simulation, literal-only reachability, explicit priority competition, requirement/basis trace. Local approvals only; no natural-language or arbitrary RTL equivalence."
+}
+
+
+> rtl-architect@1.9.0 check:state-observation
+> node --import tsx scripts/check-state-observation.ts
+
+PASS 1: Boolean arithmetic independently exhausts four-bit unsigned/signed inputs and verifies witnesses
+PASS 2: actual Yosys proc extracts both elastic-stage registers and matches existing rules
+PASS 3: observation without mappings discovers states without claiming design conformance
+PASS 4: wrong arithmetic creates an explicit old-state/input witness, leaving authority unchanged
+PASS 5: priority, hold and reset mutations are detected without stimulus or source-text matching
+PASS 6: equivalent Boolean rewrites match even though AST shapes differ
+PASS 7: simple case decode with mutually exclusive PMUX choices matches ordered model branches
+PASS 8: all unsigned comparison operators preserve one-bit width in model, monitor and RTL comparison
+PASS 9: unsized literal extension, truncating arithmetic and signed RTL comparison stay explicit
+PASS 10: asynchronous reset, multiplication, X data and different clock domains remain UNKNOWN
+PASS 11: wrong edge is a difference; alias mappings, width mistakes, overlapping PMUX and malformed ports cannot pass
+PASS 12: partial input closure and unknown tool version cannot establish a match
+PASS 13: latest mismatch is not hidden; model and artifact edits invalidate saved comparisons
+PASS 14: unknown state types stay visible in inventory; observing never auto-approves
+PASS 15: approval after comparison cannot upgrade a saved draft basis; a new comparison can bind it
+{
+  "groups": 15,
+  "passed": true,
+  "scope": "Actual Yosys proc; bounded Boolean single-step functions, explicit witnesses and UNKNOWN boundaries; no sequential reachability or full RTL equivalence."
+}
+
+
+> rtl-architect@1.9.0 check:layout-constraints
+> node --import tsx scripts/check-layout-constraints.ts
+
+PASS 1: pipeline: real RTL elaboration, net correspondence, three views and explicit reading constraints
+PASS 2: fork_join: real RTL elaboration, net correspondence, three views and explicit reading constraints
+PASS 3: arbiter: real RTL elaboration, net correspondence, three views and explicit reading constraints
+PASS 4: shared_ram: real RTL elaboration, net correspondence, three views and explicit reading constraints
+PASS 5: accumulator: real RTL elaboration, net correspondence, three views and explicit reading constraints
+PASS 6: fifo: real RTL elaboration, net correspondence, three views and explicit reading constraints
+PASS 7: conflicting / fabricated reading constraints are rejected, including saved positions
+PASS 8: manual displacement reports unmet constraints without moving nodes or changing semantics
+PASS 9: offline quality command: local-only scope arranged, stale layout / invalid scope rejected, no source writes
+完成 9 组布局约束检查。
+
+> rtl-architect@1.9.0 check:expression-types
+> node --import tsx scripts/check-expression-types.ts
+
+PASS 1: legacy model hashes are unchanged; explicit types preserve dependencies and reject ambiguous casts
+PASS 2: bounded shifter exhausts unsigned/signed four-bit inputs and wide shift amounts against integers
+{
+  "reading": {
+    "crossings": 46,
+    "hiddenLabels": 5,
+    "humanReview": "not_run"
+  }
+}
+
+PASS 3: native parallel reading layout keeps all five states and connections without geometric collisions
+PASS 4: real Yosys signed scaler matches all five explicit state rules without upgrading as-built evidence
+PASS 5: actual Verilator exhausts 4096 signed-scaler input pairs plus reset/hold with generated monitors
+PASS 6: logical_instead_of_arithmetic: independent RTL mutations produce witnesses and fail the simulation monitor
+PASS 7: unsigned_comparison: independent RTL mutations produce witnesses and fail the simulation monitor
+EXPRESSION_CASES 25 × 4096 input pairs
+PASS 8: 25 HDL expression cases match BDD functions and generated monitors across width/sign boundaries
+{
+  "groups": 8,
+  "passed": true,
+  "domain": "finite two-state expressions; no X/Z, reachability or full SystemVerilog type inference"
+}
+

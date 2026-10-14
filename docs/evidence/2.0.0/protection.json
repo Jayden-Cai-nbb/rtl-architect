@@ -1,0 +1,23 @@
+{
+  "protectedFiles": 6,
+  "allUnchanged": true,
+  "genericSync": {
+    "src": {
+      "identical": 105,
+      "differences": []
+    },
+    "scripts": {
+      "identical": 31,
+      "differences": []
+    },
+    ".agents": {
+      "identical": 20,
+      "differences": []
+    },
+    "examples": {
+      "identical": 58,
+      "differences": []
+    }
+  },
+  "preservedPublicReference": ".agents/skills/rtl-architect/references/timing-example.md"
+}

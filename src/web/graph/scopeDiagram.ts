@@ -1,7 +1,7 @@
 import {stateDescription} from '../../core/stateUpdates';
 import {hardwareView,viewNames,type ViewMode} from '../../core/hardwareView';
 import {dependencyRelations} from './dependencies';
-import {validateReadingRefs} from './readingRefs';
+import {validateReadingRefs,readingNodes} from './readingRefs';
 import {MarkerType,type Edge} from '@xyflow/react';
 import type {Model,Endpoint,ScopeLayout} from '../../core/schema';
 import {childrenOf,resolveEndpoint} from '../../core/endpoints';
@@ -28,7 +28,7 @@ export function scopeDiagram(model:Model,scope:string,options:DiagramOptions={},
  const children=childrenOf(model,scope),focused=new Set(inspection.moduleIds),focus=!!options.inspection;
  const localSignals=model.localSignals?.filter(n=>n.scope===scope)??[];
  const dependencies=dependencyRelations(model,scope,options.detail==='signals');
- const readingRefs=new Set(options.reading?[...options.reading.mainPath,...options.reading.control,...options.reading.adjacent.flatMap(a=>[a.node,a.anchor]),...(options.reading.stages??[]).flatMap(s=>s.nodes)]:[]);
+ const readingRefs=new Set(readingNodes(options.reading));
  const bridgeLocals=new Set(inspection.stored.filter(l=>l.from.local&&!l.to.local&&!linkGroup(model,l).auxiliary).map(l=>l.from.interfaceId));
  const visibleLocals=localSignals.filter(n=>options.showLocals||(options.showLocals!==false&&bridgeLocals.has(n.id)&&n.driver.kind==='comb'&&n.driver.value.kind!=='constant')||(options.showState!==false&&n.driver.kind==='register')||readingRefs.has(`local:${scope}:${n.id}`)||inspection.localIds.includes(n.id));
  const groupRows=(role:'consumer'|'producer')=>{
@@ -40,9 +40,11 @@ export function scopeDiagram(model:Model,scope:string,options:DiagramOptions={},
  };
  const racks=(['consumer','producer'] as const).map(role=>({role,groups:groupRows(role)}));
  // The input/output channels need room for their names too, independent of module spacing.
- const boundaryGap=Math.max(160,...inspection.stored.filter(l=>[l.from,l.to].some(e=>e.moduleId===scope&&!e.local)).map(l=>[...linkGroup(model,l).label].reduce((w,c)=>w+(c.charCodeAt(0)>255?16:8.5),0)+64));
+ const boundaryLabels=[...inspection.stored.filter(l=>[l.from,l.to].some(e=>e.moduleId===scope&&!e.local)).map(l=>linkGroup(model,l).label),...dependencies.filter(d=>d.from.moduleId===scope&&!d.from.local).map(d=>d.group.label)];
+ const boundaryGap=Math.max(160,...boundaryLabels.map(label=>[...label].reduce((w,c)=>w+(c.charCodeAt(0)>255?16:8.5),0)+96));
  const frameMargin=174+boundaryGap;
  const nodeId=(e:Endpoint)=>e.local?`local:${scope}:${e.interfaceId}`:e.moduleId===scope?`rack:${scope}:${owner.interfaces.find(p=>p.id===e.interfaceId)?.role}`:e.moduleId;
+ const declaredFeedback=(from:Endpoint,to:Endpoint)=>options.reading?.feedback?.find(f=>f.from===nodeId(from)&&f.to===nodeId(to));
  // Port anchors come from all stored links, so selection or folding never moves them.
  const anchorGroups=new Map<string,{in:Set<string>;out:Set<string>}>();
  for(const link of inspection.stored){
@@ -104,7 +106,7 @@ export function scopeDiagram(model:Model,scope:string,options:DiagramOptions={},
  for(const link of inspection.stored){
   const relation=relationshipById.get(link.id)!;
   const group=linkGroup(model,link),selected=focus&&selectedIds.has(link.id);
-  if(group.auxiliary&&!options.showAuxiliary&&!selected){auxiliaryCount++;omissions.push({connectionId:link.id,reason:'显式时钟/配置折叠'});continue;}
+  if(group.auxiliary&&!options.showAuxiliary&&!selected&&!declaredFeedback(link.from,link.to)){auxiliaryCount++;omissions.push({connectionId:link.id,reason:'显式时钟/配置折叠'});continue;}
   const from=nodeId(link.from),to=nodeId(link.to);
   if(!visibleIds.has(from)||!visibleIds.has(to)){foldedLocalCount++;omissions.push({connectionId:link.id,reason:'内部节点未展开'});continue;}
   const fromGroup=linkAnchorGroup(model,scope,link.from,link,mode==='signals');
@@ -121,7 +123,7 @@ export function scopeDiagram(model:Model,scope:string,options:DiagramOptions={},
   const {from: endpoint,localId,group,endpoints}=dependency;
   const source=nodeId(endpoint),target=`local:${scope}:${localId}`;
   if(!visibleIds.has(target))continue;
-  if((group.auxiliary&&!options.showAuxiliary)||!visibleIds.has(source)){foldedDependencyCount+=endpoints.length;continue;}
+  if((group.auxiliary&&!options.showAuxiliary&&!declaredFeedback(dependency.from,dependency.to))||!visibleIds.has(source)){foldedDependencyCount+=endpoints.length;continue;}
   const color=diagramColors[group.category]??diagramColors.other;
   const selected=!focus||inspection.dependencies.some(d=>d.localId===localId&&endpoints.some(e=>endpointLabel(d.endpoint)===endpointLabel(e)));
   edges.push({id:dependency.id,source,target,sourceHandle:`out:${dependency.fromGroup}`,targetHandle:`in:${dependency.toGroup}`,type:'relationship',label:group.label,reconnectable:false,
@@ -142,14 +144,35 @@ export function scopeDiagram(model:Model,scope:string,options:DiagramOptions={},
   edge.data={...edge.data,feedback,laneOffset:(index-(siblings.length-1)/2)*30,routeY:feedback?minY-44-feedbackLane++*30:undefined};
  });
  for(const edge of edges){
+  const feedback=options.reading?.feedback?.find(f=>f.from===edge.source&&f.to===edge.target);
+  if(feedback)edge.data={...edge.data,readingFeedback:feedback.side};
   const sources=inspection.stored.filter(l=>(edge.data?.connectionIds as string[]??[]).includes(l.id)).map(l=>[l.from.moduleId,l.from.interfaceId,l.from.index??null,l.from.local??false,l.from.slice??null,l.from.sliceMapping??null]);
   if(sources.length&&edge.data?.semanticKind==='wire')edge.data={...edge.data,netKey:JSON.stringify([...new Set(sources.map(s=>JSON.stringify(s)))].sort())};
  }
- orientPorts(nodes,model,scope,inspection.stored,nodeId,dependencies,mode==='signals');
- const contentRight=Math.max(maxX,...nodes.filter(n=>!n.data.boundary).map(n=>n.position.x+n.data.geometry.width));
+ orientPorts(nodes,model,scope,inspection.stored,nodeId,dependencies,mode==='signals',options.reading?.feedback,options.reading?.shared);
+ // Spread boundary groups toward their connected ports; keep each declared group intact.
+ // All stored relations participate so selection and auxiliary folding cannot move pins.
+ const boundaryRelations=[...inspection.stored.map(link=>({from:link.from,to:link.to,fromGroup:linkAnchorGroup(model,scope,link.from,link,mode==='signals'),toGroup:linkAnchorGroup(model,scope,link.to,link,mode==='signals')})),...dependencies];
+ for(const rack of nodes.filter(n=>n.data.kind==='rack')){
+  const groups=rack.data.groups as {id:string;label:string;count:number}[];
+  const rows=groups.map((group,index)=>{
+   const ys=boundaryRelations.flatMap(link=>{
+    const source=nodeId(link.from)===rack.id&&link.fromGroup===group.id,target=nodeId(link.to)===rack.id&&link.toGroup===group.id;
+    if(!source&&!target)return [];
+    const other=nodes.find(n=>n.id===nodeId(source?link.to:link.from));
+    const port=other?.data.geometry.ports.find(p=>p.id===`${source?'in':'out'}:${source?link.toGroup:link.fromGroup}`);
+    return other&&port?[other.position.y+port.y-rack.position.y]:[];
+   });
+   return {group,desired:ys.length?ys.reduce((a,b)=>a+b,0)/ys.length:66+index*44};
+  }).sort((a,b)=>a.desired-b.desired||a.group.id.localeCompare(b.group.id));
+  let previous=22;
+  for(const row of rows){const y=Math.max(previous+44,row.desired);previous=y;const port=rack.data.geometry.ports.find(p=>p.id.endsWith(':'+row.group.id));if(port)port.y=y;}
+  rack.data.groups=rows.map(r=>r.group);rack.height=rack.data.geometry.height=previous+34;
+ }
+ const contentRight=Math.max(minX+width,...nodes.filter(n=>!n.data.boundary).map(n=>n.position.x+n.data.geometry.width));
  const outputRack=nodes.find(n=>n.id===`rack:${scope}:producer`);if(outputRack)outputRack.position.x=contentRight+boundaryGap;
- frame.width=Math.max(frame.width,contentRight-allMinX+frameMargin*2);nodes[0].width=frame.width;nodes[0].data.geometry.width=frame.width;
- const graph={omissions,mode,modeLabel:viewNames[mode],semantics,nodes,edges,inspection,frame,auxiliaryCount,foldedLocalCount,foldedDependencyCount,localCount:localSignals.length,stateCount:localSignals.filter(n=>n.driver.kind==='register').length};
+ frame.width=contentRight-allMinX+frameMargin*2;nodes[0].width=frame.width;nodes[0].data.geometry.width=frame.width;
+ const graph={reading:options.reading,omissions,mode,modeLabel:viewNames[mode],semantics,nodes,edges,inspection,frame,auxiliaryCount,foldedLocalCount,foldedDependencyCount,localCount:localSignals.length,stateCount:localSignals.filter(n=>n.driver.kind==='register').length};
  for(const stage of options.reading?.stages??[]){
   const members=nodes.filter(n=>stage.nodes.includes(n.id));if(!members.length)continue;
   const left=Math.min(...members.map(n=>n.position.x))-24,top=Math.min(...members.map(n=>n.position.y))-60;

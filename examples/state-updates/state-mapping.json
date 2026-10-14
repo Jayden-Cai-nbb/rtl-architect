@@ -1,0 +1,89 @@
+{
+  "schemaVersion": 1,
+  "runId": "run_0_00000000000000000000000000000000",
+  "netlist": "state.json",
+  "top": "add_const",
+  "instancePath": [],
+  "mappings": [
+    {
+      "moduleId": "top",
+      "localSignalId": "out_data",
+      "state": "out_data",
+      "clock": "clk",
+      "signals": [
+        {
+          "endpoint": {
+            "moduleId": "top",
+            "interfaceId": "rst_n"
+          },
+          "pin": "rst_n"
+        },
+        {
+          "endpoint": {
+            "moduleId": "top",
+            "interfaceId": "s_valid"
+          },
+          "pin": "s_valid"
+        },
+        {
+          "endpoint": {
+            "moduleId": "top",
+            "interfaceId": "s_data"
+          },
+          "pin": "s_data"
+        },
+        {
+          "endpoint": {
+            "moduleId": "top",
+            "interfaceId": "m_ready"
+          },
+          "pin": "m_ready"
+        },
+        {
+          "endpoint": {
+            "moduleId": "top",
+            "interfaceId": "out_valid",
+            "local": true
+          },
+          "pin": "out_valid"
+        }
+      ]
+    },
+    {
+      "moduleId": "top",
+      "localSignalId": "out_valid",
+      "state": "out_valid",
+      "clock": "clk",
+      "signals": [
+        {
+          "endpoint": {
+            "moduleId": "top",
+            "interfaceId": "rst_n"
+          },
+          "pin": "rst_n"
+        },
+        {
+          "endpoint": {
+            "moduleId": "top",
+            "interfaceId": "s_valid"
+          },
+          "pin": "s_valid"
+        },
+        {
+          "endpoint": {
+            "moduleId": "top",
+            "interfaceId": "s_data"
+          },
+          "pin": "s_data"
+        },
+        {
+          "endpoint": {
+            "moduleId": "top",
+            "interfaceId": "m_ready"
+          },
+          "pin": "m_ready"
+        }
+      ]
+    }
+  ]
+}

@@ -14,11 +14,11 @@
 
 下面是合成测试模型的实际浏览器截图，未设置手工坐标或 reading，不含真实项目材料。
 
-![控制、主通路与局部存储自动布局](evidence/0.10.0/auto-reading/controlled-overview.png)
+![历史验证摘要](evidence/0.10.0/README.md)
 
-![放大显示真实接口，并按模块追踪连接](evidence/0.10.0/auto-reading/controlled-detail.png)
+![历史验证摘要](evidence/0.10.0/README.md)
 
-![分叉与汇合保留并行关系](evidence/0.10.0/auto-reading/fork-overview.png)
+![历史验证摘要](evidence/0.10.0/README.md)
 
 运行 `npm run check:auto-reading -- /tmp/rtlarch-reading-preview` 可生成九类样稿的独立 HTML；输出目录下各子目录的 index.html 可直接打开。再次生成使用新目录，已有成果不会被覆盖。
 

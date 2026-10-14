@@ -9,7 +9,7 @@ import { validateModel } from '../core/engine';
 import { scopeDiagram, type Positions } from '../web/graph/scopeDiagram';
 import { diagramSvg } from '../web/graph/exportSvg';
 import { diagramQuality } from '../web/graph/quality';
-import { arrangeScope } from '../web/graph/readingLayout';
+import { prepareDiagram } from '../web/graph/prepareDiagram';
 import { evidenceFreshness } from './freshness';
 import { toolRoot, toolVersion, ToolError } from './environment';
 
@@ -36,11 +36,11 @@ export async function exportBundle(workspace: string, destination: string, model
   const diagrams = [], graphs:ReturnType<typeof scopeDiagram>[]=[];
   const resolvedLayout: Record<string, { positions: Positions; reading?: Layout['scopes'][string]['reading'] }> = {};
   for (const owner of scopes) {
-    const saved = layout?.scopes[owner.id], children = model.modules.filter(m => m.parent === owner.id);
+    const saved = layout?.scopes[owner.id];
     if (saved?.reading && saved.reading.modelHash !== hash) throw new ToolError('LAYOUT_OUTDATED', `层级 ${owner.id} 的阅读约束对应旧模型`);
-    const positions = saved && children.every(m => saved.positions[m.id]) ? saved.positions : await arrangeScope(model, owner.id, hash, saved?.reading);
+    const {graph,positions}=await prepareDiagram(model,owner.id,hash,saved);
     resolvedLayout[owner.id] = { positions, ...(saved?.reading ? { reading: saved.reading } : {}) };
-    const graph = scopeDiagram(model, owner.id, { positions,reading:saved?.reading }), quality = diagramQuality(graph);
+    const quality = diagramQuality(graph);
     const file = `${owner.id}.svg`, qualityFile = `${owner.id}.quality.json`;
     files[file] = diagramSvg(model, owner.id, { positions, reading:saved?.reading, showPortNames:true }, hash,graph);
     files[qualityFile] = json({ modelHash: hash, scope: owner.id, layoutHash: hashValue(resolvedLayout[owner.id]), ...quality });
@@ -80,7 +80,7 @@ ${issues.length ? table(['对象','检查','影响'],issues.map(i=>[i.target,i.m
 <h2>为什么这样设计</h2>${decisions.length ? decisions.map(d=>`<details><summary>${html(d.text)}</summary><p>${html(d.rationale || '未记录理由')}</p><p class="muted">${html(d.moduleIds.join(', '))}</p></details>`).join('') : '<p>尚未记录设计取舍。</p>'}
 <h2>目标与验收办法</h2>${table(['目标','验收条件','负责模块'],requirements.map(r=>[r.text,r.acceptance,r.moduleIds.join(', ')]))}
 <h2>已有验证声明</h2><p>保留原始时态与条件。本次只生成交付快照，没有重新运行或独立核验以下验证。</p>${table(['阶段','声明状态','目标 / 时间','范围与依据'],declared.map(v=>[v.stage,v.status,[v.target,v.executedAt].filter(Boolean).join(' / '),v.detail]))}
-${diagrams.map(d=>`<section id="scope-${d.scope}"><h2>${html(d.name)}</h2><p>${html(model.modules.find(m=>m.id===d.scope)?.contract.responsibility)}</p><p><a href="${d.file}">完整矢量图</a> · <a href="${d.qualityFile}">几何与标签检查</a>。几何检查${d.quality.status === 'passed' ? '通过' : '需修正'}；未排下线名 ${d.quality.hiddenLabels.length}。连接对应${d.quality.structuralFidelity.status==='passed'?'完整':'需修正'}；语义${d.quality.semanticClarity.status==='needs_review'?'待核对':'未发现冲突'}；阅读${d.quality.geometricReadability.status==='clear'?'未发现拥挤':'需留意'}。视觉可读性仍需实际审阅。</p>${table(['模块','职责'],model.modules.filter(m=>m.parent===d.scope).map(m=>[`${m.name} (${m.id})`,m.contract.responsibility]))}<details><summary>完整连接索引（含折叠项）</summary>${table(['ID','来源','去向'],model.connections.filter(l=>l.scope===d.scope).map(l=>[l.id,endpoint(l.from),endpoint(l.to)]))}</details></section>`).join('')}
+${diagrams.map(d=>`<section id="scope-${d.scope}"><h2>${html(d.name)}</h2><p>${html(model.modules.find(m=>m.id===d.scope)?.contract.responsibility)}</p><p><a href="${d.file}">完整矢量图</a> · <a href="${d.qualityFile}">几何与标签检查</a>。几何检查${d.quality.status === 'passed' ? '通过' : '需修正'}；未排下线名 ${d.quality.hiddenLabels.length}。连接对应${d.quality.structuralFidelity.status==='passed'?'完整':'需修正'}；语义${d.quality.semanticClarity.status==='needs_review'?'待核对':'未发现冲突'}；阅读${d.quality.geometricReadability.status==='clear'?'未发现拥挤':'需留意'}。阅读约束${d.quality.readingConstraints.status==='not_requested'?'未指定':d.quality.readingConstraints.status==='satisfied'?'已满足':'需调整'}。视觉可读性仍需实际审阅。</p>${d.quality.readingConstraints.issues.map(i=>`<p>${html(i.reason)} (${html(i.targets.join(' → '))})</p>`).join('')}${table(['模块','职责'],model.modules.filter(m=>m.parent===d.scope).map(m=>[`${m.name} (${m.id})`,m.contract.responsibility]))}<details><summary>完整连接索引（含折叠项）</summary>${table(['ID','来源','去向'],model.connections.filter(l=>l.scope===d.scope).map(l=>[l.id,endpoint(l.from),endpoint(l.to)]))}</details></section>`).join('')}
 <footer><p>完整模型版本：<code>${hash}</code></p><p>离线快照不会自动追随项目变化。模型/Spec/合同来自同一输入；图形和批准不构成 RTL 验证。</p></footer></main></html>`;
   files['README.md'] = `# ${model.design.name}\n\n打开 [index.html](index.html) 查看用途、取舍、图和完整连接索引。\n\n- 版本：${hash}\n- 架构：${approvalLabel}\n- 来源：${evidenceLabel}\n- 实现验证：本次未核验\n- 器件验收：本次未核验\n\n${diagrams.map(d=>`- [${d.name}](${d.file})：几何检查 ${d.quality.status}`).join('\n')}\n\n[Spec](spec.md) · [合同副本](contract.json) · [证据](evidence.json) · [产物摘要](manifest.json)\n\n副本不代替 handoff；历史验证声明见 status.json。\n`;
   const manifest = { schemaVersion: 1, toolVersion, modelHash: hash, createdAt: new Date().toISOString(), source: snapshot ? 'workspace' : 'candidate',
@@ -92,5 +92,5 @@ ${diagrams.map(d=>`<section id="scope-${d.scope}"><h2>${html(d.name)}</h2><p>${h
   await mkdir(output);
   for (const [file, content] of Object.entries(files)) await writeFile(join(output,file),content,{flag:'wx'});
   return { directory: output, entry: join(output,'index.html'), modelHash: hash, reviewStatus: states.architecture.status, evidenceStatus: freshness.status,
-    geometryPassed: diagrams.every(d=>d.quality.status==='passed'), diagrams: manifest.diagrams, readOnlySource: true };
+    geometryPassed: diagrams.every(d=>d.quality.status==='passed'&&d.quality.structuralFidelity.status==='passed'&&d.quality.readingConstraints.status!=='needs_attention'), diagrams: manifest.diagrams, readOnlySource: true };
 }

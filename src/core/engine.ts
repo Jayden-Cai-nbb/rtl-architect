@@ -50,6 +50,12 @@ export function validateModel(input: unknown): Issue[] {
       if(obligation.kind==='state_transition'){
         const local=model.localSignals?.find(l=>l.id===obligation.localSignalId&&l.scope===m.id);
         if(!local||local.driver.kind!=='register'||!local.driver.update)add('OBLIGATION_STATE',target,'状态更新义务须引用本作用域具有明确更新规则的寄存状态');
+        const branches=local?.driver.kind==='register'?local.driver.update?.branches:undefined,pairs=new Set<string>();
+        for(const p of obligation.priorityPairs??[]){
+          const hi=branches?.findIndex(b=>b.id===p.higher)??-1,lo=branches?.findIndex(b=>b.id===p.lower)??-1,key=p.higher+'/'+p.lower;
+          if(hi<0||lo<=hi||pairs.has(key))add('OBLIGATION_PRIORITY',target,'优先级覆盖需引用按声明顺序排列的两个不同分支，且不能重复');
+          pairs.add(key);
+        }
         if(!m.clock)add('OBLIGATION_DOMAIN',target,'状态更新义务需要明确时钟');
         continue;
       }

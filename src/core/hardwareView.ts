@@ -29,7 +29,7 @@ export type DependencyRole='select'|'operand'|'mixed'|'state_unknown'|'state_dat
 export function dependencyRoles(local:NonNullable<Model['localSignals']>[number]):Map<string,DependencyRole>{
  const roles=new Map<string,DependencyRole>();
  const add=(e:Endpoint,role:DependencyRole)=>{const key=endpointLabel(e),old=roles.get(key);roles.set(key,old&&old!==role?(old.startsWith('state_')?'state_mixed':'mixed'):role)};
- const visit=(v:SignalValue,role:DependencyRole)=>{if(v.kind==='endpoint')add(v.endpoint,role);else if(v.kind==='concat')v.parts.forEach(p=>visit(p,role));else if(v.kind==='operator')v.operands.forEach((p,i)=>visit(p,role==='select'||v.operator==='mux'&&i===0?'select':role));};
+ const visit=(v:SignalValue,role:DependencyRole)=>{if(v.kind==='endpoint')add(v.endpoint,role);else if(v.kind==='cast')visit(v.value,role);else if(v.kind==='concat')v.parts.forEach(p=>visit(p,role));else if(v.kind==='operator')v.operands.forEach((p,i)=>visit(p,role==='select'||v.operator==='mux'&&i===0?'select':role));};
  if(local.driver.kind==='register'){
   const update=local.driver.update;
   if(!update)local.driver.inputs.forEach(e=>add(e,'state_unknown'));

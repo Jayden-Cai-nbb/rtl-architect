@@ -25,3 +25,22 @@ examples/hardware-views/architecture/*
 !examples/state-updates/architecture/
 examples/state-updates/architecture/*
 !examples/state-updates/architecture/model.json
+
+ci-evidence/
+
+# Generic 2.0 fixtures are published; user workspace artifacts stay ignored.
+!examples/typed-expressions/architecture/
+examples/typed-expressions/architecture/*
+!examples/typed-expressions/architecture/model.json
+!examples/typed-expressions/architecture/layout.json
+!examples/external-axis/architecture/
+examples/external-axis/architecture/*
+!examples/external-axis/architecture/model.json
+
+# Local simulation, coverage and editor artifacts.
+obj_dir/
+coverage/
+*.vcd
+*.fst
+*.tmp
+.DS_Store

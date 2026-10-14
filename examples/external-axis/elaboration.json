@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "name": "固定上游双实例 proc 展开",
+  "stage": "elaboration",
+  "moduleIds": [
+    "top",
+    "stage0",
+    "stage1"
+  ],
+  "inputs": [
+    "vendor/axis_register.v",
+    "rtl/axis_pair.sv",
+    "elaboration.json",
+    "upstream.json"
+  ],
+  "inputClosure": {
+    "status": "declared_complete",
+    "note": "Fixed vendored file and wrapper; no includes, external generators or macros. All parameters in wrapper."
+  },
+  "timeoutMs": 30000,
+  "commands": [
+    {
+      "program": "yosys",
+      "versionArgs": [
+        "-V"
+      ],
+      "args": [
+        "-Q",
+        "-T",
+        "-p",
+        "read_verilog -sv vendor/axis_register.v rtl/axis_pair.sv; hierarchy -check -top axis_pair; proc; opt_muxtree; check -assert; write_json {runDir}/state.json"
+      ]
+    }
+  ],
+  "checks": [
+    {
+      "kind": "artifact",
+      "file": "state.json"
+    }
+  ]
+}
