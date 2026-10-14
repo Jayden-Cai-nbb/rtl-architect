@@ -32,6 +32,8 @@ npm ci
 npm run build
 ```
 
+Node 自带的 npm 版本可能不同；若 `npm --version` 不是 11.6.2，请在所用 Node 环境中先执行 `npm install --global npm@11.6.2`。CI 也显式安装这个版本。
+
 仓库不附带本机 Node、Python 虚拟环境或 node_modules；请先准备上述版本。`env.sh` 将本仓库命令加入当前终端 PATH，不负责下载或升级依赖。
 
 将 skill 与命令链接到个人环境：
