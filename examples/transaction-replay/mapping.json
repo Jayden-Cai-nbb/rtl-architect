@@ -1,0 +1,45 @@
+{
+  "schemaVersion": 1,
+  "moduleId": "top",
+  "pathId": "pair",
+  "origin": "simulation",
+  "runId": "REPLACE_WITH_VERIFY_RUN_ID",
+  "artifact": "trace.json",
+  "configuration": "replay-profile.json",
+  "reset": "rst",
+  "points": [
+    {
+      "data": "d0",
+      "valid": "v0",
+      "ready": "r0",
+      "model": {
+        "moduleId": "top",
+        "data": "s_axis_tdata",
+        "valid": "s_axis_tvalid",
+        "ready": "s_axis_tready"
+      }
+    },
+    {
+      "data": "d1",
+      "valid": "v1",
+      "ready": "r1",
+      "model": {
+        "moduleId": "stage0",
+        "data": "m_axis_tdata",
+        "valid": "m_axis_tvalid",
+        "ready": "m_axis_tready"
+      }
+    },
+    {
+      "data": "d2",
+      "valid": "v2",
+      "ready": "r2",
+      "model": {
+        "moduleId": "stage1",
+        "data": "m_axis_tdata",
+        "valid": "m_axis_tvalid",
+        "ready": "m_axis_tready"
+      }
+    }
+  ]
+}

@@ -1,0 +1,132 @@
+[
+  {
+    "entry": "check:core",
+    "exitCode": 0,
+    "seconds": 3.849
+  },
+  {
+    "entry": "check:skill",
+    "exitCode": 0,
+    "seconds": 33.122
+  },
+  {
+    "entry": "check:import",
+    "exitCode": 0,
+    "seconds": 4.078
+  },
+  {
+    "entry": "check:explore",
+    "exitCode": 0,
+    "seconds": 3.418
+  },
+  {
+    "entry": "check:review",
+    "exitCode": 0,
+    "seconds": 4.384
+  },
+  {
+    "entry": "check:reading",
+    "exitCode": 0,
+    "seconds": 0.764
+  },
+  {
+    "entry": "check:reading-skill",
+    "exitCode": 0,
+    "seconds": 2.059
+  },
+  {
+    "entry": "check:delivery",
+    "exitCode": 0,
+    "seconds": 4.878
+  },
+  {
+    "entry": "check:auto-reading",
+    "exitCode": 0,
+    "seconds": 1.247
+  },
+  {
+    "entry": "check:milestone",
+    "exitCode": 0,
+    "seconds": 1.211
+  },
+  {
+    "entry": "check:open",
+    "exitCode": 0,
+    "seconds": 58.018
+  },
+  {
+    "entry": "check:feedback",
+    "exitCode": 0,
+    "seconds": 1.196
+  },
+  {
+    "entry": "check:assurance",
+    "exitCode": 0,
+    "seconds": 43.207
+  },
+  {
+    "entry": "check:hardware-view",
+    "exitCode": 0,
+    "seconds": 1.118
+  },
+  {
+    "entry": "check:state-updates",
+    "exitCode": 0,
+    "seconds": 50.674
+  },
+  {
+    "entry": "check:reliability",
+    "exitCode": 0,
+    "seconds": 89.085
+  },
+  {
+    "entry": "check:state-observation",
+    "exitCode": 0,
+    "seconds": 8.466
+  },
+  {
+    "entry": "check:layout-constraints",
+    "exitCode": 0,
+    "seconds": 5.203
+  },
+  {
+    "entry": "check:expression-types",
+    "exitCode": 0,
+    "seconds": 28.008
+  },
+  {
+    "entry": "check:external-axis",
+    "exitCode": 0,
+    "seconds": 29.692
+  },
+  {
+    "entry": "check:reading-tasks",
+    "exitCode": 0,
+    "seconds": 0.949
+  },
+  {
+    "entry": "check:state-cone",
+    "exitCode": 0,
+    "seconds": 1.302
+  },
+  {
+    "entry": "check:candidate-quality",
+    "exitCode": 0,
+    "seconds": 8.552
+  },
+  {
+    "entry": "check:transaction-replay",
+    "exitCode": 0,
+    "seconds": 22.52
+  },
+  {
+    "entry": "check:work-objects",
+    "exitCode": 0,
+    "seconds": 0.7
+  },
+  {
+    "entry": "check:decisions",
+    "exitCode": 0,
+    "seconds": 1.537
+  }
+]

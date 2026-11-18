@@ -1,3 +1,4 @@
+import {replayRecords} from '../workspace/transactionReplay';
 import {assurance} from '../workspace/assurance';
 import {contextViewSchema} from '../workspace/contextView';
 import {requestLimitBytes,RequestSizeError} from '../core/transport';
@@ -37,8 +38,11 @@ export function createApp(repository: Repository, apiPort = 4317, webPort = 5173
   app.use(express.json({ limit: requestLimitBytes, strict: true }));
   if (!staticDirectory) app.get('/', (_req, res) => res.redirect(302, `http://127.0.0.1:${webPort}/`));
   app.get('/api/workbench',async(_req,res)=>res.json(await repository.getWorkbench()));
+  app.post('/api/compare',async(req,res)=>res.json(await repository.compareCandidates(req.body)));
+  app.post('/api/candidate-evaluation',async(req,res)=>res.json(await repository.getCandidateEvaluation(req.body)));
   app.post('/api/workbench',async(req,res)=>res.json(await repository.updateWorkbench(req.body)));
   app.get('/api/resume',async(_req,res)=>res.json(await repository.getResume()));
+  app.get('/api/replays',async(_req,res)=>res.json(await replayRecords(repository.workspace)));
   app.get('/api/assurance',async(req,res)=>res.json(await assurance(repository.workspace,await repository.getModel(),typeof req.query.moduleId==='string'?req.query.moduleId:undefined)));
   app.get('/api/model', async (_req, res) => res.json(await repository.getModel()));
   app.get('/api/spec', async (req, res) => res.json(await repository.getSpec(typeof req.query.moduleId === 'string' ? req.query.moduleId : undefined)));

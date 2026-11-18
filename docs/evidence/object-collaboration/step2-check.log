@@ -1,0 +1,6 @@
+PASS 1: read-only candidate evaluation isolates A/B hashes and preserves failed evidence
+PASS 2: A evidence or budget cannot be attached to B and mismatched candidate hashes fail
+PASS 3: explicit user choice is append-only and does not resolve, commit or approve
+PASS 4: candidate revision invalidates old comparison budgets; stale inputs retain historical failures
+PASS 5: deterministic summary covers rule order, state, width, truncation and full connections
+完成第二步 5 组决策检查；实验为本地记录隔离 fixture，不声称 RTL 验证。

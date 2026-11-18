@@ -1,0 +1,15 @@
+
+> rtl-architect@2.0.0 check:review
+> node --import tsx scripts/check-review.ts
+
+PASS 1: 45 affine rules represent 11,520 CNU-like connections and resolve indices 0/123/255 exactly
+PASS 2: typed string references preserve ROM paths, trace multi-level dependency, and reject type/cycle errors
+PASS 3: causal ranges group only matching diagnostics; related module evidence does not absorb source/reset/contract unknowns
+PASS 4: more than 15,000 diagnostics retain exact totals while grouping by port and index range
+PASS 5: coverage separates instance paths from bits, drivers, bindings, behavior and actual verification
+PASS 6: main graph excludes boundary modules from layout, preserves all IDs and positions across inspection/auxiliary/local toggles
+PASS 7: array inspection resolves only the selected slice and marks unimported element 124 explicitly
+PASS 8: request budget uses UTF-8 bytes and reports exact size and controlled limit
+PASS 9: real preview accepts compressed full-index mapping; oversized HTTP request gets 413 with byte counts
+PASS 10: proposal creation version is immutable; legacy metadata stays unknown and model hash stays unchanged
+完成 10 组主图与大规模审阅检查。

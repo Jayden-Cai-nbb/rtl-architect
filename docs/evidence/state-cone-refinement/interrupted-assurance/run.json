@@ -1,0 +1,228 @@
+{
+  "schemaVersion": 1,
+  "id": "run_1794811308601_ca8bacce5b344de6b73b24ffe0673e60",
+  "name": "FIFO 合同仿真",
+  "stage": "simulation",
+  "moduleIds": [
+    "top"
+  ],
+  "modelHash": "02e59d3bc7e5ee1923e9da93c24b75433ead96435f48bd5b9179d483e5ffa5b0",
+  "profileHash": "9ee348d3f95ee498caa0630d809742d3f1790742e5e6c077f35055197584667c",
+  "profile": {
+    "schemaVersion": 1,
+    "name": "FIFO 合同仿真",
+    "stage": "simulation",
+    "moduleIds": [
+      "top"
+    ],
+    "inputs": [
+      "rtl/rv_fifo.sv",
+      "tb.sv",
+      "checks/checks.sv",
+      "checks/checks.json"
+    ],
+    "inputClosure": {
+      "status": "declared_complete",
+      "note": "Standalone FIFO RTL, harness and generated monitors; no external includes."
+    },
+    "timeoutMs": 120000,
+    "commands": [
+      {
+        "program": "verilator",
+        "args": [
+          "--binary",
+          "--timing",
+          "--assert",
+          "-Wno-fatal",
+          "--top-module",
+          "tb",
+          "--Mdir",
+          "{runDir}/obj",
+          "rtl/rv_fifo.sv",
+          "tb.sv",
+          "checks/checks.sv"
+        ],
+        "versionArgs": [
+          "--version"
+        ]
+      },
+      {
+        "program": "{runDir}/obj/Vtb",
+        "args": []
+      }
+    ],
+    "checks": [
+      {
+        "kind": "obligations",
+        "file": "step-1.stdout.log",
+        "metadata": "checks/checks.json"
+      }
+    ]
+  },
+  "startedAt": "2026-11-16T06:41:48.603Z",
+  "finishedAt": "2026-11-16T06:41:56.893Z",
+  "durationMs": 8290,
+  "status": "passed",
+  "inputs": [
+    {
+      "file": "rtl/rv_fifo.sv",
+      "sha256": "fb211a520325c6fa3c1bd9ced63b8b3e6a43171c47161d90db2d676933c32626"
+    },
+    {
+      "file": "tb.sv",
+      "sha256": "da7d12bc3e81f77574e7e9036944f5e269db077f2900ae55a81a25c522839cc8"
+    },
+    {
+      "file": "checks/checks.sv",
+      "sha256": "cee022c21e2d5de8455ae35cc5e0354f59e2d82bbd78d53482f5e0c41f37fd96"
+    },
+    {
+      "file": "checks/checks.json",
+      "sha256": "e406f959712cc7cb141f8c1586784f1b3accfd383f144ebceefd7f316662a2ab"
+    }
+  ],
+  "inputsAfter": [
+    {
+      "file": "rtl/rv_fifo.sv",
+      "sha256": "fb211a520325c6fa3c1bd9ced63b8b3e6a43171c47161d90db2d676933c32626"
+    },
+    {
+      "file": "tb.sv",
+      "sha256": "da7d12bc3e81f77574e7e9036944f5e269db077f2900ae55a81a25c522839cc8"
+    },
+    {
+      "file": "checks/checks.sv",
+      "sha256": "cee022c21e2d5de8455ae35cc5e0354f59e2d82bbd78d53482f5e0c41f37fd96"
+    },
+    {
+      "file": "checks/checks.json",
+      "sha256": "e406f959712cc7cb141f8c1586784f1b3accfd383f144ebceefd7f316662a2ab"
+    }
+  ],
+  "steps": [
+    {
+      "program": "verilator",
+      "args": [
+        "--binary",
+        "--timing",
+        "--assert",
+        "-Wno-fatal",
+        "--top-module",
+        "tb",
+        "--Mdir",
+        "/tmp/rtlarch-assurance-yq7j9i/evidence/runs/run_1794811308601_ca8bacce5b344de6b73b24ffe0673e60/obj",
+        "rtl/rv_fifo.sv",
+        "tb.sv",
+        "checks/checks.sv"
+      ],
+      "cwd": "/tmp/rtlarch-assurance-yq7j9i",
+      "toolVersion": "Verilator 5.053 devel rev v5.052-46-g599f8b8e3 (mod)",
+      "exitCode": 0,
+      "signal": null,
+      "timedOut": false,
+      "outputLimit": false
+    },
+    {
+      "program": "/tmp/rtlarch-assurance-yq7j9i/evidence/runs/run_1794811308601_ca8bacce5b344de6b73b24ffe0673e60/obj/Vtb",
+      "args": [],
+      "cwd": "/tmp/rtlarch-assurance-yq7j9i",
+      "toolVersion": "generated executable: sha256 ee2c7144549c3434fd64530a8d0ee3502f8e86c696b82eefe9193f892d2c233c",
+      "exitCode": 0,
+      "signal": null,
+      "timedOut": false,
+      "outputLimit": false
+    }
+  ],
+  "checks": [
+    {
+      "kind": "obligations",
+      "file": "step-1.stdout.log",
+      "metadata": "checks/checks.json",
+      "results": [
+        {
+          "moduleId": "top",
+          "obligationId": "stable",
+          "fingerprint": "78940d9cc5fdc07157d179b4a1f612826fabd2ef0f7d126d5f1805f841c8d7fb",
+          "marker": "RTLARCH_OBL_PASS top/stable 78940d9cc5fdc07157d179b4a1f612826fabd2ef0f7d126d5f1805f841c8d7fb",
+          "requirements": [],
+          "passed": true
+        },
+        {
+          "moduleId": "top",
+          "obligationId": "flush",
+          "fingerprint": "151944760150e33e4126d636b0fa5b7925637a3646df7e2f64cd42e13dfe238b",
+          "marker": "RTLARCH_OBL_PASS top/flush 151944760150e33e4126d636b0fa5b7925637a3646df7e2f64cd42e13dfe238b",
+          "requirements": [],
+          "passed": true
+        },
+        {
+          "moduleId": "top",
+          "obligationId": "order",
+          "fingerprint": "b7d91439902a1b823f343ab597017cbb66aec793594ab550140abd5033899a40",
+          "marker": "RTLARCH_OBL_PASS top/order b7d91439902a1b823f343ab597017cbb66aec793594ab550140abd5033899a40",
+          "requirements": [],
+          "passed": true
+        }
+      ],
+      "passed": true
+    }
+  ],
+  "artifacts": [
+    {
+      "file": "step-0.stdout.log",
+      "sha256": "6318822fb128078b1dc564a143955dedce01fcbf9a410c1893053f701e21d37c"
+    },
+    {
+      "file": "step-0.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "obj/Vtb",
+      "sha256": "ee2c7144549c3434fd64530a8d0ee3502f8e86c696b82eefe9193f892d2c233c"
+    },
+    {
+      "file": "step-1.stdout.log",
+      "sha256": "4bf1bf7a70f96fc48f340ce35a6a15c8c6485c198efd726b480922f60fff6c52"
+    },
+    {
+      "file": "step-1.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "step-1.stdout.log",
+      "sha256": "4bf1bf7a70f96fc48f340ce35a6a15c8c6485c198efd726b480922f60fff6c52"
+    }
+  ],
+  "obligationTargets": [
+    {
+      "moduleId": "top",
+      "obligationId": "stable",
+      "fingerprint": "78940d9cc5fdc07157d179b4a1f612826fabd2ef0f7d126d5f1805f841c8d7fb",
+      "marker": "RTLARCH_OBL_PASS top/stable 78940d9cc5fdc07157d179b4a1f612826fabd2ef0f7d126d5f1805f841c8d7fb",
+      "requirements": []
+    },
+    {
+      "moduleId": "top",
+      "obligationId": "flush",
+      "fingerprint": "151944760150e33e4126d636b0fa5b7925637a3646df7e2f64cd42e13dfe238b",
+      "marker": "RTLARCH_OBL_PASS top/flush 151944760150e33e4126d636b0fa5b7925637a3646df7e2f64cd42e13dfe238b",
+      "requirements": []
+    },
+    {
+      "moduleId": "top",
+      "obligationId": "order",
+      "fingerprint": "b7d91439902a1b823f343ab597017cbb66aec793594ab550140abd5033899a40",
+      "marker": "RTLARCH_OBL_PASS top/order b7d91439902a1b823f343ab597017cbb66aec793594ab550140abd5033899a40",
+      "requirements": []
+    }
+  ],
+  "basis": {
+    "modelHash": "02e59d3bc7e5ee1923e9da93c24b75433ead96435f48bd5b9179d483e5ffa5b0",
+    "kind": "unknown",
+    "origin": "unknown",
+    "reviewStatus": "DRAFT",
+    "reviewRecordHash": "85ba225fa8d32318b6bf11a850f109962cacf221ef2aa2f7609280f2cc675c58",
+    "review": null
+  },
+  "note": "只证明声明命令和检查在本次显式输入下的结果；未自动发现依赖，不改变架构批准或模型验证声明。"
+}

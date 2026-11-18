@@ -1,0 +1,36 @@
+import {chromium} from 'playwright';
+import {readFile,writeFile} from 'node:fs/promises';
+import assert from 'node:assert/strict';
+import {evaluateStudy} from '/home/cjjnbb/projects/rtl-architect/src/core/studies.ts';
+const root='/home/cjjnbb/projects/rtl-architect',out=root+'/docs/evidence/storage-budget';
+const open=JSON.parse(await readFile('/tmp/rtlarch-budget-browser/open.json','utf8'));
+const api=async path=>{const r=await fetch(open.service.apiUrl+'/api/'+path,{headers:{'X-RTLArch-Workspace':open.workspaceId}});assert(r.ok);return r.json();};
+const browser=await chromium.launch({headless:true,args:['--no-sandbox']}),page=await browser.newPage({viewport:{width:1600,height:1100}}),errors=[];page.on('pageerror',e=>errors.push(String(e)));
+const result=()=>page.getByRole('region',{name:'预算计算结果'}).first();
+const option=id=>result().getByTestId('budget-result-'+id);
+async function example(sample,file){
+ await page.getByRole('combobox',{name:'预算示例',exact:true}).selectOption(sample);await page.getByRole('button',{name:'载入示例（替换输入）',exact:true}).click();assert(await page.getByRole('button',{name:'保存此次预算',exact:true}).isDisabled());
+ await page.getByRole('button',{name:'计算并比较',exact:true}).click();await result().waitFor();
+ const fixture=JSON.parse(await readFile(root+'/examples/storage-budget/'+file+'.json','utf8')),expected=evaluateStudy(fixture),rows=result().locator(':scope > .budget-table > table > tbody > tr');
+ assert.equal(await rows.count(),2);for(const [i,o] of expected.options.entries()){const td=await rows.nth(i).locator('td').allTextContents();assert.equal(Number(td[1].replaceAll(',','')),o.computeII);assert.equal(Number(td[2].replaceAll(',','')),o.memoryII);assert.equal(Number(td[4].replaceAll(',','')),o.intervalLowerBound);}
+ return expected;
+}
+try{
+ const before=await api('model'),layout=await api('layout');
+ await page.goto(open.reviewUrl);if(await page.getByTestId('tab-work').getAttribute('aria-selected')!=='true')await page.getByTestId('tab-work').click();await page.getByRole('button',{name:'方案预算',exact:true}).click();
+ await example('timing','operation-timing');assert((await option('a').innerText()).includes('声明 II 1 拍'));assert((await option('b').innerText()).includes('声明 II 3 拍'));assert((await option('b').innerText()).includes('RESOURCE_OCCUPIED'));
+ await result().locator(':scope > .budget-table').screenshot({path:out+'/timing-bounds.png'});await option('b').getByText('资源占用 · 2 次请求',{exact:true}).click();await option('b').locator('details').first().scrollIntoViewIfNeeded();await page.screenshot({path:out+'/resource-occupancy.png'});
+ await example('ram','shared-ram');assert((await option('a').innerText()).includes('BANK_PORT_CONFLICT'));assert(!(await option('b').innerText()).includes('BANK_PORT_CONFLICT'));await option('b').getByText('逐拍 bank 占用与访问 · 4 次请求',{exact:true}).click();await option('b').locator('details').last().screenshot({path:out+'/independent-ram.png'});
+ await example('bank','bank-conflict');assert((await option('a').innerText()).includes('E0 / bank0'));assert(!(await option('b').innerText()).includes('BANK_PORT_CONFLICT'));await option('a').getByText('逐拍 bank 占用与访问 · 2 次请求',{exact:true}).click();await option('a').locator('details').last().scrollIntoViewIfNeeded();await page.screenshot({path:out+'/bank-conflict.png'});
+ await example('flow','feedback-flow');for(const id of ['a','b'])assert((await option(id).innerText()).includes('任何有限 FIFO 都不能支持长期无阻塞输入'));assert((await option('a').innerText()).includes('覆盖所声明停顿'));await option('a').getByText(/unbounded_growth/).scrollIntoViewIfNeeded();await page.screenshot({path:out+'/feedback-flow.png'});
+ await example('ram','shared-ram');const fields=page.locator('.budget-options > fieldset').nth(1);await fields.getByLabel('RAM 读延迟（拍；空白为未知）',{exact:true}).fill('');await fields.getByLabel(/^同址读写/).selectOption('unknown');
+ await fields.getByText('有限请求、bank 映射与反馈依赖',{exact:true}).click();const json=fields.getByRole('textbox',{name:'有限序列 b',exact:true}),seq=JSON.parse(await json.inputValue());seq.accesses[0].address=999;await json.fill(JSON.stringify(seq,null,2));
+ await page.getByRole('button',{name:'计算并比较',exact:true}).click();assert((await option('b').innerText()).includes('BANK_MAPPING_UNKNOWN'));assert((await option('b').innerText()).includes('READ_LATENCY_UNKNOWN'));assert((await option('b').innerText()).includes('READ_DURING_WRITE_UNKNOWN'));await option('b').getByText(/BANK_MAPPING_UNKNOWN/).scrollIntoViewIfNeeded();await page.screenshot({path:out+'/unknown-boundaries.png'});
+ await json.fill('{ invalid JSON');assert(await page.getByRole('button',{name:'保存此次预算',exact:true}).isDisabled());await page.getByRole('button',{name:'计算并比较',exact:true}).click();await page.getByRole('alert').waitFor();assert(await page.getByRole('button',{name:'保存此次预算',exact:true}).isDisabled());
+ await json.fill(JSON.stringify(seq));await page.getByRole('button',{name:'计算并比较',exact:true}).click();await page.getByRole('button',{name:'保存此次预算',exact:true}).click();await page.waitForFunction(()=>document.querySelector('.budget-history summary')?.textContent.includes('1'));
+ const work=await api('workbench');assert.equal(work.workbench.studies.length,1);const saved=work.workbench.studies[0];assert.equal(saved.modelHash,before.modelHash);assert.equal(saved.options[1].memory.organization.readLatencyCycles,null);assert.equal(evaluateStudy(saved).options[1].constraints.memory.trace.status,'unknown');
+ await page.reload();if(await page.getByTestId('tab-work').getAttribute('aria-selected')!=='true')await page.getByTestId('tab-work').click();await page.getByRole('button',{name:'方案预算',exact:true}).click();await page.locator('.budget-history > summary').click();assert((await page.locator('.budget-history').innerText()).includes('BANK_MAPPING_UNKNOWN'));await page.locator('.budget-history').getByText(/BANK_MAPPING_UNKNOWN/).scrollIntoViewIfNeeded();await page.screenshot({path:out+'/saved-budget.png'});
+ await page.setViewportSize({width:1100,height:820});assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));await page.screenshot({path:out+'/narrow-budget.png'});
+ const after=await api('model');assert.equal(after.modelHash,before.modelHash);assert.equal(after.reviewStatus,before.reviewStatus);assert.deepEqual(await api('layout'),layout);assert.deepEqual(errors,[]);
+ await writeFile(out+'/browser-workbench.json',JSON.stringify(work,null,2)+'\n');await writeFile(out+'/browser.json',JSON.stringify({checkedAt:new Date().toISOString(),browser:browser.version(),buildId:open.service.buildId,modelHash:before.modelHash,viewports:[[1600,1100],[1100,820]],sameCoreNumbers:true,latencyVersusOccupancy:true,portTypesDistinct:true,bankConflictVisible:true,unboundedFlowVisible:true,unknownsRetained:true,invalidInputNotSaved:true,savedAndRestored:true,modelAndApprovalUnchanged:true,layoutUnchanged:true,errors},null,2)+'\n');
+}catch(e){await page.screenshot({path:out+'/browser-failure.png'});await writeFile(out+'/browser-failure.json',JSON.stringify({error:String(e),errors},null,2)+'\n');throw e;}finally{await browser.close();}

@@ -1,3 +1,4 @@
+import {transactionPathIssues} from './transactionReplay';
 import {connectionFacts} from './connectivity';
 import { commandSchema, modelSchema, type Command, type Endpoint, type Interface, type Issue, type Link, type Model, type Module } from './schema';
 import { createTemplate } from './templates';
@@ -21,7 +22,7 @@ export function validateModel(input: unknown): Issue[] {
   }
   unique(model.modules, 'modules'); unique(model.connections, 'connections'); unique(model.clocks, 'clocks'); unique(model.resets, 'resets');
   const byId = new Map(model.modules.map(m => [m.id, m]));
-  const extended = model.modules.some(m=>m.contract.obligations!==undefined) || model.connections.some(l=>[l.from,l.to].some(e=>e.index!==undefined||e.local||e.slice||e.sliceMapping)) || !!model.provenance || !!model.localSignals || model.modules.some(m=>m.interfaceGroups||m.instances||m.parameterBindings||m.resetControlInputs||m.interfaces.some(i=>i.group||typeof i.width==='object'&&'expr' in i.width)) || model.modules.some(m => m.clock === null || m.reset === null || m.timing !== undefined) || model.clocks.some(c => c.edge !== 'rising') || model.resets.some(r => !r.synchronous || r.activeLevel !== 'low' || r.clock === null || r.deassertion !== undefined);
+  const extended = model.modules.some(m=>m.contract.obligations!==undefined||m.contract.transactionPaths!==undefined) || model.connections.some(l=>[l.from,l.to].some(e=>e.index!==undefined||e.local||e.slice||e.sliceMapping)) || !!model.provenance || !!model.localSignals || model.modules.some(m=>m.interfaceGroups||m.instances||m.parameterBindings||m.resetControlInputs||m.interfaces.some(i=>i.group||typeof i.width==='object'&&'expr' in i.width)) || model.modules.some(m => m.clock === null || m.reset === null || m.timing !== undefined) || model.clocks.some(c => c.edge !== 'rising') || model.resets.some(r => !r.synchronous || r.activeLevel !== 'low' || r.clock === null || r.deassertion !== undefined);
   if (extended && model.schemaVersion < 3) add('SCHEMA_VERSION', 'schemaVersion', '来源、扩展时钟/复位和时序分类需 schemaVersion 3');
   issues.push(...provenanceIssues(model));
   const roots = model.modules.filter(m => m.parent === null);
@@ -44,6 +45,8 @@ export function validateModel(input: unknown): Issue[] {
     for(const id of m.resetControlInputs??[])if(!m.interfaces.some(i=>i.id===id&&i.role==='consumer'&&i.protocol==='signal'))add('RESET_CONTROL_INPUT',m.id,'复位门控输入必须引用真实 signal 输入端口');
 
     unique(m.contract.obligations??[],m.id+'.contract.obligations');
+    unique(m.contract.transactionPaths??[],m.id+'.contract.transactionPaths');
+    for(const path of m.contract.transactionPaths??[])for(const error of transactionPathIssues(model,m.id,path))add('TRANSACTION_PATH',m.id+'.contract.transactionPaths.'+path.id,error);
     for(const obligation of m.contract.obligations??[]){
       const target=m.id+'.contract.obligations.'+obligation.id;
       for(const req of obligation.requirementIds??[])if(!model.specification?.requirements.some(r=>r.id===req&&(!r.moduleIds.length||r.moduleIds.includes(m.id))))add('OBLIGATION_REQUIREMENT',target,'验证义务需引用适用于本模块的真实需求');

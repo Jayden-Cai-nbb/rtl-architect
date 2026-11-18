@@ -1,0 +1,38 @@
+import {chromium} from 'playwright';
+import {readFile,writeFile} from 'node:fs/promises';
+import {execFileSync} from 'node:child_process';
+import assert from 'node:assert/strict';
+const out='/home/cjjnbb/projects/rtl-architect/docs/evidence/candidate-quality',root='/tmp/rtlarch-candidate-quality';
+const browser=await chromium.launch({headless:true,args:['--no-sandbox']});const results=[],errors=[];
+const geometry=page=>page.evaluate(()=>({nodes:[...document.querySelectorAll('.react-flow__node')].map(n=>[n.dataset.id,n.style.transform,n.style.width,n.style.height]),paths:[...document.querySelectorAll('.react-flow__edge-path')].map(p=>[p.id,p.getAttribute('d')])}));
+try{
+ for(const [key,name,state] of [['typed','typed-expressions','scaled_q'],['external','external-axis',null]]){
+  const draft=JSON.parse(await readFile(`${out}/${key}-draft.json`,'utf8'));
+  const restart=JSON.parse(await readFile(`${root}/${key}-restart.json`,'utf8'));const currentUrl=new URL(restart.reviewUrl);currentUrl.searchParams.delete('panel');currentUrl.searchParams.set('proposal',draft.proposalId);draft.reviewUrl=currentUrl.href;
+  const page=await browser.newPage({viewport:{width:1440,height:1000},acceptDownloads:true});page.on('pageerror',e=>errors.push(String(e)));
+  await page.goto(draft.reviewUrl);await page.locator('.react-flow__edge-path').first().waitFor({state:'attached'});await page.waitForTimeout(800);
+  assert.equal(await page.getByRole('combobox',{name:'阅读任务',exact:true}).inputValue(),'overview');
+  await page.screenshot({path:`${out}/${key}-candidate-overview.png`});
+  const more=page.locator('.canvas-menu');await more.locator('summary').click();
+  const download=page.waitForEvent('download');await page.getByRole('button',{name:'下载本图检查',exact:true}).click();const saved=await download;await saved.saveAs(`${out}/${key}-page-quality.json`);
+  await more.locator('summary').click();
+  const report=JSON.parse(await readFile(`${out}/${key}-page-quality.json`,'utf8'));
+  const cli=JSON.parse(execFileSync('/home/cjjnbb/projects/rtl-architect/bin/rtlarch',['diagram-quality','--workspace',`${root}/${name}`,'--model',`${root}/${name}-candidate.json`,'--task','overview','--json'],{encoding:'utf8'}));
+  assert.equal(report.modelHash,draft.candidateHash);assert.equal(report.modelSource,'candidate');assert.deepEqual(report.quality,cli.quality);
+  await writeFile(`${out}/${key}-cli-quality.json`,JSON.stringify(cli,null,2));
+  await page.locator('.diagram-audit > summary').click();await page.getByTestId('route-review').locator('summary').click();
+  await page.waitForFunction(n=>document.querySelectorAll('.react-flow__edge-path').length===n,report.quality.routeReview.routes.length);await page.waitForTimeout(250);const before=await geometry(page);await page.getByTestId('route-review').getByRole('button').first().click();await page.waitForTimeout(200);assert.deepEqual(await geometry(page),before);
+  assert.equal(await page.getByTestId('picked-members').getAttribute('open'),null);
+  const canvasHeight=(await page.getByTestId('canvas').boundingBox()).height;await page.screenshot({path:`${out}/${key}-candidate-route-review.png`});console.log(JSON.stringify({key,canvasHeight}));assert(canvasHeight>200);
+  const selected=await page.locator('.react-flow__edge-path').evaluateAll(paths=>paths.filter(p=>p.style.strokeWidth==='2.6').length);assert(selected>0);
+  await page.screenshot({path:`${out}/${key}-candidate-route-review.png`});
+  await page.locator('.diagram-audit > summary').click();
+  if(state){
+   await page.getByRole('combobox',{name:'状态范围',exact:true}).selectOption(state);await page.getByRole('button',{name:'查看状态范围',exact:true}).click();await page.waitForTimeout(600);
+   await page.getByTestId('module-local:top:scaled_q').click();await page.getByRole('button',{name:'查看模型下一状态逻辑锥',exact:true}).click();await page.getByTestId('state-cone').locator('svg').waitFor();
+   await page.screenshot({path:`${out}/${key}-candidate-state-cone.png`});
+  }
+  results.push({example:name,buildId:restart.service.buildId,canvasHeightAfterSelection:canvasHeight,membersCollapsedUntilRequested:true,candidateHash:draft.candidateHash,currentHash:draft.modelHash,cliMatchesPage:true,selectionGeometryStable:true,selectedEdges:selected,pageErrors:errors.length});await page.close();
+ }
+ assert.deepEqual(errors,[]);await writeFile(`${out}/browser.json`,JSON.stringify({executedAt:new Date().toISOString(),results,errors},null,2));
+} catch(e){await writeFile(`${out}/browser-failure.json`,JSON.stringify({error:String(e),results,errors},null,2));throw e;}finally{await browser.close();}

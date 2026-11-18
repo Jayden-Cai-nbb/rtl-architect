@@ -1,0 +1,3114 @@
+{
+  "report": {
+    "id": "typed-expressions-top-full",
+    "hash": "2cd22e38e8248095a270a45eb113ea2d37b9edd87872ccb66ecbd362c886f4bf",
+    "task": null,
+    "elapsedMs": 44.836094,
+    "nodes": 8,
+    "edges": 18,
+    "quality": {
+      "readingConstraints": {
+        "status": "satisfied",
+        "issues": [],
+        "counts": {
+          "parallel": 1,
+          "shared": 0,
+          "feedback": 0
+        },
+        "note": "只核对展示约束，不证明并行时序、资源仲裁、反馈可达性或 RTL 正确性。"
+      },
+      "structuralFidelity": {
+        "status": "passed",
+        "missing": [],
+        "extra": [],
+        "duplicates": [],
+        "wrongEndpoints": [],
+        "omissions": [],
+        "note": "仅检查当前视图及聚合清单对应模型连接；折叠有明确原因，不证明 RTL 覆盖。"
+      },
+      "semanticClarity": {
+        "status": "needs_review",
+        "issues": [
+          {
+            "code": "PROVENANCE_UNKNOWN",
+            "target": "limits",
+            "reason": "unknown：只核对有限二态状态更新；未证明四态、初始状态和任意时序需求。"
+          },
+          {
+            "code": "PARTIAL_MODEL",
+            "target": "top",
+            "reason": "模型尚未完整；图中没有显示的结构不代表 RTL 中不存在。"
+          }
+        ],
+        "humanReview": "not_run"
+      },
+      "geometricReadability": {
+        "status": "needs_review",
+        "note": "交叉、共线和隐藏线名与基本几何完整性分开；仍需沿真实事务人工阅读。"
+      },
+      "sharedLabels": [],
+      "labelStatus": "needs_attention",
+      "status": "passed",
+      "overlaps": [],
+      "nodeHits": [],
+      "unrouted": [],
+      "crossings": 28,
+      "unrelatedSharedLength": 1323.2,
+      "bends": 30,
+      "wireLength": 9748.6,
+      "hiddenLabels": [
+        "dependency:top>logical_value_q/load_control/state_condition",
+        "dependency:top>logical_value_q/sample_data/state_data",
+        "dependency:top>packed_value_q/load_control/state_condition",
+        "dependency:top>packed_value_q/sample_data/state_data",
+        "dependency:top>packed_value_q/shift_control/state_data"
+      ],
+      "folded": {
+        "auxiliary": 0,
+        "local": 0
+      },
+      "connections": [
+        {
+          "id": "scaled_out",
+          "from": {
+            "moduleId": "top",
+            "interfaceId": "scaled_q",
+            "local": true
+          },
+          "to": {
+            "moduleId": "top",
+            "interfaceId": "scaled"
+          },
+          "retainedIn": [],
+          "visibleIn": [
+            "relation:local:top:scaled_q>rack:top:producer/local:top:scaled_q/scaled_result/scaled_result/wire"
+          ]
+        },
+        {
+          "id": "packed_value_out",
+          "from": {
+            "moduleId": "top",
+            "interfaceId": "packed_value_q",
+            "local": true
+          },
+          "to": {
+            "moduleId": "top",
+            "interfaceId": "packed_value"
+          },
+          "retainedIn": [],
+          "visibleIn": [
+            "relation:local:top:packed_value_q>rack:top:producer/local:top:packed_value_q/packed_value_result/packed_value_result/wire"
+          ]
+        },
+        {
+          "id": "logical_value_out",
+          "from": {
+            "moduleId": "top",
+            "interfaceId": "logical_value_q",
+            "local": true
+          },
+          "to": {
+            "moduleId": "top",
+            "interfaceId": "logical_value"
+          },
+          "retainedIn": [],
+          "visibleIn": [
+            "relation:local:top:logical_value_q>rack:top:producer/local:top:logical_value_q/logical_value_result/logical_value_result/wire"
+          ]
+        },
+        {
+          "id": "negative_out",
+          "from": {
+            "moduleId": "top",
+            "interfaceId": "negative_q",
+            "local": true
+          },
+          "to": {
+            "moduleId": "top",
+            "interfaceId": "negative"
+          },
+          "retainedIn": [],
+          "visibleIn": [
+            "relation:local:top:negative_q>rack:top:producer/local:top:negative_q/negative_result/negative_result/wire"
+          ]
+        },
+        {
+          "id": "parity_out",
+          "from": {
+            "moduleId": "top",
+            "interfaceId": "parity_q",
+            "local": true
+          },
+          "to": {
+            "moduleId": "top",
+            "interfaceId": "parity"
+          },
+          "retainedIn": [],
+          "visibleIn": [
+            "relation:local:top:parity_q>rack:top:producer/local:top:parity_q/parity_result/parity_result/wire"
+          ]
+        }
+      ],
+      "visualReview": "not_run",
+      "note": "几何检查不证明文字可读、硬件正确或所有交叉可辨认。"
+    }
+  },
+  "graph": {
+    "reading": {
+      "modelHash": "2cd22e38e8248095a270a45eb113ea2d37b9edd87872ccb66ecbd362c886f4bf",
+      "reason": "五个状态在同一有效沿并行采样；列举顺序不代表串行流水。",
+      "mainPath": [
+        "local:top:scaled_q"
+      ],
+      "control": [],
+      "adjacent": [],
+      "parallel": [
+        {
+          "id": "sample_states",
+          "label": "并行采样状态",
+          "nodes": [
+            "local:top:scaled_q",
+            "local:top:packed_value_q",
+            "local:top:logical_value_q",
+            "local:top:negative_q",
+            "local:top:parity_q"
+          ]
+        }
+      ]
+    },
+    "omissions": [],
+    "mode": "architecture",
+    "modeLabel": "架构通路",
+    "semantics": {
+      "relationships": [
+        {
+          "id": "scaled_out",
+          "from": {
+            "moduleId": "top",
+            "interfaceId": "scaled_q",
+            "local": true
+          },
+          "to": {
+            "moduleId": "top",
+            "interfaceId": "scaled"
+          },
+          "toRole": "producer",
+          "kind": "wire",
+          "classification": "declared",
+          "group": {
+            "id": "scaled_result",
+            "label": "算术缩放",
+            "category": "data",
+            "description": "独立并行计算的输出。",
+            "auxiliary": false
+          },
+          "width": 12,
+          "evidenceIds": [],
+          "members": [
+            {
+              "part": "scaled_q",
+              "direction": "forward",
+              "width": 12
+            }
+          ],
+          "meaning": "模型记录的直接连接；业务分类不代表协议成员关系。"
+        },
+        {
+          "id": "packed_value_out",
+          "from": {
+            "moduleId": "top",
+            "interfaceId": "packed_value_q",
+            "local": true
+          },
+          "to": {
+            "moduleId": "top",
+            "interfaceId": "packed_value"
+          },
+          "toRole": "producer",
+          "kind": "wire",
+          "classification": "declared",
+          "group": {
+            "id": "packed_value_result",
+            "label": "低位打包",
+            "category": "data",
+            "description": "独立并行计算的输出。",
+            "auxiliary": false
+          },
+          "width": 8,
+          "evidenceIds": [],
+          "members": [
+            {
+              "part": "packed_value_q",
+              "direction": "forward",
+              "width": 8
+            }
+          ],
+          "meaning": "模型记录的直接连接；业务分类不代表协议成员关系。"
+        },
+        {
+          "id": "logical_value_out",
+          "from": {
+            "moduleId": "top",
+            "interfaceId": "logical_value_q",
+            "local": true
+          },
+          "to": {
+            "moduleId": "top",
+            "interfaceId": "logical_value"
+          },
+          "toRole": "producer",
+          "kind": "wire",
+          "classification": "declared",
+          "group": {
+            "id": "logical_value_result",
+            "label": "逻辑右移",
+            "category": "data",
+            "description": "独立并行计算的输出。",
+            "auxiliary": false
+          },
+          "width": 8,
+          "evidenceIds": [],
+          "members": [
+            {
+              "part": "logical_value_q",
+              "direction": "forward",
+              "width": 8
+            }
+          ],
+          "meaning": "模型记录的直接连接；业务分类不代表协议成员关系。"
+        },
+        {
+          "id": "negative_out",
+          "from": {
+            "moduleId": "top",
+            "interfaceId": "negative_q",
+            "local": true
+          },
+          "to": {
+            "moduleId": "top",
+            "interfaceId": "negative"
+          },
+          "toRole": "producer",
+          "kind": "wire",
+          "classification": "declared",
+          "group": {
+            "id": "negative_result",
+            "label": "负数标志",
+            "category": "data",
+            "description": "独立并行计算的输出。",
+            "auxiliary": false
+          },
+          "width": 1,
+          "evidenceIds": [],
+          "members": [
+            {
+              "part": "negative_q",
+              "direction": "forward",
+              "width": 1
+            }
+          ],
+          "meaning": "模型记录的直接连接；业务分类不代表协议成员关系。"
+        },
+        {
+          "id": "parity_out",
+          "from": {
+            "moduleId": "top",
+            "interfaceId": "parity_q",
+            "local": true
+          },
+          "to": {
+            "moduleId": "top",
+            "interfaceId": "parity"
+          },
+          "toRole": "producer",
+          "kind": "wire",
+          "classification": "declared",
+          "group": {
+            "id": "parity_result",
+            "label": "异或校验",
+            "category": "data",
+            "description": "独立并行计算的输出。",
+            "auxiliary": false
+          },
+          "width": 1,
+          "evidenceIds": [],
+          "members": [
+            {
+              "part": "parity_q",
+              "direction": "forward",
+              "width": 1
+            }
+          ],
+          "meaning": "模型记录的直接连接；业务分类不代表协议成员关系。"
+        }
+      ],
+      "issues": [
+        {
+          "code": "PROVENANCE_UNKNOWN",
+          "target": "limits",
+          "reason": "unknown：只核对有限二态状态更新；未证明四态、初始状态和任意时序需求。"
+        },
+        {
+          "code": "PARTIAL_MODEL",
+          "target": "top",
+          "reason": "模型尚未完整；图中没有显示的结构不代表 RTL 中不存在。"
+        }
+      ],
+      "note": "显示投影不修改 IR；位置不表示周期、真实线长或物理布局。"
+    },
+    "nodes": [
+      {
+        "id": "frame:top",
+        "type": "rtlModule",
+        "position": {
+          "x": -423.5,
+          "y": -8
+        },
+        "width": 1087,
+        "height": 1692,
+        "draggable": false,
+        "selectable": false,
+        "zIndex": -1,
+        "data": {
+          "label": "有符号缩放寄存级",
+          "moduleId": "top",
+          "kind": "frame",
+          "boundary": true,
+          "geometry": {
+            "width": 1087,
+            "height": 1692,
+            "ports": []
+          },
+          "ports": [],
+          "summary": "0 个模块 · 5 项内部逻辑",
+          "activeHandles": []
+        }
+      },
+      {
+        "id": "local:top:scaled_q",
+        "type": "rtlModule",
+        "position": {
+          "x": 12,
+          "y": 100
+        },
+        "width": 168,
+        "height": 222,
+        "data": {
+          "label": "符号扩展到 12 位后算术右移",
+          "moduleId": "top",
+          "kind": "state",
+          "boundary": false,
+          "localId": "scaled_q",
+          "mainDiagram": true,
+          "summary": "符号扩展到 12 位后算术右移；同步复位优先，使能无效保持。",
+          "statePattern": "条件装载寄存器",
+          "title": "符号扩展到 12 位后算术右移；同步复位优先，使能无效保持。\ntop.rst_n = 0 → 12bit(0)\ntop.enable → (符号扩展→12 位有符号(top.sample) >>> top.shift)\n以上条件均不成立 → 保持原值",
+          "geometry": {
+            "width": 168,
+            "height": 222,
+            "ports": [
+              {
+                "id": "in",
+                "direction": "target",
+                "side": "WEST",
+                "x": 0,
+                "y": 210
+              },
+              {
+                "id": "in:dep:dependency:top>scaled_q/domain/state_reset",
+                "direction": "target",
+                "side": "WEST",
+                "x": 0,
+                "y": 204,
+                "interfaceIds": [
+                  "rst_n"
+                ],
+                "label": "rst_n",
+                "category": "clock_reset",
+                "labelX": 10,
+                "labelY": 208,
+                "textAnchor": "start"
+              },
+              {
+                "id": "in:dep:dependency:top>scaled_q/load_control/state_condition",
+                "direction": "target",
+                "side": "WEST",
+                "x": 0,
+                "y": 168,
+                "interfaceIds": [
+                  "enable"
+                ],
+                "label": "enable",
+                "category": "control",
+                "labelX": 10,
+                "labelY": 172,
+                "textAnchor": "start"
+              },
+              {
+                "id": "in:dep:dependency:top>scaled_q/sample_data/state_data",
+                "direction": "target",
+                "side": "WEST",
+                "x": 0,
+                "y": 96,
+                "interfaceIds": [
+                  "sample"
+                ],
+                "label": "sample",
+                "category": "data",
+                "labelX": 10,
+                "labelY": 100,
+                "textAnchor": "start"
+              },
+              {
+                "id": "in:dep:dependency:top>scaled_q/shift_control/state_data",
+                "direction": "target",
+                "side": "WEST",
+                "x": 0,
+                "y": 132,
+                "interfaceIds": [
+                  "shift"
+                ],
+                "label": "shift",
+                "category": "control",
+                "labelX": 10,
+                "labelY": 136,
+                "textAnchor": "start"
+              },
+              {
+                "id": "out",
+                "direction": "source",
+                "side": "EAST",
+                "x": 168,
+                "y": 210
+              },
+              {
+                "id": "out:local:top:scaled_q",
+                "direction": "source",
+                "side": "EAST",
+                "x": 168,
+                "y": 96,
+                "interfaceIds": [
+                  "scaled_q"
+                ],
+                "label": "scaled_q",
+                "category": "data",
+                "labelX": 158,
+                "labelY": 100,
+                "textAnchor": "end"
+              }
+            ],
+            "captionY": 24
+          },
+          "ports": [
+            {
+              "id": "in"
+            },
+            {
+              "id": "in:dep:dependency:top>scaled_q/domain/state_reset"
+            },
+            {
+              "id": "in:dep:dependency:top>scaled_q/load_control/state_condition"
+            },
+            {
+              "id": "in:dep:dependency:top>scaled_q/sample_data/state_data"
+            },
+            {
+              "id": "in:dep:dependency:top>scaled_q/shift_control/state_data"
+            },
+            {
+              "id": "out"
+            },
+            {
+              "id": "out:local:top:scaled_q"
+            }
+          ],
+          "activeHandles": [
+            "out:local:top:scaled_q",
+            "in:dep:dependency:top>scaled_q/load_control/state_condition",
+            "in:dep:dependency:top>scaled_q/sample_data/state_data",
+            "in:dep:dependency:top>scaled_q/shift_control/state_data"
+          ]
+        },
+        "style": {
+          "opacity": 1
+        }
+      },
+      {
+        "id": "local:top:packed_value_q",
+        "type": "rtlModule",
+        "position": {
+          "x": 12,
+          "y": 450
+        },
+        "width": 188.00000000000003,
+        "height": 222,
+        "data": {
+          "label": "明确截取算术结果低 8 位",
+          "moduleId": "top",
+          "kind": "state",
+          "boundary": false,
+          "localId": "packed_value_q",
+          "mainDiagram": true,
+          "summary": "明确截取算术结果低 8 位；同步复位优先，使能无效保持。",
+          "statePattern": "条件装载寄存器",
+          "title": "明确截取算术结果低 8 位；同步复位优先，使能无效保持。\ntop.rst_n = 0 → 8bit(0)\ntop.enable → 截取低位→8 位无符号((符号扩展→12 位有符号(top.sample) >>> top.shift))\n以上条件均不成立 → 保持原值",
+          "geometry": {
+            "width": 188.00000000000003,
+            "height": 222,
+            "ports": [
+              {
+                "id": "in",
+                "direction": "target",
+                "side": "WEST",
+                "x": 0,
+                "y": 210
+              },
+              {
+                "id": "in:dep:dependency:top>packed_value_q/domain/state_reset",
+                "direction": "target",
+                "side": "WEST",
+                "x": 0,
+                "y": 204,
+                "interfaceIds": [
+                  "rst_n"
+                ],
+                "label": "rst_n",
+                "category": "clock_reset",
+                "labelX": 10,
+                "labelY": 208,
+                "textAnchor": "start"
+              },
+              {
+                "id": "in:dep:dependency:top>packed_value_q/load_control/state_condition",
+                "direction": "target",
+                "side": "WEST",
+                "x": 0,
+                "y": 168,
+                "interfaceIds": [
+                  "enable"
+                ],
+                "label": "enable",
+                "category": "control",
+                "labelX": 10,
+                "labelY": 172,
+                "textAnchor": "start"
+              },
+              {
+                "id": "in:dep:dependency:top>packed_value_q/sample_data/state_data",
+                "direction": "target",
+                "side": "WEST",
+                "x": 0,
+                "y": 96,
+                "interfaceIds": [
+                  "sample"
+                ],
+                "label": "sample",
+                "category": "data",
+                "labelX": 10,
+                "labelY": 100,
+                "textAnchor": "start"
+              },
+              {
+                "id": "in:dep:dependency:top>packed_value_q/shift_control/state_data",
+                "direction": "target",
+                "side": "WEST",
+                "x": 0,
+                "y": 132,
+                "interfaceIds": [
+                  "shift"
+                ],
+                "label": "shift",
+                "category": "control",
+                "labelX": 10,
+                "labelY": 136,
+                "textAnchor": "start"
+              },
+              {
+                "id": "out",
+                "direction": "source",
+                "side": "EAST",
+                "x": 188.00000000000003,
+                "y": 210
+              },
+              {
+                "id": "out:local:top:packed_value_q",
+                "direction": "source",
+                "side": "EAST",
+                "x": 188.00000000000003,
+                "y": 96,
+                "interfaceIds": [
+                  "packed_value_q"
+                ],
+                "label": "packed_value_q",
+                "category": "data",
+                "labelX": 178.00000000000003,
+                "labelY": 100,
+                "textAnchor": "end"
+              }
+            ],
+            "captionY": 24
+          },
+          "ports": [
+            {
+              "id": "in"
+            },
+            {
+              "id": "in:dep:dependency:top>packed_value_q/domain/state_reset"
+            },
+            {
+              "id": "in:dep:dependency:top>packed_value_q/load_control/state_condition"
+            },
+            {
+              "id": "in:dep:dependency:top>packed_value_q/sample_data/state_data"
+            },
+            {
+              "id": "in:dep:dependency:top>packed_value_q/shift_control/state_data"
+            },
+            {
+              "id": "out"
+            },
+            {
+              "id": "out:local:top:packed_value_q"
+            }
+          ],
+          "activeHandles": [
+            "out:local:top:packed_value_q",
+            "in:dep:dependency:top>packed_value_q/load_control/state_condition",
+            "in:dep:dependency:top>packed_value_q/sample_data/state_data",
+            "in:dep:dependency:top>packed_value_q/shift_control/state_data"
+          ]
+        },
+        "style": {
+          "opacity": 1
+        }
+      },
+      {
+        "id": "local:top:logical_value_q",
+        "type": "rtlModule",
+        "position": {
+          "x": 12,
+          "y": 800
+        },
+        "width": 195.20000000000005,
+        "height": 222,
+        "data": {
+          "label": "按无符号位向量逻辑右移",
+          "moduleId": "top",
+          "kind": "state",
+          "boundary": false,
+          "localId": "logical_value_q",
+          "mainDiagram": true,
+          "summary": "按无符号位向量逻辑右移；同步复位优先，使能无效保持。",
+          "statePattern": "条件装载寄存器",
+          "title": "按无符号位向量逻辑右移；同步复位优先，使能无效保持。\ntop.rst_n = 0 → 8bit(0)\ntop.enable → (top.sample >> top.shift)\n以上条件均不成立 → 保持原值",
+          "geometry": {
+            "width": 195.20000000000005,
+            "height": 222,
+            "ports": [
+              {
+                "id": "in",
+                "direction": "target",
+                "side": "WEST",
+                "x": 0,
+                "y": 210
+              },
+              {
+                "id": "in:dep:dependency:top>logical_value_q/domain/state_reset",
+                "direction": "target",
+                "side": "WEST",
+                "x": 0,
+                "y": 204,
+                "interfaceIds": [
+                  "rst_n"
+                ],
+                "label": "rst_n",
+                "category": "clock_reset",
+                "labelX": 10,
+                "labelY": 208,
+                "textAnchor": "start"
+              },
+              {
+                "id": "in:dep:dependency:top>logical_value_q/load_control/state_condition",
+                "direction": "target",
+                "side": "WEST",
+                "x": 0,
+                "y": 168,
+                "interfaceIds": [
+                  "enable"
+                ],
+                "label": "enable",
+                "category": "control",
+                "labelX": 10,
+                "labelY": 172,
+                "textAnchor": "start"
+              },
+              {
+                "id": "in:dep:dependency:top>logical_value_q/sample_data/state_data",
+                "direction": "target",
+                "side": "WEST",
+                "x": 0,
+                "y": 96,
+                "interfaceIds": [
+                  "sample"
+                ],
+                "label": "sample",
+                "category": "data",
+                "labelX": 10,
+                "labelY": 100,
+                "textAnchor": "start"
+              },
+              {
+                "id": "in:dep:dependency:top>logical_value_q/shift_control/state_data",
+                "direction": "target",
+                "side": "WEST",
+                "x": 0,
+                "y": 132,
+                "interfaceIds": [
+                  "shift"
+                ],
+                "label": "shift",
+                "category": "control",
+                "labelX": 10,
+                "labelY": 136,
+                "textAnchor": "start"
+              },
+              {
+                "id": "out",
+                "direction": "source",
+                "side": "EAST",
+                "x": 195.20000000000005,
+                "y": 210
+              },
+              {
+                "id": "out:local:top:logical_value_q",
+                "direction": "source",
+                "side": "EAST",
+                "x": 195.20000000000005,
+                "y": 96,
+                "interfaceIds": [
+                  "logical_value_q"
+                ],
+                "label": "logical_value_q",
+                "category": "data",
+                "labelX": 185.20000000000005,
+                "labelY": 100,
+                "textAnchor": "end"
+              }
+            ],
+            "captionY": 24
+          },
+          "ports": [
+            {
+              "id": "in"
+            },
+            {
+              "id": "in:dep:dependency:top>logical_value_q/domain/state_reset"
+            },
+            {
+              "id": "in:dep:dependency:top>logical_value_q/load_control/state_condition"
+            },
+            {
+              "id": "in:dep:dependency:top>logical_value_q/sample_data/state_data"
+            },
+            {
+              "id": "in:dep:dependency:top>logical_value_q/shift_control/state_data"
+            },
+            {
+              "id": "out"
+            },
+            {
+              "id": "out:local:top:logical_value_q"
+            }
+          ],
+          "activeHandles": [
+            "out:local:top:logical_value_q",
+            "in:dep:dependency:top>logical_value_q/load_control/state_condition",
+            "in:dep:dependency:top>logical_value_q/sample_data/state_data",
+            "in:dep:dependency:top>logical_value_q/shift_control/state_data"
+          ]
+        },
+        "style": {
+          "opacity": 1
+        }
+      },
+      {
+        "id": "local:top:negative_q",
+        "type": "rtlModule",
+        "position": {
+          "x": 12,
+          "y": 1150
+        },
+        "width": 168,
+        "height": 186,
+        "data": {
+          "label": "按有符号数判断负值",
+          "moduleId": "top",
+          "kind": "state",
+          "boundary": false,
+          "localId": "negative_q",
+          "mainDiagram": true,
+          "summary": "按有符号数判断负值；同步复位优先，使能无效保持。",
+          "statePattern": "条件装载寄存器",
+          "title": "按有符号数判断负值；同步复位优先，使能无效保持。\ntop.rst_n = 0 → 1bit(0)\ntop.enable → (重解释→8 位有符号(top.sample) < 重解释→8 位有符号(8bit(0)))\n以上条件均不成立 → 保持原值",
+          "geometry": {
+            "width": 168,
+            "height": 186,
+            "ports": [
+              {
+                "id": "in",
+                "direction": "target",
+                "side": "WEST",
+                "x": 0,
+                "y": 174
+              },
+              {
+                "id": "in:dep:dependency:top>negative_q/domain/state_reset",
+                "direction": "target",
+                "side": "WEST",
+                "x": 0,
+                "y": 168,
+                "interfaceIds": [
+                  "rst_n"
+                ],
+                "label": "rst_n",
+                "category": "clock_reset",
+                "labelX": 10,
+                "labelY": 172,
+                "textAnchor": "start"
+              },
+              {
+                "id": "in:dep:dependency:top>negative_q/load_control/state_condition",
+                "direction": "target",
+                "side": "WEST",
+                "x": 0,
+                "y": 132,
+                "interfaceIds": [
+                  "enable"
+                ],
+                "label": "enable",
+                "category": "control",
+                "labelX": 10,
+                "labelY": 136,
+                "textAnchor": "start"
+              },
+              {
+                "id": "in:dep:dependency:top>negative_q/sample_data/state_data",
+                "direction": "target",
+                "side": "WEST",
+                "x": 0,
+                "y": 96,
+                "interfaceIds": [
+                  "sample"
+                ],
+                "label": "sample",
+                "category": "data",
+                "labelX": 10,
+                "labelY": 100,
+                "textAnchor": "start"
+              },
+              {
+                "id": "out",
+                "direction": "source",
+                "side": "EAST",
+                "x": 168,
+                "y": 174
+              },
+              {
+                "id": "out:local:top:negative_q",
+                "direction": "source",
+                "side": "EAST",
+                "x": 168,
+                "y": 96,
+                "interfaceIds": [
+                  "negative_q"
+                ],
+                "label": "negative_q",
+                "category": "data",
+                "labelX": 158,
+                "labelY": 100,
+                "textAnchor": "end"
+              }
+            ],
+            "captionY": 24
+          },
+          "ports": [
+            {
+              "id": "in"
+            },
+            {
+              "id": "in:dep:dependency:top>negative_q/domain/state_reset"
+            },
+            {
+              "id": "in:dep:dependency:top>negative_q/load_control/state_condition"
+            },
+            {
+              "id": "in:dep:dependency:top>negative_q/sample_data/state_data"
+            },
+            {
+              "id": "out"
+            },
+            {
+              "id": "out:local:top:negative_q"
+            }
+          ],
+          "activeHandles": [
+            "out:local:top:negative_q",
+            "in:dep:dependency:top>negative_q/load_control/state_condition",
+            "in:dep:dependency:top>negative_q/sample_data/state_data"
+          ]
+        },
+        "style": {
+          "opacity": 1
+        }
+      },
+      {
+        "id": "local:top:parity_q",
+        "type": "rtlModule",
+        "position": {
+          "x": 12,
+          "y": 1464
+        },
+        "width": 168,
+        "height": 186,
+        "data": {
+          "label": "输入的逐位异或归约",
+          "moduleId": "top",
+          "kind": "state",
+          "boundary": false,
+          "localId": "parity_q",
+          "mainDiagram": true,
+          "summary": "输入的逐位异或归约；同步复位优先，使能无效保持。",
+          "statePattern": "条件装载寄存器",
+          "title": "输入的逐位异或归约；同步复位优先，使能无效保持。\ntop.rst_n = 0 → 1bit(0)\ntop.enable → 归约异或(top.sample)\n以上条件均不成立 → 保持原值",
+          "geometry": {
+            "width": 168,
+            "height": 186,
+            "ports": [
+              {
+                "id": "in",
+                "direction": "target",
+                "side": "WEST",
+                "x": 0,
+                "y": 174
+              },
+              {
+                "id": "in:dep:dependency:top>parity_q/domain/state_reset",
+                "direction": "target",
+                "side": "WEST",
+                "x": 0,
+                "y": 168,
+                "interfaceIds": [
+                  "rst_n"
+                ],
+                "label": "rst_n",
+                "category": "clock_reset",
+                "labelX": 10,
+                "labelY": 172,
+                "textAnchor": "start"
+              },
+              {
+                "id": "in:dep:dependency:top>parity_q/load_control/state_condition",
+                "direction": "target",
+                "side": "WEST",
+                "x": 0,
+                "y": 132,
+                "interfaceIds": [
+                  "enable"
+                ],
+                "label": "enable",
+                "category": "control",
+                "labelX": 10,
+                "labelY": 136,
+                "textAnchor": "start"
+              },
+              {
+                "id": "in:dep:dependency:top>parity_q/sample_data/state_data",
+                "direction": "target",
+                "side": "WEST",
+                "x": 0,
+                "y": 96,
+                "interfaceIds": [
+                  "sample"
+                ],
+                "label": "sample",
+                "category": "data",
+                "labelX": 10,
+                "labelY": 100,
+                "textAnchor": "start"
+              },
+              {
+                "id": "out",
+                "direction": "source",
+                "side": "EAST",
+                "x": 168,
+                "y": 174
+              },
+              {
+                "id": "out:local:top:parity_q",
+                "direction": "source",
+                "side": "EAST",
+                "x": 168,
+                "y": 96,
+                "interfaceIds": [
+                  "parity_q"
+                ],
+                "label": "parity_q",
+                "category": "data",
+                "labelX": 158,
+                "labelY": 100,
+                "textAnchor": "end"
+              }
+            ],
+            "captionY": 24
+          },
+          "ports": [
+            {
+              "id": "in"
+            },
+            {
+              "id": "in:dep:dependency:top>parity_q/domain/state_reset"
+            },
+            {
+              "id": "in:dep:dependency:top>parity_q/load_control/state_condition"
+            },
+            {
+              "id": "in:dep:dependency:top>parity_q/sample_data/state_data"
+            },
+            {
+              "id": "out"
+            },
+            {
+              "id": "out:local:top:parity_q"
+            }
+          ],
+          "activeHandles": [
+            "out:local:top:parity_q",
+            "in:dep:dependency:top>parity_q/load_control/state_condition",
+            "in:dep:dependency:top>parity_q/sample_data/state_data"
+          ]
+        },
+        "style": {
+          "opacity": 1
+        }
+      },
+      {
+        "id": "rack:top:consumer",
+        "type": "rtlModule",
+        "position": {
+          "x": -405.5,
+          "y": 70
+        },
+        "width": 156,
+        "height": 954.4,
+        "draggable": false,
+        "selectable": false,
+        "data": {
+          "label": "输入",
+          "moduleId": "top",
+          "kind": "rack",
+          "boundary": true,
+          "role": "consumer",
+          "groups": [
+            {
+              "id": "shift_control",
+              "label": "移位量",
+              "count": 1,
+              "auxiliary": false
+            },
+            {
+              "id": "sample_data",
+              "label": "采样数据",
+              "count": 1,
+              "auxiliary": false
+            },
+            {
+              "id": "load_control",
+              "label": "采样使能",
+              "count": 1,
+              "auxiliary": false
+            },
+            {
+              "id": "domain",
+              "label": "时钟与复位",
+              "count": 2,
+              "auxiliary": true
+            }
+          ],
+          "summary": "当前层级接口",
+          "ports": [
+            {
+              "id": "out:sample_data"
+            },
+            {
+              "id": "out:shift_control"
+            },
+            {
+              "id": "out:load_control"
+            },
+            {
+              "id": "out:domain"
+            },
+            {
+              "id": "out"
+            }
+          ],
+          "geometry": {
+            "width": 156,
+            "height": 954.4,
+            "ports": [
+              {
+                "id": "out:sample_data",
+                "direction": "source",
+                "side": "EAST",
+                "x": 156,
+                "y": 818.8
+              },
+              {
+                "id": "out:shift_control",
+                "direction": "source",
+                "side": "EAST",
+                "x": 156,
+                "y": 512
+              },
+              {
+                "id": "out:load_control",
+                "direction": "source",
+                "side": "EAST",
+                "x": 156,
+                "y": 876.4
+              },
+              {
+                "id": "out:domain",
+                "direction": "source",
+                "side": "EAST",
+                "x": 156,
+                "y": 920.4
+              },
+              {
+                "id": "out",
+                "direction": "source",
+                "side": "EAST",
+                "x": 156,
+                "y": 42
+              }
+            ]
+          },
+          "activeHandles": [
+            "out:load_control",
+            "out:sample_data",
+            "out:shift_control",
+            "out:load_control",
+            "out:sample_data",
+            "out:load_control",
+            "out:sample_data",
+            "out:shift_control",
+            "out:load_control",
+            "out:sample_data",
+            "out:load_control",
+            "out:sample_data",
+            "out:shift_control"
+          ]
+        }
+      },
+      {
+        "id": "rack:top:producer",
+        "type": "rtlModule",
+        "position": {
+          "x": 489.5,
+          "y": 70
+        },
+        "width": 156,
+        "height": 1524,
+        "draggable": false,
+        "selectable": false,
+        "data": {
+          "label": "输出",
+          "moduleId": "top",
+          "kind": "rack",
+          "boundary": true,
+          "role": "producer",
+          "groups": [
+            {
+              "id": "scaled_result",
+              "label": "算术缩放",
+              "count": 1,
+              "auxiliary": false
+            },
+            {
+              "id": "packed_value_result",
+              "label": "低位打包",
+              "count": 1,
+              "auxiliary": false
+            },
+            {
+              "id": "logical_value_result",
+              "label": "逻辑右移",
+              "count": 1,
+              "auxiliary": false
+            },
+            {
+              "id": "negative_result",
+              "label": "负数标志",
+              "count": 1,
+              "auxiliary": false
+            },
+            {
+              "id": "parity_result",
+              "label": "异或校验",
+              "count": 1,
+              "auxiliary": false
+            }
+          ],
+          "summary": "当前层级接口",
+          "ports": [
+            {
+              "id": "in:scaled_result"
+            },
+            {
+              "id": "in:packed_value_result"
+            },
+            {
+              "id": "in:logical_value_result"
+            },
+            {
+              "id": "in:negative_result"
+            },
+            {
+              "id": "in:parity_result"
+            },
+            {
+              "id": "in"
+            }
+          ],
+          "geometry": {
+            "width": 156,
+            "height": 1524,
+            "ports": [
+              {
+                "id": "in:scaled_result",
+                "direction": "target",
+                "side": "WEST",
+                "x": 0,
+                "y": 126
+              },
+              {
+                "id": "in:packed_value_result",
+                "direction": "target",
+                "side": "WEST",
+                "x": 0,
+                "y": 476
+              },
+              {
+                "id": "in:logical_value_result",
+                "direction": "target",
+                "side": "WEST",
+                "x": 0,
+                "y": 826
+              },
+              {
+                "id": "in:negative_result",
+                "direction": "target",
+                "side": "WEST",
+                "x": 0,
+                "y": 1176
+              },
+              {
+                "id": "in:parity_result",
+                "direction": "target",
+                "side": "WEST",
+                "x": 0,
+                "y": 1490
+              },
+              {
+                "id": "in",
+                "direction": "target",
+                "side": "WEST",
+                "x": 0,
+                "y": 42
+              }
+            ]
+          },
+          "activeHandles": [
+            "in:logical_value_result",
+            "in:negative_result",
+            "in:packed_value_result",
+            "in:parity_result",
+            "in:scaled_result"
+          ]
+        }
+      }
+    ],
+    "edges": [
+      {
+        "id": "relation:local:top:logical_value_q>rack:top:producer/local:top:logical_value_q/logical_value_result/logical_value_result/wire",
+        "source": "local:top:logical_value_q",
+        "sourceHandle": "out:local:top:logical_value_q",
+        "target": "rack:top:producer",
+        "targetHandle": "in:logical_value_result",
+        "type": "relationship",
+        "reconnectable": false,
+        "markerEnd": {
+          "type": "arrowclosed",
+          "color": "#326ea1",
+          "width": 16,
+          "height": 16
+        },
+        "data": {
+          "connectionIds": [
+            "logical_value_out"
+          ],
+          "category": "data",
+          "title": "独立并行计算的输出。\n模型记录的直接连接；业务分类不代表协议成员关系。",
+          "semanticKind": "wire",
+          "classification": "declared",
+          "members": [
+            {
+              "part": "logical_value_q",
+              "direction": "forward",
+              "width": 8
+            }
+          ],
+          "selected": false,
+          "color": "#326ea1",
+          "feedback": false,
+          "laneOffset": 0,
+          "netKey": "[\"[\\\"top\\\",\\\"logical_value_q\\\",null,true,null,null]\"]",
+          "routingWork": 0,
+          "routingSimplified": false,
+          "route": {
+            "path": "M 207.20000000000005 896 L 489.5 896",
+            "x": 348.35,
+            "y": 896
+          },
+          "routePoints": [
+            {
+              "x": 207.20000000000005,
+              "y": 896
+            },
+            {
+              "x": 489.5,
+              "y": 896
+            }
+          ],
+          "labelHidden": false,
+          "labelBox": {
+            "left": 310.35,
+            "right": 386.35,
+            "top": 883,
+            "bottom": 909
+          },
+          "crossings": []
+        },
+        "style": {
+          "stroke": "#326ea1",
+          "opacity": 0.86,
+          "strokeWidth": 1.7
+        },
+        "label": "逻辑右移"
+      },
+      {
+        "id": "relation:local:top:negative_q>rack:top:producer/local:top:negative_q/negative_result/negative_result/wire",
+        "source": "local:top:negative_q",
+        "sourceHandle": "out:local:top:negative_q",
+        "target": "rack:top:producer",
+        "targetHandle": "in:negative_result",
+        "type": "relationship",
+        "reconnectable": false,
+        "markerEnd": {
+          "type": "arrowclosed",
+          "color": "#326ea1",
+          "width": 16,
+          "height": 16
+        },
+        "data": {
+          "connectionIds": [
+            "negative_out"
+          ],
+          "category": "data",
+          "title": "独立并行计算的输出。\n模型记录的直接连接；业务分类不代表协议成员关系。",
+          "semanticKind": "wire",
+          "classification": "declared",
+          "members": [
+            {
+              "part": "negative_q",
+              "direction": "forward",
+              "width": 1
+            }
+          ],
+          "selected": false,
+          "color": "#326ea1",
+          "feedback": false,
+          "laneOffset": 0,
+          "netKey": "[\"[\\\"top\\\",\\\"negative_q\\\",null,true,null,null]\"]",
+          "routingWork": 0,
+          "routingSimplified": false,
+          "route": {
+            "path": "M 180 1246 L 489.5 1246",
+            "x": 334.75,
+            "y": 1246
+          },
+          "routePoints": [
+            {
+              "x": 180,
+              "y": 1246
+            },
+            {
+              "x": 489.5,
+              "y": 1246
+            }
+          ],
+          "labelHidden": false,
+          "labelBox": {
+            "left": 296.75,
+            "right": 372.75,
+            "top": 1233,
+            "bottom": 1259
+          },
+          "crossings": []
+        },
+        "style": {
+          "stroke": "#326ea1",
+          "opacity": 0.86,
+          "strokeWidth": 1.7
+        },
+        "label": "负数标志"
+      },
+      {
+        "id": "relation:local:top:packed_value_q>rack:top:producer/local:top:packed_value_q/packed_value_result/packed_value_result/wire",
+        "source": "local:top:packed_value_q",
+        "sourceHandle": "out:local:top:packed_value_q",
+        "target": "rack:top:producer",
+        "targetHandle": "in:packed_value_result",
+        "type": "relationship",
+        "reconnectable": false,
+        "markerEnd": {
+          "type": "arrowclosed",
+          "color": "#326ea1",
+          "width": 16,
+          "height": 16
+        },
+        "data": {
+          "connectionIds": [
+            "packed_value_out"
+          ],
+          "category": "data",
+          "title": "独立并行计算的输出。\n模型记录的直接连接；业务分类不代表协议成员关系。",
+          "semanticKind": "wire",
+          "classification": "declared",
+          "members": [
+            {
+              "part": "packed_value_q",
+              "direction": "forward",
+              "width": 8
+            }
+          ],
+          "selected": false,
+          "color": "#326ea1",
+          "feedback": false,
+          "laneOffset": 0,
+          "netKey": "[\"[\\\"top\\\",\\\"packed_value_q\\\",null,true,null,null]\"]",
+          "routingWork": 0,
+          "routingSimplified": false,
+          "route": {
+            "path": "M 200.00000000000003 546 L 489.5 546",
+            "x": 344.75,
+            "y": 546
+          },
+          "routePoints": [
+            {
+              "x": 200.00000000000003,
+              "y": 546
+            },
+            {
+              "x": 489.5,
+              "y": 546
+            }
+          ],
+          "labelHidden": false,
+          "labelBox": {
+            "left": 306.75,
+            "right": 382.75,
+            "top": 533,
+            "bottom": 559
+          },
+          "crossings": []
+        },
+        "style": {
+          "stroke": "#326ea1",
+          "opacity": 0.86,
+          "strokeWidth": 1.7
+        },
+        "label": "低位打包"
+      },
+      {
+        "id": "relation:local:top:parity_q>rack:top:producer/local:top:parity_q/parity_result/parity_result/wire",
+        "source": "local:top:parity_q",
+        "sourceHandle": "out:local:top:parity_q",
+        "target": "rack:top:producer",
+        "targetHandle": "in:parity_result",
+        "type": "relationship",
+        "reconnectable": false,
+        "markerEnd": {
+          "type": "arrowclosed",
+          "color": "#326ea1",
+          "width": 16,
+          "height": 16
+        },
+        "data": {
+          "connectionIds": [
+            "parity_out"
+          ],
+          "category": "data",
+          "title": "独立并行计算的输出。\n模型记录的直接连接；业务分类不代表协议成员关系。",
+          "semanticKind": "wire",
+          "classification": "declared",
+          "members": [
+            {
+              "part": "parity_q",
+              "direction": "forward",
+              "width": 1
+            }
+          ],
+          "selected": false,
+          "color": "#326ea1",
+          "feedback": false,
+          "laneOffset": 0,
+          "netKey": "[\"[\\\"top\\\",\\\"parity_q\\\",null,true,null,null]\"]",
+          "routingWork": 0,
+          "routingSimplified": false,
+          "route": {
+            "path": "M 180 1560 L 489.5 1560",
+            "x": 334.75,
+            "y": 1560
+          },
+          "routePoints": [
+            {
+              "x": 180,
+              "y": 1560
+            },
+            {
+              "x": 489.5,
+              "y": 1560
+            }
+          ],
+          "labelHidden": false,
+          "labelBox": {
+            "left": 296.75,
+            "right": 372.75,
+            "top": 1547,
+            "bottom": 1573
+          },
+          "crossings": []
+        },
+        "style": {
+          "stroke": "#326ea1",
+          "opacity": 0.86,
+          "strokeWidth": 1.7
+        },
+        "label": "异或校验"
+      },
+      {
+        "id": "relation:local:top:scaled_q>rack:top:producer/local:top:scaled_q/scaled_result/scaled_result/wire",
+        "source": "local:top:scaled_q",
+        "sourceHandle": "out:local:top:scaled_q",
+        "target": "rack:top:producer",
+        "targetHandle": "in:scaled_result",
+        "type": "relationship",
+        "reconnectable": false,
+        "markerEnd": {
+          "type": "arrowclosed",
+          "color": "#326ea1",
+          "width": 16,
+          "height": 16
+        },
+        "data": {
+          "connectionIds": [
+            "scaled_out"
+          ],
+          "category": "data",
+          "title": "独立并行计算的输出。\n模型记录的直接连接；业务分类不代表协议成员关系。",
+          "semanticKind": "wire",
+          "classification": "declared",
+          "members": [
+            {
+              "part": "scaled_q",
+              "direction": "forward",
+              "width": 12
+            }
+          ],
+          "selected": false,
+          "color": "#326ea1",
+          "feedback": false,
+          "laneOffset": 0,
+          "netKey": "[\"[\\\"top\\\",\\\"scaled_q\\\",null,true,null,null]\"]",
+          "routingWork": 0,
+          "routingSimplified": false,
+          "route": {
+            "path": "M 180 196 L 489.5 196",
+            "x": 334.75,
+            "y": 196
+          },
+          "routePoints": [
+            {
+              "x": 180,
+              "y": 196
+            },
+            {
+              "x": 489.5,
+              "y": 196
+            }
+          ],
+          "labelHidden": false,
+          "labelBox": {
+            "left": 296.75,
+            "right": 372.75,
+            "top": 183,
+            "bottom": 209
+          },
+          "crossings": []
+        },
+        "style": {
+          "stroke": "#326ea1",
+          "opacity": 0.86,
+          "strokeWidth": 1.7
+        },
+        "label": "算术缩放"
+      },
+      {
+        "id": "dependency:top>logical_value_q/load_control/state_condition",
+        "source": "rack:top:consumer",
+        "target": "local:top:logical_value_q",
+        "sourceHandle": "out:load_control",
+        "targetHandle": "in:dep:dependency:top>logical_value_q/load_control/state_condition",
+        "type": "relationship",
+        "label": "更新条件 · 采样使能",
+        "reconnectable": false,
+        "data": {
+          "localSignalId": "logical_value_q",
+          "dependencyEndpoint": {
+            "moduleId": "top",
+            "interfaceId": "enable"
+          },
+          "dependencyEndpoints": [
+            {
+              "moduleId": "top",
+              "interfaceId": "enable"
+            }
+          ],
+          "semanticKind": "dependency",
+          "dependencyRole": "state_condition",
+          "category": "control",
+          "relationBundle": false,
+          "title": "模型表达式依赖；不是一条直接物理线\ntop.enable",
+          "color": "#64758b",
+          "granularity": "expression",
+          "feedback": false,
+          "laneOffset": -30,
+          "routingWork": 0,
+          "routingSimplified": false,
+          "route": {
+            "path": "M -249.5 946.4 L -20 946.4 L -20 968 L 12 968",
+            "x": 0,
+            "y": 0
+          },
+          "routePoints": [
+            {
+              "x": -249.5,
+              "y": 946.4
+            },
+            {
+              "x": -20,
+              "y": 946.4
+            },
+            {
+              "x": -20,
+              "y": 968
+            },
+            {
+              "x": 12,
+              "y": 968
+            }
+          ],
+          "labelHidden": true,
+          "crossings": []
+        },
+        "style": {
+          "stroke": "#64758b",
+          "strokeWidth": 1.8,
+          "opacity": 1
+        },
+        "markerEnd": {
+          "type": "arrow",
+          "color": "#64758b"
+        }
+      },
+      {
+        "id": "dependency:top>logical_value_q/sample_data/state_data",
+        "source": "rack:top:consumer",
+        "target": "local:top:logical_value_q",
+        "sourceHandle": "out:sample_data",
+        "targetHandle": "in:dep:dependency:top>logical_value_q/sample_data/state_data",
+        "type": "relationship",
+        "label": "写入值 · 采样数据",
+        "reconnectable": false,
+        "data": {
+          "localSignalId": "logical_value_q",
+          "dependencyEndpoint": {
+            "moduleId": "top",
+            "interfaceId": "sample"
+          },
+          "dependencyEndpoints": [
+            {
+              "moduleId": "top",
+              "interfaceId": "sample"
+            }
+          ],
+          "semanticKind": "dependency",
+          "dependencyRole": "state_data",
+          "category": "data",
+          "relationBundle": false,
+          "title": "模型表达式依赖；不是一条直接物理线\ntop.sample",
+          "color": "#326ea1",
+          "granularity": "expression",
+          "feedback": false,
+          "laneOffset": 0,
+          "routingWork": 0,
+          "routingSimplified": false,
+          "route": {
+            "path": "M -249.5 888.8 L -217.5 888.8 L -217.5 896 L 12 896",
+            "x": 0,
+            "y": 0
+          },
+          "routePoints": [
+            {
+              "x": -249.5,
+              "y": 888.8
+            },
+            {
+              "x": -217.5,
+              "y": 888.8
+            },
+            {
+              "x": -217.5,
+              "y": 896
+            },
+            {
+              "x": 12,
+              "y": 896
+            }
+          ],
+          "labelHidden": true,
+          "crossings": []
+        },
+        "style": {
+          "stroke": "#326ea1",
+          "strokeWidth": 1.8,
+          "opacity": 1
+        },
+        "markerEnd": {
+          "type": "arrow",
+          "color": "#326ea1"
+        }
+      },
+      {
+        "id": "dependency:top>logical_value_q/shift_control/state_data",
+        "source": "rack:top:consumer",
+        "target": "local:top:logical_value_q",
+        "sourceHandle": "out:shift_control",
+        "targetHandle": "in:dep:dependency:top>logical_value_q/shift_control/state_data",
+        "type": "relationship",
+        "label": "写入值 · 移位量",
+        "reconnectable": false,
+        "data": {
+          "localSignalId": "logical_value_q",
+          "dependencyEndpoint": {
+            "moduleId": "top",
+            "interfaceId": "shift"
+          },
+          "dependencyEndpoints": [
+            {
+              "moduleId": "top",
+              "interfaceId": "shift"
+            }
+          ],
+          "semanticKind": "dependency",
+          "dependencyRole": "state_data",
+          "category": "control",
+          "relationBundle": false,
+          "title": "模型表达式依赖；不是一条直接物理线\ntop.shift",
+          "color": "#64758b",
+          "granularity": "expression",
+          "feedback": false,
+          "laneOffset": 30,
+          "routingWork": 0,
+          "routingSimplified": false,
+          "route": {
+            "path": "M -249.5 582 L -20 582 L -20 932 L 12 932",
+            "x": 53.75,
+            "y": 757
+          },
+          "routePoints": [
+            {
+              "x": -249.5,
+              "y": 582
+            },
+            {
+              "x": -20,
+              "y": 582
+            },
+            {
+              "x": -20,
+              "y": 932
+            },
+            {
+              "x": 12,
+              "y": 932
+            }
+          ],
+          "labelHidden": false,
+          "labelBox": {
+            "left": -13,
+            "right": 120.5,
+            "top": 744,
+            "bottom": 770
+          },
+          "crossings": [
+            {
+              "x": -20,
+              "y": 896
+            }
+          ]
+        },
+        "style": {
+          "stroke": "#64758b",
+          "strokeWidth": 1.8,
+          "opacity": 1
+        },
+        "markerEnd": {
+          "type": "arrow",
+          "color": "#64758b"
+        }
+      },
+      {
+        "id": "dependency:top>negative_q/load_control/state_condition",
+        "source": "rack:top:consumer",
+        "target": "local:top:negative_q",
+        "sourceHandle": "out:load_control",
+        "targetHandle": "in:dep:dependency:top>negative_q/load_control/state_condition",
+        "type": "relationship",
+        "label": "更新条件 · 采样使能",
+        "reconnectable": false,
+        "data": {
+          "localSignalId": "negative_q",
+          "dependencyEndpoint": {
+            "moduleId": "top",
+            "interfaceId": "enable"
+          },
+          "dependencyEndpoints": [
+            {
+              "moduleId": "top",
+              "interfaceId": "enable"
+            }
+          ],
+          "semanticKind": "dependency",
+          "dependencyRole": "state_condition",
+          "category": "control",
+          "relationBundle": false,
+          "title": "模型表达式依赖；不是一条直接物理线\ntop.enable",
+          "color": "#64758b",
+          "granularity": "expression",
+          "feedback": false,
+          "laneOffset": -15,
+          "routingWork": 0,
+          "routingSimplified": false,
+          "route": {
+            "path": "M -249.5 946.4 L -217.5 946.4 L -217.5 978.4 L -20 978.4 L -20 1282 L 12 1282",
+            "x": 69.75,
+            "y": 1124.128
+          },
+          "routePoints": [
+            {
+              "x": -249.5,
+              "y": 946.4
+            },
+            {
+              "x": -217.5,
+              "y": 946.4
+            },
+            {
+              "x": -217.5,
+              "y": 978.4
+            },
+            {
+              "x": -20,
+              "y": 978.4
+            },
+            {
+              "x": -20,
+              "y": 1282
+            },
+            {
+              "x": 12,
+              "y": 1282
+            }
+          ],
+          "labelHidden": false,
+          "labelBox": {
+            "left": -13,
+            "right": 152.5,
+            "top": 1111.128,
+            "bottom": 1137.128
+          },
+          "crossings": [
+            {
+              "x": -217.5,
+              "y": 946.4
+            }
+          ]
+        },
+        "style": {
+          "stroke": "#64758b",
+          "strokeWidth": 1.8,
+          "opacity": 1
+        },
+        "markerEnd": {
+          "type": "arrow",
+          "color": "#64758b"
+        }
+      },
+      {
+        "id": "dependency:top>negative_q/sample_data/state_data",
+        "source": "rack:top:consumer",
+        "target": "local:top:negative_q",
+        "sourceHandle": "out:sample_data",
+        "targetHandle": "in:dep:dependency:top>negative_q/sample_data/state_data",
+        "type": "relationship",
+        "label": "写入值 · 采样数据",
+        "reconnectable": false,
+        "data": {
+          "localSignalId": "negative_q",
+          "dependencyEndpoint": {
+            "moduleId": "top",
+            "interfaceId": "sample"
+          },
+          "dependencyEndpoints": [
+            {
+              "moduleId": "top",
+              "interfaceId": "sample"
+            }
+          ],
+          "semanticKind": "dependency",
+          "dependencyRole": "state_data",
+          "category": "data",
+          "relationBundle": false,
+          "title": "模型表达式依赖；不是一条直接物理线\ntop.sample",
+          "color": "#326ea1",
+          "granularity": "expression",
+          "feedback": false,
+          "laneOffset": 15,
+          "routingWork": 0,
+          "routingSimplified": false,
+          "route": {
+            "path": "M -249.5 888.8 L -217.5 888.8 L -217.5 1246 L 12 1246",
+            "x": -299.25,
+            "y": 1067.4
+          },
+          "routePoints": [
+            {
+              "x": -249.5,
+              "y": 888.8
+            },
+            {
+              "x": -217.5,
+              "y": 888.8
+            },
+            {
+              "x": -217.5,
+              "y": 1246
+            },
+            {
+              "x": 12,
+              "y": 1246
+            }
+          ],
+          "labelHidden": false,
+          "labelBox": {
+            "left": -374,
+            "right": -224.5,
+            "top": 1054.4,
+            "bottom": 1080.4
+          },
+          "crossings": [
+            {
+              "x": -217.5,
+              "y": 888.8
+            },
+            {
+              "x": -217.5,
+              "y": 946.4
+            },
+            {
+              "x": -217.5,
+              "y": 896
+            },
+            {
+              "x": -217.5,
+              "y": 978.4
+            },
+            {
+              "x": -20,
+              "y": 1246
+            }
+          ]
+        },
+        "style": {
+          "stroke": "#326ea1",
+          "strokeWidth": 1.8,
+          "opacity": 1
+        },
+        "markerEnd": {
+          "type": "arrow",
+          "color": "#326ea1"
+        }
+      },
+      {
+        "id": "dependency:top>packed_value_q/load_control/state_condition",
+        "source": "rack:top:consumer",
+        "target": "local:top:packed_value_q",
+        "sourceHandle": "out:load_control",
+        "targetHandle": "in:dep:dependency:top>packed_value_q/load_control/state_condition",
+        "type": "relationship",
+        "label": "更新条件 · 采样使能",
+        "reconnectable": false,
+        "data": {
+          "localSignalId": "packed_value_q",
+          "dependencyEndpoint": {
+            "moduleId": "top",
+            "interfaceId": "enable"
+          },
+          "dependencyEndpoints": [
+            {
+              "moduleId": "top",
+              "interfaceId": "enable"
+            }
+          ],
+          "semanticKind": "dependency",
+          "dependencyRole": "state_condition",
+          "category": "control",
+          "relationBundle": false,
+          "title": "模型表达式依赖；不是一条直接物理线\ntop.enable",
+          "color": "#64758b",
+          "granularity": "expression",
+          "feedback": false,
+          "laneOffset": -30,
+          "routingWork": 0,
+          "routingSimplified": false,
+          "route": {
+            "path": "M -249.5 946.4 L -153.5 946.4 L -153.5 618 L 12 618",
+            "x": 0,
+            "y": 0
+          },
+          "routePoints": [
+            {
+              "x": -249.5,
+              "y": 946.4
+            },
+            {
+              "x": -153.5,
+              "y": 946.4
+            },
+            {
+              "x": -153.5,
+              "y": 618
+            },
+            {
+              "x": 12,
+              "y": 618
+            }
+          ],
+          "labelHidden": true,
+          "crossings": [
+            {
+              "x": -217.5,
+              "y": 946.4
+            },
+            {
+              "x": -153.5,
+              "y": 946.4
+            },
+            {
+              "x": -153.5,
+              "y": 896
+            },
+            {
+              "x": -20,
+              "y": 618
+            }
+          ]
+        },
+        "style": {
+          "stroke": "#64758b",
+          "strokeWidth": 1.8,
+          "opacity": 1
+        },
+        "markerEnd": {
+          "type": "arrow",
+          "color": "#64758b"
+        }
+      },
+      {
+        "id": "dependency:top>packed_value_q/sample_data/state_data",
+        "source": "rack:top:consumer",
+        "target": "local:top:packed_value_q",
+        "sourceHandle": "out:sample_data",
+        "targetHandle": "in:dep:dependency:top>packed_value_q/sample_data/state_data",
+        "type": "relationship",
+        "label": "写入值 · 采样数据",
+        "reconnectable": false,
+        "data": {
+          "localSignalId": "packed_value_q",
+          "dependencyEndpoint": {
+            "moduleId": "top",
+            "interfaceId": "sample"
+          },
+          "dependencyEndpoints": [
+            {
+              "moduleId": "top",
+              "interfaceId": "sample"
+            }
+          ],
+          "semanticKind": "dependency",
+          "dependencyRole": "state_data",
+          "category": "data",
+          "relationBundle": false,
+          "title": "模型表达式依赖；不是一条直接物理线\ntop.sample",
+          "color": "#326ea1",
+          "granularity": "expression",
+          "feedback": false,
+          "laneOffset": 0,
+          "routingWork": 0,
+          "routingSimplified": false,
+          "route": {
+            "path": "M -249.5 888.8 L -217.5 888.8 L -217.5 546 L 12 546",
+            "x": 0,
+            "y": 0
+          },
+          "routePoints": [
+            {
+              "x": -249.5,
+              "y": 888.8
+            },
+            {
+              "x": -217.5,
+              "y": 888.8
+            },
+            {
+              "x": -217.5,
+              "y": 546
+            },
+            {
+              "x": 12,
+              "y": 546
+            }
+          ],
+          "labelHidden": true,
+          "crossings": [
+            {
+              "x": -217.5,
+              "y": 888.8
+            },
+            {
+              "x": -217.5,
+              "y": 582
+            }
+          ]
+        },
+        "style": {
+          "stroke": "#326ea1",
+          "strokeWidth": 1.8,
+          "opacity": 1
+        },
+        "markerEnd": {
+          "type": "arrow",
+          "color": "#326ea1"
+        }
+      },
+      {
+        "id": "dependency:top>packed_value_q/shift_control/state_data",
+        "source": "rack:top:consumer",
+        "target": "local:top:packed_value_q",
+        "sourceHandle": "out:shift_control",
+        "targetHandle": "in:dep:dependency:top>packed_value_q/shift_control/state_data",
+        "type": "relationship",
+        "label": "写入值 · 移位量",
+        "reconnectable": false,
+        "data": {
+          "localSignalId": "packed_value_q",
+          "dependencyEndpoint": {
+            "moduleId": "top",
+            "interfaceId": "shift"
+          },
+          "dependencyEndpoints": [
+            {
+              "moduleId": "top",
+              "interfaceId": "shift"
+            }
+          ],
+          "semanticKind": "dependency",
+          "dependencyRole": "state_data",
+          "category": "control",
+          "relationBundle": false,
+          "title": "模型表达式依赖；不是一条直接物理线\ntop.shift",
+          "color": "#64758b",
+          "granularity": "expression",
+          "feedback": false,
+          "laneOffset": 30,
+          "routingWork": 0,
+          "routingSimplified": false,
+          "route": {
+            "path": "M -249.5 582 L -217.5 582 L -217.5 550 L -20 550 L -20 582 L 12 582",
+            "x": 0,
+            "y": 0
+          },
+          "routePoints": [
+            {
+              "x": -249.5,
+              "y": 582
+            },
+            {
+              "x": -217.5,
+              "y": 582
+            },
+            {
+              "x": -217.5,
+              "y": 550
+            },
+            {
+              "x": -20,
+              "y": 550
+            },
+            {
+              "x": -20,
+              "y": 582
+            },
+            {
+              "x": 12,
+              "y": 582
+            }
+          ],
+          "labelHidden": true,
+          "crossings": [
+            {
+              "x": -217.5,
+              "y": 582
+            },
+            {
+              "x": -217.5,
+              "y": 550
+            },
+            {
+              "x": -20,
+              "y": 582
+            }
+          ]
+        },
+        "style": {
+          "stroke": "#64758b",
+          "strokeWidth": 1.8,
+          "opacity": 1
+        },
+        "markerEnd": {
+          "type": "arrow",
+          "color": "#64758b"
+        }
+      },
+      {
+        "id": "dependency:top>parity_q/load_control/state_condition",
+        "source": "rack:top:consumer",
+        "target": "local:top:parity_q",
+        "sourceHandle": "out:load_control",
+        "targetHandle": "in:dep:dependency:top>parity_q/load_control/state_condition",
+        "type": "relationship",
+        "label": "更新条件 · 采样使能",
+        "reconnectable": false,
+        "data": {
+          "localSignalId": "parity_q",
+          "dependencyEndpoint": {
+            "moduleId": "top",
+            "interfaceId": "enable"
+          },
+          "dependencyEndpoints": [
+            {
+              "moduleId": "top",
+              "interfaceId": "enable"
+            }
+          ],
+          "semanticKind": "dependency",
+          "dependencyRole": "state_condition",
+          "category": "control",
+          "relationBundle": false,
+          "title": "模型表达式依赖；不是一条直接物理线\ntop.enable",
+          "color": "#64758b",
+          "granularity": "expression",
+          "feedback": false,
+          "laneOffset": -15,
+          "routingWork": 0,
+          "routingSimplified": false,
+          "route": {
+            "path": "M -249.5 946.4 L -153.5 946.4 L -153.5 1596 L 12 1596",
+            "x": -63.75,
+            "y": 1362.144
+          },
+          "routePoints": [
+            {
+              "x": -249.5,
+              "y": 946.4
+            },
+            {
+              "x": -153.5,
+              "y": 946.4
+            },
+            {
+              "x": -153.5,
+              "y": 1596
+            },
+            {
+              "x": 12,
+              "y": 1596
+            }
+          ],
+          "labelHidden": false,
+          "labelBox": {
+            "left": -146.5,
+            "right": 19,
+            "top": 1349.144,
+            "bottom": 1375.144
+          },
+          "crossings": [
+            {
+              "x": -217.5,
+              "y": 946.4
+            },
+            {
+              "x": -153.5,
+              "y": 946.4
+            },
+            {
+              "x": -153.5,
+              "y": 978.4
+            },
+            {
+              "x": -153.5,
+              "y": 1246
+            }
+          ]
+        },
+        "style": {
+          "stroke": "#64758b",
+          "strokeWidth": 1.8,
+          "opacity": 1
+        },
+        "markerEnd": {
+          "type": "arrow",
+          "color": "#64758b"
+        }
+      },
+      {
+        "id": "dependency:top>parity_q/sample_data/state_data",
+        "source": "rack:top:consumer",
+        "target": "local:top:parity_q",
+        "sourceHandle": "out:sample_data",
+        "targetHandle": "in:dep:dependency:top>parity_q/sample_data/state_data",
+        "type": "relationship",
+        "label": "写入值 · 采样数据",
+        "reconnectable": false,
+        "data": {
+          "localSignalId": "parity_q",
+          "dependencyEndpoint": {
+            "moduleId": "top",
+            "interfaceId": "sample"
+          },
+          "dependencyEndpoints": [
+            {
+              "moduleId": "top",
+              "interfaceId": "sample"
+            }
+          ],
+          "semanticKind": "dependency",
+          "dependencyRole": "state_data",
+          "category": "data",
+          "relationBundle": false,
+          "title": "模型表达式依赖；不是一条直接物理线\ntop.sample",
+          "color": "#326ea1",
+          "granularity": "expression",
+          "feedback": false,
+          "laneOffset": 15,
+          "routingWork": 0,
+          "routingSimplified": false,
+          "route": {
+            "path": "M -249.5 888.8 L -185.5 888.8 L -185.5 1560 L 12 1560",
+            "x": -74.89999999999999,
+            "y": 1560
+          },
+          "routePoints": [
+            {
+              "x": -249.5,
+              "y": 888.8
+            },
+            {
+              "x": -185.5,
+              "y": 888.8
+            },
+            {
+              "x": -185.5,
+              "y": 1560
+            },
+            {
+              "x": 12,
+              "y": 1560
+            }
+          ],
+          "labelHidden": false,
+          "labelBox": {
+            "left": -149.64999999999998,
+            "right": -0.14999999999999147,
+            "top": 1547,
+            "bottom": 1573
+          },
+          "crossings": [
+            {
+              "x": -217.5,
+              "y": 888.8
+            },
+            {
+              "x": -185.5,
+              "y": 946.4
+            },
+            {
+              "x": -185.5,
+              "y": 896
+            },
+            {
+              "x": -185.5,
+              "y": 978.4
+            },
+            {
+              "x": -185.5,
+              "y": 1246
+            },
+            {
+              "x": -153.5,
+              "y": 1560
+            }
+          ]
+        },
+        "style": {
+          "stroke": "#326ea1",
+          "strokeWidth": 1.8,
+          "opacity": 1
+        },
+        "markerEnd": {
+          "type": "arrow",
+          "color": "#326ea1"
+        }
+      },
+      {
+        "id": "dependency:top>scaled_q/load_control/state_condition",
+        "source": "rack:top:consumer",
+        "target": "local:top:scaled_q",
+        "sourceHandle": "out:load_control",
+        "targetHandle": "in:dep:dependency:top>scaled_q/load_control/state_condition",
+        "type": "relationship",
+        "label": "更新条件 · 采样使能",
+        "reconnectable": false,
+        "data": {
+          "localSignalId": "scaled_q",
+          "dependencyEndpoint": {
+            "moduleId": "top",
+            "interfaceId": "enable"
+          },
+          "dependencyEndpoints": [
+            {
+              "moduleId": "top",
+              "interfaceId": "enable"
+            }
+          ],
+          "semanticKind": "dependency",
+          "dependencyRole": "state_condition",
+          "category": "control",
+          "relationBundle": false,
+          "title": "模型表达式依赖；不是一条直接物理线\ntop.enable",
+          "color": "#64758b",
+          "granularity": "expression",
+          "feedback": false,
+          "laneOffset": -30,
+          "routingWork": 0,
+          "routingSimplified": false,
+          "route": {
+            "path": "M -249.5 946.4 L -121.5 946.4 L -121.5 268 L 12 268",
+            "x": -31.75,
+            "y": 403.67999999999995
+          },
+          "routePoints": [
+            {
+              "x": -249.5,
+              "y": 946.4
+            },
+            {
+              "x": -121.5,
+              "y": 946.4
+            },
+            {
+              "x": -121.5,
+              "y": 268
+            },
+            {
+              "x": 12,
+              "y": 268
+            }
+          ],
+          "labelHidden": false,
+          "labelBox": {
+            "left": -114.5,
+            "right": 51,
+            "top": 390.67999999999995,
+            "bottom": 416.67999999999995
+          },
+          "crossings": [
+            {
+              "x": -217.5,
+              "y": 946.4
+            },
+            {
+              "x": -153.5,
+              "y": 946.4
+            },
+            {
+              "x": -185.5,
+              "y": 946.4
+            },
+            {
+              "x": -121.5,
+              "y": 946.4
+            },
+            {
+              "x": -121.5,
+              "y": 896
+            },
+            {
+              "x": -121.5,
+              "y": 582
+            },
+            {
+              "x": -121.5,
+              "y": 618
+            },
+            {
+              "x": -121.5,
+              "y": 546
+            },
+            {
+              "x": -121.5,
+              "y": 550
+            }
+          ]
+        },
+        "style": {
+          "stroke": "#64758b",
+          "strokeWidth": 1.8,
+          "opacity": 1
+        },
+        "markerEnd": {
+          "type": "arrow",
+          "color": "#64758b"
+        }
+      },
+      {
+        "id": "dependency:top>scaled_q/sample_data/state_data",
+        "source": "rack:top:consumer",
+        "target": "local:top:scaled_q",
+        "sourceHandle": "out:sample_data",
+        "targetHandle": "in:dep:dependency:top>scaled_q/sample_data/state_data",
+        "type": "relationship",
+        "label": "写入值 · 采样数据",
+        "reconnectable": false,
+        "data": {
+          "localSignalId": "scaled_q",
+          "dependencyEndpoint": {
+            "moduleId": "top",
+            "interfaceId": "sample"
+          },
+          "dependencyEndpoints": [
+            {
+              "moduleId": "top",
+              "interfaceId": "sample"
+            }
+          ],
+          "semanticKind": "dependency",
+          "dependencyRole": "state_data",
+          "category": "data",
+          "relationBundle": false,
+          "title": "模型表达式依赖；不是一条直接物理线\ntop.sample",
+          "color": "#326ea1",
+          "granularity": "expression",
+          "feedback": false,
+          "laneOffset": 0,
+          "routingWork": 0,
+          "routingSimplified": false,
+          "route": {
+            "path": "M -249.5 888.8 L -185.5 888.8 L -185.5 196 L 12 196",
+            "x": -86.75,
+            "y": 196
+          },
+          "routePoints": [
+            {
+              "x": -249.5,
+              "y": 888.8
+            },
+            {
+              "x": -185.5,
+              "y": 888.8
+            },
+            {
+              "x": -185.5,
+              "y": 196
+            },
+            {
+              "x": 12,
+              "y": 196
+            }
+          ],
+          "labelHidden": false,
+          "labelBox": {
+            "left": -161.5,
+            "right": -12,
+            "top": 183,
+            "bottom": 209
+          },
+          "crossings": [
+            {
+              "x": -217.5,
+              "y": 888.8
+            },
+            {
+              "x": -185.5,
+              "y": 888.8
+            },
+            {
+              "x": -185.5,
+              "y": 582
+            },
+            {
+              "x": -185.5,
+              "y": 546
+            },
+            {
+              "x": -185.5,
+              "y": 550
+            }
+          ]
+        },
+        "style": {
+          "stroke": "#326ea1",
+          "strokeWidth": 1.8,
+          "opacity": 1
+        },
+        "markerEnd": {
+          "type": "arrow",
+          "color": "#326ea1"
+        }
+      },
+      {
+        "id": "dependency:top>scaled_q/shift_control/state_data",
+        "source": "rack:top:consumer",
+        "target": "local:top:scaled_q",
+        "sourceHandle": "out:shift_control",
+        "targetHandle": "in:dep:dependency:top>scaled_q/shift_control/state_data",
+        "type": "relationship",
+        "label": "写入值 · 移位量",
+        "reconnectable": false,
+        "data": {
+          "localSignalId": "scaled_q",
+          "dependencyEndpoint": {
+            "moduleId": "top",
+            "interfaceId": "shift"
+          },
+          "dependencyEndpoints": [
+            {
+              "moduleId": "top",
+              "interfaceId": "shift"
+            }
+          ],
+          "semanticKind": "dependency",
+          "dependencyRole": "state_data",
+          "category": "control",
+          "relationBundle": false,
+          "title": "模型表达式依赖；不是一条直接物理线\ntop.shift",
+          "color": "#64758b",
+          "granularity": "expression",
+          "feedback": false,
+          "laneOffset": 30,
+          "routingWork": 0,
+          "routingSimplified": false,
+          "route": {
+            "path": "M -249.5 582 L -217.5 582 L -217.5 232 L 12 232",
+            "x": -102.75,
+            "y": 232
+          },
+          "routePoints": [
+            {
+              "x": -249.5,
+              "y": 582
+            },
+            {
+              "x": -217.5,
+              "y": 582
+            },
+            {
+              "x": -217.5,
+              "y": 232
+            },
+            {
+              "x": 12,
+              "y": 232
+            }
+          ],
+          "labelHidden": false,
+          "labelBox": {
+            "left": -169.5,
+            "right": -36,
+            "top": 219,
+            "bottom": 245
+          },
+          "crossings": [
+            {
+              "x": -217.5,
+              "y": 582
+            },
+            {
+              "x": -217.5,
+              "y": 546
+            },
+            {
+              "x": -217.5,
+              "y": 550
+            },
+            {
+              "x": -185.5,
+              "y": 232
+            }
+          ],
+          "junctions": []
+        },
+        "style": {
+          "stroke": "#64758b",
+          "strokeWidth": 1.8,
+          "opacity": 1
+        },
+        "markerEnd": {
+          "type": "arrow",
+          "color": "#64758b"
+        }
+      }
+    ],
+    "inspection": {
+      "stored": [
+        {
+          "id": "scaled_out",
+          "scope": "top",
+          "from": {
+            "moduleId": "top",
+            "interfaceId": "scaled_q",
+            "local": true
+          },
+          "to": {
+            "moduleId": "top",
+            "interfaceId": "scaled"
+          }
+        },
+        {
+          "id": "packed_value_out",
+          "scope": "top",
+          "from": {
+            "moduleId": "top",
+            "interfaceId": "packed_value_q",
+            "local": true
+          },
+          "to": {
+            "moduleId": "top",
+            "interfaceId": "packed_value"
+          }
+        },
+        {
+          "id": "logical_value_out",
+          "scope": "top",
+          "from": {
+            "moduleId": "top",
+            "interfaceId": "logical_value_q",
+            "local": true
+          },
+          "to": {
+            "moduleId": "top",
+            "interfaceId": "logical_value"
+          }
+        },
+        {
+          "id": "negative_out",
+          "scope": "top",
+          "from": {
+            "moduleId": "top",
+            "interfaceId": "negative_q",
+            "local": true
+          },
+          "to": {
+            "moduleId": "top",
+            "interfaceId": "negative"
+          }
+        },
+        {
+          "id": "parity_out",
+          "scope": "top",
+          "from": {
+            "moduleId": "top",
+            "interfaceId": "parity_q",
+            "local": true
+          },
+          "to": {
+            "moduleId": "top",
+            "interfaceId": "parity"
+          }
+        }
+      ],
+      "links": [
+        {
+          "id": "scaled_out",
+          "scope": "top",
+          "from": {
+            "moduleId": "top",
+            "interfaceId": "scaled_q",
+            "local": true
+          },
+          "to": {
+            "moduleId": "top",
+            "interfaceId": "scaled"
+          }
+        },
+        {
+          "id": "packed_value_out",
+          "scope": "top",
+          "from": {
+            "moduleId": "top",
+            "interfaceId": "packed_value_q",
+            "local": true
+          },
+          "to": {
+            "moduleId": "top",
+            "interfaceId": "packed_value"
+          }
+        },
+        {
+          "id": "logical_value_out",
+          "scope": "top",
+          "from": {
+            "moduleId": "top",
+            "interfaceId": "logical_value_q",
+            "local": true
+          },
+          "to": {
+            "moduleId": "top",
+            "interfaceId": "logical_value"
+          }
+        },
+        {
+          "id": "negative_out",
+          "scope": "top",
+          "from": {
+            "moduleId": "top",
+            "interfaceId": "negative_q",
+            "local": true
+          },
+          "to": {
+            "moduleId": "top",
+            "interfaceId": "negative"
+          }
+        },
+        {
+          "id": "parity_out",
+          "scope": "top",
+          "from": {
+            "moduleId": "top",
+            "interfaceId": "parity_q",
+            "local": true
+          },
+          "to": {
+            "moduleId": "top",
+            "interfaceId": "parity"
+          }
+        }
+      ],
+      "stateBoundaries": [],
+      "limited": [],
+      "depth": 1,
+      "localIds": [],
+      "dependencies": [],
+      "moduleIds": [
+        "top"
+      ],
+      "missing": [],
+      "resolved": [
+        {
+          "link": {
+            "id": "scaled_out",
+            "scope": "top",
+            "from": {
+              "moduleId": "top",
+              "interfaceId": "scaled_q",
+              "local": true
+            },
+            "to": {
+              "moduleId": "top",
+              "interfaceId": "scaled"
+            }
+          },
+          "width": 12,
+          "group": {
+            "id": "scaled_result",
+            "label": "算术缩放",
+            "category": "data",
+            "description": "独立并行计算的输出。",
+            "auxiliary": false
+          }
+        },
+        {
+          "link": {
+            "id": "packed_value_out",
+            "scope": "top",
+            "from": {
+              "moduleId": "top",
+              "interfaceId": "packed_value_q",
+              "local": true
+            },
+            "to": {
+              "moduleId": "top",
+              "interfaceId": "packed_value"
+            }
+          },
+          "width": 8,
+          "group": {
+            "id": "packed_value_result",
+            "label": "低位打包",
+            "category": "data",
+            "description": "独立并行计算的输出。",
+            "auxiliary": false
+          }
+        },
+        {
+          "link": {
+            "id": "logical_value_out",
+            "scope": "top",
+            "from": {
+              "moduleId": "top",
+              "interfaceId": "logical_value_q",
+              "local": true
+            },
+            "to": {
+              "moduleId": "top",
+              "interfaceId": "logical_value"
+            }
+          },
+          "width": 8,
+          "group": {
+            "id": "logical_value_result",
+            "label": "逻辑右移",
+            "category": "data",
+            "description": "独立并行计算的输出。",
+            "auxiliary": false
+          }
+        },
+        {
+          "link": {
+            "id": "negative_out",
+            "scope": "top",
+            "from": {
+              "moduleId": "top",
+              "interfaceId": "negative_q",
+              "local": true
+            },
+            "to": {
+              "moduleId": "top",
+              "interfaceId": "negative"
+            }
+          },
+          "width": 1,
+          "group": {
+            "id": "negative_result",
+            "label": "负数标志",
+            "category": "data",
+            "description": "独立并行计算的输出。",
+            "auxiliary": false
+          }
+        },
+        {
+          "link": {
+            "id": "parity_out",
+            "scope": "top",
+            "from": {
+              "moduleId": "top",
+              "interfaceId": "parity_q",
+              "local": true
+            },
+            "to": {
+              "moduleId": "top",
+              "interfaceId": "parity"
+            }
+          },
+          "width": 1,
+          "group": {
+            "id": "parity_result",
+            "label": "异或校验",
+            "category": "data",
+            "description": "独立并行计算的输出。",
+            "auxiliary": false
+          }
+        }
+      ],
+      "summaryCount": 5
+    },
+    "frame": {
+      "id": "frame:top",
+      "position": {
+        "x": -423.5,
+        "y": -8
+      },
+      "width": 1087,
+      "height": 1692
+    },
+    "auxiliaryCount": 0,
+    "foldedLocalCount": 0,
+    "foldedDependencyCount": 5,
+    "localCount": 5,
+    "stateCount": 5
+  },
+  "positions": {
+    "local:top:scaled_q": {
+      "x": 12,
+      "y": 100
+    },
+    "local:top:packed_value_q": {
+      "x": 12,
+      "y": 450
+    },
+    "local:top:logical_value_q": {
+      "x": 12,
+      "y": 800
+    },
+    "local:top:negative_q": {
+      "x": 12,
+      "y": 1150
+    },
+    "local:top:parity_q": {
+      "x": 12,
+      "y": 1464
+    }
+  }
+}

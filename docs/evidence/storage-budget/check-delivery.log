@@ -1,0 +1,12 @@
+
+> rtl-architect@2.0.0 check:delivery
+> node --import tsx scripts/check-delivery.ts
+
+PASS 1: freshness reports matching, changed, missing, external symlink, no evidence without mutating the model
+PASS 2: CLI remains offline, fails on stale/unknown evidence and refuses unrelated flags
+PASS 3: reading constraints preserve semantic hash, order the main path, and reject stale or duplicate assignments
+PASS 4: bundle is self-contained, artifact hashes match, approval is independent of verification, sources remain untouched
+PASS 5: bundle refuses protected directories, symlink aliases and existing output; escaped HTML cannot inject markup
+PASS 6: geometry failures retain a diagnostic package and exit nonzero; every connection keeps exact endpoint mapping
+PASS 7: routing is stable under connection record reordering; no diagram operation mutates the model
+完成 7 组证据、交付与布局检查。

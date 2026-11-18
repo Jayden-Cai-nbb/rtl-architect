@@ -1,0 +1,290 @@
+{
+  "ok": true,
+  "toolVersion": "2.0.0",
+  "id": "bank_conflict",
+  "modelHash": "0000000000000000000000000000000000000000000000000000000000000000",
+  "configuration": "单时钟、16 × 32 bit、整 word；预算假设，不是器件报告",
+  "assumptions": [
+    "端口每拍接受一个请求；示例数值须经目标实现核对",
+    "有限访问只检验列出的请求，不代表完整调度"
+  ],
+  "options": [
+    {
+      "id": "a",
+      "label": "两个请求同 bank",
+      "classification": "derived",
+      "computeII": 1,
+      "memoryII": 1,
+      "intervalLowerBound": 1,
+      "integerIILowerBound": 1,
+      "cyclesLowerBound": 8,
+      "storageBits": 1024,
+      "requiredCapacity": null,
+      "capacitySufficient": null,
+      "bottleneck": "计算与存储",
+      "runIds": [],
+      "constraints": {
+        "resource": {
+          "resourceCount": 1,
+          "occupancyCycles": 1,
+          "latencyCycles": 3,
+          "declaredInitiationInterval": 1,
+          "spacingLowerBound": 1,
+          "intervalLowerBound": 1,
+          "timingComplete": true,
+          "resultWindowLowerBound": 10,
+          "traceStatus": "no_conflict_in_declared_trace",
+          "rows": [
+            {
+              "id": "op0",
+              "cycle": 0,
+              "lane": 0,
+              "reservedUntil": 1,
+              "nextLaunchNotBefore": 1,
+              "resultVisibleCycle": 3
+            },
+            {
+              "id": "op1",
+              "cycle": 1,
+              "lane": 0,
+              "reservedUntil": 2,
+              "nextLaunchNotBefore": 2,
+              "resultVisibleCycle": 4
+            }
+          ],
+          "issues": [],
+          "explanation": "每项资源下界 = 运算数 × max(独占周期 1, 已知启动间隔 1) / 资源数 1。latency 只决定单笔结果可见时间，不乘入吞吐服务量；未知 II 时仅保留已知独占下界。有限请求不自动排队或重排。"
+        },
+        "recurrence": {
+          "status": "not_declared",
+          "intervalLowerBound": null,
+          "rows": [],
+          "explanation": "每条明确反馈依赖要求 distance × II ≥ latency；平均间隔下界为 latency / distance，固定整数 II 还需向上取整。没有声明不等于没有递推；不从图形位置、名称或 RTL 猜测依赖。"
+        },
+        "memory": {
+          "intervalLowerBound": 1,
+          "status": "aggregate_lower_bound",
+          "trace": {
+            "kind": "shared_rw",
+            "label": "共享单 R/W",
+            "readLatencyCycles": 1,
+            "sameAddressReadWrite": "old_data",
+            "status": "conflict",
+            "rows": [
+              {
+                "id": "read0",
+                "cycle": 0,
+                "kind": "read",
+                "address": 0,
+                "bank": "bank0",
+                "word": 0,
+                "port": null,
+                "portStatus": "conflict",
+                "readVisibleCycle": null,
+                "readValue": "unresolved_conflict"
+              },
+              {
+                "id": "write0",
+                "cycle": 0,
+                "kind": "write",
+                "address": 1,
+                "bank": "bank0",
+                "word": 1,
+                "port": null,
+                "portStatus": "conflict",
+                "readVisibleCycle": null,
+                "readValue": "not_a_read"
+              }
+            ],
+            "occupancy": [
+              {
+                "cycle": 0,
+                "bank": "bank0",
+                "reads": 1,
+                "writes": 1,
+                "members": [
+                  "read0",
+                  "write0"
+                ],
+                "status": "conflict"
+              }
+            ],
+            "issues": [
+              {
+                "code": "BANK_PORT_CONFLICT",
+                "message": "E0 / bank0 请求 1 读 + 1 写，超过共享单 R/W能力",
+                "members": [
+                  "read0",
+                  "write0"
+                ],
+                "cycle": 0,
+                "bank": "bank0"
+              }
+            ],
+            "unknowns": [],
+            "explanation": "按显式地址 → bank/word 映射检查同周期请求。bank 各有独立端口；总端口数不能消除局部冲突。端口编号仅说明该拍请求可分配，不是已接受事务或实际调度。读值仅报告声明语义，不仿真 RAM 内容；no_change 不产生该读请求的新结果。"
+          },
+          "explanation": "总端口下界 = 每项读 + 每项写 / 2。这是理想分布下界；实际 bank 占用与同址冲突另查，不能被总端口数抵消。"
+        },
+        "capacity": {
+          "stallRequired": null,
+          "stallCapacitySufficient": null,
+          "sustained": {
+            "status": "not_declared",
+            "netGrowth": null,
+            "timeToFill": null,
+            "timeUnit": null,
+            "finiteCapacitySupportsLongTerm": null,
+            "explanation": "未声明持续到达率/消费率；停顿缓存充足不能证明长期稳定。"
+          }
+        }
+      },
+      "scheduleStatus": "not_proven",
+      "unmodeled": [
+        "未求解完整调度、运算间数据依赖、仲裁、公平性、跨时钟、启动/排空和背压耦合；不保证下界可达。",
+        "有限请求是用户声明的尝试时刻，不自动重排；没有证明它覆盖整个工作量或可周期重复。",
+        "未声明反馈依赖；不能据此认定工作项互相独立。",
+        "显式存储仅支持单时钟、整 word、每端口每拍一个请求；每 bank 深度 16，不表达复制一致性或字节写掩码。",
+        "未声明持续到达率与消费率；缓存停顿预算不证明长期稳定。"
+      ]
+    },
+    {
+      "id": "b",
+      "label": "两个请求分 bank",
+      "classification": "derived",
+      "computeII": 1,
+      "memoryII": 1,
+      "intervalLowerBound": 1,
+      "integerIILowerBound": 1,
+      "cyclesLowerBound": 8,
+      "storageBits": 1024,
+      "requiredCapacity": null,
+      "capacitySufficient": null,
+      "bottleneck": "计算与存储",
+      "runIds": [],
+      "constraints": {
+        "resource": {
+          "resourceCount": 1,
+          "occupancyCycles": 1,
+          "latencyCycles": 3,
+          "declaredInitiationInterval": 1,
+          "spacingLowerBound": 1,
+          "intervalLowerBound": 1,
+          "timingComplete": true,
+          "resultWindowLowerBound": 10,
+          "traceStatus": "no_conflict_in_declared_trace",
+          "rows": [
+            {
+              "id": "op0",
+              "cycle": 0,
+              "lane": 0,
+              "reservedUntil": 1,
+              "nextLaunchNotBefore": 1,
+              "resultVisibleCycle": 3
+            },
+            {
+              "id": "op1",
+              "cycle": 1,
+              "lane": 0,
+              "reservedUntil": 2,
+              "nextLaunchNotBefore": 2,
+              "resultVisibleCycle": 4
+            }
+          ],
+          "issues": [],
+          "explanation": "每项资源下界 = 运算数 × max(独占周期 1, 已知启动间隔 1) / 资源数 1。latency 只决定单笔结果可见时间，不乘入吞吐服务量；未知 II 时仅保留已知独占下界。有限请求不自动排队或重排。"
+        },
+        "recurrence": {
+          "status": "not_declared",
+          "intervalLowerBound": null,
+          "rows": [],
+          "explanation": "每条明确反馈依赖要求 distance × II ≥ latency；平均间隔下界为 latency / distance，固定整数 II 还需向上取整。没有声明不等于没有递推；不从图形位置、名称或 RTL 猜测依赖。"
+        },
+        "memory": {
+          "intervalLowerBound": 1,
+          "status": "aggregate_lower_bound",
+          "trace": {
+            "kind": "shared_rw",
+            "label": "共享单 R/W",
+            "readLatencyCycles": 1,
+            "sameAddressReadWrite": "old_data",
+            "status": "no_conflict_in_declared_trace",
+            "rows": [
+              {
+                "id": "read0",
+                "cycle": 0,
+                "kind": "read",
+                "address": 0,
+                "bank": "bank0",
+                "word": 0,
+                "port": "RW0",
+                "portStatus": "within_declared_ports",
+                "readVisibleCycle": 1,
+                "readValue": "stored_value"
+              },
+              {
+                "id": "write0",
+                "cycle": 0,
+                "kind": "write",
+                "address": 1,
+                "bank": "bank1",
+                "word": 1,
+                "port": "RW0",
+                "portStatus": "within_declared_ports",
+                "readVisibleCycle": null,
+                "readValue": "not_a_read"
+              }
+            ],
+            "occupancy": [
+              {
+                "cycle": 0,
+                "bank": "bank0",
+                "reads": 1,
+                "writes": 0,
+                "members": [
+                  "read0"
+                ],
+                "status": "within_declared_ports"
+              },
+              {
+                "cycle": 0,
+                "bank": "bank1",
+                "reads": 0,
+                "writes": 1,
+                "members": [
+                  "write0"
+                ],
+                "status": "within_declared_ports"
+              }
+            ],
+            "issues": [],
+            "unknowns": [],
+            "explanation": "按显式地址 → bank/word 映射检查同周期请求。bank 各有独立端口；总端口数不能消除局部冲突。端口编号仅说明该拍请求可分配，不是已接受事务或实际调度。读值仅报告声明语义，不仿真 RAM 内容；no_change 不产生该读请求的新结果。"
+          },
+          "explanation": "总端口下界 = 每项读 + 每项写 / 2。这是理想分布下界；实际 bank 占用与同址冲突另查，不能被总端口数抵消。"
+        },
+        "capacity": {
+          "stallRequired": null,
+          "stallCapacitySufficient": null,
+          "sustained": {
+            "status": "not_declared",
+            "netGrowth": null,
+            "timeToFill": null,
+            "timeUnit": null,
+            "finiteCapacitySupportsLongTerm": null,
+            "explanation": "未声明持续到达率/消费率；停顿缓存充足不能证明长期稳定。"
+          }
+        }
+      },
+      "scheduleStatus": "not_proven",
+      "unmodeled": [
+        "未求解完整调度、运算间数据依赖、仲裁、公平性、跨时钟、启动/排空和背压耦合；不保证下界可达。",
+        "有限请求是用户声明的尝试时刻，不自动重排；没有证明它覆盖整个工作量或可周期重复。",
+        "未声明反馈依赖；不能据此认定工作项互相独立。",
+        "显式存储仅支持单时钟、整 word、每端口每拍一个请求；每 bank 深度 16，不表达复制一致性或字节写掩码。",
+        "未声明持续到达率与消费率；缓存停顿预算不证明长期稳定。"
+      ]
+    }
+  ],
+  "note": "资源服务量下界与有限请求检查，非完整调度可行性结论。cyclesLowerBound 保留原服务量/独占周期口径（不含结果启动排空）；latency、启动间隔、递推和长期容量分别报告。所有新输入都是工作记录中的显式假设，不修改硬件模型、批准或证据。"
+}

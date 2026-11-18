@@ -1,0 +1,2117 @@
+{
+  "schemaVersion": 1,
+  "engine": "yosys-proc-bdd-v2",
+  "toolVersion": "2.0.0",
+  "modelHash": "2cd22e38e8248095a270a45eb113ea2d37b9edd87872ccb66ecbd362c886f4bf",
+  "manifest": {
+    "schemaVersion": 1,
+    "runId": "run_1794811050378_a1a24567fffd415c91a2a065bf2265c1",
+    "netlist": "state.json",
+    "top": "signed_scaler",
+    "instancePath": [],
+    "mappings": [
+      {
+        "moduleId": "top",
+        "localSignalId": "scaled_q",
+        "state": "scaled",
+        "clock": "clk",
+        "signals": [
+          {
+            "endpoint": {
+              "moduleId": "top",
+              "interfaceId": "sample"
+            },
+            "pin": "sample"
+          },
+          {
+            "endpoint": {
+              "moduleId": "top",
+              "interfaceId": "shift"
+            },
+            "pin": "shift"
+          },
+          {
+            "endpoint": {
+              "moduleId": "top",
+              "interfaceId": "enable"
+            },
+            "pin": "enable"
+          },
+          {
+            "endpoint": {
+              "moduleId": "top",
+              "interfaceId": "rst_n"
+            },
+            "pin": "rst_n"
+          }
+        ]
+      },
+      {
+        "moduleId": "top",
+        "localSignalId": "packed_value_q",
+        "state": "packed_value",
+        "clock": "clk",
+        "signals": [
+          {
+            "endpoint": {
+              "moduleId": "top",
+              "interfaceId": "sample"
+            },
+            "pin": "sample"
+          },
+          {
+            "endpoint": {
+              "moduleId": "top",
+              "interfaceId": "shift"
+            },
+            "pin": "shift"
+          },
+          {
+            "endpoint": {
+              "moduleId": "top",
+              "interfaceId": "enable"
+            },
+            "pin": "enable"
+          },
+          {
+            "endpoint": {
+              "moduleId": "top",
+              "interfaceId": "rst_n"
+            },
+            "pin": "rst_n"
+          }
+        ]
+      },
+      {
+        "moduleId": "top",
+        "localSignalId": "logical_value_q",
+        "state": "logical_value",
+        "clock": "clk",
+        "signals": [
+          {
+            "endpoint": {
+              "moduleId": "top",
+              "interfaceId": "sample"
+            },
+            "pin": "sample"
+          },
+          {
+            "endpoint": {
+              "moduleId": "top",
+              "interfaceId": "shift"
+            },
+            "pin": "shift"
+          },
+          {
+            "endpoint": {
+              "moduleId": "top",
+              "interfaceId": "enable"
+            },
+            "pin": "enable"
+          },
+          {
+            "endpoint": {
+              "moduleId": "top",
+              "interfaceId": "rst_n"
+            },
+            "pin": "rst_n"
+          }
+        ]
+      },
+      {
+        "moduleId": "top",
+        "localSignalId": "negative_q",
+        "state": "negative",
+        "clock": "clk",
+        "signals": [
+          {
+            "endpoint": {
+              "moduleId": "top",
+              "interfaceId": "sample"
+            },
+            "pin": "sample"
+          },
+          {
+            "endpoint": {
+              "moduleId": "top",
+              "interfaceId": "shift"
+            },
+            "pin": "shift"
+          },
+          {
+            "endpoint": {
+              "moduleId": "top",
+              "interfaceId": "enable"
+            },
+            "pin": "enable"
+          },
+          {
+            "endpoint": {
+              "moduleId": "top",
+              "interfaceId": "rst_n"
+            },
+            "pin": "rst_n"
+          }
+        ]
+      },
+      {
+        "moduleId": "top",
+        "localSignalId": "parity_q",
+        "state": "parity",
+        "clock": "clk",
+        "signals": [
+          {
+            "endpoint": {
+              "moduleId": "top",
+              "interfaceId": "sample"
+            },
+            "pin": "sample"
+          },
+          {
+            "endpoint": {
+              "moduleId": "top",
+              "interfaceId": "shift"
+            },
+            "pin": "shift"
+          },
+          {
+            "endpoint": {
+              "moduleId": "top",
+              "interfaceId": "enable"
+            },
+            "pin": "enable"
+          },
+          {
+            "endpoint": {
+              "moduleId": "top",
+              "interfaceId": "rst_n"
+            },
+            "pin": "rst_n"
+          }
+        ]
+      }
+    ]
+  },
+  "manifestHash": "36e47a022a74f806a6ac7793926b27f3c17654bbb1ef00997008073f1d44396a",
+  "producerRun": "run_1794811050378_a1a24567fffd415c91a2a065bf2265c1",
+  "producerFresh": true,
+  "producerInputsCurrent": true,
+  "producer": {
+    "netlistHash": "909c44fcce392e6cb1897d39045256ea5c82b9f49093528d10e403b09c2e1872",
+    "profileHash": "65948a0cbfe8db2b56efb5561c77804ceea1cf73848e313dd907f208f5a05fa5",
+    "inputs": [
+      {
+        "file": "rtl/signed_scaler.sv",
+        "sha256": "0b7424483adcb3cf6f860754c70cc6fdbf2d3cd170a115fc717a1bc719761cfe"
+      },
+      {
+        "file": "elaboration.json",
+        "sha256": "151a564903dc85f122aee01c72c4ecabbf3f818b8ed5aefa5ae65c0e8d50f9ea"
+      }
+    ],
+    "tools": [
+      {
+        "program": "yosys",
+        "version": "Yosys 0.68+206 (git sha1 72dc97739-dirty, Release, Clang /usr/bin/clang++ 21.1.8)"
+      }
+    ]
+  },
+  "basis": {
+    "kind": "as_built",
+    "label": "还原模型一致性",
+    "reviewRecordHash": "85ba225fa8d32318b6bf11a850f109962cacf221ef2aa2f7609280f2cc675c58"
+  },
+  "status": "MATCH",
+  "discoveryComplete": true,
+  "scope": {
+    "stateCount": 5,
+    "observedCount": 5,
+    "truncated": false,
+    "mappedCount": 5
+  },
+  "scopes": [
+    {
+      "instancePath": [],
+      "found": true,
+      "stateCount": 5,
+      "observedCount": 5,
+      "mappedCount": 5,
+      "truncated": false
+    }
+  ],
+  "observations": [
+    {
+      "cell": "$procdff$33",
+      "type": "$dff",
+      "width": 12,
+      "aliases": [
+        "scaled"
+      ],
+      "source": "rtl/signed_scaler.sv:10.3-24.6",
+      "instancePath": [],
+      "status": "EXTRACTED",
+      "reason": "已提取有限二态下一拍函数；未与设计声明比较",
+      "observed": {
+        "cell": "$procdff$33",
+        "aliases": [
+          "scaled"
+        ],
+        "width": 12,
+        "source": "rtl/signed_scaler.sv:10.3-24.6",
+        "clock": {
+          "bits": [
+            2
+          ],
+          "edge": "rising"
+        },
+        "stateBits": [
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28
+        ],
+        "nextBits": [
+          49,
+          50,
+          51,
+          52,
+          53,
+          54,
+          55,
+          56,
+          57,
+          58,
+          59,
+          60
+        ],
+        "leafBits": [
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28
+        ],
+        "cells": [
+          {
+            "name": "$procmux$28",
+            "type": "$mux",
+            "source": "rtl/signed_scaler.sv:17.18-17.24|rtl/signed_scaler.sv:17.14-23.8",
+            "parameters": {
+              "WIDTH": "00000000000000000000000000001100"
+            },
+            "connections": {
+              "A": [
+                17,
+                18,
+                19,
+                20,
+                21,
+                22,
+                23,
+                24,
+                25,
+                26,
+                27,
+                28
+              ],
+              "B": [
+                113,
+                114,
+                115,
+                116,
+                117,
+                118,
+                119,
+                120,
+                121,
+                122,
+                123,
+                124
+              ],
+              "S": [
+                4
+              ],
+              "Y": [
+                125,
+                126,
+                127,
+                128,
+                129,
+                130,
+                131,
+                132,
+                133,
+                134,
+                135,
+                136
+              ]
+            }
+          },
+          {
+            "name": "$procmux$31",
+            "type": "$mux",
+            "source": "rtl/signed_scaler.sv:11.9-11.15|rtl/signed_scaler.sv:11.5-23.8",
+            "parameters": {
+              "WIDTH": "00000000000000000000000000001100"
+            },
+            "connections": {
+              "A": [
+                "0",
+                "0",
+                "0",
+                "0",
+                "0",
+                "0",
+                "0",
+                "0",
+                "0",
+                "0",
+                "0",
+                "0"
+              ],
+              "B": [
+                125,
+                126,
+                127,
+                128,
+                129,
+                130,
+                131,
+                132,
+                133,
+                134,
+                135,
+                136
+              ],
+              "S": [
+                3
+              ],
+              "Y": [
+                49,
+                50,
+                51,
+                52,
+                53,
+                54,
+                55,
+                56,
+                57,
+                58,
+                59,
+                60
+              ]
+            }
+          },
+          {
+            "name": "$sshr$rtl/signed_scaler.sv:18$3",
+            "type": "$sshr",
+            "source": "rtl/signed_scaler.sv:18.17-18.42",
+            "parameters": {
+              "A_SIGNED": "00000000000000000000000000000001",
+              "A_WIDTH": "00000000000000000000000000001100",
+              "B_SIGNED": "00000000000000000000000000000000",
+              "B_WIDTH": "00000000000000000000000000000100",
+              "Y_WIDTH": "00000000000000000000000000001100"
+            },
+            "connections": {
+              "A": [
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12,
+                12,
+                12,
+                12,
+                12
+              ],
+              "B": [
+                13,
+                14,
+                15,
+                16
+              ],
+              "Y": [
+                113,
+                114,
+                115,
+                116,
+                117,
+                118,
+                119,
+                120,
+                121,
+                122,
+                123,
+                124
+              ]
+            }
+          }
+        ],
+        "expression": {
+          "text": "(rst_n ? (enable ? $sshr[12](extended_sample >>> shift) : scaled) : 12'h0)",
+          "abbreviated": false
+        },
+        "bitOrder": "lsb_first",
+        "domain": "two_state"
+      },
+      "metrics": {
+        "nodes": 2441,
+        "operations": 5162
+      }
+    },
+    {
+      "cell": "$procdff$34",
+      "type": "$dff",
+      "width": 8,
+      "aliases": [
+        "packed_value"
+      ],
+      "source": "rtl/signed_scaler.sv:10.3-24.6",
+      "instancePath": [],
+      "status": "EXTRACTED",
+      "reason": "已提取有限二态下一拍函数；未与设计声明比较",
+      "observed": {
+        "cell": "$procdff$34",
+        "aliases": [
+          "packed_value"
+        ],
+        "width": 8,
+        "source": "rtl/signed_scaler.sv:10.3-24.6",
+        "clock": {
+          "bits": [
+            2
+          ],
+          "edge": "rising"
+        },
+        "stateBits": [
+          29,
+          30,
+          31,
+          32,
+          33,
+          34,
+          35,
+          36
+        ],
+        "nextBits": [
+          61,
+          62,
+          63,
+          64,
+          65,
+          66,
+          67,
+          68
+        ],
+        "leafBits": [
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          29,
+          30,
+          31,
+          32,
+          33,
+          34,
+          35,
+          36
+        ],
+        "cells": [
+          {
+            "name": "$procmux$23",
+            "type": "$mux",
+            "source": "rtl/signed_scaler.sv:17.18-17.24|rtl/signed_scaler.sv:17.14-23.8",
+            "parameters": {
+              "WIDTH": "00000000000000000000000000001000"
+            },
+            "connections": {
+              "A": [
+                29,
+                30,
+                31,
+                32,
+                33,
+                34,
+                35,
+                36
+              ],
+              "B": [
+                97,
+                98,
+                99,
+                100,
+                101,
+                102,
+                103,
+                104
+              ],
+              "S": [
+                4
+              ],
+              "Y": [
+                105,
+                106,
+                107,
+                108,
+                109,
+                110,
+                111,
+                112
+              ]
+            }
+          },
+          {
+            "name": "$procmux$26",
+            "type": "$mux",
+            "source": "rtl/signed_scaler.sv:11.9-11.15|rtl/signed_scaler.sv:11.5-23.8",
+            "parameters": {
+              "WIDTH": "00000000000000000000000000001000"
+            },
+            "connections": {
+              "A": [
+                "0",
+                "0",
+                "0",
+                "0",
+                "0",
+                "0",
+                "0",
+                "0"
+              ],
+              "B": [
+                105,
+                106,
+                107,
+                108,
+                109,
+                110,
+                111,
+                112
+              ],
+              "S": [
+                3
+              ],
+              "Y": [
+                61,
+                62,
+                63,
+                64,
+                65,
+                66,
+                67,
+                68
+              ]
+            }
+          },
+          {
+            "name": "$sshr$rtl/signed_scaler.sv:19$4",
+            "type": "$sshr",
+            "source": "rtl/signed_scaler.sv:19.26-19.51",
+            "parameters": {
+              "A_SIGNED": "00000000000000000000000000000001",
+              "A_WIDTH": "00000000000000000000000000001100",
+              "B_SIGNED": "00000000000000000000000000000000",
+              "B_WIDTH": "00000000000000000000000000000100",
+              "Y_WIDTH": "00000000000000000000000000001100"
+            },
+            "connections": {
+              "A": [
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12,
+                12,
+                12,
+                12,
+                12
+              ],
+              "B": [
+                13,
+                14,
+                15,
+                16
+              ],
+              "Y": [
+                97,
+                98,
+                99,
+                100,
+                101,
+                102,
+                103,
+                104,
+                138,
+                139,
+                140,
+                141
+              ]
+            }
+          }
+        ],
+        "expression": {
+          "text": "(rst_n ? (enable ? bits[97,98,99,100,101,102,103,104] : packed_value) : 8'h0)",
+          "abbreviated": false
+        },
+        "bitOrder": "lsb_first",
+        "domain": "two_state"
+      },
+      "metrics": {
+        "nodes": 2425,
+        "operations": 5106
+      }
+    },
+    {
+      "cell": "$procdff$35",
+      "type": "$dff",
+      "width": 8,
+      "aliases": [
+        "logical_value"
+      ],
+      "source": "rtl/signed_scaler.sv:10.3-24.6",
+      "instancePath": [],
+      "status": "EXTRACTED",
+      "reason": "已提取有限二态下一拍函数；未与设计声明比较",
+      "observed": {
+        "cell": "$procdff$35",
+        "aliases": [
+          "logical_value"
+        ],
+        "width": 8,
+        "source": "rtl/signed_scaler.sv:10.3-24.6",
+        "clock": {
+          "bits": [
+            2
+          ],
+          "edge": "rising"
+        },
+        "stateBits": [
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44
+        ],
+        "nextBits": [
+          69,
+          70,
+          71,
+          72,
+          73,
+          74,
+          75,
+          76
+        ],
+        "leafBits": [
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44
+        ],
+        "cells": [
+          {
+            "name": "$procmux$18",
+            "type": "$mux",
+            "source": "rtl/signed_scaler.sv:17.18-17.24|rtl/signed_scaler.sv:17.14-23.8",
+            "parameters": {
+              "WIDTH": "00000000000000000000000000001000"
+            },
+            "connections": {
+              "A": [
+                37,
+                38,
+                39,
+                40,
+                41,
+                42,
+                43,
+                44
+              ],
+              "B": [
+                81,
+                82,
+                83,
+                84,
+                85,
+                86,
+                87,
+                88
+              ],
+              "S": [
+                4
+              ],
+              "Y": [
+                89,
+                90,
+                91,
+                92,
+                93,
+                94,
+                95,
+                96
+              ]
+            }
+          },
+          {
+            "name": "$procmux$21",
+            "type": "$mux",
+            "source": "rtl/signed_scaler.sv:11.9-11.15|rtl/signed_scaler.sv:11.5-23.8",
+            "parameters": {
+              "WIDTH": "00000000000000000000000000001000"
+            },
+            "connections": {
+              "A": [
+                "0",
+                "0",
+                "0",
+                "0",
+                "0",
+                "0",
+                "0",
+                "0"
+              ],
+              "B": [
+                89,
+                90,
+                91,
+                92,
+                93,
+                94,
+                95,
+                96
+              ],
+              "S": [
+                3
+              ],
+              "Y": [
+                69,
+                70,
+                71,
+                72,
+                73,
+                74,
+                75,
+                76
+              ]
+            }
+          },
+          {
+            "name": "$shr$rtl/signed_scaler.sv:20$5",
+            "type": "$shr",
+            "source": "rtl/signed_scaler.sv:20.24-20.50",
+            "parameters": {
+              "A_SIGNED": "00000000000000000000000000000000",
+              "A_WIDTH": "00000000000000000000000000001000",
+              "B_SIGNED": "00000000000000000000000000000000",
+              "B_WIDTH": "00000000000000000000000000000100",
+              "Y_WIDTH": "00000000000000000000000000001000"
+            },
+            "connections": {
+              "A": [
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12
+              ],
+              "B": [
+                13,
+                14,
+                15,
+                16
+              ],
+              "Y": [
+                81,
+                82,
+                83,
+                84,
+                85,
+                86,
+                87,
+                88
+              ]
+            }
+          }
+        ],
+        "expression": {
+          "text": "(rst_n ? (enable ? $shr[8](sample >> shift) : logical_value) : 8'h0)",
+          "abbreviated": false
+        },
+        "bitOrder": "lsb_first",
+        "domain": "two_state"
+      },
+      "metrics": {
+        "nodes": 1761,
+        "operations": 3704
+      }
+    },
+    {
+      "cell": "$procdff$36",
+      "type": "$dff",
+      "width": 1,
+      "aliases": [
+        "negative"
+      ],
+      "source": "rtl/signed_scaler.sv:10.3-24.6",
+      "instancePath": [],
+      "status": "EXTRACTED",
+      "reason": "已提取有限二态下一拍函数；未与设计声明比较",
+      "observed": {
+        "cell": "$procdff$36",
+        "aliases": [
+          "negative"
+        ],
+        "width": 1,
+        "source": "rtl/signed_scaler.sv:10.3-24.6",
+        "clock": {
+          "bits": [
+            2
+          ],
+          "edge": "rising"
+        },
+        "stateBits": [
+          45
+        ],
+        "nextBits": [
+          77
+        ],
+        "leafBits": [
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          45
+        ],
+        "cells": [
+          {
+            "name": "$lt$rtl/signed_scaler.sv:21$6",
+            "type": "$lt",
+            "source": "rtl/signed_scaler.sv:21.19-21.33",
+            "parameters": {
+              "A_SIGNED": "00000000000000000000000000000001",
+              "A_WIDTH": "00000000000000000000000000001000",
+              "B_SIGNED": "00000000000000000000000000000001",
+              "B_WIDTH": "00000000000000000000000000001000",
+              "Y_WIDTH": "00000000000000000000000000000001"
+            },
+            "connections": {
+              "A": [
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12
+              ],
+              "B": [
+                "0",
+                "0",
+                "0",
+                "0",
+                "0",
+                "0",
+                "0",
+                "0"
+              ],
+              "Y": [
+                48
+              ]
+            }
+          },
+          {
+            "name": "$procmux$13",
+            "type": "$mux",
+            "source": "rtl/signed_scaler.sv:17.18-17.24|rtl/signed_scaler.sv:17.14-23.8",
+            "parameters": {
+              "WIDTH": "00000000000000000000000000000001"
+            },
+            "connections": {
+              "A": [
+                45
+              ],
+              "B": [
+                48
+              ],
+              "S": [
+                4
+              ],
+              "Y": [
+                80
+              ]
+            }
+          },
+          {
+            "name": "$procmux$16",
+            "type": "$mux",
+            "source": "rtl/signed_scaler.sv:11.9-11.15|rtl/signed_scaler.sv:11.5-23.8",
+            "parameters": {
+              "WIDTH": "00000000000000000000000000000001"
+            },
+            "connections": {
+              "A": [
+                "0"
+              ],
+              "B": [
+                80
+              ],
+              "S": [
+                3
+              ],
+              "Y": [
+                77
+              ]
+            }
+          }
+        ],
+        "expression": {
+          "text": "(rst_n ? (enable ? $lt[1](sample < 8'h0) : negative) : 1'h0)",
+          "abbreviated": false
+        },
+        "bitOrder": "lsb_first",
+        "domain": "two_state"
+      },
+      "metrics": {
+        "nodes": 27,
+        "operations": 96
+      }
+    },
+    {
+      "cell": "$procdff$37",
+      "type": "$dff",
+      "width": 1,
+      "aliases": [
+        "parity"
+      ],
+      "source": "rtl/signed_scaler.sv:10.3-24.6",
+      "instancePath": [],
+      "status": "EXTRACTED",
+      "reason": "已提取有限二态下一拍函数；未与设计声明比较",
+      "observed": {
+        "cell": "$procdff$37",
+        "aliases": [
+          "parity"
+        ],
+        "width": 1,
+        "source": "rtl/signed_scaler.sv:10.3-24.6",
+        "clock": {
+          "bits": [
+            2
+          ],
+          "edge": "rising"
+        },
+        "stateBits": [
+          46
+        ],
+        "nextBits": [
+          78
+        ],
+        "leafBits": [
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          46
+        ],
+        "cells": [
+          {
+            "name": "$procmux$11",
+            "type": "$mux",
+            "source": "rtl/signed_scaler.sv:11.9-11.15|rtl/signed_scaler.sv:11.5-23.8",
+            "parameters": {
+              "WIDTH": "00000000000000000000000000000001"
+            },
+            "connections": {
+              "A": [
+                "0"
+              ],
+              "B": [
+                79
+              ],
+              "S": [
+                3
+              ],
+              "Y": [
+                78
+              ]
+            }
+          },
+          {
+            "name": "$procmux$8",
+            "type": "$mux",
+            "source": "rtl/signed_scaler.sv:17.18-17.24|rtl/signed_scaler.sv:17.14-23.8",
+            "parameters": {
+              "WIDTH": "00000000000000000000000000000001"
+            },
+            "connections": {
+              "A": [
+                46
+              ],
+              "B": [
+                137
+              ],
+              "S": [
+                4
+              ],
+              "Y": [
+                79
+              ]
+            }
+          },
+          {
+            "name": "$reduce_xor$rtl/signed_scaler.sv:22$7",
+            "type": "$reduce_xor",
+            "source": "rtl/signed_scaler.sv:22.17-22.24",
+            "parameters": {
+              "A_SIGNED": "00000000000000000000000000000000",
+              "A_WIDTH": "00000000000000000000000000001000",
+              "Y_WIDTH": "00000000000000000000000000000001"
+            },
+            "connections": {
+              "A": [
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12
+              ],
+              "Y": [
+                137
+              ]
+            }
+          }
+        ],
+        "expression": {
+          "text": "(rst_n ? (enable ? $reduce_xor[1](A=sample) : parity) : 1'h0)",
+          "abbreviated": false
+        },
+        "bitOrder": "lsb_first",
+        "domain": "two_state"
+      },
+      "metrics": {
+        "nodes": 75,
+        "operations": 140
+      }
+    }
+  ],
+  "results": [
+    {
+      "moduleId": "top",
+      "localSignalId": "scaled_q",
+      "state": "scaled",
+      "instancePath": [],
+      "status": "MATCH",
+      "reason": "所有二态输入与旧状态组合下，映射寄存器的单步更新函数相同",
+      "observed": {
+        "cell": "$procdff$33",
+        "aliases": [
+          "scaled"
+        ],
+        "width": 12,
+        "source": "rtl/signed_scaler.sv:10.3-24.6",
+        "clock": {
+          "bits": [
+            2
+          ],
+          "edge": "rising"
+        },
+        "stateBits": [
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28
+        ],
+        "nextBits": [
+          49,
+          50,
+          51,
+          52,
+          53,
+          54,
+          55,
+          56,
+          57,
+          58,
+          59,
+          60
+        ],
+        "leafBits": [
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28
+        ],
+        "cells": [
+          {
+            "name": "$procmux$28",
+            "type": "$mux",
+            "source": "rtl/signed_scaler.sv:17.18-17.24|rtl/signed_scaler.sv:17.14-23.8",
+            "parameters": {
+              "WIDTH": "00000000000000000000000000001100"
+            },
+            "connections": {
+              "A": [
+                17,
+                18,
+                19,
+                20,
+                21,
+                22,
+                23,
+                24,
+                25,
+                26,
+                27,
+                28
+              ],
+              "B": [
+                113,
+                114,
+                115,
+                116,
+                117,
+                118,
+                119,
+                120,
+                121,
+                122,
+                123,
+                124
+              ],
+              "S": [
+                4
+              ],
+              "Y": [
+                125,
+                126,
+                127,
+                128,
+                129,
+                130,
+                131,
+                132,
+                133,
+                134,
+                135,
+                136
+              ]
+            }
+          },
+          {
+            "name": "$procmux$31",
+            "type": "$mux",
+            "source": "rtl/signed_scaler.sv:11.9-11.15|rtl/signed_scaler.sv:11.5-23.8",
+            "parameters": {
+              "WIDTH": "00000000000000000000000000001100"
+            },
+            "connections": {
+              "A": [
+                "0",
+                "0",
+                "0",
+                "0",
+                "0",
+                "0",
+                "0",
+                "0",
+                "0",
+                "0",
+                "0",
+                "0"
+              ],
+              "B": [
+                125,
+                126,
+                127,
+                128,
+                129,
+                130,
+                131,
+                132,
+                133,
+                134,
+                135,
+                136
+              ],
+              "S": [
+                3
+              ],
+              "Y": [
+                49,
+                50,
+                51,
+                52,
+                53,
+                54,
+                55,
+                56,
+                57,
+                58,
+                59,
+                60
+              ]
+            }
+          },
+          {
+            "name": "$sshr$rtl/signed_scaler.sv:18$3",
+            "type": "$sshr",
+            "source": "rtl/signed_scaler.sv:18.17-18.42",
+            "parameters": {
+              "A_SIGNED": "00000000000000000000000000000001",
+              "A_WIDTH": "00000000000000000000000000001100",
+              "B_SIGNED": "00000000000000000000000000000000",
+              "B_WIDTH": "00000000000000000000000000000100",
+              "Y_WIDTH": "00000000000000000000000000001100"
+            },
+            "connections": {
+              "A": [
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12,
+                12,
+                12,
+                12,
+                12
+              ],
+              "B": [
+                13,
+                14,
+                15,
+                16
+              ],
+              "Y": [
+                113,
+                114,
+                115,
+                116,
+                117,
+                118,
+                119,
+                120,
+                121,
+                122,
+                123,
+                124
+              ]
+            }
+          }
+        ],
+        "expression": {
+          "text": "(rst_n ? (enable ? $sshr[12](extended_sample >>> shift) : scaled) : 12'h0)",
+          "abbreviated": false
+        },
+        "bitOrder": "lsb_first",
+        "domain": "two_state"
+      },
+      "metrics": {
+        "nodes": 2441,
+        "operations": 5479
+      },
+      "observedHash": "e2bb08ad83bf0a5dc07eb540cdd8cd91acf0a61064b417a095c7d574415e2899"
+    },
+    {
+      "moduleId": "top",
+      "localSignalId": "packed_value_q",
+      "state": "packed_value",
+      "instancePath": [],
+      "status": "MATCH",
+      "reason": "所有二态输入与旧状态组合下，映射寄存器的单步更新函数相同",
+      "observed": {
+        "cell": "$procdff$34",
+        "aliases": [
+          "packed_value"
+        ],
+        "width": 8,
+        "source": "rtl/signed_scaler.sv:10.3-24.6",
+        "clock": {
+          "bits": [
+            2
+          ],
+          "edge": "rising"
+        },
+        "stateBits": [
+          29,
+          30,
+          31,
+          32,
+          33,
+          34,
+          35,
+          36
+        ],
+        "nextBits": [
+          61,
+          62,
+          63,
+          64,
+          65,
+          66,
+          67,
+          68
+        ],
+        "leafBits": [
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          29,
+          30,
+          31,
+          32,
+          33,
+          34,
+          35,
+          36
+        ],
+        "cells": [
+          {
+            "name": "$procmux$23",
+            "type": "$mux",
+            "source": "rtl/signed_scaler.sv:17.18-17.24|rtl/signed_scaler.sv:17.14-23.8",
+            "parameters": {
+              "WIDTH": "00000000000000000000000000001000"
+            },
+            "connections": {
+              "A": [
+                29,
+                30,
+                31,
+                32,
+                33,
+                34,
+                35,
+                36
+              ],
+              "B": [
+                97,
+                98,
+                99,
+                100,
+                101,
+                102,
+                103,
+                104
+              ],
+              "S": [
+                4
+              ],
+              "Y": [
+                105,
+                106,
+                107,
+                108,
+                109,
+                110,
+                111,
+                112
+              ]
+            }
+          },
+          {
+            "name": "$procmux$26",
+            "type": "$mux",
+            "source": "rtl/signed_scaler.sv:11.9-11.15|rtl/signed_scaler.sv:11.5-23.8",
+            "parameters": {
+              "WIDTH": "00000000000000000000000000001000"
+            },
+            "connections": {
+              "A": [
+                "0",
+                "0",
+                "0",
+                "0",
+                "0",
+                "0",
+                "0",
+                "0"
+              ],
+              "B": [
+                105,
+                106,
+                107,
+                108,
+                109,
+                110,
+                111,
+                112
+              ],
+              "S": [
+                3
+              ],
+              "Y": [
+                61,
+                62,
+                63,
+                64,
+                65,
+                66,
+                67,
+                68
+              ]
+            }
+          },
+          {
+            "name": "$sshr$rtl/signed_scaler.sv:19$4",
+            "type": "$sshr",
+            "source": "rtl/signed_scaler.sv:19.26-19.51",
+            "parameters": {
+              "A_SIGNED": "00000000000000000000000000000001",
+              "A_WIDTH": "00000000000000000000000000001100",
+              "B_SIGNED": "00000000000000000000000000000000",
+              "B_WIDTH": "00000000000000000000000000000100",
+              "Y_WIDTH": "00000000000000000000000000001100"
+            },
+            "connections": {
+              "A": [
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12,
+                12,
+                12,
+                12,
+                12
+              ],
+              "B": [
+                13,
+                14,
+                15,
+                16
+              ],
+              "Y": [
+                97,
+                98,
+                99,
+                100,
+                101,
+                102,
+                103,
+                104,
+                138,
+                139,
+                140,
+                141
+              ]
+            }
+          }
+        ],
+        "expression": {
+          "text": "(rst_n ? (enable ? bits[97,98,99,100,101,102,103,104] : packed_value) : 8'h0)",
+          "abbreviated": false
+        },
+        "bitOrder": "lsb_first",
+        "domain": "two_state"
+      },
+      "metrics": {
+        "nodes": 2425,
+        "operations": 5383
+      },
+      "observedHash": "7091bc532125958d1a21c78dd58b971b42642aedfb4c5881d5a2afcab30b2316"
+    },
+    {
+      "moduleId": "top",
+      "localSignalId": "logical_value_q",
+      "state": "logical_value",
+      "instancePath": [],
+      "status": "MATCH",
+      "reason": "所有二态输入与旧状态组合下，映射寄存器的单步更新函数相同",
+      "observed": {
+        "cell": "$procdff$35",
+        "aliases": [
+          "logical_value"
+        ],
+        "width": 8,
+        "source": "rtl/signed_scaler.sv:10.3-24.6",
+        "clock": {
+          "bits": [
+            2
+          ],
+          "edge": "rising"
+        },
+        "stateBits": [
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44
+        ],
+        "nextBits": [
+          69,
+          70,
+          71,
+          72,
+          73,
+          74,
+          75,
+          76
+        ],
+        "leafBits": [
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44
+        ],
+        "cells": [
+          {
+            "name": "$procmux$18",
+            "type": "$mux",
+            "source": "rtl/signed_scaler.sv:17.18-17.24|rtl/signed_scaler.sv:17.14-23.8",
+            "parameters": {
+              "WIDTH": "00000000000000000000000000001000"
+            },
+            "connections": {
+              "A": [
+                37,
+                38,
+                39,
+                40,
+                41,
+                42,
+                43,
+                44
+              ],
+              "B": [
+                81,
+                82,
+                83,
+                84,
+                85,
+                86,
+                87,
+                88
+              ],
+              "S": [
+                4
+              ],
+              "Y": [
+                89,
+                90,
+                91,
+                92,
+                93,
+                94,
+                95,
+                96
+              ]
+            }
+          },
+          {
+            "name": "$procmux$21",
+            "type": "$mux",
+            "source": "rtl/signed_scaler.sv:11.9-11.15|rtl/signed_scaler.sv:11.5-23.8",
+            "parameters": {
+              "WIDTH": "00000000000000000000000000001000"
+            },
+            "connections": {
+              "A": [
+                "0",
+                "0",
+                "0",
+                "0",
+                "0",
+                "0",
+                "0",
+                "0"
+              ],
+              "B": [
+                89,
+                90,
+                91,
+                92,
+                93,
+                94,
+                95,
+                96
+              ],
+              "S": [
+                3
+              ],
+              "Y": [
+                69,
+                70,
+                71,
+                72,
+                73,
+                74,
+                75,
+                76
+              ]
+            }
+          },
+          {
+            "name": "$shr$rtl/signed_scaler.sv:20$5",
+            "type": "$shr",
+            "source": "rtl/signed_scaler.sv:20.24-20.50",
+            "parameters": {
+              "A_SIGNED": "00000000000000000000000000000000",
+              "A_WIDTH": "00000000000000000000000000001000",
+              "B_SIGNED": "00000000000000000000000000000000",
+              "B_WIDTH": "00000000000000000000000000000100",
+              "Y_WIDTH": "00000000000000000000000000001000"
+            },
+            "connections": {
+              "A": [
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12
+              ],
+              "B": [
+                13,
+                14,
+                15,
+                16
+              ],
+              "Y": [
+                81,
+                82,
+                83,
+                84,
+                85,
+                86,
+                87,
+                88
+              ]
+            }
+          }
+        ],
+        "expression": {
+          "text": "(rst_n ? (enable ? $shr[8](sample >> shift) : logical_value) : 8'h0)",
+          "abbreviated": false
+        },
+        "bitOrder": "lsb_first",
+        "domain": "two_state"
+      },
+      "metrics": {
+        "nodes": 1761,
+        "operations": 3917
+      },
+      "observedHash": "f155e812962fbf14263ba357dbfe8b5cd59455a85ae76a7745c17cee2f6da6c6"
+    },
+    {
+      "moduleId": "top",
+      "localSignalId": "negative_q",
+      "state": "negative",
+      "instancePath": [],
+      "status": "MATCH",
+      "reason": "所有二态输入与旧状态组合下，映射寄存器的单步更新函数相同",
+      "observed": {
+        "cell": "$procdff$36",
+        "aliases": [
+          "negative"
+        ],
+        "width": 1,
+        "source": "rtl/signed_scaler.sv:10.3-24.6",
+        "clock": {
+          "bits": [
+            2
+          ],
+          "edge": "rising"
+        },
+        "stateBits": [
+          45
+        ],
+        "nextBits": [
+          77
+        ],
+        "leafBits": [
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          45
+        ],
+        "cells": [
+          {
+            "name": "$lt$rtl/signed_scaler.sv:21$6",
+            "type": "$lt",
+            "source": "rtl/signed_scaler.sv:21.19-21.33",
+            "parameters": {
+              "A_SIGNED": "00000000000000000000000000000001",
+              "A_WIDTH": "00000000000000000000000000001000",
+              "B_SIGNED": "00000000000000000000000000000001",
+              "B_WIDTH": "00000000000000000000000000001000",
+              "Y_WIDTH": "00000000000000000000000000000001"
+            },
+            "connections": {
+              "A": [
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12
+              ],
+              "B": [
+                "0",
+                "0",
+                "0",
+                "0",
+                "0",
+                "0",
+                "0",
+                "0"
+              ],
+              "Y": [
+                48
+              ]
+            }
+          },
+          {
+            "name": "$procmux$13",
+            "type": "$mux",
+            "source": "rtl/signed_scaler.sv:17.18-17.24|rtl/signed_scaler.sv:17.14-23.8",
+            "parameters": {
+              "WIDTH": "00000000000000000000000000000001"
+            },
+            "connections": {
+              "A": [
+                45
+              ],
+              "B": [
+                48
+              ],
+              "S": [
+                4
+              ],
+              "Y": [
+                80
+              ]
+            }
+          },
+          {
+            "name": "$procmux$16",
+            "type": "$mux",
+            "source": "rtl/signed_scaler.sv:11.9-11.15|rtl/signed_scaler.sv:11.5-23.8",
+            "parameters": {
+              "WIDTH": "00000000000000000000000000000001"
+            },
+            "connections": {
+              "A": [
+                "0"
+              ],
+              "B": [
+                80
+              ],
+              "S": [
+                3
+              ],
+              "Y": [
+                77
+              ]
+            }
+          }
+        ],
+        "expression": {
+          "text": "(rst_n ? (enable ? $lt[1](sample < 8'h0) : negative) : 1'h0)",
+          "abbreviated": false
+        },
+        "bitOrder": "lsb_first",
+        "domain": "two_state"
+      },
+      "metrics": {
+        "nodes": 31,
+        "operations": 169
+      },
+      "observedHash": "ce690c9279cd73c69319bf96bf5402f6c1bbc6417135f856e45883f12b0855ce"
+    },
+    {
+      "moduleId": "top",
+      "localSignalId": "parity_q",
+      "state": "parity",
+      "instancePath": [],
+      "status": "MATCH",
+      "reason": "所有二态输入与旧状态组合下，映射寄存器的单步更新函数相同",
+      "observed": {
+        "cell": "$procdff$37",
+        "aliases": [
+          "parity"
+        ],
+        "width": 1,
+        "source": "rtl/signed_scaler.sv:10.3-24.6",
+        "clock": {
+          "bits": [
+            2
+          ],
+          "edge": "rising"
+        },
+        "stateBits": [
+          46
+        ],
+        "nextBits": [
+          78
+        ],
+        "leafBits": [
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          46
+        ],
+        "cells": [
+          {
+            "name": "$procmux$11",
+            "type": "$mux",
+            "source": "rtl/signed_scaler.sv:11.9-11.15|rtl/signed_scaler.sv:11.5-23.8",
+            "parameters": {
+              "WIDTH": "00000000000000000000000000000001"
+            },
+            "connections": {
+              "A": [
+                "0"
+              ],
+              "B": [
+                79
+              ],
+              "S": [
+                3
+              ],
+              "Y": [
+                78
+              ]
+            }
+          },
+          {
+            "name": "$procmux$8",
+            "type": "$mux",
+            "source": "rtl/signed_scaler.sv:17.18-17.24|rtl/signed_scaler.sv:17.14-23.8",
+            "parameters": {
+              "WIDTH": "00000000000000000000000000000001"
+            },
+            "connections": {
+              "A": [
+                46
+              ],
+              "B": [
+                137
+              ],
+              "S": [
+                4
+              ],
+              "Y": [
+                79
+              ]
+            }
+          },
+          {
+            "name": "$reduce_xor$rtl/signed_scaler.sv:22$7",
+            "type": "$reduce_xor",
+            "source": "rtl/signed_scaler.sv:22.17-22.24",
+            "parameters": {
+              "A_SIGNED": "00000000000000000000000000000000",
+              "A_WIDTH": "00000000000000000000000000001000",
+              "Y_WIDTH": "00000000000000000000000000000001"
+            },
+            "connections": {
+              "A": [
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12
+              ],
+              "Y": [
+                137
+              ]
+            }
+          }
+        ],
+        "expression": {
+          "text": "(rst_n ? (enable ? $reduce_xor[1](A=sample) : parity) : 1'h0)",
+          "abbreviated": false
+        },
+        "bitOrder": "lsb_first",
+        "domain": "two_state"
+      },
+      "metrics": {
+        "nodes": 79,
+        "operations": 163
+      },
+      "observedHash": "bc48e67144db1f548e497337138e121fe6bcf9e9f77ee74ef420eb56de1d1c7c"
+    }
+  ],
+  "limitations": [
+    "逐实例独立比较作用域内完整 $dff 的二态单步函数；不跨层拼接逻辑锥；其他寄存器类型、X/Z、不支持的运算及预算超限为 UNKNOWN。",
+    "所有输入和旧状态作为自由变量；反例未判断可达性，不是完整时序等价、需求或器件验收。",
+    "需要显式完整构建输入、参数/宏配置和工具版本；声明完整不是自动依赖发现。",
+    "观察快照是派生证据，不覆盖 register.update、不改变批准；未映射状态未与设计比较。"
+  ]
+}

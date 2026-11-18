@@ -1,4 +1,5 @@
-import {useState} from 'react';
+import {ObservedStateCone} from './StateCone';
+import {useEffect,useState} from 'react';
 import {api} from '../api';
 import type {assurance} from '../../workspace/assurance';
 type Report=Awaited<ReturnType<typeof assurance>>;
@@ -18,7 +19,7 @@ function StateEvidence({report:r}:{report:Report['stateObservation']}){
     <p>下一拍：设计 <strong>{item.witness.expected}</strong>；RTL <strong>{item.witness.actual}</strong>。</p>
     <p className="hint">这是单步函数的反例；该旧状态能否实际到达尚未检查。</p>
    </>}
-   {item.record&&<details><summary>本状态证据记录</summary><code>{item.record}</code></details>}
+   <ObservedStateCone observed={item.observed} status={item.status} reason={item.reason} identity={`${item.record??'没有观察记录'} · ${item.instancePath.join('/')} · ${item.moduleId}/${item.localSignalId} · ${item.observedHash??'观察摘要未知'}`}/>{item.record&&<details><summary>本状态证据记录</summary><code>{item.record}</code></details>}
    {item.observed&&<details><summary>展开更新逻辑与源码位置</summary>
     <p>{item.observed.width} 位 · {item.observed.clock.edge==='rising'?'上升沿':'下降沿'} · <code>{item.observed.source??'来源位置未知'}</code></p>
     <p><code>{item.observed.expression.text}</code></p>
@@ -84,4 +85,14 @@ export function Assurance({moduleId,modelHash,candidate}:{moduleId:string;modelH
    </>}
   </>}
  </details>;
+}
+
+/** Whole-workspace evidence, independent of visible groups or ordinary selection. */
+export function ReadingEvidence({modelHash,candidate}:{modelHash:string;candidate:boolean}){
+ const [report,setReport]=useState<Report>(),[error,setError]=useState('');
+ useEffect(()=>{let active=true;if(!candidate)void api<Report>('assurance').then(r=>{if(active){if(r.modelHash===modelHash)setReport(r);else setError('证据模型版本不匹配')}}).catch(e=>{if(active)setError(String(e))});return()=>{active=false}},[modelHash,candidate]);
+ if(candidate)return <p>候选的验证状态 UNKNOWN；不能复用保存版本证据。</p>;
+ if(!report)return <p>验证状态 UNKNOWN · {error||'正在读取保存证据；未执行新验证。'}</p>;
+ const c=report.stateObservation.coverage;
+ return <div data-testid="reading-evidence">保存证据（非本轮执行）：结构 {report.structural.status} · 状态 {report.stateObservation.status} · 差异 {c.mismatched} / 未知 {c.unknown} / 过期 {c.stale} / 未比较 {c.notRun} · 运行历史非通过 {report.runs.filter(r=>r.status!=='passed').length} · 行为失败 {report.behavior.filter(b=>b.status==='FAILED').length}<details><summary>全部状态与行为证据</summary><p>运行历史（保留失败，不代表最新结论）：{report.runs.filter(r=>r.status!=='passed').length} 条非通过记录</p>{report.runs.map(r=><p key={r.id}>{r.id} · {r.status} · {r.fresh?'输入仍匹配':'过期或不可读'}</p>)}<StateEvidence report={report.stateObservation}/>{report.behavior.map(b=><BehaviorEvidence key={b.moduleId+'/'+b.obligationId} item={b}/>)}</details></div>;
 }

@@ -1,0 +1,12 @@
+
+> rtl-architect@2.0.0 check:reading-tasks
+> node --import tsx scripts/check-reading-tasks.ts
+
+{"example":"typed-expressions","scope":"top","task":{"kind":"overview"},"nodes":1,"edges":8,"crossings":6,"hidden":0,"elapsedMs":215.52706}
+{"example":"typed-expressions","scope":"top","task":{"kind":"state","stateId":"scaled_q"},"nodes":2,"edges":4,"crossings":3,"hidden":0,"elapsedMs":18.540431000000012}
+{"example":"external-axis","scope":"top","task":{"kind":"overview"},"nodes":2,"edges":9,"crossings":4,"hidden":0,"elapsedMs":36.213527}
+{"example":"external-axis","scope":"stage0","task":{"kind":"overview"},"nodes":1,"edges":6,"crossings":0,"hidden":0,"elapsedMs":15.872566000000006}
+{"example":"external-axis","scope":"stage0","task":{"kind":"state","stateId":"stage0_data_q"},"nodes":3,"edges":8,"crossings":6,"hidden":0,"elapsedMs":32.11332300000004}
+{"example":"external-axis","scope":"stage1","task":{"kind":"overview"},"nodes":1,"edges":6,"crossings":0,"hidden":0,"elapsedMs":12.926143000000025}
+{"example":"external-axis","scope":"stage1","task":{"kind":"state","stateId":"stage1_data_q"},"nodes":3,"edges":8,"crossings":6,"hidden":0,"elapsedMs":20.280029000000013}
+PASS reading tasks: exact membership, relation ledger, stable selection, expansion, hashes and geometry

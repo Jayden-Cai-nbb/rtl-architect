@@ -1,0 +1,12 @@
+
+> rtl-architect@2.0.0 check:import
+> node --import tsx scripts/check-import.ts
+
+PASS 1: legacy hash is preserved; async reset, resetless RAM and combinational modules validate
+PASS 2: physical feedback and broadcast preserve edges; multidriver, width, CDC, scope and rv restrictions remain
+PASS 3: incomplete provenance survives clearing openQuestions, commit/reload, and blocks every approval/export/handoff path
+PASS 4: partial/unsupported/coverage markers independently block a design; invalid evidence is rejected; additions appear in diff
+PASS 5: approved v3 design exports truthful timing and source metadata; provenance edits invalidate reviews
+PASS 6: source inventory is read-only, deterministic, and reports missing assets separately from verification
+PASS 7: offline context ignores service metadata, stays scoped and writes nothing; doctor makes no startup claim
+完成 7 项真实项目反馈回归检查；未改写真实工作区。

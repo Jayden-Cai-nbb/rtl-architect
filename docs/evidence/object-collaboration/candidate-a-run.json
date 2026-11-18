@@ -1,0 +1,99 @@
+{
+  "schemaVersion": 1,
+  "id": "run_1794906655585_1437119f71fe4c2daed1a62e1f490a2d",
+  "name": "候选 A 本地记录",
+  "stage": "lint",
+  "moduleIds": [
+    "top",
+    "stage0",
+    "stage1"
+  ],
+  "modelHash": "bd53f3bcb9970638e2355ca5fc3e207c404147985d09e0c719db62984ebf49f9",
+  "profileHash": "e2418dc864258d616d22f66816e36d5a7badad172929fa949784cc922740c0d1",
+  "profile": {
+    "schemaVersion": 1,
+    "name": "候选 A 本地记录",
+    "stage": "lint",
+    "moduleIds": [
+      "top",
+      "stage0",
+      "stage1"
+    ],
+    "inputs": [
+      "probe.cjs"
+    ],
+    "timeoutMs": 5000,
+    "commands": [
+      {
+        "program": "/home/cjjnbb/projects/rtl-architect/.runtime/bin/node",
+        "args": [
+          "probe.cjs"
+        ],
+        "versionArgs": [
+          "--version"
+        ]
+      }
+    ],
+    "checks": [
+      {
+        "kind": "exit_code"
+      }
+    ]
+  },
+  "startedAt": "2026-11-17T09:10:55.588Z",
+  "finishedAt": "2026-11-17T09:10:55.631Z",
+  "durationMs": 43,
+  "status": "passed",
+  "inputs": [
+    {
+      "file": "probe.cjs",
+      "sha256": "67fd4e8f7e5d2b63e989b19b675bfbd8a986f97d0cfe9970b1c4bf01c9956148"
+    }
+  ],
+  "inputsAfter": [
+    {
+      "file": "probe.cjs",
+      "sha256": "67fd4e8f7e5d2b63e989b19b675bfbd8a986f97d0cfe9970b1c4bf01c9956148"
+    }
+  ],
+  "steps": [
+    {
+      "program": "/home/cjjnbb/projects/rtl-architect/.runtime/bin/node",
+      "args": [
+        "probe.cjs"
+      ],
+      "cwd": "/tmp/rtlarch-object-workspace",
+      "toolVersion": "v24.18.1",
+      "exitCode": 0,
+      "signal": null,
+      "timedOut": false,
+      "outputLimit": false
+    }
+  ],
+  "checks": [
+    {
+      "kind": "exit_code",
+      "passed": true
+    }
+  ],
+  "artifacts": [
+    {
+      "file": "step-0.stdout.log",
+      "sha256": "71171f908ecfdc590507a133df1935d27354579b3f59f72ee53ca46aa13c43a7"
+    },
+    {
+      "file": "step-0.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "obligationTargets": [],
+  "basis": {
+    "modelHash": "bd53f3bcb9970638e2355ca5fc3e207c404147985d09e0c719db62984ebf49f9",
+    "kind": "as_built",
+    "origin": "as_built",
+    "reviewStatus": "DRAFT",
+    "reviewRecordHash": "85ba225fa8d32318b6bf11a850f109962cacf221ef2aa2f7609280f2cc675c58",
+    "review": null
+  },
+  "note": "只证明声明命令和检查在本次显式输入下的结果；未自动发现依赖，不改变架构批准或模型验证声明。"
+}

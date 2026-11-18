@@ -2,6 +2,7 @@ import type {Model,Endpoint,SignalValue} from './schema';
 import {interfaceGroup,linkGroup} from './inspection';
 import {resolveEndpoint} from './endpoints';
 import {endpointLabel,signalReads} from './signals';
+export {readingProjection,readingTaskNames,type ReadingTask} from './readingProjection';
 export type ViewMode='architecture'|'microarchitecture'|'signals';
 export const viewNames:Record<ViewMode,string>={architecture:'架构通路',microarchitecture:'内部状态与运算',signals:'原始连接'};
 export type SemanticFinding={code:string;target:string;reason:string};
@@ -22,6 +23,10 @@ export function hardwareView(model:Model,scope:string){
    meaning:rv?'模型声明的 RV 通道：data/valid 正向，ready 反向；成员引脚名与实际行为需通过 RTL 映射和核验确认。':'模型记录的直接连接；业务分类不代表协议成员关系。'};
  });
  for(const local of model.localSignals?.filter(s=>s.scope===scope)??[])if(local.driver.kind==='register'&&!local.driver.update)issues.push({code:'STATE_ROLE_UNKNOWN',target:`local:${scope}:${local.id}`,reason:'只记录了状态输入集合，未表达数据、使能、取消及逐位更新条件；不能当作精确数据线。'});
+ for(const m of model.modules)if(m.timing==='unknown')issues.push({code:'TIMING_UNKNOWN',target:m.id,reason:'UNKNOWN：时序类别尚未核实。'});
+ for(const finding of model.provenance?.findings??[])if(finding.classification!=='fact')issues.push({code:'PROVENANCE_'+finding.classification.toUpperCase(),target:finding.id,reason:finding.classification+'：'+finding.text});
+ for(const gap of model.provenance?.unsupportedStructures??[])issues.push({code:'UNSUPPORTED_STRUCTURE',target:gap.id,reason:gap.description});
+ for(const v of model.provenance?.verification??[])if(v.status!=='passed')issues.push({code:'VERIFICATION_'+v.status.toUpperCase(),target:v.target??v.stage,reason:'模型中的历史验证记录 '+v.status+'：'+v.detail});
  if(model.provenance?.fidelity==='partial')issues.push({code:'PARTIAL_MODEL',target:scope,reason:'模型尚未完整；图中没有显示的结构不代表 RTL 中不存在。'});
  return {relationships,issues,note:'显示投影不修改 IR；位置不表示周期、真实线长或物理布局。'};
 }

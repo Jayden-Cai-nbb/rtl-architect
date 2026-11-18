@@ -1,0 +1,108 @@
+{
+  "id": "feedback_capacity",
+  "title": "反馈依赖与持续流率",
+  "modelHash": "0000000000000000000000000000000000000000000000000000000000000000",
+  "moduleIds": [
+    "top"
+  ],
+  "configuration": "单时钟、16 × 32 bit、整 word；预算假设，不是器件报告",
+  "assumptions": [
+    "端口每拍接受一个请求；示例数值须经目标实现核对",
+    "有限访问只检验列出的请求，不代表完整调度"
+  ],
+  "workItems": 8,
+  "options": [
+    {
+      "id": "a",
+      "label": "有限 FIFO",
+      "compute": {
+        "lanes": 1,
+        "operationsPerItem": 1,
+        "cyclesPerOperation": 1,
+        "overheadCycles": 0,
+        "timing": {
+          "latencyCycles": 3,
+          "initiationInterval": 1
+        },
+        "launches": [
+          {
+            "id": "op0",
+            "cycle": 0,
+            "lane": 0
+          },
+          {
+            "id": "op1",
+            "cycle": 1,
+            "lane": 0
+          }
+        ]
+      },
+      "runIds": [],
+      "feedback": [
+        {
+          "id": "accumulate",
+          "latencyCycles": 3,
+          "distance": 2
+        }
+      ],
+      "flow": {
+        "producedPerCycle": 1,
+        "maxStallCycles": 4,
+        "inFlight": 0,
+        "capacity": 16,
+        "sustained": {
+          "unit": "bytes_per_second",
+          "arrival": 8000000000,
+          "consumption": 6000000000,
+          "bytesPerItem": 4
+        }
+      }
+    },
+    {
+      "id": "b",
+      "label": "加大 FIFO",
+      "compute": {
+        "lanes": 1,
+        "operationsPerItem": 1,
+        "cyclesPerOperation": 1,
+        "overheadCycles": 0,
+        "timing": {
+          "latencyCycles": 3,
+          "initiationInterval": 1
+        },
+        "launches": [
+          {
+            "id": "op0",
+            "cycle": 0,
+            "lane": 0
+          },
+          {
+            "id": "op1",
+            "cycle": 1,
+            "lane": 0
+          }
+        ]
+      },
+      "runIds": [],
+      "feedback": [
+        {
+          "id": "accumulate",
+          "latencyCycles": 3,
+          "distance": 2
+        }
+      ],
+      "flow": {
+        "producedPerCycle": 1,
+        "maxStallCycles": 4,
+        "inFlight": 0,
+        "capacity": 1000000,
+        "sustained": {
+          "unit": "bytes_per_second",
+          "arrival": 8000000000,
+          "consumption": 6000000000,
+          "bytesPerItem": 4
+        }
+      }
+    }
+  ]
+}

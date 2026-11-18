@@ -1,0 +1,693 @@
+{
+  "modelHash": "3861a7bccd4c8011b71a290679499caf2e4417529364b7454991ed31e6869c0f",
+  "scope": "top",
+  "modelSource": "candidate",
+  "task": {
+    "kind": "overview"
+  },
+  "mode": "architecture",
+  "positions": {
+    "aggregate:top:states": {
+      "x": 12,
+      "y": 100
+    }
+  },
+  "quality": {
+    "readingConstraints": {
+      "status": "not_requested",
+      "issues": [],
+      "counts": {
+        "parallel": 0,
+        "shared": 0,
+        "feedback": 0
+      }
+    },
+    "structuralFidelity": {
+      "status": "passed",
+      "missing": [],
+      "extra": [],
+      "duplicates": [],
+      "wrongEndpoints": [],
+      "omissions": [],
+      "note": "仅检查当前视图及聚合清单对应模型连接；折叠有明确原因，不证明 RTL 覆盖。"
+    },
+    "semanticClarity": {
+      "status": "needs_review",
+      "issues": [
+        {
+          "code": "PROVENANCE_UNKNOWN",
+          "target": "limits",
+          "reason": "unknown：只核对有限二态状态更新；未证明四态、初始状态和任意时序需求。"
+        },
+        {
+          "code": "PARTIAL_MODEL",
+          "target": "top",
+          "reason": "模型尚未完整；图中没有显示的结构不代表 RTL 中不存在。"
+        }
+      ],
+      "humanReview": "not_run"
+    },
+    "geometricReadability": {
+      "status": "needs_review",
+      "note": "交叉、共线和隐藏线名与基本几何完整性分开；仍需沿真实事务人工阅读。"
+    },
+    "sharedLabels": [],
+    "labelStatus": "named",
+    "status": "passed",
+    "overlaps": [],
+    "nodeHits": [],
+    "unrouted": [],
+    "crossings": 6,
+    "unrelatedSharedLength": 0,
+    "bends": 8,
+    "wireLength": 3272,
+    "maxRouteLength": 512,
+    "routeReview": {
+      "units": "diagram_units",
+      "routes": [
+        {
+          "id": "reading-relation:[\"rack:top:consumer\",\"aggregate:top:states\",\"dependency\",\"control\",\"state_condition\",\"更新条件 · 采样使能\",\"\",\"out:load_control\",\"\"]",
+          "label": "更新条件 · 采样使能 · 5 关系",
+          "source": "rack:top:consumer",
+          "target": "aggregate:top:states",
+          "length": 512,
+          "directLength": 512,
+          "detour": 0,
+          "ratio": 1,
+          "routed": true,
+          "connectionIds": [],
+          "dependencyEndpoints": [
+            {
+              "moduleId": "top",
+              "interfaceId": "enable"
+            },
+            {
+              "moduleId": "top",
+              "interfaceId": "enable"
+            },
+            {
+              "moduleId": "top",
+              "interfaceId": "enable"
+            },
+            {
+              "moduleId": "top",
+              "interfaceId": "enable"
+            },
+            {
+              "moduleId": "top",
+              "interfaceId": "enable"
+            }
+          ],
+          "relationMembers": [
+            {
+              "id": "dependency:top>logical_value_q/load_control/state_condition",
+              "source": "rack:top:consumer",
+              "target": "local:top:logical_value_q",
+              "label": "更新条件 · 采样使能",
+              "connectionIds": [],
+              "connections": [],
+              "dependencyEndpoints": [
+                {
+                  "moduleId": "top",
+                  "interfaceId": "enable"
+                }
+              ],
+              "localSignalId": "logical_value_q",
+              "semanticKind": "dependency"
+            },
+            {
+              "id": "dependency:top>negative_q/load_control/state_condition",
+              "source": "rack:top:consumer",
+              "target": "local:top:negative_q",
+              "label": "更新条件 · 采样使能",
+              "connectionIds": [],
+              "connections": [],
+              "dependencyEndpoints": [
+                {
+                  "moduleId": "top",
+                  "interfaceId": "enable"
+                }
+              ],
+              "localSignalId": "negative_q",
+              "semanticKind": "dependency"
+            },
+            {
+              "id": "dependency:top>packed_value_q/load_control/state_condition",
+              "source": "rack:top:consumer",
+              "target": "local:top:packed_value_q",
+              "label": "更新条件 · 采样使能",
+              "connectionIds": [],
+              "connections": [],
+              "dependencyEndpoints": [
+                {
+                  "moduleId": "top",
+                  "interfaceId": "enable"
+                }
+              ],
+              "localSignalId": "packed_value_q",
+              "semanticKind": "dependency"
+            },
+            {
+              "id": "dependency:top>parity_q/load_control/state_condition",
+              "source": "rack:top:consumer",
+              "target": "local:top:parity_q",
+              "label": "更新条件 · 采样使能",
+              "connectionIds": [],
+              "connections": [],
+              "dependencyEndpoints": [
+                {
+                  "moduleId": "top",
+                  "interfaceId": "enable"
+                }
+              ],
+              "localSignalId": "parity_q",
+              "semanticKind": "dependency"
+            },
+            {
+              "id": "dependency:top>scaled_q/load_control/state_condition",
+              "source": "rack:top:consumer",
+              "target": "local:top:scaled_q",
+              "label": "更新条件 · 采样使能",
+              "connectionIds": [],
+              "connections": [],
+              "dependencyEndpoints": [
+                {
+                  "moduleId": "top",
+                  "interfaceId": "enable"
+                }
+              ],
+              "localSignalId": "scaled_q",
+              "semanticKind": "dependency"
+            }
+          ]
+        },
+        {
+          "id": "reading-relation:[\"aggregate:top:states\",\"rack:top:producer\",\"wire\",\"data\",\"\",\"负数标志\",\"\",\"\",\"in:negative_result\"]",
+          "label": "负数标志",
+          "source": "aggregate:top:states",
+          "target": "rack:top:producer",
+          "length": 492,
+          "directLength": 492,
+          "detour": 0,
+          "ratio": 1,
+          "routed": true,
+          "connectionIds": [
+            "negative_out"
+          ],
+          "dependencyEndpoints": [],
+          "relationMembers": [
+            {
+              "id": "relation:local:top:negative_q>rack:top:producer/local:top:negative_q/negative_result/negative_result/wire",
+              "source": "local:top:negative_q",
+              "target": "rack:top:producer",
+              "label": "负数标志",
+              "connectionIds": [
+                "negative_out"
+              ],
+              "connections": [
+                {
+                  "id": "negative_out",
+                  "scope": "top",
+                  "from": {
+                    "moduleId": "top",
+                    "interfaceId": "negative_q",
+                    "local": true
+                  },
+                  "to": {
+                    "moduleId": "top",
+                    "interfaceId": "negative"
+                  }
+                }
+              ],
+              "dependencyEndpoints": [],
+              "semanticKind": "wire"
+            }
+          ]
+        },
+        {
+          "id": "reading-relation:[\"aggregate:top:states\",\"rack:top:producer\",\"wire\",\"data\",\"\",\"异或校验\",\"\",\"\",\"in:parity_result\"]",
+          "label": "异或校验",
+          "source": "aggregate:top:states",
+          "target": "rack:top:producer",
+          "length": 464,
+          "directLength": 464,
+          "detour": 0,
+          "ratio": 1,
+          "routed": true,
+          "connectionIds": [
+            "parity_out"
+          ],
+          "dependencyEndpoints": [],
+          "relationMembers": [
+            {
+              "id": "relation:local:top:parity_q>rack:top:producer/local:top:parity_q/parity_result/parity_result/wire",
+              "source": "local:top:parity_q",
+              "target": "rack:top:producer",
+              "label": "异或校验",
+              "connectionIds": [
+                "parity_out"
+              ],
+              "connections": [
+                {
+                  "id": "parity_out",
+                  "scope": "top",
+                  "from": {
+                    "moduleId": "top",
+                    "interfaceId": "parity_q",
+                    "local": true
+                  },
+                  "to": {
+                    "moduleId": "top",
+                    "interfaceId": "parity"
+                  }
+                }
+              ],
+              "dependencyEndpoints": [],
+              "semanticKind": "wire"
+            }
+          ]
+        },
+        {
+          "id": "reading-relation:[\"rack:top:consumer\",\"aggregate:top:states\",\"dependency\",\"data\",\"state_data\",\"写入值 · 采样数据\",\"\",\"out:sample_data\",\"\"]",
+          "label": "写入值 · 采样数据 · 5 关系",
+          "source": "rack:top:consumer",
+          "target": "aggregate:top:states",
+          "length": 432,
+          "directLength": 432,
+          "detour": 0,
+          "ratio": 1,
+          "routed": true,
+          "connectionIds": [],
+          "dependencyEndpoints": [
+            {
+              "moduleId": "top",
+              "interfaceId": "sample"
+            },
+            {
+              "moduleId": "top",
+              "interfaceId": "sample"
+            },
+            {
+              "moduleId": "top",
+              "interfaceId": "sample"
+            },
+            {
+              "moduleId": "top",
+              "interfaceId": "sample"
+            },
+            {
+              "moduleId": "top",
+              "interfaceId": "sample"
+            }
+          ],
+          "relationMembers": [
+            {
+              "id": "dependency:top>logical_value_q/sample_data/state_data",
+              "source": "rack:top:consumer",
+              "target": "local:top:logical_value_q",
+              "label": "写入值 · 采样数据",
+              "connectionIds": [],
+              "connections": [],
+              "dependencyEndpoints": [
+                {
+                  "moduleId": "top",
+                  "interfaceId": "sample"
+                }
+              ],
+              "localSignalId": "logical_value_q",
+              "semanticKind": "dependency"
+            },
+            {
+              "id": "dependency:top>negative_q/sample_data/state_data",
+              "source": "rack:top:consumer",
+              "target": "local:top:negative_q",
+              "label": "写入值 · 采样数据",
+              "connectionIds": [],
+              "connections": [],
+              "dependencyEndpoints": [
+                {
+                  "moduleId": "top",
+                  "interfaceId": "sample"
+                }
+              ],
+              "localSignalId": "negative_q",
+              "semanticKind": "dependency"
+            },
+            {
+              "id": "dependency:top>packed_value_q/sample_data/state_data",
+              "source": "rack:top:consumer",
+              "target": "local:top:packed_value_q",
+              "label": "写入值 · 采样数据",
+              "connectionIds": [],
+              "connections": [],
+              "dependencyEndpoints": [
+                {
+                  "moduleId": "top",
+                  "interfaceId": "sample"
+                }
+              ],
+              "localSignalId": "packed_value_q",
+              "semanticKind": "dependency"
+            },
+            {
+              "id": "dependency:top>parity_q/sample_data/state_data",
+              "source": "rack:top:consumer",
+              "target": "local:top:parity_q",
+              "label": "写入值 · 采样数据",
+              "connectionIds": [],
+              "connections": [],
+              "dependencyEndpoints": [
+                {
+                  "moduleId": "top",
+                  "interfaceId": "sample"
+                }
+              ],
+              "localSignalId": "parity_q",
+              "semanticKind": "dependency"
+            },
+            {
+              "id": "dependency:top>scaled_q/sample_data/state_data",
+              "source": "rack:top:consumer",
+              "target": "local:top:scaled_q",
+              "label": "写入值 · 采样数据",
+              "connectionIds": [],
+              "connections": [],
+              "dependencyEndpoints": [
+                {
+                  "moduleId": "top",
+                  "interfaceId": "sample"
+                }
+              ],
+              "localSignalId": "scaled_q",
+              "semanticKind": "dependency"
+            }
+          ]
+        },
+        {
+          "id": "reading-relation:[\"rack:top:consumer\",\"aggregate:top:states\",\"dependency\",\"control\",\"state_data\",\"写入值 · 移位量\",\"\",\"out:shift_control\",\"\"]",
+          "label": "写入值 · 移位量 · 3 关系",
+          "source": "rack:top:consumer",
+          "target": "aggregate:top:states",
+          "length": 352,
+          "directLength": 352,
+          "detour": 0,
+          "ratio": 1,
+          "routed": true,
+          "connectionIds": [],
+          "dependencyEndpoints": [
+            {
+              "moduleId": "top",
+              "interfaceId": "shift"
+            },
+            {
+              "moduleId": "top",
+              "interfaceId": "shift"
+            },
+            {
+              "moduleId": "top",
+              "interfaceId": "shift"
+            }
+          ],
+          "relationMembers": [
+            {
+              "id": "dependency:top>logical_value_q/shift_control/state_data",
+              "source": "rack:top:consumer",
+              "target": "local:top:logical_value_q",
+              "label": "写入值 · 移位量",
+              "connectionIds": [],
+              "connections": [],
+              "dependencyEndpoints": [
+                {
+                  "moduleId": "top",
+                  "interfaceId": "shift"
+                }
+              ],
+              "localSignalId": "logical_value_q",
+              "semanticKind": "dependency"
+            },
+            {
+              "id": "dependency:top>packed_value_q/shift_control/state_data",
+              "source": "rack:top:consumer",
+              "target": "local:top:packed_value_q",
+              "label": "写入值 · 移位量",
+              "connectionIds": [],
+              "connections": [],
+              "dependencyEndpoints": [
+                {
+                  "moduleId": "top",
+                  "interfaceId": "shift"
+                }
+              ],
+              "localSignalId": "packed_value_q",
+              "semanticKind": "dependency"
+            },
+            {
+              "id": "dependency:top>scaled_q/shift_control/state_data",
+              "source": "rack:top:consumer",
+              "target": "local:top:scaled_q",
+              "label": "写入值 · 移位量",
+              "connectionIds": [],
+              "connections": [],
+              "dependencyEndpoints": [
+                {
+                  "moduleId": "top",
+                  "interfaceId": "shift"
+                }
+              ],
+              "localSignalId": "scaled_q",
+              "semanticKind": "dependency"
+            }
+          ]
+        },
+        {
+          "id": "reading-relation:[\"aggregate:top:states\",\"rack:top:producer\",\"wire\",\"data\",\"\",\"低位打包\",\"\",\"\",\"in:packed_value_result\"]",
+          "label": "低位打包",
+          "source": "aggregate:top:states",
+          "target": "rack:top:producer",
+          "length": 340,
+          "directLength": 340,
+          "detour": 0,
+          "ratio": 1,
+          "routed": true,
+          "connectionIds": [
+            "packed_value_out"
+          ],
+          "dependencyEndpoints": [],
+          "relationMembers": [
+            {
+              "id": "relation:local:top:packed_value_q>rack:top:producer/local:top:packed_value_q/packed_value_result/packed_value_result/wire",
+              "source": "local:top:packed_value_q",
+              "target": "rack:top:producer",
+              "label": "低位打包",
+              "connectionIds": [
+                "packed_value_out"
+              ],
+              "connections": [
+                {
+                  "id": "packed_value_out",
+                  "scope": "top",
+                  "from": {
+                    "moduleId": "top",
+                    "interfaceId": "packed_value_q",
+                    "local": true
+                  },
+                  "to": {
+                    "moduleId": "top",
+                    "interfaceId": "packed_value"
+                  }
+                }
+              ],
+              "dependencyEndpoints": [],
+              "semanticKind": "wire"
+            }
+          ]
+        },
+        {
+          "id": "reading-relation:[\"aggregate:top:states\",\"rack:top:producer\",\"wire\",\"data\",\"\",\"算术缩放\",\"\",\"\",\"in:scaled_result\"]",
+          "label": "算术缩放",
+          "source": "aggregate:top:states",
+          "target": "rack:top:producer",
+          "length": 340,
+          "directLength": 340,
+          "detour": 0,
+          "ratio": 1,
+          "routed": true,
+          "connectionIds": [
+            "scaled_out"
+          ],
+          "dependencyEndpoints": [],
+          "relationMembers": [
+            {
+              "id": "relation:local:top:scaled_q>rack:top:producer/local:top:scaled_q/scaled_result/scaled_result/wire",
+              "source": "local:top:scaled_q",
+              "target": "rack:top:producer",
+              "label": "算术缩放",
+              "connectionIds": [
+                "scaled_out"
+              ],
+              "connections": [
+                {
+                  "id": "scaled_out",
+                  "scope": "top",
+                  "from": {
+                    "moduleId": "top",
+                    "interfaceId": "scaled_q",
+                    "local": true
+                  },
+                  "to": {
+                    "moduleId": "top",
+                    "interfaceId": "scaled"
+                  }
+                }
+              ],
+              "dependencyEndpoints": [],
+              "semanticKind": "wire"
+            }
+          ]
+        },
+        {
+          "id": "reading-relation:[\"aggregate:top:states\",\"rack:top:producer\",\"wire\",\"data\",\"\",\"逻辑右移\",\"\",\"\",\"in:logical_value_result\"]",
+          "label": "逻辑右移",
+          "source": "aggregate:top:states",
+          "target": "rack:top:producer",
+          "length": 340,
+          "directLength": 340,
+          "detour": 0,
+          "ratio": 1,
+          "routed": true,
+          "connectionIds": [
+            "logical_value_out"
+          ],
+          "dependencyEndpoints": [],
+          "relationMembers": [
+            {
+              "id": "relation:local:top:logical_value_q>rack:top:producer/local:top:logical_value_q/logical_value_result/logical_value_result/wire",
+              "source": "local:top:logical_value_q",
+              "target": "rack:top:producer",
+              "label": "逻辑右移",
+              "connectionIds": [
+                "logical_value_out"
+              ],
+              "connections": [
+                {
+                  "id": "logical_value_out",
+                  "scope": "top",
+                  "from": {
+                    "moduleId": "top",
+                    "interfaceId": "logical_value_q",
+                    "local": true
+                  },
+                  "to": {
+                    "moduleId": "top",
+                    "interfaceId": "logical_value"
+                  }
+                }
+              ],
+              "dependencyEndpoints": [],
+              "semanticKind": "wire"
+            }
+          ]
+        }
+      ],
+      "longest": [
+        "reading-relation:[\"rack:top:consumer\",\"aggregate:top:states\",\"dependency\",\"control\",\"state_condition\",\"更新条件 · 采样使能\",\"\",\"out:load_control\",\"\"]",
+        "reading-relation:[\"aggregate:top:states\",\"rack:top:producer\",\"wire\",\"data\",\"\",\"负数标志\",\"\",\"\",\"in:negative_result\"]",
+        "reading-relation:[\"aggregate:top:states\",\"rack:top:producer\",\"wire\",\"data\",\"\",\"异或校验\",\"\",\"\",\"in:parity_result\"]",
+        "reading-relation:[\"rack:top:consumer\",\"aggregate:top:states\",\"dependency\",\"data\",\"state_data\",\"写入值 · 采样数据\",\"\",\"out:sample_data\",\"\"]",
+        "reading-relation:[\"rack:top:consumer\",\"aggregate:top:states\",\"dependency\",\"control\",\"state_data\",\"写入值 · 移位量\",\"\",\"out:shift_control\",\"\"]"
+      ],
+      "detours": [],
+      "note": "最长关系用于定位；绕行提示阈值为多走至少 256 图单位且达到端点曼哈顿距离的 2 倍，不是 RTL 时序或失败判据。"
+    },
+    "hiddenLabels": [],
+    "folded": {
+      "auxiliary": 5,
+      "local": 0
+    },
+    "connections": [
+      {
+        "id": "scaled_out",
+        "from": {
+          "moduleId": "top",
+          "interfaceId": "scaled_q",
+          "local": true
+        },
+        "to": {
+          "moduleId": "top",
+          "interfaceId": "scaled"
+        },
+        "retainedIn": [],
+        "visibleIn": [
+          "reading-relation:[\"aggregate:top:states\",\"rack:top:producer\",\"wire\",\"data\",\"\",\"算术缩放\",\"\",\"\",\"in:scaled_result\"]"
+        ]
+      },
+      {
+        "id": "packed_value_out",
+        "from": {
+          "moduleId": "top",
+          "interfaceId": "packed_value_q",
+          "local": true
+        },
+        "to": {
+          "moduleId": "top",
+          "interfaceId": "packed_value"
+        },
+        "retainedIn": [],
+        "visibleIn": [
+          "reading-relation:[\"aggregate:top:states\",\"rack:top:producer\",\"wire\",\"data\",\"\",\"低位打包\",\"\",\"\",\"in:packed_value_result\"]"
+        ]
+      },
+      {
+        "id": "logical_value_out",
+        "from": {
+          "moduleId": "top",
+          "interfaceId": "logical_value_q",
+          "local": true
+        },
+        "to": {
+          "moduleId": "top",
+          "interfaceId": "logical_value"
+        },
+        "retainedIn": [],
+        "visibleIn": [
+          "reading-relation:[\"aggregate:top:states\",\"rack:top:producer\",\"wire\",\"data\",\"\",\"逻辑右移\",\"\",\"\",\"in:logical_value_result\"]"
+        ]
+      },
+      {
+        "id": "negative_out",
+        "from": {
+          "moduleId": "top",
+          "interfaceId": "negative_q",
+          "local": true
+        },
+        "to": {
+          "moduleId": "top",
+          "interfaceId": "negative"
+        },
+        "retainedIn": [],
+        "visibleIn": [
+          "reading-relation:[\"aggregate:top:states\",\"rack:top:producer\",\"wire\",\"data\",\"\",\"负数标志\",\"\",\"\",\"in:negative_result\"]"
+        ]
+      },
+      {
+        "id": "parity_out",
+        "from": {
+          "moduleId": "top",
+          "interfaceId": "parity_q",
+          "local": true
+        },
+        "to": {
+          "moduleId": "top",
+          "interfaceId": "parity"
+        },
+        "retainedIn": [],
+        "visibleIn": [
+          "reading-relation:[\"aggregate:top:states\",\"rack:top:producer\",\"wire\",\"data\",\"\",\"异或校验\",\"\",\"\",\"in:parity_result\"]"
+        ]
+      }
+    ],
+    "visualReview": "not_run",
+    "note": "几何检查不证明文字可读、硬件正确或所有交叉可辨认。"
+  },
+  "exportedAt": "2026-11-16T07:55:57.684Z"
+}

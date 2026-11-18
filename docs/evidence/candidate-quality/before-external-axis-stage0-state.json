@@ -1,0 +1,1873 @@
+{
+  "report": {
+    "id": "external-axis-stage0-state",
+    "hash": "0c376d420bf9f3aab4c18449e23b548cfae3e9c039fc138099d39011d5f0b8e9",
+    "task": {
+      "kind": "state",
+      "stateId": "stage0_data_q"
+    },
+    "elapsedMs": 41.73057799999992,
+    "nodes": 6,
+    "edges": 8,
+    "quality": {
+      "readingConstraints": {
+        "status": "not_requested",
+        "issues": [],
+        "counts": {
+          "parallel": 0,
+          "shared": 0,
+          "feedback": 0
+        }
+      },
+      "structuralFidelity": {
+        "status": "passed",
+        "missing": [],
+        "extra": [],
+        "duplicates": [],
+        "wrongEndpoints": [],
+        "omissions": [],
+        "note": "仅检查当前视图及聚合清单对应模型连接；折叠有明确原因，不证明 RTL 覆盖。"
+      },
+      "semanticClarity": {
+        "status": "needs_review",
+        "issues": [
+          {
+            "code": "PARTIAL_MODEL",
+            "target": "stage0",
+            "reason": "模型尚未完整；图中没有显示的结构不代表 RTL 中不存在。"
+          }
+        ],
+        "humanReview": "not_run"
+      },
+      "geometricReadability": {
+        "status": "needs_review",
+        "note": "交叉、共线和隐藏线名与基本几何完整性分开；仍需沿真实事务人工阅读。"
+      },
+      "sharedLabels": [],
+      "labelStatus": "named",
+      "status": "passed",
+      "overlaps": [],
+      "nodeHits": [],
+      "unrouted": [],
+      "crossings": 6,
+      "unrelatedSharedLength": 224,
+      "bends": 24,
+      "wireLength": 8073,
+      "hiddenLabels": [],
+      "folded": {
+        "auxiliary": 1,
+        "local": 0
+      },
+      "connections": [
+        {
+          "id": "stage0_data_q",
+          "from": {
+            "moduleId": "stage0",
+            "interfaceId": "stage0_data_q",
+            "local": true
+          },
+          "to": {
+            "moduleId": "stage0",
+            "interfaceId": "m_axis_tdata"
+          },
+          "retainedIn": [],
+          "visibleIn": [
+            "relation:local:stage0:stage0_data_q>rack:stage0:producer/local:stage0:stage0_data_q/payload/payload/wire"
+          ]
+        },
+        {
+          "id": "stage0_valid_q",
+          "from": {
+            "moduleId": "stage0",
+            "interfaceId": "stage0_valid_q",
+            "local": true
+          },
+          "to": {
+            "moduleId": "stage0",
+            "interfaceId": "m_axis_tvalid"
+          },
+          "retainedIn": [
+            "aggregate:stage0:context"
+          ],
+          "visibleIn": []
+        },
+        {
+          "id": "stage0_ready_q",
+          "from": {
+            "moduleId": "stage0",
+            "interfaceId": "stage0_ready_q",
+            "local": true
+          },
+          "to": {
+            "moduleId": "stage0",
+            "interfaceId": "s_axis_tready"
+          },
+          "retainedIn": [],
+          "visibleIn": [
+            "relation:local:stage0:stage0_ready_q>rack:stage0:producer/local:stage0:stage0_ready_q/control/control/wire"
+          ]
+        }
+      ],
+      "visualReview": "not_run",
+      "note": "几何检查不证明文字可读、硬件正确或所有交叉可辨认。"
+    }
+  },
+  "graph": {
+    "projection": {
+      "task": {
+        "kind": "state",
+        "stateId": "stage0_data_q"
+      },
+      "groups": [
+        {
+          "id": "aggregate:stage0:context",
+          "label": "范围外上下文",
+          "members": [
+            "local:stage0:stage0_valid_q"
+          ],
+          "basis": "context",
+          "expanded": false
+        }
+      ],
+      "members": [
+        "local:stage0:stage0_data_q",
+        "local:stage0:stage0_valid_q",
+        "local:stage0:stage0_ready_q"
+      ],
+      "nodeFor": {
+        "local:stage0:stage0_data_q": "local:stage0:stage0_data_q",
+        "local:stage0:stage0_valid_q": "aggregate:stage0:context",
+        "local:stage0:stage0_ready_q": "local:stage0:stage0_ready_q"
+      },
+      "focus": [
+        "local:stage0:stage0_data_q",
+        "local:stage0:stage0_ready_q",
+        "stage0"
+      ],
+      "issues": [],
+      "note": "只读阅读集合；不是 RTL 实例、物理网络或周期。范围外内容仍可展开。",
+      "internal": {
+        "aggregate:stage0:context": [
+          {
+            "id": "relation:local:stage0:stage0_valid_q>rack:stage0:producer/local:stage0:stage0_valid_q/control/control/wire",
+            "source": "local:stage0:stage0_valid_q",
+            "target": "rack:stage0:producer",
+            "label": "握手控制",
+            "connectionIds": [
+              "stage0_valid_q"
+            ],
+            "connections": [
+              {
+                "id": "stage0_valid_q",
+                "scope": "stage0",
+                "from": {
+                  "moduleId": "stage0",
+                  "interfaceId": "stage0_valid_q",
+                  "local": true
+                },
+                "to": {
+                  "moduleId": "stage0",
+                  "interfaceId": "m_axis_tvalid"
+                }
+              }
+            ],
+            "dependencyEndpoints": [],
+            "semanticKind": "wire"
+          },
+          {
+            "id": "dependency:stage0>stage0_valid_q/control/state_condition",
+            "source": "rack:stage0:consumer",
+            "target": "local:stage0:stage0_valid_q",
+            "label": "更新条件 · 握手控制",
+            "connectionIds": [],
+            "connections": [],
+            "dependencyEndpoints": [
+              {
+                "moduleId": "stage0",
+                "interfaceId": "m_axis_tready"
+              }
+            ],
+            "localSignalId": "stage0_valid_q",
+            "semanticKind": "dependency"
+          },
+          {
+            "id": "dependency:stage0>stage0_valid_q/control/state_data",
+            "source": "rack:stage0:consumer",
+            "target": "local:stage0:stage0_valid_q",
+            "label": "写入值 · 握手控制",
+            "connectionIds": [],
+            "connections": [],
+            "dependencyEndpoints": [
+              {
+                "moduleId": "stage0",
+                "interfaceId": "s_axis_tvalid"
+              }
+            ],
+            "localSignalId": "stage0_valid_q",
+            "semanticKind": "dependency"
+          },
+          {
+            "id": "dependency:stage0>stage0_valid_q/domain/state_reset",
+            "source": "rack:stage0:consumer",
+            "target": "local:stage0:stage0_valid_q",
+            "label": "复位 · 时钟复位",
+            "connectionIds": [],
+            "connections": [],
+            "dependencyEndpoints": [
+              {
+                "moduleId": "stage0",
+                "interfaceId": "rst"
+              }
+            ],
+            "localSignalId": "stage0_valid_q",
+            "semanticKind": "dependency"
+          }
+        ]
+      },
+      "auxiliary": [
+        {
+          "id": "dependency:stage0>stage0_ready_q/domain/state_reset",
+          "source": "rack:stage0:consumer",
+          "target": "local:stage0:stage0_ready_q",
+          "label": "复位 · 时钟复位",
+          "connectionIds": [],
+          "connections": [],
+          "dependencyEndpoints": [
+            {
+              "moduleId": "stage0",
+              "interfaceId": "rst"
+            }
+          ],
+          "localSignalId": "stage0_ready_q",
+          "semanticKind": "dependency"
+        }
+      ],
+      "relationCount": 13
+    },
+    "omissions": [],
+    "mode": "architecture",
+    "modeLabel": "选中状态的局部范围",
+    "semantics": {
+      "relationships": [
+        {
+          "id": "stage0_data_q",
+          "from": {
+            "moduleId": "stage0",
+            "interfaceId": "stage0_data_q",
+            "local": true
+          },
+          "to": {
+            "moduleId": "stage0",
+            "interfaceId": "m_axis_tdata"
+          },
+          "toRole": "producer",
+          "kind": "wire",
+          "classification": "declared",
+          "group": {
+            "id": "payload",
+            "label": "数据",
+            "category": "data",
+            "description": "数据",
+            "auxiliary": false
+          },
+          "width": 8,
+          "evidenceIds": [],
+          "members": [
+            {
+              "part": "stage0_data_q",
+              "direction": "forward",
+              "width": 8
+            }
+          ],
+          "meaning": "模型记录的直接连接；业务分类不代表协议成员关系。"
+        },
+        {
+          "id": "stage0_valid_q",
+          "from": {
+            "moduleId": "stage0",
+            "interfaceId": "stage0_valid_q",
+            "local": true
+          },
+          "to": {
+            "moduleId": "stage0",
+            "interfaceId": "m_axis_tvalid"
+          },
+          "toRole": "producer",
+          "kind": "wire",
+          "classification": "declared",
+          "group": {
+            "id": "control",
+            "label": "握手控制",
+            "category": "control",
+            "description": "握手控制",
+            "auxiliary": false
+          },
+          "width": 1,
+          "evidenceIds": [],
+          "members": [
+            {
+              "part": "stage0_valid_q",
+              "direction": "forward",
+              "width": 1
+            }
+          ],
+          "meaning": "模型记录的直接连接；业务分类不代表协议成员关系。"
+        },
+        {
+          "id": "stage0_ready_q",
+          "from": {
+            "moduleId": "stage0",
+            "interfaceId": "stage0_ready_q",
+            "local": true
+          },
+          "to": {
+            "moduleId": "stage0",
+            "interfaceId": "s_axis_tready"
+          },
+          "toRole": "producer",
+          "kind": "wire",
+          "classification": "declared",
+          "group": {
+            "id": "control",
+            "label": "握手控制",
+            "category": "control",
+            "description": "握手控制",
+            "auxiliary": false
+          },
+          "width": 1,
+          "evidenceIds": [],
+          "members": [
+            {
+              "part": "stage0_ready_q",
+              "direction": "forward",
+              "width": 1
+            }
+          ],
+          "meaning": "模型记录的直接连接；业务分类不代表协议成员关系。"
+        }
+      ],
+      "issues": [
+        {
+          "code": "PARTIAL_MODEL",
+          "target": "stage0",
+          "reason": "模型尚未完整；图中没有显示的结构不代表 RTL 中不存在。"
+        }
+      ],
+      "note": "显示投影不修改 IR；位置不表示周期、真实线长或物理布局。"
+    },
+    "nodes": [
+      {
+        "id": "frame:stage0",
+        "type": "rtlModule",
+        "position": {
+          "x": -520,
+          "y": -10
+        },
+        "width": 2756,
+        "height": 505,
+        "draggable": false,
+        "selectable": false,
+        "zIndex": -1,
+        "data": {
+          "label": "输入寄存级",
+          "moduleId": "stage0",
+          "kind": "frame",
+          "boundary": true,
+          "geometry": {
+            "width": 2756,
+            "height": 505,
+            "ports": []
+          },
+          "ports": [],
+          "summary": "3 个原始成员 · 1 个阅读集合",
+          "activeHandles": []
+        }
+      },
+      {
+        "id": "local:stage0:stage0_data_q",
+        "type": "rtlModule",
+        "position": {
+          "x": 1456,
+          "y": 163
+        },
+        "width": 260,
+        "height": 162,
+        "data": {
+          "label": "数据寄存器",
+          "moduleId": "stage0",
+          "kind": "state",
+          "boundary": false,
+          "localId": "stage0_data_q",
+          "mainDiagram": true,
+          "summary": "REG_TYPE=1 的整向量更新；来源为固定提交的上游 RTL。",
+          "statePattern": "条件装载寄存器",
+          "title": "REG_TYPE=1 的整向量更新；来源为固定提交的上游 RTL。\nlocal.stage0_ready_q → stage0.s_axis_tdata\n以上条件均不成立 → 保持原值",
+          "geometry": {
+            "width": 260,
+            "height": 162,
+            "captionY": 24,
+            "ports": [
+              {
+                "id": "in:dependency:local:stage0:stage0_ready_q>stage0_data_q/local:stage0:stage0_ready_q/state_condition",
+                "direction": "target",
+                "side": "WEST",
+                "x": 0,
+                "y": 100,
+                "category": "other"
+              },
+              {
+                "id": "in:dependency:stage0>stage0_data_q/payload/state_data",
+                "direction": "target",
+                "side": "WEST",
+                "x": 0,
+                "y": 136,
+                "category": "data"
+              },
+              {
+                "id": "out:relation:local:stage0:stage0_data_q>rack:stage0:producer/local:stage0:stage0_data_q/payload/payload/wire",
+                "direction": "source",
+                "side": "EAST",
+                "x": 260,
+                "y": 100,
+                "category": "data"
+              }
+            ]
+          },
+          "ports": [
+            {
+              "id": "in:dependency:local:stage0:stage0_ready_q>stage0_data_q/local:stage0:stage0_ready_q/state_condition"
+            },
+            {
+              "id": "in:dependency:stage0>stage0_data_q/payload/state_data"
+            },
+            {
+              "id": "out:relation:local:stage0:stage0_data_q>rack:stage0:producer/local:stage0:stage0_data_q/payload/payload/wire"
+            }
+          ],
+          "activeHandles": [
+            "in:dependency:local:stage0:stage0_ready_q>stage0_data_q/local:stage0:stage0_ready_q/state_condition",
+            "in:dependency:stage0>stage0_data_q/payload/state_data",
+            "out:relation:local:stage0:stage0_data_q>rack:stage0:producer/local:stage0:stage0_data_q/payload/payload/wire"
+          ],
+          "memberIds": [
+            "local:stage0:stage0_data_q"
+          ]
+        }
+      },
+      {
+        "id": "aggregate:stage0:context",
+        "type": "rtlModule",
+        "position": {
+          "x": 15,
+          "y": 176
+        },
+        "data": {
+          "label": "范围外上下文",
+          "moduleId": "stage0",
+          "kind": "aggregate",
+          "boundary": false,
+          "mainDiagram": true,
+          "memberIds": [
+            "local:stage0:stage0_valid_q"
+          ],
+          "groupBasis": "context",
+          "summary": "1 项 · 只读集合",
+          "title": "范围外上下文 · 1 项\n只读阅读集合；不是 RTL 实例、物理网络或周期。范围外内容仍可展开。\nlocal:stage0:stage0_valid_q",
+          "statePattern": "阅读集合 · 1 项",
+          "ports": [
+            {
+              "id": "in:reading-relation:[\"local:stage0:stage0_ready_q\",\"aggregate:stage0:context\",\"dependency\",\"other\",\"state_condition\",\"更新条件 · stage0_ready_q\",\"dependency:local:stage0:stage0_ready_q>stage0_valid_q/local:stage0:stage0_ready_q/state_condition\",\"\",\"\"]"
+            },
+            {
+              "id": "out:reading-relation:[\"aggregate:stage0:context\",\"local:stage0:stage0_ready_q\",\"dependency\",\"other\",\"state_data\",\"写入值 · stage0_valid_q\",\"dependency:local:stage0:stage0_valid_q>stage0_ready_q/local:stage0:stage0_valid_q/state_data\",\"\",\"\"]"
+            }
+          ],
+          "geometry": {
+            "width": 260,
+            "height": 140,
+            "captionY": 24,
+            "ports": [
+              {
+                "id": "in:reading-relation:[\"local:stage0:stage0_ready_q\",\"aggregate:stage0:context\",\"dependency\",\"other\",\"state_condition\",\"更新条件 · stage0_ready_q\",\"dependency:local:stage0:stage0_ready_q>stage0_valid_q/local:stage0:stage0_ready_q/state_condition\",\"\",\"\"]",
+                "direction": "target",
+                "side": "WEST",
+                "x": 0,
+                "y": 100,
+                "category": "other"
+              },
+              {
+                "id": "out:reading-relation:[\"aggregate:stage0:context\",\"local:stage0:stage0_ready_q\",\"dependency\",\"other\",\"state_data\",\"写入值 · stage0_valid_q\",\"dependency:local:stage0:stage0_valid_q>stage0_ready_q/local:stage0:stage0_valid_q/state_data\",\"\",\"\"]",
+                "direction": "source",
+                "side": "EAST",
+                "x": 260,
+                "y": 100,
+                "category": "other"
+              }
+            ]
+          },
+          "activeHandles": [
+            "in:reading-relation:[\"local:stage0:stage0_ready_q\",\"aggregate:stage0:context\",\"dependency\",\"other\",\"state_condition\",\"更新条件 · stage0_ready_q\",\"dependency:local:stage0:stage0_ready_q>stage0_valid_q/local:stage0:stage0_ready_q/state_condition\",\"\",\"\"]",
+            "out:reading-relation:[\"aggregate:stage0:context\",\"local:stage0:stage0_ready_q\",\"dependency\",\"other\",\"state_data\",\"写入值 · stage0_valid_q\",\"dependency:local:stage0:stage0_valid_q>stage0_ready_q/local:stage0:stage0_valid_q/state_data\",\"\",\"\"]"
+          ],
+          "internalRelationCount": 4
+        },
+        "width": 260,
+        "height": 140
+      },
+      {
+        "id": "local:stage0:stage0_ready_q",
+        "type": "rtlModule",
+        "position": {
+          "x": 736,
+          "y": 120
+        },
+        "width": 260,
+        "height": 234,
+        "data": {
+          "label": "可接收状态",
+          "moduleId": "stage0",
+          "kind": "state",
+          "boundary": false,
+          "localId": "stage0_ready_q",
+          "mainDiagram": true,
+          "summary": "REG_TYPE=1 的整向量更新；来源为固定提交的上游 RTL。",
+          "statePattern": "条件装载寄存器",
+          "title": "REG_TYPE=1 的整向量更新；来源为固定提交的上游 RTL。\nstage0.rst = 1 → 1bit(0)\n1bit(1) → !(local.stage0_ready_q ? stage0.s_axis_tvalid : (stage0.m_axis_tready ? 1bit(0) : local.stage0_valid_q))\n以上条件均不成立 → 保持原值",
+          "geometry": {
+            "width": 260,
+            "height": 234,
+            "captionY": 24,
+            "ports": [
+              {
+                "id": "in:dependency:local:stage0:stage0_ready_q>stage0_ready_q/local:stage0:stage0_ready_q/state_data",
+                "direction": "target",
+                "side": "WEST",
+                "x": 0,
+                "y": 100,
+                "category": "other"
+              },
+              {
+                "id": "in:reading-relation:[\"aggregate:stage0:context\",\"local:stage0:stage0_ready_q\",\"dependency\",\"other\",\"state_data\",\"写入值 · stage0_valid_q\",\"dependency:local:stage0:stage0_valid_q>stage0_ready_q/local:stage0:stage0_valid_q/state_data\",\"\",\"\"]",
+                "direction": "target",
+                "side": "WEST",
+                "x": 0,
+                "y": 136,
+                "category": "other"
+              },
+              {
+                "id": "in:dependency:stage0>stage0_ready_q/control/state_data",
+                "direction": "target",
+                "side": "WEST",
+                "x": 0,
+                "y": 172,
+                "category": "control"
+              },
+              {
+                "id": "out:relation:local:stage0:stage0_ready_q>rack:stage0:producer/local:stage0:stage0_ready_q/control/control/wire",
+                "direction": "source",
+                "side": "EAST",
+                "x": 260,
+                "y": 100,
+                "category": "control"
+              },
+              {
+                "id": "out:dependency:local:stage0:stage0_ready_q>stage0_data_q/local:stage0:stage0_ready_q/state_condition",
+                "direction": "source",
+                "side": "EAST",
+                "x": 260,
+                "y": 136,
+                "category": "other"
+              },
+              {
+                "id": "out:dependency:local:stage0:stage0_ready_q>stage0_ready_q/local:stage0:stage0_ready_q/state_data",
+                "direction": "source",
+                "side": "EAST",
+                "x": 260,
+                "y": 172,
+                "category": "other"
+              },
+              {
+                "id": "out:reading-relation:[\"local:stage0:stage0_ready_q\",\"aggregate:stage0:context\",\"dependency\",\"other\",\"state_condition\",\"更新条件 · stage0_ready_q\",\"dependency:local:stage0:stage0_ready_q>stage0_valid_q/local:stage0:stage0_ready_q/state_condition\",\"\",\"\"]",
+                "direction": "source",
+                "side": "EAST",
+                "x": 260,
+                "y": 208,
+                "category": "other"
+              }
+            ]
+          },
+          "ports": [
+            {
+              "id": "in:dependency:local:stage0:stage0_ready_q>stage0_ready_q/local:stage0:stage0_ready_q/state_data"
+            },
+            {
+              "id": "in:reading-relation:[\"aggregate:stage0:context\",\"local:stage0:stage0_ready_q\",\"dependency\",\"other\",\"state_data\",\"写入值 · stage0_valid_q\",\"dependency:local:stage0:stage0_valid_q>stage0_ready_q/local:stage0:stage0_valid_q/state_data\",\"\",\"\"]"
+            },
+            {
+              "id": "in:dependency:stage0>stage0_ready_q/control/state_data"
+            },
+            {
+              "id": "out:relation:local:stage0:stage0_ready_q>rack:stage0:producer/local:stage0:stage0_ready_q/control/control/wire"
+            },
+            {
+              "id": "out:dependency:local:stage0:stage0_ready_q>stage0_data_q/local:stage0:stage0_ready_q/state_condition"
+            },
+            {
+              "id": "out:dependency:local:stage0:stage0_ready_q>stage0_ready_q/local:stage0:stage0_ready_q/state_data"
+            },
+            {
+              "id": "out:reading-relation:[\"local:stage0:stage0_ready_q\",\"aggregate:stage0:context\",\"dependency\",\"other\",\"state_condition\",\"更新条件 · stage0_ready_q\",\"dependency:local:stage0:stage0_ready_q>stage0_valid_q/local:stage0:stage0_ready_q/state_condition\",\"\",\"\"]"
+            }
+          ],
+          "activeHandles": [
+            "in:dependency:local:stage0:stage0_ready_q>stage0_ready_q/local:stage0:stage0_ready_q/state_data",
+            "in:reading-relation:[\"aggregate:stage0:context\",\"local:stage0:stage0_ready_q\",\"dependency\",\"other\",\"state_data\",\"写入值 · stage0_valid_q\",\"dependency:local:stage0:stage0_valid_q>stage0_ready_q/local:stage0:stage0_valid_q/state_data\",\"\",\"\"]",
+            "in:dependency:stage0>stage0_ready_q/control/state_data",
+            "out:relation:local:stage0:stage0_ready_q>rack:stage0:producer/local:stage0:stage0_ready_q/control/control/wire",
+            "out:dependency:local:stage0:stage0_ready_q>stage0_data_q/local:stage0:stage0_ready_q/state_condition",
+            "out:dependency:local:stage0:stage0_ready_q>stage0_ready_q/local:stage0:stage0_ready_q/state_data",
+            "out:reading-relation:[\"local:stage0:stage0_ready_q\",\"aggregate:stage0:context\",\"dependency\",\"other\",\"state_condition\",\"更新条件 · stage0_ready_q\",\"dependency:local:stage0:stage0_ready_q>stage0_valid_q/local:stage0:stage0_ready_q/state_condition\",\"\",\"\"]"
+          ],
+          "memberIds": [
+            "local:stage0:stage0_ready_q"
+          ]
+        }
+      },
+      {
+        "id": "rack:stage0:consumer",
+        "type": "rtlModule",
+        "position": {
+          "x": -496,
+          "y": 64
+        },
+        "width": 156,
+        "height": 357,
+        "draggable": false,
+        "selectable": false,
+        "data": {
+          "label": "输入",
+          "moduleId": "stage0",
+          "kind": "rack",
+          "boundary": true,
+          "role": "consumer",
+          "groups": [
+            {
+              "id": "payload",
+              "label": "数据",
+              "count": 1,
+              "auxiliary": false
+            },
+            {
+              "id": "control",
+              "label": "握手控制",
+              "count": 2,
+              "auxiliary": false
+            },
+            {
+              "id": "domain",
+              "label": "时钟复位",
+              "count": 2,
+              "auxiliary": true
+            }
+          ],
+          "summary": "当前层级接口",
+          "ports": [
+            {
+              "id": "out:payload"
+            },
+            {
+              "id": "out:control"
+            },
+            {
+              "id": "out:domain"
+            },
+            {
+              "id": "out"
+            }
+          ],
+          "geometry": {
+            "width": 156,
+            "height": 357,
+            "ports": [
+              {
+                "id": "out:payload",
+                "direction": "source",
+                "side": "EAST",
+                "x": 156,
+                "y": 235
+              },
+              {
+                "id": "out:control",
+                "direction": "source",
+                "side": "EAST",
+                "x": 156,
+                "y": 279
+              },
+              {
+                "id": "out:domain",
+                "direction": "source",
+                "side": "EAST",
+                "x": 156,
+                "y": 323
+              },
+              {
+                "id": "out",
+                "direction": "source",
+                "side": "EAST",
+                "x": 156,
+                "y": 42
+              }
+            ]
+          },
+          "activeHandles": [
+            "out:payload",
+            "out:control",
+            "out:domain",
+            "out:control",
+            "out:control",
+            "out:domain"
+          ]
+        }
+      },
+      {
+        "id": "rack:stage0:producer",
+        "type": "rtlModule",
+        "position": {
+          "x": 2056,
+          "y": 64
+        },
+        "width": 156,
+        "height": 277,
+        "draggable": false,
+        "selectable": false,
+        "data": {
+          "label": "输出",
+          "moduleId": "stage0",
+          "kind": "rack",
+          "boundary": true,
+          "role": "producer",
+          "groups": [
+            {
+              "id": "payload",
+              "label": "数据",
+              "count": 1,
+              "auxiliary": false
+            },
+            {
+              "id": "control",
+              "label": "握手控制",
+              "count": 2,
+              "auxiliary": false
+            }
+          ],
+          "summary": "当前层级接口",
+          "ports": [
+            {
+              "id": "in:control"
+            },
+            {
+              "id": "in:payload"
+            },
+            {
+              "id": "in"
+            }
+          ],
+          "geometry": {
+            "width": 156,
+            "height": 277,
+            "ports": [
+              {
+                "id": "in:control",
+                "direction": "target",
+                "side": "WEST",
+                "x": 0,
+                "y": 243
+              },
+              {
+                "id": "in:payload",
+                "direction": "target",
+                "side": "WEST",
+                "x": 0,
+                "y": 199
+              },
+              {
+                "id": "in",
+                "direction": "target",
+                "side": "WEST",
+                "x": 0,
+                "y": 42
+              }
+            ]
+          },
+          "activeHandles": [
+            "in:payload",
+            "in:control",
+            "in:control"
+          ]
+        }
+      }
+    ],
+    "edges": [
+      {
+        "id": "relation:local:stage0:stage0_data_q>rack:stage0:producer/local:stage0:stage0_data_q/payload/payload/wire",
+        "source": "local:stage0:stage0_data_q",
+        "sourceHandle": "out:relation:local:stage0:stage0_data_q>rack:stage0:producer/local:stage0:stage0_data_q/payload/payload/wire",
+        "target": "rack:stage0:producer",
+        "targetHandle": "in:payload",
+        "type": "relationship",
+        "reconnectable": false,
+        "markerEnd": {
+          "type": "arrowclosed",
+          "color": "#326ea1"
+        },
+        "data": {
+          "connectionIds": [
+            "stage0_data_q"
+          ],
+          "category": "data",
+          "title": "数据\nrelation:local:stage0:stage0_data_q>rack:stage0:producer/local:stage0:stage0_data_q/payload/payload/wire\nstage0_data_q",
+          "semanticKind": "wire",
+          "classification": "declared",
+          "members": [
+            {
+              "part": "stage0_data_q",
+              "direction": "forward",
+              "width": 8
+            }
+          ],
+          "selected": false,
+          "color": "#326ea1",
+          "feedback": false,
+          "laneOffset": 0,
+          "netKey": "[\"[\\\"stage0\\\",\\\"stage0_data_q\\\",null,true,null,null]\"]",
+          "relationMembers": [
+            {
+              "id": "relation:local:stage0:stage0_data_q>rack:stage0:producer/local:stage0:stage0_data_q/payload/payload/wire",
+              "source": "local:stage0:stage0_data_q",
+              "target": "rack:stage0:producer",
+              "label": "数据",
+              "connectionIds": [
+                "stage0_data_q"
+              ],
+              "connections": [
+                {
+                  "id": "stage0_data_q",
+                  "scope": "stage0",
+                  "from": {
+                    "moduleId": "stage0",
+                    "interfaceId": "stage0_data_q",
+                    "local": true
+                  },
+                  "to": {
+                    "moduleId": "stage0",
+                    "interfaceId": "m_axis_tdata"
+                  }
+                }
+              ],
+              "dependencyEndpoints": [],
+              "semanticKind": "wire"
+            }
+          ],
+          "dependencyEndpoints": [],
+          "routingWork": 0,
+          "routingSimplified": false,
+          "route": {
+            "path": "M 1716 263 L 2056 263",
+            "x": 1886,
+            "y": 263
+          },
+          "routePoints": [
+            {
+              "x": 1716,
+              "y": 263
+            },
+            {
+              "x": 2056,
+              "y": 263
+            }
+          ],
+          "labelHidden": false,
+          "labelBox": {
+            "left": 1864,
+            "right": 1908,
+            "top": 250,
+            "bottom": 276
+          },
+          "crossings": []
+        },
+        "style": {
+          "stroke": "#326ea1",
+          "strokeWidth": 1.8,
+          "opacity": 0.9
+        },
+        "label": "数据"
+      },
+      {
+        "id": "relation:local:stage0:stage0_ready_q>rack:stage0:producer/local:stage0:stage0_ready_q/control/control/wire",
+        "source": "local:stage0:stage0_ready_q",
+        "sourceHandle": "out:relation:local:stage0:stage0_ready_q>rack:stage0:producer/local:stage0:stage0_ready_q/control/control/wire",
+        "target": "rack:stage0:producer",
+        "targetHandle": "in:control",
+        "type": "relationship",
+        "reconnectable": false,
+        "markerEnd": {
+          "type": "arrowclosed",
+          "color": "#64758b"
+        },
+        "data": {
+          "connectionIds": [
+            "stage0_ready_q"
+          ],
+          "category": "control",
+          "title": "握手控制\nrelation:local:stage0:stage0_ready_q>rack:stage0:producer/local:stage0:stage0_ready_q/control/control/wire\nstage0_ready_q",
+          "semanticKind": "wire",
+          "classification": "declared",
+          "members": [
+            {
+              "part": "stage0_ready_q",
+              "direction": "forward",
+              "width": 1
+            }
+          ],
+          "selected": false,
+          "color": "#64758b",
+          "feedback": false,
+          "laneOffset": 0,
+          "netKey": "[\"[\\\"stage0\\\",\\\"stage0_ready_q\\\",null,true,null,null]\"]",
+          "relationMembers": [
+            {
+              "id": "relation:local:stage0:stage0_ready_q>rack:stage0:producer/local:stage0:stage0_ready_q/control/control/wire",
+              "source": "local:stage0:stage0_ready_q",
+              "target": "rack:stage0:producer",
+              "label": "握手控制",
+              "connectionIds": [
+                "stage0_ready_q"
+              ],
+              "connections": [
+                {
+                  "id": "stage0_ready_q",
+                  "scope": "stage0",
+                  "from": {
+                    "moduleId": "stage0",
+                    "interfaceId": "stage0_ready_q",
+                    "local": true
+                  },
+                  "to": {
+                    "moduleId": "stage0",
+                    "interfaceId": "s_axis_tready"
+                  }
+                }
+              ],
+              "dependencyEndpoints": [],
+              "semanticKind": "wire"
+            }
+          ],
+          "dependencyEndpoints": [],
+          "routingWork": 0,
+          "routingSimplified": false,
+          "route": {
+            "path": "M 996 220 L 1028 220 L 1028 461 L 2024 461 L 2024 307 L 2056 307",
+            "x": 1526,
+            "y": 461
+          },
+          "routePoints": [
+            {
+              "x": 996,
+              "y": 220
+            },
+            {
+              "x": 1028,
+              "y": 220
+            },
+            {
+              "x": 1028,
+              "y": 461
+            },
+            {
+              "x": 2024,
+              "y": 461
+            },
+            {
+              "x": 2024,
+              "y": 307
+            },
+            {
+              "x": 2056,
+              "y": 307
+            }
+          ],
+          "labelHidden": false,
+          "labelBox": {
+            "left": 1488,
+            "right": 1564,
+            "top": 448,
+            "bottom": 474
+          },
+          "crossings": []
+        },
+        "style": {
+          "stroke": "#64758b",
+          "strokeWidth": 1.8,
+          "opacity": 0.9
+        },
+        "label": "握手控制"
+      },
+      {
+        "id": "dependency:local:stage0:stage0_ready_q>stage0_data_q/local:stage0:stage0_ready_q/state_condition",
+        "source": "local:stage0:stage0_ready_q",
+        "target": "local:stage0:stage0_data_q",
+        "sourceHandle": "out:dependency:local:stage0:stage0_ready_q>stage0_data_q/local:stage0:stage0_ready_q/state_condition",
+        "targetHandle": "in:dependency:local:stage0:stage0_ready_q>stage0_data_q/local:stage0:stage0_ready_q/state_condition",
+        "type": "relationship",
+        "label": "更新条件 · stage0_ready_q",
+        "reconnectable": false,
+        "data": {
+          "localSignalId": "stage0_data_q",
+          "dependencyEndpoint": {
+            "moduleId": "stage0",
+            "interfaceId": "stage0_ready_q",
+            "local": true
+          },
+          "dependencyEndpoints": [
+            {
+              "moduleId": "stage0",
+              "interfaceId": "stage0_ready_q",
+              "local": true
+            }
+          ],
+          "semanticKind": "dependency",
+          "dependencyRole": "state_condition",
+          "category": "other",
+          "relationBundle": false,
+          "title": "更新条件 · stage0_ready_q\ndependency:local:stage0:stage0_ready_q>stage0_data_q/local:stage0:stage0_ready_q/state_condition\n",
+          "color": "#64758b",
+          "granularity": "expression",
+          "feedback": false,
+          "laneOffset": 0,
+          "routeY": 76,
+          "relationMembers": [
+            {
+              "id": "dependency:local:stage0:stage0_ready_q>stage0_data_q/local:stage0:stage0_ready_q/state_condition",
+              "source": "local:stage0:stage0_ready_q",
+              "target": "local:stage0:stage0_data_q",
+              "label": "更新条件 · stage0_ready_q",
+              "connectionIds": [],
+              "connections": [],
+              "dependencyEndpoints": [
+                {
+                  "moduleId": "stage0",
+                  "interfaceId": "stage0_ready_q",
+                  "local": true
+                }
+              ],
+              "localSignalId": "stage0_data_q",
+              "semanticKind": "dependency"
+            }
+          ],
+          "connectionIds": [],
+          "routingWork": 0,
+          "routingSimplified": false,
+          "route": {
+            "path": "M 996 256 L 1424 256 L 1424 263 L 1456 263",
+            "x": 1210,
+            "y": 256
+          },
+          "routePoints": [
+            {
+              "x": 996,
+              "y": 256
+            },
+            {
+              "x": 1424,
+              "y": 256
+            },
+            {
+              "x": 1424,
+              "y": 263
+            },
+            {
+              "x": 1456,
+              "y": 263
+            }
+          ],
+          "labelHidden": false,
+          "labelBox": {
+            "left": 1099.75,
+            "right": 1320.25,
+            "top": 243,
+            "bottom": 269
+          },
+          "crossings": [
+            {
+              "x": 1028,
+              "y": 256
+            }
+          ]
+        },
+        "style": {
+          "stroke": "#64758b",
+          "strokeWidth": 1.8,
+          "opacity": 0.9
+        },
+        "markerEnd": {
+          "type": "arrow",
+          "color": "#64758b"
+        }
+      },
+      {
+        "id": "dependency:local:stage0:stage0_ready_q>stage0_ready_q/local:stage0:stage0_ready_q/state_data",
+        "source": "local:stage0:stage0_ready_q",
+        "target": "local:stage0:stage0_ready_q",
+        "sourceHandle": "out:dependency:local:stage0:stage0_ready_q>stage0_ready_q/local:stage0:stage0_ready_q/state_data",
+        "targetHandle": "in:dependency:local:stage0:stage0_ready_q>stage0_ready_q/local:stage0:stage0_ready_q/state_data",
+        "type": "relationship",
+        "label": "写入值 · stage0_ready_q",
+        "reconnectable": false,
+        "data": {
+          "localSignalId": "stage0_ready_q",
+          "dependencyEndpoint": {
+            "moduleId": "stage0",
+            "interfaceId": "stage0_ready_q",
+            "local": true
+          },
+          "dependencyEndpoints": [
+            {
+              "moduleId": "stage0",
+              "interfaceId": "stage0_ready_q",
+              "local": true
+            }
+          ],
+          "semanticKind": "dependency",
+          "dependencyRole": "state_data",
+          "category": "other",
+          "relationBundle": false,
+          "title": "写入值 · stage0_ready_q\ndependency:local:stage0:stage0_ready_q>stage0_ready_q/local:stage0:stage0_ready_q/state_data\n",
+          "color": "#64758b",
+          "granularity": "expression",
+          "feedback": true,
+          "laneOffset": 0,
+          "routeY": 46,
+          "relationMembers": [
+            {
+              "id": "dependency:local:stage0:stage0_ready_q>stage0_ready_q/local:stage0:stage0_ready_q/state_data",
+              "source": "local:stage0:stage0_ready_q",
+              "target": "local:stage0:stage0_ready_q",
+              "label": "写入值 · stage0_ready_q",
+              "connectionIds": [],
+              "connections": [],
+              "dependencyEndpoints": [
+                {
+                  "moduleId": "stage0",
+                  "interfaceId": "stage0_ready_q",
+                  "local": true
+                }
+              ],
+              "localSignalId": "stage0_ready_q",
+              "semanticKind": "dependency"
+            }
+          ],
+          "connectionIds": [],
+          "routingWork": 0,
+          "routingSimplified": false,
+          "route": {
+            "path": "M 996 292 L 1028 292 L 1028 24 L 704 24 L 704 220 L 736 220",
+            "x": 866,
+            "y": 24
+          },
+          "routePoints": [
+            {
+              "x": 996,
+              "y": 292
+            },
+            {
+              "x": 1028,
+              "y": 292
+            },
+            {
+              "x": 1028,
+              "y": 24
+            },
+            {
+              "x": 704,
+              "y": 24
+            },
+            {
+              "x": 704,
+              "y": 220
+            },
+            {
+              "x": 736,
+              "y": 220
+            }
+          ],
+          "labelHidden": false,
+          "labelBox": {
+            "left": 763.75,
+            "right": 968.25,
+            "top": 11,
+            "bottom": 37
+          },
+          "crossings": [
+            {
+              "x": 1028,
+              "y": 292
+            },
+            {
+              "x": 1028,
+              "y": 220
+            },
+            {
+              "x": 1028,
+              "y": 256
+            }
+          ]
+        },
+        "style": {
+          "stroke": "#64758b",
+          "strokeWidth": 1.8,
+          "opacity": 0.9
+        },
+        "markerEnd": {
+          "type": "arrow",
+          "color": "#64758b"
+        }
+      },
+      {
+        "id": "reading-relation:[\"local:stage0:stage0_ready_q\",\"aggregate:stage0:context\",\"dependency\",\"other\",\"state_condition\",\"更新条件 · stage0_ready_q\",\"dependency:local:stage0:stage0_ready_q>stage0_valid_q/local:stage0:stage0_ready_q/state_condition\",\"\",\"\"]",
+        "source": "local:stage0:stage0_ready_q",
+        "target": "aggregate:stage0:context",
+        "sourceHandle": "out:reading-relation:[\"local:stage0:stage0_ready_q\",\"aggregate:stage0:context\",\"dependency\",\"other\",\"state_condition\",\"更新条件 · stage0_ready_q\",\"dependency:local:stage0:stage0_ready_q>stage0_valid_q/local:stage0:stage0_ready_q/state_condition\",\"\",\"\"]",
+        "targetHandle": "in:reading-relation:[\"local:stage0:stage0_ready_q\",\"aggregate:stage0:context\",\"dependency\",\"other\",\"state_condition\",\"更新条件 · stage0_ready_q\",\"dependency:local:stage0:stage0_ready_q>stage0_valid_q/local:stage0:stage0_ready_q/state_condition\",\"\",\"\"]",
+        "type": "relationship",
+        "label": "更新条件 · stage0_ready_q",
+        "reconnectable": false,
+        "data": {
+          "localSignalId": "stage0_valid_q",
+          "dependencyEndpoint": {
+            "moduleId": "stage0",
+            "interfaceId": "stage0_ready_q",
+            "local": true
+          },
+          "dependencyEndpoints": [
+            {
+              "moduleId": "stage0",
+              "interfaceId": "stage0_ready_q",
+              "local": true
+            }
+          ],
+          "semanticKind": "aggregate",
+          "dependencyRole": "state_condition",
+          "category": "other",
+          "relationBundle": true,
+          "title": "阅读关系集合；不是物理网络\n更新条件 · stage0_ready_q\ndependency:local:stage0:stage0_ready_q>stage0_valid_q/local:stage0:stage0_ready_q/state_condition\n",
+          "color": "#64758b",
+          "granularity": "expression",
+          "feedback": true,
+          "laneOffset": 0,
+          "relationMembers": [
+            {
+              "id": "dependency:local:stage0:stage0_ready_q>stage0_valid_q/local:stage0:stage0_ready_q/state_condition",
+              "source": "local:stage0:stage0_ready_q",
+              "target": "local:stage0:stage0_valid_q",
+              "label": "更新条件 · stage0_ready_q",
+              "connectionIds": [],
+              "connections": [],
+              "dependencyEndpoints": [
+                {
+                  "moduleId": "stage0",
+                  "interfaceId": "stage0_ready_q",
+                  "local": true
+                }
+              ],
+              "localSignalId": "stage0_valid_q",
+              "semanticKind": "dependency"
+            }
+          ],
+          "connectionIds": [],
+          "routingWork": 0,
+          "routingSimplified": false,
+          "route": {
+            "path": "M 996 328 L 1028 328 L 1028 461 L -17 461 L -17 276 L 15 276",
+            "x": 505.5,
+            "y": 461
+          },
+          "routePoints": [
+            {
+              "x": 996,
+              "y": 328
+            },
+            {
+              "x": 1028,
+              "y": 328
+            },
+            {
+              "x": 1028,
+              "y": 461
+            },
+            {
+              "x": -17,
+              "y": 461
+            },
+            {
+              "x": -17,
+              "y": 276
+            },
+            {
+              "x": 15,
+              "y": 276
+            }
+          ],
+          "labelHidden": false,
+          "labelBox": {
+            "left": 395.25,
+            "right": 615.75,
+            "top": 448,
+            "bottom": 474
+          },
+          "crossings": [
+            {
+              "x": 1028,
+              "y": 328
+            },
+            {
+              "x": 1028,
+              "y": 461
+            }
+          ]
+        },
+        "style": {
+          "stroke": "#64758b",
+          "strokeWidth": 2,
+          "opacity": 0.9
+        },
+        "markerEnd": {
+          "type": "arrow",
+          "color": "#64758b"
+        }
+      },
+      {
+        "id": "reading-relation:[\"aggregate:stage0:context\",\"local:stage0:stage0_ready_q\",\"dependency\",\"other\",\"state_data\",\"写入值 · stage0_valid_q\",\"dependency:local:stage0:stage0_valid_q>stage0_ready_q/local:stage0:stage0_valid_q/state_data\",\"\",\"\"]",
+        "source": "aggregate:stage0:context",
+        "target": "local:stage0:stage0_ready_q",
+        "sourceHandle": "out:reading-relation:[\"aggregate:stage0:context\",\"local:stage0:stage0_ready_q\",\"dependency\",\"other\",\"state_data\",\"写入值 · stage0_valid_q\",\"dependency:local:stage0:stage0_valid_q>stage0_ready_q/local:stage0:stage0_valid_q/state_data\",\"\",\"\"]",
+        "targetHandle": "in:reading-relation:[\"aggregate:stage0:context\",\"local:stage0:stage0_ready_q\",\"dependency\",\"other\",\"state_data\",\"写入值 · stage0_valid_q\",\"dependency:local:stage0:stage0_valid_q>stage0_ready_q/local:stage0:stage0_valid_q/state_data\",\"\",\"\"]",
+        "type": "relationship",
+        "label": "写入值 · stage0_valid_q",
+        "reconnectable": false,
+        "data": {
+          "localSignalId": "stage0_ready_q",
+          "dependencyEndpoint": {
+            "moduleId": "stage0",
+            "interfaceId": "stage0_valid_q",
+            "local": true
+          },
+          "dependencyEndpoints": [
+            {
+              "moduleId": "stage0",
+              "interfaceId": "stage0_valid_q",
+              "local": true
+            }
+          ],
+          "semanticKind": "aggregate",
+          "dependencyRole": "state_data",
+          "category": "other",
+          "relationBundle": true,
+          "title": "阅读关系集合；不是物理网络\n写入值 · stage0_valid_q\ndependency:local:stage0:stage0_valid_q>stage0_ready_q/local:stage0:stage0_valid_q/state_data\n",
+          "color": "#64758b",
+          "granularity": "expression",
+          "feedback": false,
+          "laneOffset": 0,
+          "routeY": 16,
+          "relationMembers": [
+            {
+              "id": "dependency:local:stage0:stage0_valid_q>stage0_ready_q/local:stage0:stage0_valid_q/state_data",
+              "source": "local:stage0:stage0_valid_q",
+              "target": "local:stage0:stage0_ready_q",
+              "label": "写入值 · stage0_valid_q",
+              "connectionIds": [],
+              "connections": [],
+              "dependencyEndpoints": [
+                {
+                  "moduleId": "stage0",
+                  "interfaceId": "stage0_valid_q",
+                  "local": true
+                }
+              ],
+              "localSignalId": "stage0_ready_q",
+              "semanticKind": "dependency"
+            }
+          ],
+          "connectionIds": [],
+          "routingWork": 0,
+          "routingSimplified": false,
+          "route": {
+            "path": "M 275 276 L 307 276 L 307 256 L 736 256",
+            "x": 521.5,
+            "y": 256
+          },
+          "routePoints": [
+            {
+              "x": 275,
+              "y": 276
+            },
+            {
+              "x": 307,
+              "y": 276
+            },
+            {
+              "x": 307,
+              "y": 256
+            },
+            {
+              "x": 736,
+              "y": 256
+            }
+          ],
+          "labelHidden": false,
+          "labelBox": {
+            "left": 419.25,
+            "right": 623.75,
+            "top": 243,
+            "bottom": 269
+          },
+          "crossings": []
+        },
+        "style": {
+          "stroke": "#64758b",
+          "strokeWidth": 2,
+          "opacity": 0.9
+        },
+        "markerEnd": {
+          "type": "arrow",
+          "color": "#64758b"
+        }
+      },
+      {
+        "id": "dependency:stage0>stage0_data_q/payload/state_data",
+        "source": "rack:stage0:consumer",
+        "target": "local:stage0:stage0_data_q",
+        "sourceHandle": "out:payload",
+        "targetHandle": "in:dependency:stage0>stage0_data_q/payload/state_data",
+        "type": "relationship",
+        "label": "写入值 · 数据",
+        "reconnectable": false,
+        "data": {
+          "localSignalId": "stage0_data_q",
+          "dependencyEndpoint": {
+            "moduleId": "stage0",
+            "interfaceId": "s_axis_tdata"
+          },
+          "dependencyEndpoints": [
+            {
+              "moduleId": "stage0",
+              "interfaceId": "s_axis_tdata"
+            }
+          ],
+          "semanticKind": "dependency",
+          "dependencyRole": "state_data",
+          "category": "data",
+          "relationBundle": false,
+          "title": "写入值 · 数据\ndependency:stage0>stage0_data_q/payload/state_data\n",
+          "color": "#326ea1",
+          "granularity": "expression",
+          "feedback": false,
+          "laneOffset": 0,
+          "relationMembers": [
+            {
+              "id": "dependency:stage0>stage0_data_q/payload/state_data",
+              "source": "rack:stage0:consumer",
+              "target": "local:stage0:stage0_data_q",
+              "label": "写入值 · 数据",
+              "connectionIds": [],
+              "connections": [],
+              "dependencyEndpoints": [
+                {
+                  "moduleId": "stage0",
+                  "interfaceId": "s_axis_tdata"
+                }
+              ],
+              "localSignalId": "stage0_data_q",
+              "semanticKind": "dependency"
+            }
+          ],
+          "connectionIds": [],
+          "routingWork": 0,
+          "routingSimplified": false,
+          "route": {
+            "path": "M -340 299 L -308 299 L -308 363 L 1424 363 L 1424 299 L 1456 299",
+            "x": 558,
+            "y": 363
+          },
+          "routePoints": [
+            {
+              "x": -340,
+              "y": 299
+            },
+            {
+              "x": -308,
+              "y": 299
+            },
+            {
+              "x": -308,
+              "y": 363
+            },
+            {
+              "x": 1424,
+              "y": 363
+            },
+            {
+              "x": 1424,
+              "y": 299
+            },
+            {
+              "x": 1456,
+              "y": 299
+            }
+          ],
+          "labelHidden": false,
+          "labelBox": {
+            "left": 499.25,
+            "right": 616.75,
+            "top": 350,
+            "bottom": 376
+          },
+          "crossings": [
+            {
+              "x": 1028,
+              "y": 363
+            },
+            {
+              "x": -17,
+              "y": 363
+            }
+          ]
+        },
+        "style": {
+          "stroke": "#326ea1",
+          "strokeWidth": 1.8,
+          "opacity": 0.9
+        },
+        "markerEnd": {
+          "type": "arrow",
+          "color": "#326ea1"
+        }
+      },
+      {
+        "id": "dependency:stage0>stage0_ready_q/control/state_data",
+        "source": "rack:stage0:consumer",
+        "target": "local:stage0:stage0_ready_q",
+        "sourceHandle": "out:control",
+        "targetHandle": "in:dependency:stage0>stage0_ready_q/control/state_data",
+        "type": "relationship",
+        "label": "写入值 · 握手控制 · 2 项",
+        "reconnectable": false,
+        "data": {
+          "localSignalId": "stage0_ready_q",
+          "dependencyEndpoint": {
+            "moduleId": "stage0",
+            "interfaceId": "s_axis_tvalid"
+          },
+          "dependencyEndpoints": [
+            {
+              "moduleId": "stage0",
+              "interfaceId": "m_axis_tready"
+            },
+            {
+              "moduleId": "stage0",
+              "interfaceId": "s_axis_tvalid"
+            }
+          ],
+          "semanticKind": "dependency",
+          "dependencyRole": "state_data",
+          "category": "control",
+          "relationBundle": true,
+          "title": "写入值 · 握手控制 · 2 项\ndependency:stage0>stage0_ready_q/control/state_data\n",
+          "color": "#64758b",
+          "granularity": "expression",
+          "feedback": false,
+          "laneOffset": -15,
+          "relationMembers": [
+            {
+              "id": "dependency:stage0>stage0_ready_q/control/state_data",
+              "source": "rack:stage0:consumer",
+              "target": "local:stage0:stage0_ready_q",
+              "label": "写入值 · 握手控制 · 2 项",
+              "connectionIds": [],
+              "connections": [],
+              "dependencyEndpoints": [
+                {
+                  "moduleId": "stage0",
+                  "interfaceId": "m_axis_tready"
+                },
+                {
+                  "moduleId": "stage0",
+                  "interfaceId": "s_axis_tvalid"
+                }
+              ],
+              "localSignalId": "stage0_ready_q",
+              "semanticKind": "dependency"
+            }
+          ],
+          "connectionIds": [],
+          "routingWork": 0,
+          "routingSimplified": false,
+          "route": {
+            "path": "M -340 343 L -308 343 L -308 324 L 704 324 L 704 292 L 736 292",
+            "x": 420.64,
+            "y": 324
+          },
+          "routePoints": [
+            {
+              "x": -340,
+              "y": 343
+            },
+            {
+              "x": -308,
+              "y": 343
+            },
+            {
+              "x": -308,
+              "y": 324
+            },
+            {
+              "x": 704,
+              "y": 324
+            },
+            {
+              "x": 704,
+              "y": 292
+            },
+            {
+              "x": 736,
+              "y": 292
+            }
+          ],
+          "labelHidden": false,
+          "labelBox": {
+            "left": 316.64,
+            "right": 524.64,
+            "top": 311,
+            "bottom": 337
+          },
+          "crossings": [
+            {
+              "x": -308,
+              "y": 343
+            },
+            {
+              "x": -17,
+              "y": 324
+            },
+            {
+              "x": -308,
+              "y": 324
+            }
+          ],
+          "junctions": []
+        },
+        "style": {
+          "stroke": "#64758b",
+          "strokeWidth": 1.8,
+          "opacity": 0.9
+        },
+        "markerEnd": {
+          "type": "arrow",
+          "color": "#64758b"
+        }
+      }
+    ],
+    "inspection": {
+      "stored": [
+        {
+          "id": "stage0_data_q",
+          "scope": "stage0",
+          "from": {
+            "moduleId": "stage0",
+            "interfaceId": "stage0_data_q",
+            "local": true
+          },
+          "to": {
+            "moduleId": "stage0",
+            "interfaceId": "m_axis_tdata"
+          }
+        },
+        {
+          "id": "stage0_valid_q",
+          "scope": "stage0",
+          "from": {
+            "moduleId": "stage0",
+            "interfaceId": "stage0_valid_q",
+            "local": true
+          },
+          "to": {
+            "moduleId": "stage0",
+            "interfaceId": "m_axis_tvalid"
+          }
+        },
+        {
+          "id": "stage0_ready_q",
+          "scope": "stage0",
+          "from": {
+            "moduleId": "stage0",
+            "interfaceId": "stage0_ready_q",
+            "local": true
+          },
+          "to": {
+            "moduleId": "stage0",
+            "interfaceId": "s_axis_tready"
+          }
+        }
+      ],
+      "links": [
+        {
+          "id": "stage0_data_q",
+          "scope": "stage0",
+          "from": {
+            "moduleId": "stage0",
+            "interfaceId": "stage0_data_q",
+            "local": true
+          },
+          "to": {
+            "moduleId": "stage0",
+            "interfaceId": "m_axis_tdata"
+          }
+        },
+        {
+          "id": "stage0_valid_q",
+          "scope": "stage0",
+          "from": {
+            "moduleId": "stage0",
+            "interfaceId": "stage0_valid_q",
+            "local": true
+          },
+          "to": {
+            "moduleId": "stage0",
+            "interfaceId": "m_axis_tvalid"
+          }
+        },
+        {
+          "id": "stage0_ready_q",
+          "scope": "stage0",
+          "from": {
+            "moduleId": "stage0",
+            "interfaceId": "stage0_ready_q",
+            "local": true
+          },
+          "to": {
+            "moduleId": "stage0",
+            "interfaceId": "s_axis_tready"
+          }
+        }
+      ],
+      "stateBoundaries": [],
+      "limited": [],
+      "depth": 1,
+      "localIds": [],
+      "dependencies": [],
+      "moduleIds": [
+        "stage0"
+      ],
+      "missing": [],
+      "resolved": [
+        {
+          "link": {
+            "id": "stage0_data_q",
+            "scope": "stage0",
+            "from": {
+              "moduleId": "stage0",
+              "interfaceId": "stage0_data_q",
+              "local": true
+            },
+            "to": {
+              "moduleId": "stage0",
+              "interfaceId": "m_axis_tdata"
+            }
+          },
+          "width": 8,
+          "group": {
+            "id": "payload",
+            "label": "数据",
+            "category": "data",
+            "description": "数据",
+            "auxiliary": false
+          }
+        },
+        {
+          "link": {
+            "id": "stage0_valid_q",
+            "scope": "stage0",
+            "from": {
+              "moduleId": "stage0",
+              "interfaceId": "stage0_valid_q",
+              "local": true
+            },
+            "to": {
+              "moduleId": "stage0",
+              "interfaceId": "m_axis_tvalid"
+            }
+          },
+          "width": 1,
+          "group": {
+            "id": "control",
+            "label": "握手控制",
+            "category": "control",
+            "description": "握手控制",
+            "auxiliary": false
+          }
+        },
+        {
+          "link": {
+            "id": "stage0_ready_q",
+            "scope": "stage0",
+            "from": {
+              "moduleId": "stage0",
+              "interfaceId": "stage0_ready_q",
+              "local": true
+            },
+            "to": {
+              "moduleId": "stage0",
+              "interfaceId": "s_axis_tready"
+            }
+          },
+          "width": 1,
+          "group": {
+            "id": "control",
+            "label": "握手控制",
+            "category": "control",
+            "description": "握手控制",
+            "auxiliary": false
+          }
+        }
+      ],
+      "summaryCount": 3
+    },
+    "frame": {
+      "id": "frame:stage0",
+      "position": {
+        "x": -520,
+        "y": -10
+      },
+      "width": 2756,
+      "height": 505
+    },
+    "auxiliaryCount": 1,
+    "foldedLocalCount": 0,
+    "foldedDependencyCount": 0,
+    "localCount": 3,
+    "stateCount": 3
+  },
+  "positions": {
+    "aggregate:stage0:context": {
+      "x": 15,
+      "y": 176
+    },
+    "local:stage0:stage0_data_q": {
+      "x": 1456,
+      "y": 163
+    },
+    "local:stage0:stage0_ready_q": {
+      "x": 736,
+      "y": 120
+    }
+  }
+}

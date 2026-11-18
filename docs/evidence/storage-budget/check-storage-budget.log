@@ -1,0 +1,16 @@
+
+> rtl-architect@2.0.0 check:storage-budget
+> node --import tsx scripts/check-storage-budget.ts
+
+PASS 1: legacy inputs and workbench hash stay unchanged, old lower-bound numbers remain exact
+PASS 2: three-cycle pipelined latency differs from three-cycle exclusive occupancy; II is separate
+PASS 3: shared R/W, independent 1R1W and 2RW obey an independent exhaustive port allocator
+PASS 4: identical aggregate ports cannot hide same-bank conflicts; every access ID is retained
+PASS 5: physical word aliases, read latency, read-during-write and unknown boundaries stay explicit
+PASS 6: feedback distance creates a separate recurrence bound, unknown never becomes zero latency
+PASS 7: 8 GB/s arrival versus 6 GB/s drain rejects every finite FIFO despite a passing stall budget
+PASS 8: invalid maps, resource identity, duplicate IDs, unsupported types and numeric overflow fail
+PASS 9: maximum finite request sets terminate with grouped diagnostics and complete membership
+PASS 10: CLI and core return identical calculation and explanation without workspace writes
+PASS 11: saved budgets round-trip without defaults and preserve approved temporary hardware bytes
+完成 11 组有限资源与存储预算检查；非 RTL 调度、仿真或性能证明。

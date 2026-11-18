@@ -1,0 +1,65 @@
+[
+  {
+    "file": "architecture/model.json",
+    "baseline": "candidate-quality/protected-before.json (previous turn)",
+    "before": "65c2e4e3ccda3c5c8c1d42badd7f4375ac771805ef4a446978fa2dd742d1d201",
+    "after": "65c2e4e3ccda3c5c8c1d42badd7f4375ac771805ef4a446978fa2dd742d1d201",
+    "unchanged": true
+  },
+  {
+    "file": "architecture/layout.json",
+    "baseline": "candidate-quality/protected-before.json (previous turn)",
+    "before": "d83bc465f2bb8e6c8cc6f9d5fa6d474e5d107a68e3b7fb394affd27b8499def5",
+    "after": "d83bc465f2bb8e6c8cc6f9d5fa6d474e5d107a68e3b7fb394affd27b8499def5",
+    "unchanged": true
+  },
+  {
+    "file": "examples/typed-expressions/architecture/layout.json",
+    "baseline": "candidate-quality/protected-before.json (previous turn)",
+    "before": "631921261f469a73a5cbb689e99093087ee22498308b5dd5859ee092aa681ead",
+    "after": "631921261f469a73a5cbb689e99093087ee22498308b5dd5859ee092aa681ead",
+    "unchanged": true
+  },
+  {
+    "file": "examples/typed-expressions/architecture/model.json",
+    "baseline": "candidate-quality/protected-before.json (previous turn)",
+    "before": "c4d1115edd6fe4356f89630ca3bfb639ac6fcf1407e2b514ef36c8027f4fc1a3",
+    "after": "c4d1115edd6fe4356f89630ca3bfb639ac6fcf1407e2b514ef36c8027f4fc1a3",
+    "unchanged": true
+  },
+  {
+    "file": "examples/hardware-views/architecture/model.json",
+    "baseline": "candidate-quality/protected-before.json (previous turn)",
+    "before": "374a1f527dfd9e8415400f34b9bd7d8fdf7a45845fdb8c07186d03513e5b2407",
+    "after": "374a1f527dfd9e8415400f34b9bd7d8fdf7a45845fdb8c07186d03513e5b2407",
+    "unchanged": true
+  },
+  {
+    "file": "examples/state-updates/architecture/model.json",
+    "baseline": "candidate-quality/protected-before.json (previous turn)",
+    "before": "a452d38d1ef0d0bf221f2ad47a9fe1f079190a3564ea11734daa5085e31eeb5f",
+    "after": "a452d38d1ef0d0bf221f2ad47a9fe1f079190a3564ea11734daa5085e31eeb5f",
+    "unchanged": true
+  },
+  {
+    "file": "examples/contract-checks/architecture/model.json",
+    "baseline": "candidate-quality/protected-before.json (previous turn)",
+    "before": "0e9a188c71bf011c9c6c178731d0cbcf3833ae02d23a1c6cfa225c37c89386a3",
+    "after": "0e9a188c71bf011c9c6c178731d0cbcf3833ae02d23a1c6cfa225c37c89386a3",
+    "unchanged": true
+  },
+  {
+    "file": "examples/external-axis/architecture/model.json",
+    "baseline": "candidate-quality/protected-before.json (previous turn)",
+    "before": "0cb6704b8d147cee793875adb9c9c29bdb8c4613a7c5af79232d25deda328803",
+    "after": "0cb6704b8d147cee793875adb9c9c29bdb8c4613a7c5af79232d25deda328803",
+    "unchanged": true
+  },
+  {
+    "file": "examples/external-axis/vendor/axis_register.v",
+    "baseline": "fixed upstream SHA-256",
+    "before": "599fde2d6c2d806643bbffb7c444297e69a71871f962d4b741ec1914342e0d39",
+    "after": "599fde2d6c2d806643bbffb7c444297e69a71871f962d4b741ec1914342e0d39",
+    "unchanged": true
+  }
+]

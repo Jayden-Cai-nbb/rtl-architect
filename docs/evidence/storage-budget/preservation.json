@@ -1,0 +1,47 @@
+{
+  "checkedAt": "2026-11-18T03:13:08.404863+00:00",
+  "allUnchanged": true,
+  "existingFiles": 5,
+  "paths": [
+    {
+      "path": "architecture/model.json",
+      "before": "65c2e4e3ccda3c5c8c1d42badd7f4375ac771805ef4a446978fa2dd742d1d201",
+      "after": "65c2e4e3ccda3c5c8c1d42badd7f4375ac771805ef4a446978fa2dd742d1d201"
+    },
+    {
+      "path": "architecture/layout.json",
+      "before": "d83bc465f2bb8e6c8cc6f9d5fa6d474e5d107a68e3b7fb394affd27b8499def5",
+      "after": "d83bc465f2bb8e6c8cc6f9d5fa6d474e5d107a68e3b7fb394affd27b8499def5"
+    },
+    {
+      "path": "architecture/workbench.json",
+      "before": null,
+      "after": null
+    },
+    {
+      "path": "architecture/review.json",
+      "before": null,
+      "after": null
+    },
+    {
+      "path": "architecture/module-reviews.json",
+      "before": null,
+      "after": null
+    },
+    {
+      "path": "package-lock.json",
+      "before": "f069245bb14051145ad39f1b54b973d4392d433e724a7e9335138c53e8abd8aa",
+      "after": "f069245bb14051145ad39f1b54b973d4392d433e724a7e9335138c53e8abd8aa"
+    },
+    {
+      "path": "examples/external-axis/architecture/model.json",
+      "before": "0cb6704b8d147cee793875adb9c9c29bdb8c4613a7c5af79232d25deda328803",
+      "after": "0cb6704b8d147cee793875adb9c9c29bdb8c4613a7c5af79232d25deda328803"
+    },
+    {
+      "path": "examples/external-axis/vendor/axis_register.v",
+      "before": "599fde2d6c2d806643bbffb7c444297e69a71871f962d4b741ec1914342e0d39",
+      "after": "599fde2d6c2d806643bbffb7c444297e69a71871f962d4b741ec1914342e0d39"
+    }
+  ]
+}

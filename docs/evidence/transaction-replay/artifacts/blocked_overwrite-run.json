@@ -1,0 +1,208 @@
+{
+  "schemaVersion": 1,
+  "id": "run_1794903162122_7222e04e1ad244d4b49f0501e84822de",
+  "name": "事务 JSON：连续输入、阻塞恢复、在途复位",
+  "stage": "simulation",
+  "moduleIds": [
+    "top",
+    "stage0",
+    "stage1"
+  ],
+  "modelHash": "7bf5e344cd1ff13896361386ea9f04afa883ce2f8bc2928863b065ed95c537b5",
+  "profileHash": "b62152732d610470c32f5df2e2f73da1f5015d3c3e338e96e4cfde72beb3d232",
+  "profile": {
+    "schemaVersion": 1,
+    "name": "事务 JSON：连续输入、阻塞恢复、在途复位",
+    "stage": "simulation",
+    "moduleIds": [
+      "top",
+      "stage0",
+      "stage1"
+    ],
+    "inputs": [
+      "vendor/axis_register.v",
+      "rtl/axis_pair.sv",
+      "tb_replay.sv",
+      "replay-profile.json",
+      "upstream.json"
+    ],
+    "inputClosure": {
+      "status": "declared_complete",
+      "note": "固定双级配置，显式 TB；无包含或生成依赖"
+    },
+    "timeoutMs": 120000,
+    "commands": [
+      {
+        "program": "verilator",
+        "args": [
+          "--binary",
+          "--timing",
+          "-Wno-fatal",
+          "--top-module",
+          "tb_replay",
+          "--Mdir",
+          "{runDir}/obj",
+          "vendor/axis_register.v",
+          "rtl/axis_pair.sv",
+          "tb_replay.sv"
+        ],
+        "versionArgs": [
+          "--version"
+        ]
+      },
+      {
+        "program": "{runDir}/obj/Vtb_replay",
+        "args": [
+          "+TRACE={runDir}/trace.json"
+        ]
+      }
+    ],
+    "checks": [
+      {
+        "kind": "artifact",
+        "file": "trace.json"
+      },
+      {
+        "kind": "contains",
+        "file": "step-1.stdout.log",
+        "text": "REPLAY_CAPTURED"
+      }
+    ]
+  },
+  "startedAt": "2026-11-17T08:12:42.123Z",
+  "finishedAt": "2026-11-17T08:12:49.003Z",
+  "durationMs": 6880,
+  "status": "passed",
+  "inputs": [
+    {
+      "file": "vendor/axis_register.v",
+      "sha256": "a96f1a00c2bef15e26588878b6a066622801241383f303344c1dd3e50288a510"
+    },
+    {
+      "file": "rtl/axis_pair.sv",
+      "sha256": "370bb395832a9208456d08cf33c63b580b294edabd78248e5186a79c410764c6"
+    },
+    {
+      "file": "tb_replay.sv",
+      "sha256": "9d06ff9c40921549c7a6c31a14e44b929b130f11640c26ee2f24bac3a74008ef"
+    },
+    {
+      "file": "replay-profile.json",
+      "sha256": "e16d68ac27cff49e8aa275fc956e4235bcc1511a66883812f4e5b0f4909e2206"
+    },
+    {
+      "file": "upstream.json",
+      "sha256": "5434ab3598ef226a2e39aa9f9e57d5f96e82aa8bf98c5189b8587f486c7bb960"
+    }
+  ],
+  "inputsAfter": [
+    {
+      "file": "vendor/axis_register.v",
+      "sha256": "a96f1a00c2bef15e26588878b6a066622801241383f303344c1dd3e50288a510"
+    },
+    {
+      "file": "rtl/axis_pair.sv",
+      "sha256": "370bb395832a9208456d08cf33c63b580b294edabd78248e5186a79c410764c6"
+    },
+    {
+      "file": "tb_replay.sv",
+      "sha256": "9d06ff9c40921549c7a6c31a14e44b929b130f11640c26ee2f24bac3a74008ef"
+    },
+    {
+      "file": "replay-profile.json",
+      "sha256": "e16d68ac27cff49e8aa275fc956e4235bcc1511a66883812f4e5b0f4909e2206"
+    },
+    {
+      "file": "upstream.json",
+      "sha256": "5434ab3598ef226a2e39aa9f9e57d5f96e82aa8bf98c5189b8587f486c7bb960"
+    }
+  ],
+  "steps": [
+    {
+      "program": "verilator",
+      "args": [
+        "--binary",
+        "--timing",
+        "-Wno-fatal",
+        "--top-module",
+        "tb_replay",
+        "--Mdir",
+        "/tmp/rtlarch-transaction-replay/evidence/runs/run_1794903162122_7222e04e1ad244d4b49f0501e84822de/obj",
+        "vendor/axis_register.v",
+        "rtl/axis_pair.sv",
+        "tb_replay.sv"
+      ],
+      "cwd": "/tmp/rtlarch-transaction-replay",
+      "toolVersion": "Verilator 5.053 devel rev v5.052-46-g599f8b8e3 (mod)",
+      "exitCode": 0,
+      "signal": null,
+      "timedOut": false,
+      "outputLimit": false
+    },
+    {
+      "program": "/tmp/rtlarch-transaction-replay/evidence/runs/run_1794903162122_7222e04e1ad244d4b49f0501e84822de/obj/Vtb_replay",
+      "args": [
+        "+TRACE=/tmp/rtlarch-transaction-replay/evidence/runs/run_1794903162122_7222e04e1ad244d4b49f0501e84822de/trace.json"
+      ],
+      "cwd": "/tmp/rtlarch-transaction-replay",
+      "toolVersion": "generated executable: sha256 6cc9fc38ab13001090f0544cf44b3bf8d1b6e61e483ee9919dce4d5e6f0f0981",
+      "exitCode": 0,
+      "signal": null,
+      "timedOut": false,
+      "outputLimit": false
+    }
+  ],
+  "checks": [
+    {
+      "kind": "artifact",
+      "file": "trace.json",
+      "passed": true
+    },
+    {
+      "kind": "contains",
+      "file": "step-1.stdout.log",
+      "text": "REPLAY_CAPTURED",
+      "passed": true
+    }
+  ],
+  "artifacts": [
+    {
+      "file": "step-0.stdout.log",
+      "sha256": "7a5508d9076db600704011408e94a489c125940bfc889c5fdb41e76536cf7578"
+    },
+    {
+      "file": "step-0.stderr.log",
+      "sha256": "b272f636ad19ea70b6b85375dcbb189f75ccdc9dd4b81510414abd283d91fa58"
+    },
+    {
+      "file": "obj/Vtb_replay",
+      "sha256": "6cc9fc38ab13001090f0544cf44b3bf8d1b6e61e483ee9919dce4d5e6f0f0981"
+    },
+    {
+      "file": "step-1.stdout.log",
+      "sha256": "e1ba600473411bd0bc1808476363dab91fe91ab6acf101d1d36d8d844085c2f9"
+    },
+    {
+      "file": "step-1.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "trace.json",
+      "sha256": "a1133ceb92d313c5d727a9fbd975e4a8b529746a978db34f3b07373201e86e61"
+    },
+    {
+      "file": "step-1.stdout.log",
+      "sha256": "e1ba600473411bd0bc1808476363dab91fe91ab6acf101d1d36d8d844085c2f9"
+    }
+  ],
+  "obligationTargets": [],
+  "basis": {
+    "modelHash": "7bf5e344cd1ff13896361386ea9f04afa883ce2f8bc2928863b065ed95c537b5",
+    "kind": "as_built",
+    "origin": "as_built",
+    "reviewStatus": "DRAFT",
+    "reviewRecordHash": "85ba225fa8d32318b6bf11a850f109962cacf221ef2aa2f7609280f2cc675c58",
+    "review": null
+  },
+  "note": "只证明声明命令和检查在本次显式输入下的结果；未自动发现依赖，不改变架构批准或模型验证声明。"
+}

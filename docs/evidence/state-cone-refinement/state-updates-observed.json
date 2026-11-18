@@ -1,0 +1,1099 @@
+{
+  "schemaVersion": 1,
+  "engine": "yosys-proc-bdd-v2",
+  "toolVersion": "2.0.0",
+  "modelHash": "94c6cafc1ef936ab89fc883f3c761edce3d287c99461daf70a4c4a4ddb749bb5",
+  "manifest": {
+    "schemaVersion": 1,
+    "runId": "run_1794811050478_38ca8c44f16e423fa7a4123d8e232bd5",
+    "netlist": "state.json",
+    "top": "add_const",
+    "instancePath": [],
+    "mappings": [
+      {
+        "moduleId": "top",
+        "localSignalId": "out_data",
+        "state": "out_data",
+        "clock": "clk",
+        "signals": [
+          {
+            "endpoint": {
+              "moduleId": "top",
+              "interfaceId": "rst_n"
+            },
+            "pin": "rst_n"
+          },
+          {
+            "endpoint": {
+              "moduleId": "top",
+              "interfaceId": "s_valid"
+            },
+            "pin": "s_valid"
+          },
+          {
+            "endpoint": {
+              "moduleId": "top",
+              "interfaceId": "s_data"
+            },
+            "pin": "s_data"
+          },
+          {
+            "endpoint": {
+              "moduleId": "top",
+              "interfaceId": "m_ready"
+            },
+            "pin": "m_ready"
+          },
+          {
+            "endpoint": {
+              "moduleId": "top",
+              "interfaceId": "out_valid",
+              "local": true
+            },
+            "pin": "out_valid"
+          }
+        ]
+      },
+      {
+        "moduleId": "top",
+        "localSignalId": "out_valid",
+        "state": "out_valid",
+        "clock": "clk",
+        "signals": [
+          {
+            "endpoint": {
+              "moduleId": "top",
+              "interfaceId": "rst_n"
+            },
+            "pin": "rst_n"
+          },
+          {
+            "endpoint": {
+              "moduleId": "top",
+              "interfaceId": "s_valid"
+            },
+            "pin": "s_valid"
+          },
+          {
+            "endpoint": {
+              "moduleId": "top",
+              "interfaceId": "s_data"
+            },
+            "pin": "s_data"
+          },
+          {
+            "endpoint": {
+              "moduleId": "top",
+              "interfaceId": "m_ready"
+            },
+            "pin": "m_ready"
+          }
+        ]
+      }
+    ]
+  },
+  "manifestHash": "2bedfffa13c0a942148b327f15a80004a9c7e7386e6f910a29e17afe2ae87d9e",
+  "producerRun": "run_1794811050478_38ca8c44f16e423fa7a4123d8e232bd5",
+  "producerFresh": true,
+  "producerInputsCurrent": true,
+  "producer": {
+    "netlistHash": "adad7db3afda30603134c51b4158f81db1a0fb4fe6a830915ea7acc8f47dbc98",
+    "profileHash": "27ea1c88cb97c0b3369c126a94a9bb895d70c9f837aee96bf920bdf7a0937ee3",
+    "inputs": [
+      {
+        "file": "rtl/add_const.sv",
+        "sha256": "581b358f68e87a9b03c854de4b226e4952555a8975e690f0344da8e8551e6c7f"
+      },
+      {
+        "file": "elaboration.json",
+        "sha256": "40b6ed86136fb4bed56434a9582327556b10d8dcae780bf2aedab380b75c9721"
+      }
+    ],
+    "tools": [
+      {
+        "program": "yosys",
+        "version": "Yosys 0.68+206 (git sha1 72dc97739-dirty, Release, Clang /usr/bin/clang++ 21.1.8)"
+      }
+    ]
+  },
+  "basis": {
+    "kind": "as_built",
+    "label": "还原模型一致性",
+    "reviewRecordHash": "85ba225fa8d32318b6bf11a850f109962cacf221ef2aa2f7609280f2cc675c58"
+  },
+  "status": "MATCH",
+  "discoveryComplete": true,
+  "scope": {
+    "stateCount": 2,
+    "observedCount": 2,
+    "truncated": false,
+    "mappedCount": 2
+  },
+  "scopes": [
+    {
+      "instancePath": [],
+      "found": true,
+      "stateCount": 2,
+      "observedCount": 2,
+      "mappedCount": 2,
+      "truncated": false
+    }
+  ],
+  "observations": [
+    {
+      "cell": "$procdff$20",
+      "type": "$dff",
+      "width": 1,
+      "aliases": [
+        "out_valid"
+      ],
+      "source": "rtl/add_const.sv:19.3-27.6",
+      "instancePath": [],
+      "status": "EXTRACTED",
+      "reason": "已提取有限二态下一拍函数；未与设计声明比较",
+      "observed": {
+        "cell": "$procdff$20",
+        "aliases": [
+          "out_valid"
+        ],
+        "width": 1,
+        "source": "rtl/add_const.sv:19.3-27.6",
+        "clock": {
+          "bits": [
+            2
+          ],
+          "edge": "rising"
+        },
+        "stateBits": [
+          33
+        ],
+        "nextBits": [
+          36
+        ],
+        "leafBits": [
+          3,
+          12,
+          23,
+          33
+        ],
+        "cells": [
+          {
+            "name": "$logic_and$rtl/add_const.sv:16$3",
+            "type": "$logic_and",
+            "source": "rtl/add_const.sv:16.20-16.52",
+            "parameters": {
+              "A_SIGNED": "00000000000000000000000000000000",
+              "A_WIDTH": "00000000000000000000000000000001",
+              "B_SIGNED": "00000000000000000000000000000000",
+              "B_WIDTH": "00000000000000000000000000000001",
+              "Y_WIDTH": "00000000000000000000000000000001"
+            },
+            "connections": {
+              "A": [
+                3
+              ],
+              "B": [
+                32
+              ],
+              "Y": [
+                13
+              ]
+            }
+          },
+          {
+            "name": "$logic_not$rtl/add_const.sv:16$1",
+            "type": "$logic_not",
+            "source": "rtl/add_const.sv:16.30-16.40",
+            "parameters": {
+              "A_SIGNED": "00000000000000000000000000000000",
+              "A_WIDTH": "00000000000000000000000000000001",
+              "Y_WIDTH": "00000000000000000000000000000001"
+            },
+            "connections": {
+              "A": [
+                33
+              ],
+              "Y": [
+                34
+              ]
+            }
+          },
+          {
+            "name": "$logic_or$rtl/add_const.sv:16$2",
+            "type": "$logic_or",
+            "source": "rtl/add_const.sv:16.30-16.51",
+            "parameters": {
+              "A_SIGNED": "00000000000000000000000000000000",
+              "A_WIDTH": "00000000000000000000000000000001",
+              "B_SIGNED": "00000000000000000000000000000000",
+              "B_WIDTH": "00000000000000000000000000000001",
+              "Y_WIDTH": "00000000000000000000000000000001"
+            },
+            "connections": {
+              "A": [
+                34
+              ],
+              "B": [
+                23
+              ],
+              "Y": [
+                32
+              ]
+            }
+          },
+          {
+            "name": "$procmux$15",
+            "type": "$mux",
+            "source": "rtl/add_const.sv:23.18-23.25|rtl/add_const.sv:23.14-26.8",
+            "parameters": {
+              "WIDTH": "00000000000000000000000000000001"
+            },
+            "connections": {
+              "A": [
+                33
+              ],
+              "B": [
+                12
+              ],
+              "S": [
+                13
+              ],
+              "Y": [
+                61
+              ]
+            }
+          },
+          {
+            "name": "$procmux$18",
+            "type": "$mux",
+            "source": "rtl/add_const.sv:20.9-20.15|rtl/add_const.sv:20.5-26.8",
+            "parameters": {
+              "WIDTH": "00000000000000000000000000000001"
+            },
+            "connections": {
+              "A": [
+                "0"
+              ],
+              "B": [
+                61
+              ],
+              "S": [
+                3
+              ],
+              "Y": [
+                36
+              ]
+            }
+          }
+        ],
+        "expression": {
+          "text": "(rst_n ? ($logic_and[1](rst_n && $logic_or[1](!(out_valid) || m_ready)) ? s_valid : out_valid) : 1'h0)",
+          "abbreviated": false
+        },
+        "bitOrder": "lsb_first",
+        "domain": "two_state"
+      },
+      "metrics": {
+        "nodes": 18,
+        "operations": 48
+      }
+    },
+    {
+      "cell": "$procdff$21",
+      "type": "$dff",
+      "width": 8,
+      "aliases": [
+        "m_data",
+        "out_data"
+      ],
+      "source": "rtl/add_const.sv:19.3-27.6",
+      "instancePath": [],
+      "status": "EXTRACTED",
+      "reason": "已提取有限二态下一拍函数；未与设计声明比较",
+      "observed": {
+        "cell": "$procdff$21",
+        "aliases": [
+          "m_data",
+          "out_data"
+        ],
+        "width": 8,
+        "source": "rtl/add_const.sv:19.3-27.6",
+        "clock": {
+          "bits": [
+            2
+          ],
+          "edge": "rising"
+        },
+        "stateBits": [
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21
+        ],
+        "nextBits": [
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44
+        ],
+        "leafBits": [
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          23,
+          33
+        ],
+        "cells": [
+          {
+            "name": "$add$rtl/add_const.sv:25$7",
+            "type": "$add",
+            "source": "rtl/add_const.sv:25.32-25.46",
+            "parameters": {
+              "A_SIGNED": "00000000000000000000000000000000",
+              "A_WIDTH": "00000000000000000000000000001000",
+              "B_SIGNED": "00000000000000000000000000000000",
+              "B_WIDTH": "00000000000000000000000000001000",
+              "Y_WIDTH": "00000000000000000000000000001000"
+            },
+            "connections": {
+              "A": [
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11
+              ],
+              "B": [
+                "1",
+                "1",
+                "0",
+                "0",
+                "0",
+                "0",
+                "0",
+                "0"
+              ],
+              "Y": [
+                24,
+                25,
+                26,
+                27,
+                28,
+                29,
+                30,
+                31
+              ]
+            }
+          },
+          {
+            "name": "$logic_and$rtl/add_const.sv:16$3",
+            "type": "$logic_and",
+            "source": "rtl/add_const.sv:16.20-16.52",
+            "parameters": {
+              "A_SIGNED": "00000000000000000000000000000000",
+              "A_WIDTH": "00000000000000000000000000000001",
+              "B_SIGNED": "00000000000000000000000000000000",
+              "B_WIDTH": "00000000000000000000000000000001",
+              "Y_WIDTH": "00000000000000000000000000000001"
+            },
+            "connections": {
+              "A": [
+                3
+              ],
+              "B": [
+                32
+              ],
+              "Y": [
+                13
+              ]
+            }
+          },
+          {
+            "name": "$logic_not$rtl/add_const.sv:16$1",
+            "type": "$logic_not",
+            "source": "rtl/add_const.sv:16.30-16.40",
+            "parameters": {
+              "A_SIGNED": "00000000000000000000000000000000",
+              "A_WIDTH": "00000000000000000000000000000001",
+              "Y_WIDTH": "00000000000000000000000000000001"
+            },
+            "connections": {
+              "A": [
+                33
+              ],
+              "Y": [
+                34
+              ]
+            }
+          },
+          {
+            "name": "$logic_or$rtl/add_const.sv:16$2",
+            "type": "$logic_or",
+            "source": "rtl/add_const.sv:16.30-16.51",
+            "parameters": {
+              "A_SIGNED": "00000000000000000000000000000000",
+              "A_WIDTH": "00000000000000000000000000000001",
+              "B_SIGNED": "00000000000000000000000000000000",
+              "B_WIDTH": "00000000000000000000000000000001",
+              "Y_WIDTH": "00000000000000000000000000000001"
+            },
+            "connections": {
+              "A": [
+                34
+              ],
+              "B": [
+                23
+              ],
+              "Y": [
+                32
+              ]
+            }
+          },
+          {
+            "name": "$procmux$10",
+            "type": "$mux",
+            "source": "rtl/add_const.sv:23.18-23.25|rtl/add_const.sv:23.14-26.8",
+            "parameters": {
+              "WIDTH": "00000000000000000000000000001000"
+            },
+            "connections": {
+              "A": [
+                14,
+                15,
+                16,
+                17,
+                18,
+                19,
+                20,
+                21
+              ],
+              "B": [
+                45,
+                46,
+                47,
+                48,
+                49,
+                50,
+                51,
+                52
+              ],
+              "S": [
+                13
+              ],
+              "Y": [
+                53,
+                54,
+                55,
+                56,
+                57,
+                58,
+                59,
+                60
+              ]
+            }
+          },
+          {
+            "name": "$procmux$13",
+            "type": "$mux",
+            "source": "rtl/add_const.sv:20.9-20.15|rtl/add_const.sv:20.5-26.8",
+            "parameters": {
+              "WIDTH": "00000000000000000000000000001000"
+            },
+            "connections": {
+              "A": [
+                "0",
+                "0",
+                "0",
+                "0",
+                "0",
+                "0",
+                "0",
+                "0"
+              ],
+              "B": [
+                53,
+                54,
+                55,
+                56,
+                57,
+                58,
+                59,
+                60
+              ],
+              "S": [
+                3
+              ],
+              "Y": [
+                37,
+                38,
+                39,
+                40,
+                41,
+                42,
+                43,
+                44
+              ]
+            }
+          },
+          {
+            "name": "$procmux$8",
+            "type": "$mux",
+            "source": "rtl/add_const.sv:25.11-25.18|rtl/add_const.sv:25.7-25.47",
+            "parameters": {
+              "WIDTH": "00000000000000000000000000001000"
+            },
+            "connections": {
+              "A": [
+                14,
+                15,
+                16,
+                17,
+                18,
+                19,
+                20,
+                21
+              ],
+              "B": [
+                24,
+                25,
+                26,
+                27,
+                28,
+                29,
+                30,
+                31
+              ],
+              "S": [
+                12
+              ],
+              "Y": [
+                45,
+                46,
+                47,
+                48,
+                49,
+                50,
+                51,
+                52
+              ]
+            }
+          }
+        ],
+        "expression": {
+          "text": "(rst_n ? ($logic_and[1](rst_n && $logic_or[1](!(out_valid) || m_ready)) ? (s_valid ? $add[8](s_data + 8'h3) : m_data) : m_data) : 8'h0)",
+          "abbreviated": false
+        },
+        "bitOrder": "lsb_first",
+        "domain": "two_state"
+      },
+      "metrics": {
+        "nodes": 370,
+        "operations": 866
+      }
+    }
+  ],
+  "results": [
+    {
+      "moduleId": "top",
+      "localSignalId": "out_data",
+      "state": "out_data",
+      "instancePath": [],
+      "status": "MATCH",
+      "reason": "所有二态输入与旧状态组合下，映射寄存器的单步更新函数相同",
+      "observed": {
+        "cell": "$procdff$21",
+        "aliases": [
+          "m_data",
+          "out_data"
+        ],
+        "width": 8,
+        "source": "rtl/add_const.sv:19.3-27.6",
+        "clock": {
+          "bits": [
+            2
+          ],
+          "edge": "rising"
+        },
+        "stateBits": [
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21
+        ],
+        "nextBits": [
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44
+        ],
+        "leafBits": [
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          23,
+          33
+        ],
+        "cells": [
+          {
+            "name": "$add$rtl/add_const.sv:25$7",
+            "type": "$add",
+            "source": "rtl/add_const.sv:25.32-25.46",
+            "parameters": {
+              "A_SIGNED": "00000000000000000000000000000000",
+              "A_WIDTH": "00000000000000000000000000001000",
+              "B_SIGNED": "00000000000000000000000000000000",
+              "B_WIDTH": "00000000000000000000000000001000",
+              "Y_WIDTH": "00000000000000000000000000001000"
+            },
+            "connections": {
+              "A": [
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11
+              ],
+              "B": [
+                "1",
+                "1",
+                "0",
+                "0",
+                "0",
+                "0",
+                "0",
+                "0"
+              ],
+              "Y": [
+                24,
+                25,
+                26,
+                27,
+                28,
+                29,
+                30,
+                31
+              ]
+            }
+          },
+          {
+            "name": "$logic_and$rtl/add_const.sv:16$3",
+            "type": "$logic_and",
+            "source": "rtl/add_const.sv:16.20-16.52",
+            "parameters": {
+              "A_SIGNED": "00000000000000000000000000000000",
+              "A_WIDTH": "00000000000000000000000000000001",
+              "B_SIGNED": "00000000000000000000000000000000",
+              "B_WIDTH": "00000000000000000000000000000001",
+              "Y_WIDTH": "00000000000000000000000000000001"
+            },
+            "connections": {
+              "A": [
+                3
+              ],
+              "B": [
+                32
+              ],
+              "Y": [
+                13
+              ]
+            }
+          },
+          {
+            "name": "$logic_not$rtl/add_const.sv:16$1",
+            "type": "$logic_not",
+            "source": "rtl/add_const.sv:16.30-16.40",
+            "parameters": {
+              "A_SIGNED": "00000000000000000000000000000000",
+              "A_WIDTH": "00000000000000000000000000000001",
+              "Y_WIDTH": "00000000000000000000000000000001"
+            },
+            "connections": {
+              "A": [
+                33
+              ],
+              "Y": [
+                34
+              ]
+            }
+          },
+          {
+            "name": "$logic_or$rtl/add_const.sv:16$2",
+            "type": "$logic_or",
+            "source": "rtl/add_const.sv:16.30-16.51",
+            "parameters": {
+              "A_SIGNED": "00000000000000000000000000000000",
+              "A_WIDTH": "00000000000000000000000000000001",
+              "B_SIGNED": "00000000000000000000000000000000",
+              "B_WIDTH": "00000000000000000000000000000001",
+              "Y_WIDTH": "00000000000000000000000000000001"
+            },
+            "connections": {
+              "A": [
+                34
+              ],
+              "B": [
+                23
+              ],
+              "Y": [
+                32
+              ]
+            }
+          },
+          {
+            "name": "$procmux$10",
+            "type": "$mux",
+            "source": "rtl/add_const.sv:23.18-23.25|rtl/add_const.sv:23.14-26.8",
+            "parameters": {
+              "WIDTH": "00000000000000000000000000001000"
+            },
+            "connections": {
+              "A": [
+                14,
+                15,
+                16,
+                17,
+                18,
+                19,
+                20,
+                21
+              ],
+              "B": [
+                45,
+                46,
+                47,
+                48,
+                49,
+                50,
+                51,
+                52
+              ],
+              "S": [
+                13
+              ],
+              "Y": [
+                53,
+                54,
+                55,
+                56,
+                57,
+                58,
+                59,
+                60
+              ]
+            }
+          },
+          {
+            "name": "$procmux$13",
+            "type": "$mux",
+            "source": "rtl/add_const.sv:20.9-20.15|rtl/add_const.sv:20.5-26.8",
+            "parameters": {
+              "WIDTH": "00000000000000000000000000001000"
+            },
+            "connections": {
+              "A": [
+                "0",
+                "0",
+                "0",
+                "0",
+                "0",
+                "0",
+                "0",
+                "0"
+              ],
+              "B": [
+                53,
+                54,
+                55,
+                56,
+                57,
+                58,
+                59,
+                60
+              ],
+              "S": [
+                3
+              ],
+              "Y": [
+                37,
+                38,
+                39,
+                40,
+                41,
+                42,
+                43,
+                44
+              ]
+            }
+          },
+          {
+            "name": "$procmux$8",
+            "type": "$mux",
+            "source": "rtl/add_const.sv:25.11-25.18|rtl/add_const.sv:25.7-25.47",
+            "parameters": {
+              "WIDTH": "00000000000000000000000000001000"
+            },
+            "connections": {
+              "A": [
+                14,
+                15,
+                16,
+                17,
+                18,
+                19,
+                20,
+                21
+              ],
+              "B": [
+                24,
+                25,
+                26,
+                27,
+                28,
+                29,
+                30,
+                31
+              ],
+              "S": [
+                12
+              ],
+              "Y": [
+                45,
+                46,
+                47,
+                48,
+                49,
+                50,
+                51,
+                52
+              ]
+            }
+          }
+        ],
+        "expression": {
+          "text": "(rst_n ? ($logic_and[1](rst_n && $logic_or[1](!(out_valid) || m_ready)) ? (s_valid ? $add[8](s_data + 8'h3) : m_data) : m_data) : 8'h0)",
+          "abbreviated": false
+        },
+        "bitOrder": "lsb_first",
+        "domain": "two_state"
+      },
+      "metrics": {
+        "nodes": 433,
+        "operations": 1262
+      },
+      "observedHash": "6bc7697f46382bfd1bc54c1dd78036e309fbcccc0e86492487b604b56b51f2e4"
+    },
+    {
+      "moduleId": "top",
+      "localSignalId": "out_valid",
+      "state": "out_valid",
+      "instancePath": [],
+      "status": "MATCH",
+      "reason": "所有二态输入与旧状态组合下，映射寄存器的单步更新函数相同",
+      "observed": {
+        "cell": "$procdff$20",
+        "aliases": [
+          "out_valid"
+        ],
+        "width": 1,
+        "source": "rtl/add_const.sv:19.3-27.6",
+        "clock": {
+          "bits": [
+            2
+          ],
+          "edge": "rising"
+        },
+        "stateBits": [
+          33
+        ],
+        "nextBits": [
+          36
+        ],
+        "leafBits": [
+          3,
+          12,
+          23,
+          33
+        ],
+        "cells": [
+          {
+            "name": "$logic_and$rtl/add_const.sv:16$3",
+            "type": "$logic_and",
+            "source": "rtl/add_const.sv:16.20-16.52",
+            "parameters": {
+              "A_SIGNED": "00000000000000000000000000000000",
+              "A_WIDTH": "00000000000000000000000000000001",
+              "B_SIGNED": "00000000000000000000000000000000",
+              "B_WIDTH": "00000000000000000000000000000001",
+              "Y_WIDTH": "00000000000000000000000000000001"
+            },
+            "connections": {
+              "A": [
+                3
+              ],
+              "B": [
+                32
+              ],
+              "Y": [
+                13
+              ]
+            }
+          },
+          {
+            "name": "$logic_not$rtl/add_const.sv:16$1",
+            "type": "$logic_not",
+            "source": "rtl/add_const.sv:16.30-16.40",
+            "parameters": {
+              "A_SIGNED": "00000000000000000000000000000000",
+              "A_WIDTH": "00000000000000000000000000000001",
+              "Y_WIDTH": "00000000000000000000000000000001"
+            },
+            "connections": {
+              "A": [
+                33
+              ],
+              "Y": [
+                34
+              ]
+            }
+          },
+          {
+            "name": "$logic_or$rtl/add_const.sv:16$2",
+            "type": "$logic_or",
+            "source": "rtl/add_const.sv:16.30-16.51",
+            "parameters": {
+              "A_SIGNED": "00000000000000000000000000000000",
+              "A_WIDTH": "00000000000000000000000000000001",
+              "B_SIGNED": "00000000000000000000000000000000",
+              "B_WIDTH": "00000000000000000000000000000001",
+              "Y_WIDTH": "00000000000000000000000000000001"
+            },
+            "connections": {
+              "A": [
+                34
+              ],
+              "B": [
+                23
+              ],
+              "Y": [
+                32
+              ]
+            }
+          },
+          {
+            "name": "$procmux$15",
+            "type": "$mux",
+            "source": "rtl/add_const.sv:23.18-23.25|rtl/add_const.sv:23.14-26.8",
+            "parameters": {
+              "WIDTH": "00000000000000000000000000000001"
+            },
+            "connections": {
+              "A": [
+                33
+              ],
+              "B": [
+                12
+              ],
+              "S": [
+                13
+              ],
+              "Y": [
+                61
+              ]
+            }
+          },
+          {
+            "name": "$procmux$18",
+            "type": "$mux",
+            "source": "rtl/add_const.sv:20.9-20.15|rtl/add_const.sv:20.5-26.8",
+            "parameters": {
+              "WIDTH": "00000000000000000000000000000001"
+            },
+            "connections": {
+              "A": [
+                "0"
+              ],
+              "B": [
+                61
+              ],
+              "S": [
+                3
+              ],
+              "Y": [
+                36
+              ]
+            }
+          }
+        ],
+        "expression": {
+          "text": "(rst_n ? ($logic_and[1](rst_n && $logic_or[1](!(out_valid) || m_ready)) ? s_valid : out_valid) : 1'h0)",
+          "abbreviated": false
+        },
+        "bitOrder": "lsb_first",
+        "domain": "two_state"
+      },
+      "metrics": {
+        "nodes": 26,
+        "operations": 71
+      },
+      "observedHash": "0c2aac515c98dfcf3fdd5322ae1489999c69b17c8eba673b5417922da95d210b"
+    }
+  ],
+  "limitations": [
+    "逐实例独立比较作用域内完整 $dff 的二态单步函数；不跨层拼接逻辑锥；其他寄存器类型、X/Z、不支持的运算及预算超限为 UNKNOWN。",
+    "所有输入和旧状态作为自由变量；反例未判断可达性，不是完整时序等价、需求或器件验收。",
+    "需要显式完整构建输入、参数/宏配置和工具版本；声明完整不是自动依赖发现。",
+    "观察快照是派生证据，不覆盖 register.update、不改变批准；未映射状态未与设计比较。"
+  ]
+}

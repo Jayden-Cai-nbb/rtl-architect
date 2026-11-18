@@ -1,0 +1,5686 @@
+{
+  "schemaVersion": 1,
+  "id": "replay_a9ea7849718445a8a4cdc594d6d77ebf",
+  "createdAt": "2026-11-17T08:12:42.109Z",
+  "modelHash": "7bf5e344cd1ff13896361386ea9f04afa883ce2f8bc2928863b065ed95c537b5",
+  "sourceDigest": "2d1f10c57c60b40b8d02e53b60308f22a3bbec81fb926808cb65ce8e192255a9",
+  "runDigest": "8b1e69c20d731d1aa687b3de236001ca4521231a5cc80fe2a9c200bba5f2434a",
+  "artifactDigest": "70085848641f10b1bd6cb3fcd30f0f7d513b1ffa36e0efc4e274056449973efd",
+  "pathDigest": "822806bdbf591c0a679cfacd9a0b54505bbcef150e662abc1144ed9c31e0e8c1",
+  "mapping": {
+    "schemaVersion": 1,
+    "moduleId": "top",
+    "pathId": "pair",
+    "origin": "simulation",
+    "runId": "run_1794903155289_47503ba730b5422aa68e8e11838830ab",
+    "artifact": "trace.json",
+    "configuration": "replay-profile.json",
+    "reset": "rst",
+    "points": [
+      {
+        "model": {
+          "moduleId": "top",
+          "data": "s_axis_tdata",
+          "valid": "s_axis_tvalid",
+          "ready": "s_axis_tready"
+        },
+        "data": "d0",
+        "valid": "v0",
+        "ready": "r0"
+      },
+      {
+        "model": {
+          "moduleId": "stage0",
+          "data": "m_axis_tdata",
+          "valid": "m_axis_tvalid",
+          "ready": "m_axis_tready"
+        },
+        "data": "d1",
+        "valid": "v1",
+        "ready": "r1"
+      },
+      {
+        "model": {
+          "moduleId": "stage1",
+          "data": "m_axis_tdata",
+          "valid": "m_axis_tvalid",
+          "ready": "m_axis_tready"
+        },
+        "data": "d2",
+        "valid": "v2",
+        "ready": "r2"
+      }
+    ]
+  },
+  "resultDigest": "f63ee99890d7771897092a40bb1556056030c8f3df718fd0473736e92b2f3f08",
+  "result": {
+    "status": "FAILED",
+    "events": [
+      {
+        "kind": "accept",
+        "phase": "pre",
+        "edge": 2,
+        "transaction": "T0",
+        "payload": "16",
+        "stage": 0,
+        "state": {
+          "moduleId": "stage0",
+          "localSignalId": "stage0_data_q"
+        },
+        "branch": "load",
+        "matched": true
+      },
+      {
+        "kind": "visible",
+        "phase": "post",
+        "edge": 2,
+        "transaction": "T0",
+        "payload": "16",
+        "stage": 0,
+        "state": {
+          "moduleId": "stage0",
+          "localSignalId": "stage0_data_q"
+        },
+        "branch": "load",
+        "matched": false
+      },
+      {
+        "kind": "accept",
+        "phase": "pre",
+        "edge": 4,
+        "transaction": "T1",
+        "payload": "17",
+        "stage": 0,
+        "state": {
+          "moduleId": "stage0",
+          "localSignalId": "stage0_data_q"
+        },
+        "branch": "load",
+        "matched": true
+      },
+      {
+        "kind": "visible",
+        "phase": "post",
+        "edge": 4,
+        "transaction": "T1",
+        "payload": "17",
+        "stage": 0,
+        "state": {
+          "moduleId": "stage0",
+          "localSignalId": "stage0_data_q"
+        },
+        "branch": "load",
+        "matched": false
+      },
+      {
+        "kind": "visible",
+        "phase": "post",
+        "edge": 4,
+        "transaction": "T0",
+        "payload": "16",
+        "stage": 1,
+        "state": {
+          "moduleId": "stage1",
+          "localSignalId": "stage1_data_q"
+        },
+        "branch": "load",
+        "matched": false
+      },
+      {
+        "kind": "accept",
+        "phase": "pre",
+        "edge": 6,
+        "transaction": "T2",
+        "payload": "18",
+        "stage": 0,
+        "state": {
+          "moduleId": "stage0",
+          "localSignalId": "stage0_data_q"
+        },
+        "branch": "load",
+        "matched": true
+      },
+      {
+        "kind": "consume",
+        "phase": "pre",
+        "edge": 6,
+        "transaction": "T0",
+        "payload": "16",
+        "stage": 1,
+        "state": {
+          "moduleId": "stage1",
+          "localSignalId": "stage1_data_q"
+        },
+        "branch": null,
+        "matched": true
+      },
+      {
+        "kind": "visible",
+        "phase": "post",
+        "edge": 6,
+        "transaction": "T2",
+        "payload": "18",
+        "stage": 0,
+        "state": {
+          "moduleId": "stage0",
+          "localSignalId": "stage0_data_q"
+        },
+        "branch": "load",
+        "matched": false
+      },
+      {
+        "kind": "visible",
+        "phase": "post",
+        "edge": 6,
+        "transaction": "T1",
+        "payload": "17",
+        "stage": 1,
+        "state": {
+          "moduleId": "stage1",
+          "localSignalId": "stage1_data_q"
+        },
+        "branch": "load",
+        "matched": false
+      },
+      {
+        "kind": "accept",
+        "phase": "pre",
+        "edge": 8,
+        "transaction": "T3",
+        "payload": "19",
+        "stage": 0,
+        "state": {
+          "moduleId": "stage0",
+          "localSignalId": "stage0_data_q"
+        },
+        "branch": "load",
+        "matched": true
+      },
+      {
+        "kind": "consume",
+        "phase": "pre",
+        "edge": 8,
+        "transaction": "T1",
+        "payload": "17",
+        "stage": 1,
+        "state": {
+          "moduleId": "stage1",
+          "localSignalId": "stage1_data_q"
+        },
+        "branch": null,
+        "matched": true
+      },
+      {
+        "kind": "visible",
+        "phase": "post",
+        "edge": 8,
+        "transaction": "T3",
+        "payload": "19",
+        "stage": 0,
+        "state": {
+          "moduleId": "stage0",
+          "localSignalId": "stage0_data_q"
+        },
+        "branch": "load",
+        "matched": false
+      },
+      {
+        "kind": "visible",
+        "phase": "post",
+        "edge": 8,
+        "transaction": "T2",
+        "payload": "18",
+        "stage": 1,
+        "state": {
+          "moduleId": "stage1",
+          "localSignalId": "stage1_data_q"
+        },
+        "branch": "load",
+        "matched": false
+      },
+      {
+        "kind": "accept",
+        "phase": "pre",
+        "edge": 10,
+        "transaction": "T4",
+        "payload": "20",
+        "stage": 0,
+        "state": {
+          "moduleId": "stage0",
+          "localSignalId": "stage0_data_q"
+        },
+        "branch": "load",
+        "matched": true
+      },
+      {
+        "kind": "visible",
+        "phase": "post",
+        "edge": 10,
+        "transaction": "T4",
+        "payload": "20",
+        "stage": 0,
+        "state": {
+          "moduleId": "stage0",
+          "localSignalId": "stage0_data_q"
+        },
+        "branch": "load",
+        "matched": false
+      },
+      {
+        "kind": "visible",
+        "phase": "post",
+        "edge": 10,
+        "transaction": "T3",
+        "payload": "19",
+        "stage": 1,
+        "state": {
+          "moduleId": "stage1",
+          "localSignalId": "stage1_data_q"
+        },
+        "branch": "load",
+        "matched": false
+      },
+      {
+        "kind": "accept",
+        "phase": "pre",
+        "edge": 12,
+        "transaction": "T5",
+        "payload": "21",
+        "stage": 0,
+        "state": {
+          "moduleId": "stage0",
+          "localSignalId": "stage0_data_q"
+        },
+        "branch": "load",
+        "matched": true
+      },
+      {
+        "kind": "visible",
+        "phase": "post",
+        "edge": 12,
+        "transaction": "T5",
+        "payload": "21",
+        "stage": 0,
+        "state": {
+          "moduleId": "stage0",
+          "localSignalId": "stage0_data_q"
+        },
+        "branch": "load",
+        "matched": false
+      },
+      {
+        "kind": "visible",
+        "phase": "post",
+        "edge": 12,
+        "transaction": "T4",
+        "payload": "20",
+        "stage": 1,
+        "state": {
+          "moduleId": "stage1",
+          "localSignalId": "stage1_data_q"
+        },
+        "branch": "load",
+        "matched": false
+      },
+      {
+        "kind": "accept",
+        "phase": "pre",
+        "edge": 14,
+        "transaction": "T6",
+        "payload": "22",
+        "stage": 0,
+        "state": {
+          "moduleId": "stage0",
+          "localSignalId": "stage0_data_q"
+        },
+        "branch": "load",
+        "matched": true
+      },
+      {
+        "kind": "visible",
+        "phase": "post",
+        "edge": 14,
+        "transaction": "T6",
+        "payload": "22",
+        "stage": 0,
+        "state": {
+          "moduleId": "stage0",
+          "localSignalId": "stage0_data_q"
+        },
+        "branch": "load",
+        "matched": false
+      },
+      {
+        "kind": "visible",
+        "phase": "post",
+        "edge": 14,
+        "transaction": "T5",
+        "payload": "21",
+        "stage": 1,
+        "state": {
+          "moduleId": "stage1",
+          "localSignalId": "stage1_data_q"
+        },
+        "branch": "load",
+        "matched": false
+      },
+      {
+        "kind": "accept",
+        "phase": "pre",
+        "edge": 16,
+        "transaction": "T7",
+        "payload": "23",
+        "stage": 0,
+        "state": {
+          "moduleId": "stage0",
+          "localSignalId": "stage0_data_q"
+        },
+        "branch": "load",
+        "matched": true
+      },
+      {
+        "kind": "visible",
+        "phase": "post",
+        "edge": 16,
+        "transaction": "T7",
+        "payload": "23",
+        "stage": 0,
+        "state": {
+          "moduleId": "stage0",
+          "localSignalId": "stage0_data_q"
+        },
+        "branch": "load",
+        "matched": false
+      },
+      {
+        "kind": "visible",
+        "phase": "post",
+        "edge": 16,
+        "transaction": "T6",
+        "payload": "22",
+        "stage": 1,
+        "state": {
+          "moduleId": "stage1",
+          "localSignalId": "stage1_data_q"
+        },
+        "branch": "load",
+        "matched": false
+      },
+      {
+        "kind": "accept",
+        "phase": "pre",
+        "edge": 18,
+        "transaction": "T8",
+        "payload": "24",
+        "stage": 0,
+        "state": {
+          "moduleId": "stage0",
+          "localSignalId": "stage0_data_q"
+        },
+        "branch": "load",
+        "matched": true
+      },
+      {
+        "kind": "visible",
+        "phase": "post",
+        "edge": 18,
+        "transaction": "T8",
+        "payload": "24",
+        "stage": 0,
+        "state": {
+          "moduleId": "stage0",
+          "localSignalId": "stage0_data_q"
+        },
+        "branch": "load",
+        "matched": false
+      },
+      {
+        "kind": "visible",
+        "phase": "post",
+        "edge": 18,
+        "transaction": "T7",
+        "payload": "23",
+        "stage": 1,
+        "state": {
+          "moduleId": "stage1",
+          "localSignalId": "stage1_data_q"
+        },
+        "branch": "load",
+        "matched": false
+      },
+      {
+        "kind": "accept",
+        "phase": "pre",
+        "edge": 20,
+        "transaction": "T9",
+        "payload": "25",
+        "stage": 0,
+        "state": {
+          "moduleId": "stage0",
+          "localSignalId": "stage0_data_q"
+        },
+        "branch": "load",
+        "matched": true
+      },
+      {
+        "kind": "consume",
+        "phase": "pre",
+        "edge": 20,
+        "transaction": "T7",
+        "payload": "23",
+        "stage": 1,
+        "state": {
+          "moduleId": "stage1",
+          "localSignalId": "stage1_data_q"
+        },
+        "branch": null,
+        "matched": true
+      },
+      {
+        "kind": "visible",
+        "phase": "post",
+        "edge": 20,
+        "transaction": "T9",
+        "payload": "25",
+        "stage": 0,
+        "state": {
+          "moduleId": "stage0",
+          "localSignalId": "stage0_data_q"
+        },
+        "branch": "load",
+        "matched": false
+      },
+      {
+        "kind": "visible",
+        "phase": "post",
+        "edge": 20,
+        "transaction": "T8",
+        "payload": "24",
+        "stage": 1,
+        "state": {
+          "moduleId": "stage1",
+          "localSignalId": "stage1_data_q"
+        },
+        "branch": "load",
+        "matched": false
+      },
+      {
+        "kind": "accept",
+        "phase": "pre",
+        "edge": 22,
+        "transaction": "T10",
+        "payload": "26",
+        "stage": 0,
+        "state": {
+          "moduleId": "stage0",
+          "localSignalId": "stage0_data_q"
+        },
+        "branch": "load",
+        "matched": true
+      },
+      {
+        "kind": "consume",
+        "phase": "pre",
+        "edge": 22,
+        "transaction": "T8",
+        "payload": "24",
+        "stage": 1,
+        "state": {
+          "moduleId": "stage1",
+          "localSignalId": "stage1_data_q"
+        },
+        "branch": null,
+        "matched": true
+      },
+      {
+        "kind": "visible",
+        "phase": "post",
+        "edge": 22,
+        "transaction": "T10",
+        "payload": "26",
+        "stage": 0,
+        "state": {
+          "moduleId": "stage0",
+          "localSignalId": "stage0_data_q"
+        },
+        "branch": "load",
+        "matched": false
+      },
+      {
+        "kind": "visible",
+        "phase": "post",
+        "edge": 22,
+        "transaction": "T9",
+        "payload": "25",
+        "stage": 1,
+        "state": {
+          "moduleId": "stage1",
+          "localSignalId": "stage1_data_q"
+        },
+        "branch": "load",
+        "matched": false
+      },
+      {
+        "kind": "accept",
+        "phase": "pre",
+        "edge": 24,
+        "transaction": "T11",
+        "payload": "27",
+        "stage": 0,
+        "state": {
+          "moduleId": "stage0",
+          "localSignalId": "stage0_data_q"
+        },
+        "branch": "load",
+        "matched": true
+      },
+      {
+        "kind": "consume",
+        "phase": "pre",
+        "edge": 24,
+        "transaction": "T9",
+        "payload": "25",
+        "stage": 1,
+        "state": {
+          "moduleId": "stage1",
+          "localSignalId": "stage1_data_q"
+        },
+        "branch": null,
+        "matched": true
+      },
+      {
+        "kind": "visible",
+        "phase": "post",
+        "edge": 24,
+        "transaction": "T11",
+        "payload": "27",
+        "stage": 0,
+        "state": {
+          "moduleId": "stage0",
+          "localSignalId": "stage0_data_q"
+        },
+        "branch": "load",
+        "matched": false
+      },
+      {
+        "kind": "visible",
+        "phase": "post",
+        "edge": 24,
+        "transaction": "T10",
+        "payload": "26",
+        "stage": 1,
+        "state": {
+          "moduleId": "stage1",
+          "localSignalId": "stage1_data_q"
+        },
+        "branch": "load",
+        "matched": false
+      },
+      {
+        "kind": "accept",
+        "phase": "pre",
+        "edge": 26,
+        "transaction": "T12",
+        "payload": "28",
+        "stage": 0,
+        "state": {
+          "moduleId": "stage0",
+          "localSignalId": "stage0_data_q"
+        },
+        "branch": "load",
+        "matched": true
+      },
+      {
+        "kind": "consume",
+        "phase": "pre",
+        "edge": 26,
+        "transaction": "T10",
+        "payload": "26",
+        "stage": 1,
+        "state": {
+          "moduleId": "stage1",
+          "localSignalId": "stage1_data_q"
+        },
+        "branch": null,
+        "matched": true
+      },
+      {
+        "kind": "visible",
+        "phase": "post",
+        "edge": 26,
+        "transaction": "T12",
+        "payload": "28",
+        "stage": 0,
+        "state": {
+          "moduleId": "stage0",
+          "localSignalId": "stage0_data_q"
+        },
+        "branch": "load",
+        "matched": false
+      },
+      {
+        "kind": "visible",
+        "phase": "post",
+        "edge": 26,
+        "transaction": "T11",
+        "payload": "27",
+        "stage": 1,
+        "state": {
+          "moduleId": "stage1",
+          "localSignalId": "stage1_data_q"
+        },
+        "branch": "load",
+        "matched": false
+      },
+      {
+        "kind": "cancel",
+        "phase": "pre",
+        "edge": 28,
+        "transaction": "T12",
+        "payload": "28",
+        "stage": 0,
+        "state": {
+          "moduleId": "stage0",
+          "localSignalId": "stage0_valid_q"
+        },
+        "branch": "reset",
+        "matched": true
+      },
+      {
+        "kind": "cancel",
+        "phase": "pre",
+        "edge": 28,
+        "transaction": "T11",
+        "payload": "27",
+        "stage": 1,
+        "state": {
+          "moduleId": "stage1",
+          "localSignalId": "stage1_valid_q"
+        },
+        "branch": "reset",
+        "matched": true
+      },
+      {
+        "kind": "accept",
+        "phase": "pre",
+        "edge": 30,
+        "transaction": "T13",
+        "payload": "29",
+        "stage": 0,
+        "state": {
+          "moduleId": "stage0",
+          "localSignalId": "stage0_data_q"
+        },
+        "branch": "load",
+        "matched": true
+      },
+      {
+        "kind": "visible",
+        "phase": "post",
+        "edge": 30,
+        "transaction": "T13",
+        "payload": "29",
+        "stage": 0,
+        "state": {
+          "moduleId": "stage0",
+          "localSignalId": "stage0_data_q"
+        },
+        "branch": "load",
+        "matched": false
+      },
+      {
+        "kind": "accept",
+        "phase": "pre",
+        "edge": 32,
+        "transaction": "T14",
+        "payload": "30",
+        "stage": 0,
+        "state": {
+          "moduleId": "stage0",
+          "localSignalId": "stage0_data_q"
+        },
+        "branch": "load",
+        "matched": true
+      },
+      {
+        "kind": "visible",
+        "phase": "post",
+        "edge": 32,
+        "transaction": "T14",
+        "payload": "30",
+        "stage": 0,
+        "state": {
+          "moduleId": "stage0",
+          "localSignalId": "stage0_data_q"
+        },
+        "branch": "load",
+        "matched": false
+      },
+      {
+        "kind": "visible",
+        "phase": "post",
+        "edge": 32,
+        "transaction": "T13",
+        "payload": "29",
+        "stage": 1,
+        "state": {
+          "moduleId": "stage1",
+          "localSignalId": "stage1_data_q"
+        },
+        "branch": "load",
+        "matched": false
+      },
+      {
+        "kind": "accept",
+        "phase": "pre",
+        "edge": 34,
+        "transaction": "T15",
+        "payload": "31",
+        "stage": 0,
+        "state": {
+          "moduleId": "stage0",
+          "localSignalId": "stage0_data_q"
+        },
+        "branch": "load",
+        "matched": true
+      },
+      {
+        "kind": "consume",
+        "phase": "pre",
+        "edge": 34,
+        "transaction": "T13",
+        "payload": "29",
+        "stage": 1,
+        "state": {
+          "moduleId": "stage1",
+          "localSignalId": "stage1_data_q"
+        },
+        "branch": null,
+        "matched": true
+      },
+      {
+        "kind": "visible",
+        "phase": "post",
+        "edge": 34,
+        "transaction": "T15",
+        "payload": "31",
+        "stage": 0,
+        "state": {
+          "moduleId": "stage0",
+          "localSignalId": "stage0_data_q"
+        },
+        "branch": "load",
+        "matched": false
+      },
+      {
+        "kind": "visible",
+        "phase": "post",
+        "edge": 34,
+        "transaction": "T14",
+        "payload": "30",
+        "stage": 1,
+        "state": {
+          "moduleId": "stage1",
+          "localSignalId": "stage1_data_q"
+        },
+        "branch": "load",
+        "matched": false
+      },
+      {
+        "kind": "accept",
+        "phase": "pre",
+        "edge": 36,
+        "transaction": "T16",
+        "payload": "32",
+        "stage": 0,
+        "state": {
+          "moduleId": "stage0",
+          "localSignalId": "stage0_data_q"
+        },
+        "branch": "load",
+        "matched": true
+      },
+      {
+        "kind": "consume",
+        "phase": "pre",
+        "edge": 36,
+        "transaction": "T14",
+        "payload": "30",
+        "stage": 1,
+        "state": {
+          "moduleId": "stage1",
+          "localSignalId": "stage1_data_q"
+        },
+        "branch": null,
+        "matched": true
+      },
+      {
+        "kind": "visible",
+        "phase": "post",
+        "edge": 36,
+        "transaction": "T16",
+        "payload": "32",
+        "stage": 0,
+        "state": {
+          "moduleId": "stage0",
+          "localSignalId": "stage0_data_q"
+        },
+        "branch": "load",
+        "matched": false
+      },
+      {
+        "kind": "visible",
+        "phase": "post",
+        "edge": 36,
+        "transaction": "T15",
+        "payload": "31",
+        "stage": 1,
+        "state": {
+          "moduleId": "stage1",
+          "localSignalId": "stage1_data_q"
+        },
+        "branch": "load",
+        "matched": false
+      },
+      {
+        "kind": "accept",
+        "phase": "pre",
+        "edge": 38,
+        "transaction": "T17",
+        "payload": "33",
+        "stage": 0,
+        "state": {
+          "moduleId": "stage0",
+          "localSignalId": "stage0_data_q"
+        },
+        "branch": "load",
+        "matched": true
+      },
+      {
+        "kind": "consume",
+        "phase": "pre",
+        "edge": 38,
+        "transaction": "T15",
+        "payload": "31",
+        "stage": 1,
+        "state": {
+          "moduleId": "stage1",
+          "localSignalId": "stage1_data_q"
+        },
+        "branch": null,
+        "matched": true
+      },
+      {
+        "kind": "visible",
+        "phase": "post",
+        "edge": 38,
+        "transaction": "T17",
+        "payload": "33",
+        "stage": 0,
+        "state": {
+          "moduleId": "stage0",
+          "localSignalId": "stage0_data_q"
+        },
+        "branch": "load",
+        "matched": false
+      },
+      {
+        "kind": "visible",
+        "phase": "post",
+        "edge": 38,
+        "transaction": "T16",
+        "payload": "32",
+        "stage": 1,
+        "state": {
+          "moduleId": "stage1",
+          "localSignalId": "stage1_data_q"
+        },
+        "branch": "load",
+        "matched": false
+      },
+      {
+        "kind": "accept",
+        "phase": "pre",
+        "edge": 40,
+        "transaction": "T18",
+        "payload": "34",
+        "stage": 0,
+        "state": {
+          "moduleId": "stage0",
+          "localSignalId": "stage0_data_q"
+        },
+        "branch": "load",
+        "matched": true
+      },
+      {
+        "kind": "consume",
+        "phase": "pre",
+        "edge": 40,
+        "transaction": "T16",
+        "payload": "32",
+        "stage": 1,
+        "state": {
+          "moduleId": "stage1",
+          "localSignalId": "stage1_data_q"
+        },
+        "branch": null,
+        "matched": true
+      },
+      {
+        "kind": "visible",
+        "phase": "post",
+        "edge": 40,
+        "transaction": "T18",
+        "payload": "34",
+        "stage": 0,
+        "state": {
+          "moduleId": "stage0",
+          "localSignalId": "stage0_data_q"
+        },
+        "branch": "load",
+        "matched": false
+      },
+      {
+        "kind": "visible",
+        "phase": "post",
+        "edge": 40,
+        "transaction": "T17",
+        "payload": "33",
+        "stage": 1,
+        "state": {
+          "moduleId": "stage1",
+          "localSignalId": "stage1_data_q"
+        },
+        "branch": "load",
+        "matched": false
+      },
+      {
+        "kind": "accept",
+        "phase": "pre",
+        "edge": 42,
+        "transaction": "T19",
+        "payload": "35",
+        "stage": 0,
+        "state": {
+          "moduleId": "stage0",
+          "localSignalId": "stage0_data_q"
+        },
+        "branch": "load",
+        "matched": true
+      },
+      {
+        "kind": "consume",
+        "phase": "pre",
+        "edge": 42,
+        "transaction": "T17",
+        "payload": "33",
+        "stage": 1,
+        "state": {
+          "moduleId": "stage1",
+          "localSignalId": "stage1_data_q"
+        },
+        "branch": null,
+        "matched": true
+      },
+      {
+        "kind": "visible",
+        "phase": "post",
+        "edge": 42,
+        "transaction": "T19",
+        "payload": "35",
+        "stage": 0,
+        "state": {
+          "moduleId": "stage0",
+          "localSignalId": "stage0_data_q"
+        },
+        "branch": "load",
+        "matched": false
+      },
+      {
+        "kind": "visible",
+        "phase": "post",
+        "edge": 42,
+        "transaction": "T18",
+        "payload": "34",
+        "stage": 1,
+        "state": {
+          "moduleId": "stage1",
+          "localSignalId": "stage1_data_q"
+        },
+        "branch": "load",
+        "matched": false
+      },
+      {
+        "kind": "accept",
+        "phase": "pre",
+        "edge": 44,
+        "transaction": "T20",
+        "payload": "36",
+        "stage": 0,
+        "state": {
+          "moduleId": "stage0",
+          "localSignalId": "stage0_data_q"
+        },
+        "branch": "load",
+        "matched": true
+      },
+      {
+        "kind": "consume",
+        "phase": "pre",
+        "edge": 44,
+        "transaction": "T18",
+        "payload": "34",
+        "stage": 1,
+        "state": {
+          "moduleId": "stage1",
+          "localSignalId": "stage1_data_q"
+        },
+        "branch": null,
+        "matched": true
+      },
+      {
+        "kind": "visible",
+        "phase": "post",
+        "edge": 44,
+        "transaction": "T20",
+        "payload": "36",
+        "stage": 0,
+        "state": {
+          "moduleId": "stage0",
+          "localSignalId": "stage0_data_q"
+        },
+        "branch": "load",
+        "matched": false
+      },
+      {
+        "kind": "visible",
+        "phase": "post",
+        "edge": 44,
+        "transaction": "T19",
+        "payload": "35",
+        "stage": 1,
+        "state": {
+          "moduleId": "stage1",
+          "localSignalId": "stage1_data_q"
+        },
+        "branch": "load",
+        "matched": false
+      },
+      {
+        "kind": "consume",
+        "phase": "pre",
+        "edge": 46,
+        "transaction": "T19",
+        "payload": "35",
+        "stage": 1,
+        "state": {
+          "moduleId": "stage1",
+          "localSignalId": "stage1_data_q"
+        },
+        "branch": null,
+        "matched": true
+      },
+      {
+        "kind": "visible",
+        "phase": "post",
+        "edge": 46,
+        "transaction": "T20",
+        "payload": "36",
+        "stage": 1,
+        "state": {
+          "moduleId": "stage1",
+          "localSignalId": "stage1_data_q"
+        },
+        "branch": "load",
+        "matched": false
+      },
+      {
+        "kind": "consume",
+        "phase": "pre",
+        "edge": 48,
+        "transaction": "T20",
+        "payload": "36",
+        "stage": 1,
+        "state": {
+          "moduleId": "stage1",
+          "localSignalId": "stage1_data_q"
+        },
+        "branch": null,
+        "matched": true
+      }
+    ],
+    "issues": [
+      {
+        "code": "VALID_PHASE",
+        "edge": 2,
+        "phase": "post",
+        "stage": 0,
+        "transaction": "T0",
+        "state": {
+          "moduleId": "stage0",
+          "localSignalId": "stage0_valid_q"
+        },
+        "expected": "true",
+        "actual": "false"
+      },
+      {
+        "code": "VALID_PHASE",
+        "edge": 3,
+        "phase": "pre",
+        "stage": 0,
+        "transaction": "T0",
+        "state": {
+          "moduleId": "stage0",
+          "localSignalId": "stage0_valid_q"
+        },
+        "expected": "true",
+        "actual": "false"
+      },
+      {
+        "code": "VALID_PHASE",
+        "edge": 4,
+        "phase": "post",
+        "stage": 0,
+        "transaction": "T1",
+        "state": {
+          "moduleId": "stage0",
+          "localSignalId": "stage0_valid_q"
+        },
+        "expected": "true",
+        "actual": "false"
+      },
+      {
+        "code": "VALID_PHASE",
+        "edge": 4,
+        "phase": "post",
+        "stage": 1,
+        "transaction": "T0",
+        "state": {
+          "moduleId": "stage1",
+          "localSignalId": "stage1_valid_q"
+        },
+        "expected": "true",
+        "actual": "false"
+      },
+      {
+        "code": "VALID_PHASE",
+        "edge": 5,
+        "phase": "pre",
+        "stage": 0,
+        "transaction": "T1",
+        "state": {
+          "moduleId": "stage0",
+          "localSignalId": "stage0_valid_q"
+        },
+        "expected": "true",
+        "actual": "false"
+      },
+      {
+        "code": "VALID_PHASE",
+        "edge": 5,
+        "phase": "pre",
+        "stage": 1,
+        "transaction": "T0",
+        "state": {
+          "moduleId": "stage1",
+          "localSignalId": "stage1_valid_q"
+        },
+        "expected": "true",
+        "actual": "false"
+      },
+      {
+        "code": "VALID_PHASE",
+        "edge": 6,
+        "phase": "post",
+        "stage": 0,
+        "transaction": "T2",
+        "state": {
+          "moduleId": "stage0",
+          "localSignalId": "stage0_valid_q"
+        },
+        "expected": "true",
+        "actual": "false"
+      },
+      {
+        "code": "VALID_PHASE",
+        "edge": 6,
+        "phase": "post",
+        "stage": 1,
+        "transaction": "T1",
+        "state": {
+          "moduleId": "stage1",
+          "localSignalId": "stage1_valid_q"
+        },
+        "expected": "true",
+        "actual": "false"
+      },
+      {
+        "code": "VALID_PHASE",
+        "edge": 7,
+        "phase": "pre",
+        "stage": 0,
+        "transaction": "T2",
+        "state": {
+          "moduleId": "stage0",
+          "localSignalId": "stage0_valid_q"
+        },
+        "expected": "true",
+        "actual": "false"
+      },
+      {
+        "code": "VALID_PHASE",
+        "edge": 7,
+        "phase": "pre",
+        "stage": 1,
+        "transaction": "T1",
+        "state": {
+          "moduleId": "stage1",
+          "localSignalId": "stage1_valid_q"
+        },
+        "expected": "true",
+        "actual": "false"
+      },
+      {
+        "code": "VALID_PHASE",
+        "edge": 8,
+        "phase": "post",
+        "stage": 0,
+        "transaction": "T3",
+        "state": {
+          "moduleId": "stage0",
+          "localSignalId": "stage0_valid_q"
+        },
+        "expected": "true",
+        "actual": "false"
+      },
+      {
+        "code": "VALID_PHASE",
+        "edge": 8,
+        "phase": "post",
+        "stage": 1,
+        "transaction": "T2",
+        "state": {
+          "moduleId": "stage1",
+          "localSignalId": "stage1_valid_q"
+        },
+        "expected": "true",
+        "actual": "false"
+      },
+      {
+        "code": "VALID_PHASE",
+        "edge": 9,
+        "phase": "pre",
+        "stage": 0,
+        "transaction": "T3",
+        "state": {
+          "moduleId": "stage0",
+          "localSignalId": "stage0_valid_q"
+        },
+        "expected": "true",
+        "actual": "false"
+      },
+      {
+        "code": "VALID_PHASE",
+        "edge": 9,
+        "phase": "pre",
+        "stage": 1,
+        "transaction": "T2",
+        "state": {
+          "moduleId": "stage1",
+          "localSignalId": "stage1_valid_q"
+        },
+        "expected": "true",
+        "actual": "false"
+      },
+      {
+        "code": "OCCUPIED_OVERWRITE",
+        "edge": 10,
+        "phase": "pre",
+        "stage": 1,
+        "transaction": "T2",
+        "state": {
+          "moduleId": "stage1",
+          "localSignalId": "stage1_data_q"
+        },
+        "expected": "保持在途事务",
+        "actual": "新的输入握手"
+      },
+      {
+        "code": "VALID_PHASE",
+        "edge": 10,
+        "phase": "post",
+        "stage": 0,
+        "transaction": "T4",
+        "state": {
+          "moduleId": "stage0",
+          "localSignalId": "stage0_valid_q"
+        },
+        "expected": "true",
+        "actual": "false"
+      },
+      {
+        "code": "VALID_PHASE",
+        "edge": 10,
+        "phase": "post",
+        "stage": 1,
+        "transaction": "T3",
+        "state": {
+          "moduleId": "stage1",
+          "localSignalId": "stage1_valid_q"
+        },
+        "expected": "true",
+        "actual": "false"
+      },
+      {
+        "code": "VALID_PHASE",
+        "edge": 11,
+        "phase": "pre",
+        "stage": 0,
+        "transaction": "T4",
+        "state": {
+          "moduleId": "stage0",
+          "localSignalId": "stage0_valid_q"
+        },
+        "expected": "true",
+        "actual": "false"
+      },
+      {
+        "code": "VALID_PHASE",
+        "edge": 11,
+        "phase": "pre",
+        "stage": 1,
+        "transaction": "T3",
+        "state": {
+          "moduleId": "stage1",
+          "localSignalId": "stage1_valid_q"
+        },
+        "expected": "true",
+        "actual": "false"
+      },
+      {
+        "code": "OCCUPIED_OVERWRITE",
+        "edge": 12,
+        "phase": "pre",
+        "stage": 1,
+        "transaction": "T3",
+        "state": {
+          "moduleId": "stage1",
+          "localSignalId": "stage1_data_q"
+        },
+        "expected": "保持在途事务",
+        "actual": "新的输入握手"
+      },
+      {
+        "code": "VALID_PHASE",
+        "edge": 12,
+        "phase": "post",
+        "stage": 0,
+        "transaction": "T5",
+        "state": {
+          "moduleId": "stage0",
+          "localSignalId": "stage0_valid_q"
+        },
+        "expected": "true",
+        "actual": "false"
+      },
+      {
+        "code": "VALID_PHASE",
+        "edge": 12,
+        "phase": "post",
+        "stage": 1,
+        "transaction": "T4",
+        "state": {
+          "moduleId": "stage1",
+          "localSignalId": "stage1_valid_q"
+        },
+        "expected": "true",
+        "actual": "false"
+      },
+      {
+        "code": "VALID_PHASE",
+        "edge": 13,
+        "phase": "pre",
+        "stage": 0,
+        "transaction": "T5",
+        "state": {
+          "moduleId": "stage0",
+          "localSignalId": "stage0_valid_q"
+        },
+        "expected": "true",
+        "actual": "false"
+      },
+      {
+        "code": "VALID_PHASE",
+        "edge": 13,
+        "phase": "pre",
+        "stage": 1,
+        "transaction": "T4",
+        "state": {
+          "moduleId": "stage1",
+          "localSignalId": "stage1_valid_q"
+        },
+        "expected": "true",
+        "actual": "false"
+      },
+      {
+        "code": "OCCUPIED_OVERWRITE",
+        "edge": 14,
+        "phase": "pre",
+        "stage": 1,
+        "transaction": "T4",
+        "state": {
+          "moduleId": "stage1",
+          "localSignalId": "stage1_data_q"
+        },
+        "expected": "保持在途事务",
+        "actual": "新的输入握手"
+      },
+      {
+        "code": "VALID_PHASE",
+        "edge": 14,
+        "phase": "post",
+        "stage": 0,
+        "transaction": "T6",
+        "state": {
+          "moduleId": "stage0",
+          "localSignalId": "stage0_valid_q"
+        },
+        "expected": "true",
+        "actual": "false"
+      },
+      {
+        "code": "VALID_PHASE",
+        "edge": 14,
+        "phase": "post",
+        "stage": 1,
+        "transaction": "T5",
+        "state": {
+          "moduleId": "stage1",
+          "localSignalId": "stage1_valid_q"
+        },
+        "expected": "true",
+        "actual": "false"
+      },
+      {
+        "code": "VALID_PHASE",
+        "edge": 15,
+        "phase": "pre",
+        "stage": 0,
+        "transaction": "T6",
+        "state": {
+          "moduleId": "stage0",
+          "localSignalId": "stage0_valid_q"
+        },
+        "expected": "true",
+        "actual": "false"
+      },
+      {
+        "code": "VALID_PHASE",
+        "edge": 15,
+        "phase": "pre",
+        "stage": 1,
+        "transaction": "T5",
+        "state": {
+          "moduleId": "stage1",
+          "localSignalId": "stage1_valid_q"
+        },
+        "expected": "true",
+        "actual": "false"
+      },
+      {
+        "code": "OCCUPIED_OVERWRITE",
+        "edge": 16,
+        "phase": "pre",
+        "stage": 1,
+        "transaction": "T5",
+        "state": {
+          "moduleId": "stage1",
+          "localSignalId": "stage1_data_q"
+        },
+        "expected": "保持在途事务",
+        "actual": "新的输入握手"
+      },
+      {
+        "code": "VALID_PHASE",
+        "edge": 16,
+        "phase": "post",
+        "stage": 0,
+        "transaction": "T7",
+        "state": {
+          "moduleId": "stage0",
+          "localSignalId": "stage0_valid_q"
+        },
+        "expected": "true",
+        "actual": "false"
+      },
+      {
+        "code": "VALID_PHASE",
+        "edge": 16,
+        "phase": "post",
+        "stage": 1,
+        "transaction": "T6",
+        "state": {
+          "moduleId": "stage1",
+          "localSignalId": "stage1_valid_q"
+        },
+        "expected": "true",
+        "actual": "false"
+      },
+      {
+        "code": "VALID_PHASE",
+        "edge": 17,
+        "phase": "pre",
+        "stage": 0,
+        "transaction": "T7",
+        "state": {
+          "moduleId": "stage0",
+          "localSignalId": "stage0_valid_q"
+        },
+        "expected": "true",
+        "actual": "false"
+      },
+      {
+        "code": "VALID_PHASE",
+        "edge": 17,
+        "phase": "pre",
+        "stage": 1,
+        "transaction": "T6",
+        "state": {
+          "moduleId": "stage1",
+          "localSignalId": "stage1_valid_q"
+        },
+        "expected": "true",
+        "actual": "false"
+      },
+      {
+        "code": "OCCUPIED_OVERWRITE",
+        "edge": 18,
+        "phase": "pre",
+        "stage": 1,
+        "transaction": "T6",
+        "state": {
+          "moduleId": "stage1",
+          "localSignalId": "stage1_data_q"
+        },
+        "expected": "保持在途事务",
+        "actual": "新的输入握手"
+      },
+      {
+        "code": "VALID_PHASE",
+        "edge": 18,
+        "phase": "post",
+        "stage": 0,
+        "transaction": "T8",
+        "state": {
+          "moduleId": "stage0",
+          "localSignalId": "stage0_valid_q"
+        },
+        "expected": "true",
+        "actual": "false"
+      },
+      {
+        "code": "VALID_PHASE",
+        "edge": 18,
+        "phase": "post",
+        "stage": 1,
+        "transaction": "T7",
+        "state": {
+          "moduleId": "stage1",
+          "localSignalId": "stage1_valid_q"
+        },
+        "expected": "true",
+        "actual": "false"
+      },
+      {
+        "code": "VALID_PHASE",
+        "edge": 19,
+        "phase": "pre",
+        "stage": 0,
+        "transaction": "T8",
+        "state": {
+          "moduleId": "stage0",
+          "localSignalId": "stage0_valid_q"
+        },
+        "expected": "true",
+        "actual": "false"
+      },
+      {
+        "code": "VALID_PHASE",
+        "edge": 19,
+        "phase": "pre",
+        "stage": 1,
+        "transaction": "T7",
+        "state": {
+          "moduleId": "stage1",
+          "localSignalId": "stage1_valid_q"
+        },
+        "expected": "true",
+        "actual": "false"
+      },
+      {
+        "code": "VALID_PHASE",
+        "edge": 20,
+        "phase": "post",
+        "stage": 0,
+        "transaction": "T9",
+        "state": {
+          "moduleId": "stage0",
+          "localSignalId": "stage0_valid_q"
+        },
+        "expected": "true",
+        "actual": "false"
+      },
+      {
+        "code": "VALID_PHASE",
+        "edge": 20,
+        "phase": "post",
+        "stage": 1,
+        "transaction": "T8",
+        "state": {
+          "moduleId": "stage1",
+          "localSignalId": "stage1_valid_q"
+        },
+        "expected": "true",
+        "actual": "false"
+      },
+      {
+        "code": "VALID_PHASE",
+        "edge": 21,
+        "phase": "pre",
+        "stage": 0,
+        "transaction": "T9",
+        "state": {
+          "moduleId": "stage0",
+          "localSignalId": "stage0_valid_q"
+        },
+        "expected": "true",
+        "actual": "false"
+      },
+      {
+        "code": "VALID_PHASE",
+        "edge": 21,
+        "phase": "pre",
+        "stage": 1,
+        "transaction": "T8",
+        "state": {
+          "moduleId": "stage1",
+          "localSignalId": "stage1_valid_q"
+        },
+        "expected": "true",
+        "actual": "false"
+      },
+      {
+        "code": "VALID_PHASE",
+        "edge": 22,
+        "phase": "post",
+        "stage": 0,
+        "transaction": "T10",
+        "state": {
+          "moduleId": "stage0",
+          "localSignalId": "stage0_valid_q"
+        },
+        "expected": "true",
+        "actual": "false"
+      },
+      {
+        "code": "VALID_PHASE",
+        "edge": 22,
+        "phase": "post",
+        "stage": 1,
+        "transaction": "T9",
+        "state": {
+          "moduleId": "stage1",
+          "localSignalId": "stage1_valid_q"
+        },
+        "expected": "true",
+        "actual": "false"
+      },
+      {
+        "code": "VALID_PHASE",
+        "edge": 23,
+        "phase": "pre",
+        "stage": 0,
+        "transaction": "T10",
+        "state": {
+          "moduleId": "stage0",
+          "localSignalId": "stage0_valid_q"
+        },
+        "expected": "true",
+        "actual": "false"
+      },
+      {
+        "code": "VALID_PHASE",
+        "edge": 23,
+        "phase": "pre",
+        "stage": 1,
+        "transaction": "T9",
+        "state": {
+          "moduleId": "stage1",
+          "localSignalId": "stage1_valid_q"
+        },
+        "expected": "true",
+        "actual": "false"
+      },
+      {
+        "code": "VALID_PHASE",
+        "edge": 24,
+        "phase": "post",
+        "stage": 0,
+        "transaction": "T11",
+        "state": {
+          "moduleId": "stage0",
+          "localSignalId": "stage0_valid_q"
+        },
+        "expected": "true",
+        "actual": "false"
+      },
+      {
+        "code": "VALID_PHASE",
+        "edge": 24,
+        "phase": "post",
+        "stage": 1,
+        "transaction": "T10",
+        "state": {
+          "moduleId": "stage1",
+          "localSignalId": "stage1_valid_q"
+        },
+        "expected": "true",
+        "actual": "false"
+      },
+      {
+        "code": "VALID_PHASE",
+        "edge": 25,
+        "phase": "pre",
+        "stage": 0,
+        "transaction": "T11",
+        "state": {
+          "moduleId": "stage0",
+          "localSignalId": "stage0_valid_q"
+        },
+        "expected": "true",
+        "actual": "false"
+      },
+      {
+        "code": "VALID_PHASE",
+        "edge": 25,
+        "phase": "pre",
+        "stage": 1,
+        "transaction": "T10",
+        "state": {
+          "moduleId": "stage1",
+          "localSignalId": "stage1_valid_q"
+        },
+        "expected": "true",
+        "actual": "false"
+      },
+      {
+        "code": "VALID_PHASE",
+        "edge": 26,
+        "phase": "post",
+        "stage": 0,
+        "transaction": "T12",
+        "state": {
+          "moduleId": "stage0",
+          "localSignalId": "stage0_valid_q"
+        },
+        "expected": "true",
+        "actual": "false"
+      },
+      {
+        "code": "VALID_PHASE",
+        "edge": 26,
+        "phase": "post",
+        "stage": 1,
+        "transaction": "T11",
+        "state": {
+          "moduleId": "stage1",
+          "localSignalId": "stage1_valid_q"
+        },
+        "expected": "true",
+        "actual": "false"
+      },
+      {
+        "code": "VALID_PHASE",
+        "edge": 27,
+        "phase": "pre",
+        "stage": 0,
+        "transaction": "T12",
+        "state": {
+          "moduleId": "stage0",
+          "localSignalId": "stage0_valid_q"
+        },
+        "expected": "true",
+        "actual": "false"
+      },
+      {
+        "code": "VALID_PHASE",
+        "edge": 27,
+        "phase": "pre",
+        "stage": 1,
+        "transaction": "T11",
+        "state": {
+          "moduleId": "stage1",
+          "localSignalId": "stage1_valid_q"
+        },
+        "expected": "true",
+        "actual": "false"
+      },
+      {
+        "code": "VALID_PHASE",
+        "edge": 30,
+        "phase": "post",
+        "stage": 0,
+        "transaction": "T13",
+        "state": {
+          "moduleId": "stage0",
+          "localSignalId": "stage0_valid_q"
+        },
+        "expected": "true",
+        "actual": "false"
+      },
+      {
+        "code": "VALID_PHASE",
+        "edge": 31,
+        "phase": "pre",
+        "stage": 0,
+        "transaction": "T13",
+        "state": {
+          "moduleId": "stage0",
+          "localSignalId": "stage0_valid_q"
+        },
+        "expected": "true",
+        "actual": "false"
+      },
+      {
+        "code": "VALID_PHASE",
+        "edge": 32,
+        "phase": "post",
+        "stage": 0,
+        "transaction": "T14",
+        "state": {
+          "moduleId": "stage0",
+          "localSignalId": "stage0_valid_q"
+        },
+        "expected": "true",
+        "actual": "false"
+      },
+      {
+        "code": "VALID_PHASE",
+        "edge": 32,
+        "phase": "post",
+        "stage": 1,
+        "transaction": "T13",
+        "state": {
+          "moduleId": "stage1",
+          "localSignalId": "stage1_valid_q"
+        },
+        "expected": "true",
+        "actual": "false"
+      },
+      {
+        "code": "VALID_PHASE",
+        "edge": 33,
+        "phase": "pre",
+        "stage": 0,
+        "transaction": "T14",
+        "state": {
+          "moduleId": "stage0",
+          "localSignalId": "stage0_valid_q"
+        },
+        "expected": "true",
+        "actual": "false"
+      },
+      {
+        "code": "VALID_PHASE",
+        "edge": 33,
+        "phase": "pre",
+        "stage": 1,
+        "transaction": "T13",
+        "state": {
+          "moduleId": "stage1",
+          "localSignalId": "stage1_valid_q"
+        },
+        "expected": "true",
+        "actual": "false"
+      },
+      {
+        "code": "VALID_PHASE",
+        "edge": 34,
+        "phase": "post",
+        "stage": 0,
+        "transaction": "T15",
+        "state": {
+          "moduleId": "stage0",
+          "localSignalId": "stage0_valid_q"
+        },
+        "expected": "true",
+        "actual": "false"
+      },
+      {
+        "code": "VALID_PHASE",
+        "edge": 34,
+        "phase": "post",
+        "stage": 1,
+        "transaction": "T14",
+        "state": {
+          "moduleId": "stage1",
+          "localSignalId": "stage1_valid_q"
+        },
+        "expected": "true",
+        "actual": "false"
+      },
+      {
+        "code": "VALID_PHASE",
+        "edge": 35,
+        "phase": "pre",
+        "stage": 0,
+        "transaction": "T15",
+        "state": {
+          "moduleId": "stage0",
+          "localSignalId": "stage0_valid_q"
+        },
+        "expected": "true",
+        "actual": "false"
+      },
+      {
+        "code": "VALID_PHASE",
+        "edge": 35,
+        "phase": "pre",
+        "stage": 1,
+        "transaction": "T14",
+        "state": {
+          "moduleId": "stage1",
+          "localSignalId": "stage1_valid_q"
+        },
+        "expected": "true",
+        "actual": "false"
+      },
+      {
+        "code": "VALID_PHASE",
+        "edge": 36,
+        "phase": "post",
+        "stage": 0,
+        "transaction": "T16",
+        "state": {
+          "moduleId": "stage0",
+          "localSignalId": "stage0_valid_q"
+        },
+        "expected": "true",
+        "actual": "false"
+      },
+      {
+        "code": "VALID_PHASE",
+        "edge": 36,
+        "phase": "post",
+        "stage": 1,
+        "transaction": "T15",
+        "state": {
+          "moduleId": "stage1",
+          "localSignalId": "stage1_valid_q"
+        },
+        "expected": "true",
+        "actual": "false"
+      },
+      {
+        "code": "VALID_PHASE",
+        "edge": 37,
+        "phase": "pre",
+        "stage": 0,
+        "transaction": "T16",
+        "state": {
+          "moduleId": "stage0",
+          "localSignalId": "stage0_valid_q"
+        },
+        "expected": "true",
+        "actual": "false"
+      },
+      {
+        "code": "VALID_PHASE",
+        "edge": 37,
+        "phase": "pre",
+        "stage": 1,
+        "transaction": "T15",
+        "state": {
+          "moduleId": "stage1",
+          "localSignalId": "stage1_valid_q"
+        },
+        "expected": "true",
+        "actual": "false"
+      },
+      {
+        "code": "VALID_PHASE",
+        "edge": 38,
+        "phase": "post",
+        "stage": 0,
+        "transaction": "T17",
+        "state": {
+          "moduleId": "stage0",
+          "localSignalId": "stage0_valid_q"
+        },
+        "expected": "true",
+        "actual": "false"
+      },
+      {
+        "code": "VALID_PHASE",
+        "edge": 38,
+        "phase": "post",
+        "stage": 1,
+        "transaction": "T16",
+        "state": {
+          "moduleId": "stage1",
+          "localSignalId": "stage1_valid_q"
+        },
+        "expected": "true",
+        "actual": "false"
+      },
+      {
+        "code": "VALID_PHASE",
+        "edge": 39,
+        "phase": "pre",
+        "stage": 0,
+        "transaction": "T17",
+        "state": {
+          "moduleId": "stage0",
+          "localSignalId": "stage0_valid_q"
+        },
+        "expected": "true",
+        "actual": "false"
+      },
+      {
+        "code": "VALID_PHASE",
+        "edge": 39,
+        "phase": "pre",
+        "stage": 1,
+        "transaction": "T16",
+        "state": {
+          "moduleId": "stage1",
+          "localSignalId": "stage1_valid_q"
+        },
+        "expected": "true",
+        "actual": "false"
+      },
+      {
+        "code": "VALID_PHASE",
+        "edge": 40,
+        "phase": "post",
+        "stage": 0,
+        "transaction": "T18",
+        "state": {
+          "moduleId": "stage0",
+          "localSignalId": "stage0_valid_q"
+        },
+        "expected": "true",
+        "actual": "false"
+      },
+      {
+        "code": "VALID_PHASE",
+        "edge": 40,
+        "phase": "post",
+        "stage": 1,
+        "transaction": "T17",
+        "state": {
+          "moduleId": "stage1",
+          "localSignalId": "stage1_valid_q"
+        },
+        "expected": "true",
+        "actual": "false"
+      },
+      {
+        "code": "VALID_PHASE",
+        "edge": 41,
+        "phase": "pre",
+        "stage": 0,
+        "transaction": "T18",
+        "state": {
+          "moduleId": "stage0",
+          "localSignalId": "stage0_valid_q"
+        },
+        "expected": "true",
+        "actual": "false"
+      },
+      {
+        "code": "VALID_PHASE",
+        "edge": 41,
+        "phase": "pre",
+        "stage": 1,
+        "transaction": "T17",
+        "state": {
+          "moduleId": "stage1",
+          "localSignalId": "stage1_valid_q"
+        },
+        "expected": "true",
+        "actual": "false"
+      },
+      {
+        "code": "VALID_PHASE",
+        "edge": 42,
+        "phase": "post",
+        "stage": 0,
+        "transaction": "T19",
+        "state": {
+          "moduleId": "stage0",
+          "localSignalId": "stage0_valid_q"
+        },
+        "expected": "true",
+        "actual": "false"
+      },
+      {
+        "code": "VALID_PHASE",
+        "edge": 42,
+        "phase": "post",
+        "stage": 1,
+        "transaction": "T18",
+        "state": {
+          "moduleId": "stage1",
+          "localSignalId": "stage1_valid_q"
+        },
+        "expected": "true",
+        "actual": "false"
+      },
+      {
+        "code": "VALID_PHASE",
+        "edge": 43,
+        "phase": "pre",
+        "stage": 0,
+        "transaction": "T19",
+        "state": {
+          "moduleId": "stage0",
+          "localSignalId": "stage0_valid_q"
+        },
+        "expected": "true",
+        "actual": "false"
+      },
+      {
+        "code": "VALID_PHASE",
+        "edge": 43,
+        "phase": "pre",
+        "stage": 1,
+        "transaction": "T18",
+        "state": {
+          "moduleId": "stage1",
+          "localSignalId": "stage1_valid_q"
+        },
+        "expected": "true",
+        "actual": "false"
+      },
+      {
+        "code": "VALID_PHASE",
+        "edge": 44,
+        "phase": "post",
+        "stage": 0,
+        "transaction": "T20",
+        "state": {
+          "moduleId": "stage0",
+          "localSignalId": "stage0_valid_q"
+        },
+        "expected": "true",
+        "actual": "false"
+      },
+      {
+        "code": "VALID_PHASE",
+        "edge": 44,
+        "phase": "post",
+        "stage": 1,
+        "transaction": "T19",
+        "state": {
+          "moduleId": "stage1",
+          "localSignalId": "stage1_valid_q"
+        },
+        "expected": "true",
+        "actual": "false"
+      },
+      {
+        "code": "VALID_PHASE",
+        "edge": 45,
+        "phase": "pre",
+        "stage": 0,
+        "transaction": "T20",
+        "state": {
+          "moduleId": "stage0",
+          "localSignalId": "stage0_valid_q"
+        },
+        "expected": "true",
+        "actual": "false"
+      },
+      {
+        "code": "VALID_PHASE",
+        "edge": 45,
+        "phase": "pre",
+        "stage": 1,
+        "transaction": "T19",
+        "state": {
+          "moduleId": "stage1",
+          "localSignalId": "stage1_valid_q"
+        },
+        "expected": "true",
+        "actual": "false"
+      },
+      {
+        "code": "VALID_PHASE",
+        "edge": 46,
+        "phase": "post",
+        "stage": 1,
+        "transaction": "T20",
+        "state": {
+          "moduleId": "stage1",
+          "localSignalId": "stage1_valid_q"
+        },
+        "expected": "true",
+        "actual": "false"
+      },
+      {
+        "code": "VALID_PHASE",
+        "edge": 47,
+        "phase": "pre",
+        "stage": 1,
+        "transaction": "T20",
+        "state": {
+          "moduleId": "stage1",
+          "localSignalId": "stage1_valid_q"
+        },
+        "expected": "true",
+        "actual": "false"
+      }
+    ],
+    "rows": [
+      {
+        "edge": 0,
+        "events": [],
+        "locations": [],
+        "blocked": [],
+        "issues": []
+      },
+      {
+        "edge": 1,
+        "events": [],
+        "locations": [],
+        "blocked": [],
+        "issues": []
+      },
+      {
+        "edge": 2,
+        "events": [
+          {
+            "kind": "accept",
+            "phase": "pre",
+            "edge": 2,
+            "transaction": "T0",
+            "payload": "16",
+            "stage": 0,
+            "state": {
+              "moduleId": "stage0",
+              "localSignalId": "stage0_data_q"
+            },
+            "branch": "load",
+            "matched": true
+          },
+          {
+            "kind": "visible",
+            "phase": "post",
+            "edge": 2,
+            "transaction": "T0",
+            "payload": "16",
+            "stage": 0,
+            "state": {
+              "moduleId": "stage0",
+              "localSignalId": "stage0_data_q"
+            },
+            "branch": "load",
+            "matched": false
+          }
+        ],
+        "locations": [
+          {
+            "transaction": "T0",
+            "payload": "16",
+            "state": {
+              "moduleId": "stage0",
+              "localSignalId": "stage0_data_q"
+            }
+          }
+        ],
+        "blocked": [],
+        "issues": [
+          {
+            "code": "VALID_PHASE",
+            "edge": 2,
+            "phase": "post",
+            "stage": 0,
+            "transaction": "T0",
+            "state": {
+              "moduleId": "stage0",
+              "localSignalId": "stage0_valid_q"
+            },
+            "expected": "true",
+            "actual": "false"
+          }
+        ]
+      },
+      {
+        "edge": 3,
+        "events": [],
+        "locations": [
+          {
+            "transaction": "T0",
+            "payload": "16",
+            "state": {
+              "moduleId": "stage0",
+              "localSignalId": "stage0_data_q"
+            }
+          }
+        ],
+        "blocked": [],
+        "issues": [
+          {
+            "code": "VALID_PHASE",
+            "edge": 3,
+            "phase": "pre",
+            "stage": 0,
+            "transaction": "T0",
+            "state": {
+              "moduleId": "stage0",
+              "localSignalId": "stage0_valid_q"
+            },
+            "expected": "true",
+            "actual": "false"
+          }
+        ]
+      },
+      {
+        "edge": 4,
+        "events": [
+          {
+            "kind": "accept",
+            "phase": "pre",
+            "edge": 4,
+            "transaction": "T1",
+            "payload": "17",
+            "stage": 0,
+            "state": {
+              "moduleId": "stage0",
+              "localSignalId": "stage0_data_q"
+            },
+            "branch": "load",
+            "matched": true
+          },
+          {
+            "kind": "visible",
+            "phase": "post",
+            "edge": 4,
+            "transaction": "T1",
+            "payload": "17",
+            "stage": 0,
+            "state": {
+              "moduleId": "stage0",
+              "localSignalId": "stage0_data_q"
+            },
+            "branch": "load",
+            "matched": false
+          },
+          {
+            "kind": "visible",
+            "phase": "post",
+            "edge": 4,
+            "transaction": "T0",
+            "payload": "16",
+            "stage": 1,
+            "state": {
+              "moduleId": "stage1",
+              "localSignalId": "stage1_data_q"
+            },
+            "branch": "load",
+            "matched": false
+          }
+        ],
+        "locations": [
+          {
+            "transaction": "T1",
+            "payload": "17",
+            "state": {
+              "moduleId": "stage0",
+              "localSignalId": "stage0_data_q"
+            }
+          },
+          {
+            "transaction": "T0",
+            "payload": "16",
+            "state": {
+              "moduleId": "stage1",
+              "localSignalId": "stage1_data_q"
+            }
+          }
+        ],
+        "blocked": [],
+        "issues": [
+          {
+            "code": "VALID_PHASE",
+            "edge": 4,
+            "phase": "post",
+            "stage": 0,
+            "transaction": "T1",
+            "state": {
+              "moduleId": "stage0",
+              "localSignalId": "stage0_valid_q"
+            },
+            "expected": "true",
+            "actual": "false"
+          },
+          {
+            "code": "VALID_PHASE",
+            "edge": 4,
+            "phase": "post",
+            "stage": 1,
+            "transaction": "T0",
+            "state": {
+              "moduleId": "stage1",
+              "localSignalId": "stage1_valid_q"
+            },
+            "expected": "true",
+            "actual": "false"
+          }
+        ]
+      },
+      {
+        "edge": 5,
+        "events": [],
+        "locations": [
+          {
+            "transaction": "T1",
+            "payload": "17",
+            "state": {
+              "moduleId": "stage0",
+              "localSignalId": "stage0_data_q"
+            }
+          },
+          {
+            "transaction": "T0",
+            "payload": "16",
+            "state": {
+              "moduleId": "stage1",
+              "localSignalId": "stage1_data_q"
+            }
+          }
+        ],
+        "blocked": [],
+        "issues": [
+          {
+            "code": "VALID_PHASE",
+            "edge": 5,
+            "phase": "pre",
+            "stage": 0,
+            "transaction": "T1",
+            "state": {
+              "moduleId": "stage0",
+              "localSignalId": "stage0_valid_q"
+            },
+            "expected": "true",
+            "actual": "false"
+          },
+          {
+            "code": "VALID_PHASE",
+            "edge": 5,
+            "phase": "pre",
+            "stage": 1,
+            "transaction": "T0",
+            "state": {
+              "moduleId": "stage1",
+              "localSignalId": "stage1_valid_q"
+            },
+            "expected": "true",
+            "actual": "false"
+          }
+        ]
+      },
+      {
+        "edge": 6,
+        "events": [
+          {
+            "kind": "accept",
+            "phase": "pre",
+            "edge": 6,
+            "transaction": "T2",
+            "payload": "18",
+            "stage": 0,
+            "state": {
+              "moduleId": "stage0",
+              "localSignalId": "stage0_data_q"
+            },
+            "branch": "load",
+            "matched": true
+          },
+          {
+            "kind": "consume",
+            "phase": "pre",
+            "edge": 6,
+            "transaction": "T0",
+            "payload": "16",
+            "stage": 1,
+            "state": {
+              "moduleId": "stage1",
+              "localSignalId": "stage1_data_q"
+            },
+            "branch": null,
+            "matched": true
+          },
+          {
+            "kind": "visible",
+            "phase": "post",
+            "edge": 6,
+            "transaction": "T2",
+            "payload": "18",
+            "stage": 0,
+            "state": {
+              "moduleId": "stage0",
+              "localSignalId": "stage0_data_q"
+            },
+            "branch": "load",
+            "matched": false
+          },
+          {
+            "kind": "visible",
+            "phase": "post",
+            "edge": 6,
+            "transaction": "T1",
+            "payload": "17",
+            "stage": 1,
+            "state": {
+              "moduleId": "stage1",
+              "localSignalId": "stage1_data_q"
+            },
+            "branch": "load",
+            "matched": false
+          }
+        ],
+        "locations": [
+          {
+            "transaction": "T2",
+            "payload": "18",
+            "state": {
+              "moduleId": "stage0",
+              "localSignalId": "stage0_data_q"
+            }
+          },
+          {
+            "transaction": "T1",
+            "payload": "17",
+            "state": {
+              "moduleId": "stage1",
+              "localSignalId": "stage1_data_q"
+            }
+          }
+        ],
+        "blocked": [],
+        "issues": [
+          {
+            "code": "VALID_PHASE",
+            "edge": 6,
+            "phase": "post",
+            "stage": 0,
+            "transaction": "T2",
+            "state": {
+              "moduleId": "stage0",
+              "localSignalId": "stage0_valid_q"
+            },
+            "expected": "true",
+            "actual": "false"
+          },
+          {
+            "code": "VALID_PHASE",
+            "edge": 6,
+            "phase": "post",
+            "stage": 1,
+            "transaction": "T1",
+            "state": {
+              "moduleId": "stage1",
+              "localSignalId": "stage1_valid_q"
+            },
+            "expected": "true",
+            "actual": "false"
+          }
+        ]
+      },
+      {
+        "edge": 7,
+        "events": [],
+        "locations": [
+          {
+            "transaction": "T2",
+            "payload": "18",
+            "state": {
+              "moduleId": "stage0",
+              "localSignalId": "stage0_data_q"
+            }
+          },
+          {
+            "transaction": "T1",
+            "payload": "17",
+            "state": {
+              "moduleId": "stage1",
+              "localSignalId": "stage1_data_q"
+            }
+          }
+        ],
+        "blocked": [],
+        "issues": [
+          {
+            "code": "VALID_PHASE",
+            "edge": 7,
+            "phase": "pre",
+            "stage": 0,
+            "transaction": "T2",
+            "state": {
+              "moduleId": "stage0",
+              "localSignalId": "stage0_valid_q"
+            },
+            "expected": "true",
+            "actual": "false"
+          },
+          {
+            "code": "VALID_PHASE",
+            "edge": 7,
+            "phase": "pre",
+            "stage": 1,
+            "transaction": "T1",
+            "state": {
+              "moduleId": "stage1",
+              "localSignalId": "stage1_valid_q"
+            },
+            "expected": "true",
+            "actual": "false"
+          }
+        ]
+      },
+      {
+        "edge": 8,
+        "events": [
+          {
+            "kind": "accept",
+            "phase": "pre",
+            "edge": 8,
+            "transaction": "T3",
+            "payload": "19",
+            "stage": 0,
+            "state": {
+              "moduleId": "stage0",
+              "localSignalId": "stage0_data_q"
+            },
+            "branch": "load",
+            "matched": true
+          },
+          {
+            "kind": "consume",
+            "phase": "pre",
+            "edge": 8,
+            "transaction": "T1",
+            "payload": "17",
+            "stage": 1,
+            "state": {
+              "moduleId": "stage1",
+              "localSignalId": "stage1_data_q"
+            },
+            "branch": null,
+            "matched": true
+          },
+          {
+            "kind": "visible",
+            "phase": "post",
+            "edge": 8,
+            "transaction": "T3",
+            "payload": "19",
+            "stage": 0,
+            "state": {
+              "moduleId": "stage0",
+              "localSignalId": "stage0_data_q"
+            },
+            "branch": "load",
+            "matched": false
+          },
+          {
+            "kind": "visible",
+            "phase": "post",
+            "edge": 8,
+            "transaction": "T2",
+            "payload": "18",
+            "stage": 1,
+            "state": {
+              "moduleId": "stage1",
+              "localSignalId": "stage1_data_q"
+            },
+            "branch": "load",
+            "matched": false
+          }
+        ],
+        "locations": [
+          {
+            "transaction": "T3",
+            "payload": "19",
+            "state": {
+              "moduleId": "stage0",
+              "localSignalId": "stage0_data_q"
+            }
+          },
+          {
+            "transaction": "T2",
+            "payload": "18",
+            "state": {
+              "moduleId": "stage1",
+              "localSignalId": "stage1_data_q"
+            }
+          }
+        ],
+        "blocked": [],
+        "issues": [
+          {
+            "code": "VALID_PHASE",
+            "edge": 8,
+            "phase": "post",
+            "stage": 0,
+            "transaction": "T3",
+            "state": {
+              "moduleId": "stage0",
+              "localSignalId": "stage0_valid_q"
+            },
+            "expected": "true",
+            "actual": "false"
+          },
+          {
+            "code": "VALID_PHASE",
+            "edge": 8,
+            "phase": "post",
+            "stage": 1,
+            "transaction": "T2",
+            "state": {
+              "moduleId": "stage1",
+              "localSignalId": "stage1_valid_q"
+            },
+            "expected": "true",
+            "actual": "false"
+          }
+        ]
+      },
+      {
+        "edge": 9,
+        "events": [],
+        "locations": [
+          {
+            "transaction": "T3",
+            "payload": "19",
+            "state": {
+              "moduleId": "stage0",
+              "localSignalId": "stage0_data_q"
+            }
+          },
+          {
+            "transaction": "T2",
+            "payload": "18",
+            "state": {
+              "moduleId": "stage1",
+              "localSignalId": "stage1_data_q"
+            }
+          }
+        ],
+        "blocked": [],
+        "issues": [
+          {
+            "code": "VALID_PHASE",
+            "edge": 9,
+            "phase": "pre",
+            "stage": 0,
+            "transaction": "T3",
+            "state": {
+              "moduleId": "stage0",
+              "localSignalId": "stage0_valid_q"
+            },
+            "expected": "true",
+            "actual": "false"
+          },
+          {
+            "code": "VALID_PHASE",
+            "edge": 9,
+            "phase": "pre",
+            "stage": 1,
+            "transaction": "T2",
+            "state": {
+              "moduleId": "stage1",
+              "localSignalId": "stage1_valid_q"
+            },
+            "expected": "true",
+            "actual": "false"
+          }
+        ]
+      },
+      {
+        "edge": 10,
+        "events": [
+          {
+            "kind": "accept",
+            "phase": "pre",
+            "edge": 10,
+            "transaction": "T4",
+            "payload": "20",
+            "stage": 0,
+            "state": {
+              "moduleId": "stage0",
+              "localSignalId": "stage0_data_q"
+            },
+            "branch": "load",
+            "matched": true
+          },
+          {
+            "kind": "visible",
+            "phase": "post",
+            "edge": 10,
+            "transaction": "T4",
+            "payload": "20",
+            "stage": 0,
+            "state": {
+              "moduleId": "stage0",
+              "localSignalId": "stage0_data_q"
+            },
+            "branch": "load",
+            "matched": false
+          },
+          {
+            "kind": "visible",
+            "phase": "post",
+            "edge": 10,
+            "transaction": "T3",
+            "payload": "19",
+            "stage": 1,
+            "state": {
+              "moduleId": "stage1",
+              "localSignalId": "stage1_data_q"
+            },
+            "branch": "load",
+            "matched": false
+          }
+        ],
+        "locations": [
+          {
+            "transaction": "T4",
+            "payload": "20",
+            "state": {
+              "moduleId": "stage0",
+              "localSignalId": "stage0_data_q"
+            }
+          },
+          {
+            "transaction": "T3",
+            "payload": "19",
+            "state": {
+              "moduleId": "stage1",
+              "localSignalId": "stage1_data_q"
+            }
+          }
+        ],
+        "blocked": [
+          1
+        ],
+        "issues": [
+          {
+            "code": "OCCUPIED_OVERWRITE",
+            "edge": 10,
+            "phase": "pre",
+            "stage": 1,
+            "transaction": "T2",
+            "state": {
+              "moduleId": "stage1",
+              "localSignalId": "stage1_data_q"
+            },
+            "expected": "保持在途事务",
+            "actual": "新的输入握手"
+          },
+          {
+            "code": "VALID_PHASE",
+            "edge": 10,
+            "phase": "post",
+            "stage": 0,
+            "transaction": "T4",
+            "state": {
+              "moduleId": "stage0",
+              "localSignalId": "stage0_valid_q"
+            },
+            "expected": "true",
+            "actual": "false"
+          },
+          {
+            "code": "VALID_PHASE",
+            "edge": 10,
+            "phase": "post",
+            "stage": 1,
+            "transaction": "T3",
+            "state": {
+              "moduleId": "stage1",
+              "localSignalId": "stage1_valid_q"
+            },
+            "expected": "true",
+            "actual": "false"
+          }
+        ]
+      },
+      {
+        "edge": 11,
+        "events": [],
+        "locations": [
+          {
+            "transaction": "T4",
+            "payload": "20",
+            "state": {
+              "moduleId": "stage0",
+              "localSignalId": "stage0_data_q"
+            }
+          },
+          {
+            "transaction": "T3",
+            "payload": "19",
+            "state": {
+              "moduleId": "stage1",
+              "localSignalId": "stage1_data_q"
+            }
+          }
+        ],
+        "blocked": [],
+        "issues": [
+          {
+            "code": "VALID_PHASE",
+            "edge": 11,
+            "phase": "pre",
+            "stage": 0,
+            "transaction": "T4",
+            "state": {
+              "moduleId": "stage0",
+              "localSignalId": "stage0_valid_q"
+            },
+            "expected": "true",
+            "actual": "false"
+          },
+          {
+            "code": "VALID_PHASE",
+            "edge": 11,
+            "phase": "pre",
+            "stage": 1,
+            "transaction": "T3",
+            "state": {
+              "moduleId": "stage1",
+              "localSignalId": "stage1_valid_q"
+            },
+            "expected": "true",
+            "actual": "false"
+          }
+        ]
+      },
+      {
+        "edge": 12,
+        "events": [
+          {
+            "kind": "accept",
+            "phase": "pre",
+            "edge": 12,
+            "transaction": "T5",
+            "payload": "21",
+            "stage": 0,
+            "state": {
+              "moduleId": "stage0",
+              "localSignalId": "stage0_data_q"
+            },
+            "branch": "load",
+            "matched": true
+          },
+          {
+            "kind": "visible",
+            "phase": "post",
+            "edge": 12,
+            "transaction": "T5",
+            "payload": "21",
+            "stage": 0,
+            "state": {
+              "moduleId": "stage0",
+              "localSignalId": "stage0_data_q"
+            },
+            "branch": "load",
+            "matched": false
+          },
+          {
+            "kind": "visible",
+            "phase": "post",
+            "edge": 12,
+            "transaction": "T4",
+            "payload": "20",
+            "stage": 1,
+            "state": {
+              "moduleId": "stage1",
+              "localSignalId": "stage1_data_q"
+            },
+            "branch": "load",
+            "matched": false
+          }
+        ],
+        "locations": [
+          {
+            "transaction": "T5",
+            "payload": "21",
+            "state": {
+              "moduleId": "stage0",
+              "localSignalId": "stage0_data_q"
+            }
+          },
+          {
+            "transaction": "T4",
+            "payload": "20",
+            "state": {
+              "moduleId": "stage1",
+              "localSignalId": "stage1_data_q"
+            }
+          }
+        ],
+        "blocked": [
+          1
+        ],
+        "issues": [
+          {
+            "code": "OCCUPIED_OVERWRITE",
+            "edge": 12,
+            "phase": "pre",
+            "stage": 1,
+            "transaction": "T3",
+            "state": {
+              "moduleId": "stage1",
+              "localSignalId": "stage1_data_q"
+            },
+            "expected": "保持在途事务",
+            "actual": "新的输入握手"
+          },
+          {
+            "code": "VALID_PHASE",
+            "edge": 12,
+            "phase": "post",
+            "stage": 0,
+            "transaction": "T5",
+            "state": {
+              "moduleId": "stage0",
+              "localSignalId": "stage0_valid_q"
+            },
+            "expected": "true",
+            "actual": "false"
+          },
+          {
+            "code": "VALID_PHASE",
+            "edge": 12,
+            "phase": "post",
+            "stage": 1,
+            "transaction": "T4",
+            "state": {
+              "moduleId": "stage1",
+              "localSignalId": "stage1_valid_q"
+            },
+            "expected": "true",
+            "actual": "false"
+          }
+        ]
+      },
+      {
+        "edge": 13,
+        "events": [],
+        "locations": [
+          {
+            "transaction": "T5",
+            "payload": "21",
+            "state": {
+              "moduleId": "stage0",
+              "localSignalId": "stage0_data_q"
+            }
+          },
+          {
+            "transaction": "T4",
+            "payload": "20",
+            "state": {
+              "moduleId": "stage1",
+              "localSignalId": "stage1_data_q"
+            }
+          }
+        ],
+        "blocked": [],
+        "issues": [
+          {
+            "code": "VALID_PHASE",
+            "edge": 13,
+            "phase": "pre",
+            "stage": 0,
+            "transaction": "T5",
+            "state": {
+              "moduleId": "stage0",
+              "localSignalId": "stage0_valid_q"
+            },
+            "expected": "true",
+            "actual": "false"
+          },
+          {
+            "code": "VALID_PHASE",
+            "edge": 13,
+            "phase": "pre",
+            "stage": 1,
+            "transaction": "T4",
+            "state": {
+              "moduleId": "stage1",
+              "localSignalId": "stage1_valid_q"
+            },
+            "expected": "true",
+            "actual": "false"
+          }
+        ]
+      },
+      {
+        "edge": 14,
+        "events": [
+          {
+            "kind": "accept",
+            "phase": "pre",
+            "edge": 14,
+            "transaction": "T6",
+            "payload": "22",
+            "stage": 0,
+            "state": {
+              "moduleId": "stage0",
+              "localSignalId": "stage0_data_q"
+            },
+            "branch": "load",
+            "matched": true
+          },
+          {
+            "kind": "visible",
+            "phase": "post",
+            "edge": 14,
+            "transaction": "T6",
+            "payload": "22",
+            "stage": 0,
+            "state": {
+              "moduleId": "stage0",
+              "localSignalId": "stage0_data_q"
+            },
+            "branch": "load",
+            "matched": false
+          },
+          {
+            "kind": "visible",
+            "phase": "post",
+            "edge": 14,
+            "transaction": "T5",
+            "payload": "21",
+            "stage": 1,
+            "state": {
+              "moduleId": "stage1",
+              "localSignalId": "stage1_data_q"
+            },
+            "branch": "load",
+            "matched": false
+          }
+        ],
+        "locations": [
+          {
+            "transaction": "T6",
+            "payload": "22",
+            "state": {
+              "moduleId": "stage0",
+              "localSignalId": "stage0_data_q"
+            }
+          },
+          {
+            "transaction": "T5",
+            "payload": "21",
+            "state": {
+              "moduleId": "stage1",
+              "localSignalId": "stage1_data_q"
+            }
+          }
+        ],
+        "blocked": [
+          1
+        ],
+        "issues": [
+          {
+            "code": "OCCUPIED_OVERWRITE",
+            "edge": 14,
+            "phase": "pre",
+            "stage": 1,
+            "transaction": "T4",
+            "state": {
+              "moduleId": "stage1",
+              "localSignalId": "stage1_data_q"
+            },
+            "expected": "保持在途事务",
+            "actual": "新的输入握手"
+          },
+          {
+            "code": "VALID_PHASE",
+            "edge": 14,
+            "phase": "post",
+            "stage": 0,
+            "transaction": "T6",
+            "state": {
+              "moduleId": "stage0",
+              "localSignalId": "stage0_valid_q"
+            },
+            "expected": "true",
+            "actual": "false"
+          },
+          {
+            "code": "VALID_PHASE",
+            "edge": 14,
+            "phase": "post",
+            "stage": 1,
+            "transaction": "T5",
+            "state": {
+              "moduleId": "stage1",
+              "localSignalId": "stage1_valid_q"
+            },
+            "expected": "true",
+            "actual": "false"
+          }
+        ]
+      },
+      {
+        "edge": 15,
+        "events": [],
+        "locations": [
+          {
+            "transaction": "T6",
+            "payload": "22",
+            "state": {
+              "moduleId": "stage0",
+              "localSignalId": "stage0_data_q"
+            }
+          },
+          {
+            "transaction": "T5",
+            "payload": "21",
+            "state": {
+              "moduleId": "stage1",
+              "localSignalId": "stage1_data_q"
+            }
+          }
+        ],
+        "blocked": [],
+        "issues": [
+          {
+            "code": "VALID_PHASE",
+            "edge": 15,
+            "phase": "pre",
+            "stage": 0,
+            "transaction": "T6",
+            "state": {
+              "moduleId": "stage0",
+              "localSignalId": "stage0_valid_q"
+            },
+            "expected": "true",
+            "actual": "false"
+          },
+          {
+            "code": "VALID_PHASE",
+            "edge": 15,
+            "phase": "pre",
+            "stage": 1,
+            "transaction": "T5",
+            "state": {
+              "moduleId": "stage1",
+              "localSignalId": "stage1_valid_q"
+            },
+            "expected": "true",
+            "actual": "false"
+          }
+        ]
+      },
+      {
+        "edge": 16,
+        "events": [
+          {
+            "kind": "accept",
+            "phase": "pre",
+            "edge": 16,
+            "transaction": "T7",
+            "payload": "23",
+            "stage": 0,
+            "state": {
+              "moduleId": "stage0",
+              "localSignalId": "stage0_data_q"
+            },
+            "branch": "load",
+            "matched": true
+          },
+          {
+            "kind": "visible",
+            "phase": "post",
+            "edge": 16,
+            "transaction": "T7",
+            "payload": "23",
+            "stage": 0,
+            "state": {
+              "moduleId": "stage0",
+              "localSignalId": "stage0_data_q"
+            },
+            "branch": "load",
+            "matched": false
+          },
+          {
+            "kind": "visible",
+            "phase": "post",
+            "edge": 16,
+            "transaction": "T6",
+            "payload": "22",
+            "stage": 1,
+            "state": {
+              "moduleId": "stage1",
+              "localSignalId": "stage1_data_q"
+            },
+            "branch": "load",
+            "matched": false
+          }
+        ],
+        "locations": [
+          {
+            "transaction": "T7",
+            "payload": "23",
+            "state": {
+              "moduleId": "stage0",
+              "localSignalId": "stage0_data_q"
+            }
+          },
+          {
+            "transaction": "T6",
+            "payload": "22",
+            "state": {
+              "moduleId": "stage1",
+              "localSignalId": "stage1_data_q"
+            }
+          }
+        ],
+        "blocked": [
+          1
+        ],
+        "issues": [
+          {
+            "code": "OCCUPIED_OVERWRITE",
+            "edge": 16,
+            "phase": "pre",
+            "stage": 1,
+            "transaction": "T5",
+            "state": {
+              "moduleId": "stage1",
+              "localSignalId": "stage1_data_q"
+            },
+            "expected": "保持在途事务",
+            "actual": "新的输入握手"
+          },
+          {
+            "code": "VALID_PHASE",
+            "edge": 16,
+            "phase": "post",
+            "stage": 0,
+            "transaction": "T7",
+            "state": {
+              "moduleId": "stage0",
+              "localSignalId": "stage0_valid_q"
+            },
+            "expected": "true",
+            "actual": "false"
+          },
+          {
+            "code": "VALID_PHASE",
+            "edge": 16,
+            "phase": "post",
+            "stage": 1,
+            "transaction": "T6",
+            "state": {
+              "moduleId": "stage1",
+              "localSignalId": "stage1_valid_q"
+            },
+            "expected": "true",
+            "actual": "false"
+          }
+        ]
+      },
+      {
+        "edge": 17,
+        "events": [],
+        "locations": [
+          {
+            "transaction": "T7",
+            "payload": "23",
+            "state": {
+              "moduleId": "stage0",
+              "localSignalId": "stage0_data_q"
+            }
+          },
+          {
+            "transaction": "T6",
+            "payload": "22",
+            "state": {
+              "moduleId": "stage1",
+              "localSignalId": "stage1_data_q"
+            }
+          }
+        ],
+        "blocked": [],
+        "issues": [
+          {
+            "code": "VALID_PHASE",
+            "edge": 17,
+            "phase": "pre",
+            "stage": 0,
+            "transaction": "T7",
+            "state": {
+              "moduleId": "stage0",
+              "localSignalId": "stage0_valid_q"
+            },
+            "expected": "true",
+            "actual": "false"
+          },
+          {
+            "code": "VALID_PHASE",
+            "edge": 17,
+            "phase": "pre",
+            "stage": 1,
+            "transaction": "T6",
+            "state": {
+              "moduleId": "stage1",
+              "localSignalId": "stage1_valid_q"
+            },
+            "expected": "true",
+            "actual": "false"
+          }
+        ]
+      },
+      {
+        "edge": 18,
+        "events": [
+          {
+            "kind": "accept",
+            "phase": "pre",
+            "edge": 18,
+            "transaction": "T8",
+            "payload": "24",
+            "stage": 0,
+            "state": {
+              "moduleId": "stage0",
+              "localSignalId": "stage0_data_q"
+            },
+            "branch": "load",
+            "matched": true
+          },
+          {
+            "kind": "visible",
+            "phase": "post",
+            "edge": 18,
+            "transaction": "T8",
+            "payload": "24",
+            "stage": 0,
+            "state": {
+              "moduleId": "stage0",
+              "localSignalId": "stage0_data_q"
+            },
+            "branch": "load",
+            "matched": false
+          },
+          {
+            "kind": "visible",
+            "phase": "post",
+            "edge": 18,
+            "transaction": "T7",
+            "payload": "23",
+            "stage": 1,
+            "state": {
+              "moduleId": "stage1",
+              "localSignalId": "stage1_data_q"
+            },
+            "branch": "load",
+            "matched": false
+          }
+        ],
+        "locations": [
+          {
+            "transaction": "T8",
+            "payload": "24",
+            "state": {
+              "moduleId": "stage0",
+              "localSignalId": "stage0_data_q"
+            }
+          },
+          {
+            "transaction": "T7",
+            "payload": "23",
+            "state": {
+              "moduleId": "stage1",
+              "localSignalId": "stage1_data_q"
+            }
+          }
+        ],
+        "blocked": [
+          1
+        ],
+        "issues": [
+          {
+            "code": "OCCUPIED_OVERWRITE",
+            "edge": 18,
+            "phase": "pre",
+            "stage": 1,
+            "transaction": "T6",
+            "state": {
+              "moduleId": "stage1",
+              "localSignalId": "stage1_data_q"
+            },
+            "expected": "保持在途事务",
+            "actual": "新的输入握手"
+          },
+          {
+            "code": "VALID_PHASE",
+            "edge": 18,
+            "phase": "post",
+            "stage": 0,
+            "transaction": "T8",
+            "state": {
+              "moduleId": "stage0",
+              "localSignalId": "stage0_valid_q"
+            },
+            "expected": "true",
+            "actual": "false"
+          },
+          {
+            "code": "VALID_PHASE",
+            "edge": 18,
+            "phase": "post",
+            "stage": 1,
+            "transaction": "T7",
+            "state": {
+              "moduleId": "stage1",
+              "localSignalId": "stage1_valid_q"
+            },
+            "expected": "true",
+            "actual": "false"
+          }
+        ]
+      },
+      {
+        "edge": 19,
+        "events": [],
+        "locations": [
+          {
+            "transaction": "T8",
+            "payload": "24",
+            "state": {
+              "moduleId": "stage0",
+              "localSignalId": "stage0_data_q"
+            }
+          },
+          {
+            "transaction": "T7",
+            "payload": "23",
+            "state": {
+              "moduleId": "stage1",
+              "localSignalId": "stage1_data_q"
+            }
+          }
+        ],
+        "blocked": [],
+        "issues": [
+          {
+            "code": "VALID_PHASE",
+            "edge": 19,
+            "phase": "pre",
+            "stage": 0,
+            "transaction": "T8",
+            "state": {
+              "moduleId": "stage0",
+              "localSignalId": "stage0_valid_q"
+            },
+            "expected": "true",
+            "actual": "false"
+          },
+          {
+            "code": "VALID_PHASE",
+            "edge": 19,
+            "phase": "pre",
+            "stage": 1,
+            "transaction": "T7",
+            "state": {
+              "moduleId": "stage1",
+              "localSignalId": "stage1_valid_q"
+            },
+            "expected": "true",
+            "actual": "false"
+          }
+        ]
+      },
+      {
+        "edge": 20,
+        "events": [
+          {
+            "kind": "accept",
+            "phase": "pre",
+            "edge": 20,
+            "transaction": "T9",
+            "payload": "25",
+            "stage": 0,
+            "state": {
+              "moduleId": "stage0",
+              "localSignalId": "stage0_data_q"
+            },
+            "branch": "load",
+            "matched": true
+          },
+          {
+            "kind": "consume",
+            "phase": "pre",
+            "edge": 20,
+            "transaction": "T7",
+            "payload": "23",
+            "stage": 1,
+            "state": {
+              "moduleId": "stage1",
+              "localSignalId": "stage1_data_q"
+            },
+            "branch": null,
+            "matched": true
+          },
+          {
+            "kind": "visible",
+            "phase": "post",
+            "edge": 20,
+            "transaction": "T9",
+            "payload": "25",
+            "stage": 0,
+            "state": {
+              "moduleId": "stage0",
+              "localSignalId": "stage0_data_q"
+            },
+            "branch": "load",
+            "matched": false
+          },
+          {
+            "kind": "visible",
+            "phase": "post",
+            "edge": 20,
+            "transaction": "T8",
+            "payload": "24",
+            "stage": 1,
+            "state": {
+              "moduleId": "stage1",
+              "localSignalId": "stage1_data_q"
+            },
+            "branch": "load",
+            "matched": false
+          }
+        ],
+        "locations": [
+          {
+            "transaction": "T9",
+            "payload": "25",
+            "state": {
+              "moduleId": "stage0",
+              "localSignalId": "stage0_data_q"
+            }
+          },
+          {
+            "transaction": "T8",
+            "payload": "24",
+            "state": {
+              "moduleId": "stage1",
+              "localSignalId": "stage1_data_q"
+            }
+          }
+        ],
+        "blocked": [],
+        "issues": [
+          {
+            "code": "VALID_PHASE",
+            "edge": 20,
+            "phase": "post",
+            "stage": 0,
+            "transaction": "T9",
+            "state": {
+              "moduleId": "stage0",
+              "localSignalId": "stage0_valid_q"
+            },
+            "expected": "true",
+            "actual": "false"
+          },
+          {
+            "code": "VALID_PHASE",
+            "edge": 20,
+            "phase": "post",
+            "stage": 1,
+            "transaction": "T8",
+            "state": {
+              "moduleId": "stage1",
+              "localSignalId": "stage1_valid_q"
+            },
+            "expected": "true",
+            "actual": "false"
+          }
+        ]
+      },
+      {
+        "edge": 21,
+        "events": [],
+        "locations": [
+          {
+            "transaction": "T9",
+            "payload": "25",
+            "state": {
+              "moduleId": "stage0",
+              "localSignalId": "stage0_data_q"
+            }
+          },
+          {
+            "transaction": "T8",
+            "payload": "24",
+            "state": {
+              "moduleId": "stage1",
+              "localSignalId": "stage1_data_q"
+            }
+          }
+        ],
+        "blocked": [],
+        "issues": [
+          {
+            "code": "VALID_PHASE",
+            "edge": 21,
+            "phase": "pre",
+            "stage": 0,
+            "transaction": "T9",
+            "state": {
+              "moduleId": "stage0",
+              "localSignalId": "stage0_valid_q"
+            },
+            "expected": "true",
+            "actual": "false"
+          },
+          {
+            "code": "VALID_PHASE",
+            "edge": 21,
+            "phase": "pre",
+            "stage": 1,
+            "transaction": "T8",
+            "state": {
+              "moduleId": "stage1",
+              "localSignalId": "stage1_valid_q"
+            },
+            "expected": "true",
+            "actual": "false"
+          }
+        ]
+      },
+      {
+        "edge": 22,
+        "events": [
+          {
+            "kind": "accept",
+            "phase": "pre",
+            "edge": 22,
+            "transaction": "T10",
+            "payload": "26",
+            "stage": 0,
+            "state": {
+              "moduleId": "stage0",
+              "localSignalId": "stage0_data_q"
+            },
+            "branch": "load",
+            "matched": true
+          },
+          {
+            "kind": "consume",
+            "phase": "pre",
+            "edge": 22,
+            "transaction": "T8",
+            "payload": "24",
+            "stage": 1,
+            "state": {
+              "moduleId": "stage1",
+              "localSignalId": "stage1_data_q"
+            },
+            "branch": null,
+            "matched": true
+          },
+          {
+            "kind": "visible",
+            "phase": "post",
+            "edge": 22,
+            "transaction": "T10",
+            "payload": "26",
+            "stage": 0,
+            "state": {
+              "moduleId": "stage0",
+              "localSignalId": "stage0_data_q"
+            },
+            "branch": "load",
+            "matched": false
+          },
+          {
+            "kind": "visible",
+            "phase": "post",
+            "edge": 22,
+            "transaction": "T9",
+            "payload": "25",
+            "stage": 1,
+            "state": {
+              "moduleId": "stage1",
+              "localSignalId": "stage1_data_q"
+            },
+            "branch": "load",
+            "matched": false
+          }
+        ],
+        "locations": [
+          {
+            "transaction": "T10",
+            "payload": "26",
+            "state": {
+              "moduleId": "stage0",
+              "localSignalId": "stage0_data_q"
+            }
+          },
+          {
+            "transaction": "T9",
+            "payload": "25",
+            "state": {
+              "moduleId": "stage1",
+              "localSignalId": "stage1_data_q"
+            }
+          }
+        ],
+        "blocked": [],
+        "issues": [
+          {
+            "code": "VALID_PHASE",
+            "edge": 22,
+            "phase": "post",
+            "stage": 0,
+            "transaction": "T10",
+            "state": {
+              "moduleId": "stage0",
+              "localSignalId": "stage0_valid_q"
+            },
+            "expected": "true",
+            "actual": "false"
+          },
+          {
+            "code": "VALID_PHASE",
+            "edge": 22,
+            "phase": "post",
+            "stage": 1,
+            "transaction": "T9",
+            "state": {
+              "moduleId": "stage1",
+              "localSignalId": "stage1_valid_q"
+            },
+            "expected": "true",
+            "actual": "false"
+          }
+        ]
+      },
+      {
+        "edge": 23,
+        "events": [],
+        "locations": [
+          {
+            "transaction": "T10",
+            "payload": "26",
+            "state": {
+              "moduleId": "stage0",
+              "localSignalId": "stage0_data_q"
+            }
+          },
+          {
+            "transaction": "T9",
+            "payload": "25",
+            "state": {
+              "moduleId": "stage1",
+              "localSignalId": "stage1_data_q"
+            }
+          }
+        ],
+        "blocked": [],
+        "issues": [
+          {
+            "code": "VALID_PHASE",
+            "edge": 23,
+            "phase": "pre",
+            "stage": 0,
+            "transaction": "T10",
+            "state": {
+              "moduleId": "stage0",
+              "localSignalId": "stage0_valid_q"
+            },
+            "expected": "true",
+            "actual": "false"
+          },
+          {
+            "code": "VALID_PHASE",
+            "edge": 23,
+            "phase": "pre",
+            "stage": 1,
+            "transaction": "T9",
+            "state": {
+              "moduleId": "stage1",
+              "localSignalId": "stage1_valid_q"
+            },
+            "expected": "true",
+            "actual": "false"
+          }
+        ]
+      },
+      {
+        "edge": 24,
+        "events": [
+          {
+            "kind": "accept",
+            "phase": "pre",
+            "edge": 24,
+            "transaction": "T11",
+            "payload": "27",
+            "stage": 0,
+            "state": {
+              "moduleId": "stage0",
+              "localSignalId": "stage0_data_q"
+            },
+            "branch": "load",
+            "matched": true
+          },
+          {
+            "kind": "consume",
+            "phase": "pre",
+            "edge": 24,
+            "transaction": "T9",
+            "payload": "25",
+            "stage": 1,
+            "state": {
+              "moduleId": "stage1",
+              "localSignalId": "stage1_data_q"
+            },
+            "branch": null,
+            "matched": true
+          },
+          {
+            "kind": "visible",
+            "phase": "post",
+            "edge": 24,
+            "transaction": "T11",
+            "payload": "27",
+            "stage": 0,
+            "state": {
+              "moduleId": "stage0",
+              "localSignalId": "stage0_data_q"
+            },
+            "branch": "load",
+            "matched": false
+          },
+          {
+            "kind": "visible",
+            "phase": "post",
+            "edge": 24,
+            "transaction": "T10",
+            "payload": "26",
+            "stage": 1,
+            "state": {
+              "moduleId": "stage1",
+              "localSignalId": "stage1_data_q"
+            },
+            "branch": "load",
+            "matched": false
+          }
+        ],
+        "locations": [
+          {
+            "transaction": "T11",
+            "payload": "27",
+            "state": {
+              "moduleId": "stage0",
+              "localSignalId": "stage0_data_q"
+            }
+          },
+          {
+            "transaction": "T10",
+            "payload": "26",
+            "state": {
+              "moduleId": "stage1",
+              "localSignalId": "stage1_data_q"
+            }
+          }
+        ],
+        "blocked": [],
+        "issues": [
+          {
+            "code": "VALID_PHASE",
+            "edge": 24,
+            "phase": "post",
+            "stage": 0,
+            "transaction": "T11",
+            "state": {
+              "moduleId": "stage0",
+              "localSignalId": "stage0_valid_q"
+            },
+            "expected": "true",
+            "actual": "false"
+          },
+          {
+            "code": "VALID_PHASE",
+            "edge": 24,
+            "phase": "post",
+            "stage": 1,
+            "transaction": "T10",
+            "state": {
+              "moduleId": "stage1",
+              "localSignalId": "stage1_valid_q"
+            },
+            "expected": "true",
+            "actual": "false"
+          }
+        ]
+      },
+      {
+        "edge": 25,
+        "events": [],
+        "locations": [
+          {
+            "transaction": "T11",
+            "payload": "27",
+            "state": {
+              "moduleId": "stage0",
+              "localSignalId": "stage0_data_q"
+            }
+          },
+          {
+            "transaction": "T10",
+            "payload": "26",
+            "state": {
+              "moduleId": "stage1",
+              "localSignalId": "stage1_data_q"
+            }
+          }
+        ],
+        "blocked": [],
+        "issues": [
+          {
+            "code": "VALID_PHASE",
+            "edge": 25,
+            "phase": "pre",
+            "stage": 0,
+            "transaction": "T11",
+            "state": {
+              "moduleId": "stage0",
+              "localSignalId": "stage0_valid_q"
+            },
+            "expected": "true",
+            "actual": "false"
+          },
+          {
+            "code": "VALID_PHASE",
+            "edge": 25,
+            "phase": "pre",
+            "stage": 1,
+            "transaction": "T10",
+            "state": {
+              "moduleId": "stage1",
+              "localSignalId": "stage1_valid_q"
+            },
+            "expected": "true",
+            "actual": "false"
+          }
+        ]
+      },
+      {
+        "edge": 26,
+        "events": [
+          {
+            "kind": "accept",
+            "phase": "pre",
+            "edge": 26,
+            "transaction": "T12",
+            "payload": "28",
+            "stage": 0,
+            "state": {
+              "moduleId": "stage0",
+              "localSignalId": "stage0_data_q"
+            },
+            "branch": "load",
+            "matched": true
+          },
+          {
+            "kind": "consume",
+            "phase": "pre",
+            "edge": 26,
+            "transaction": "T10",
+            "payload": "26",
+            "stage": 1,
+            "state": {
+              "moduleId": "stage1",
+              "localSignalId": "stage1_data_q"
+            },
+            "branch": null,
+            "matched": true
+          },
+          {
+            "kind": "visible",
+            "phase": "post",
+            "edge": 26,
+            "transaction": "T12",
+            "payload": "28",
+            "stage": 0,
+            "state": {
+              "moduleId": "stage0",
+              "localSignalId": "stage0_data_q"
+            },
+            "branch": "load",
+            "matched": false
+          },
+          {
+            "kind": "visible",
+            "phase": "post",
+            "edge": 26,
+            "transaction": "T11",
+            "payload": "27",
+            "stage": 1,
+            "state": {
+              "moduleId": "stage1",
+              "localSignalId": "stage1_data_q"
+            },
+            "branch": "load",
+            "matched": false
+          }
+        ],
+        "locations": [
+          {
+            "transaction": "T12",
+            "payload": "28",
+            "state": {
+              "moduleId": "stage0",
+              "localSignalId": "stage0_data_q"
+            }
+          },
+          {
+            "transaction": "T11",
+            "payload": "27",
+            "state": {
+              "moduleId": "stage1",
+              "localSignalId": "stage1_data_q"
+            }
+          }
+        ],
+        "blocked": [],
+        "issues": [
+          {
+            "code": "VALID_PHASE",
+            "edge": 26,
+            "phase": "post",
+            "stage": 0,
+            "transaction": "T12",
+            "state": {
+              "moduleId": "stage0",
+              "localSignalId": "stage0_valid_q"
+            },
+            "expected": "true",
+            "actual": "false"
+          },
+          {
+            "code": "VALID_PHASE",
+            "edge": 26,
+            "phase": "post",
+            "stage": 1,
+            "transaction": "T11",
+            "state": {
+              "moduleId": "stage1",
+              "localSignalId": "stage1_valid_q"
+            },
+            "expected": "true",
+            "actual": "false"
+          }
+        ]
+      },
+      {
+        "edge": 27,
+        "events": [],
+        "locations": [
+          {
+            "transaction": "T12",
+            "payload": "28",
+            "state": {
+              "moduleId": "stage0",
+              "localSignalId": "stage0_data_q"
+            }
+          },
+          {
+            "transaction": "T11",
+            "payload": "27",
+            "state": {
+              "moduleId": "stage1",
+              "localSignalId": "stage1_data_q"
+            }
+          }
+        ],
+        "blocked": [],
+        "issues": [
+          {
+            "code": "VALID_PHASE",
+            "edge": 27,
+            "phase": "pre",
+            "stage": 0,
+            "transaction": "T12",
+            "state": {
+              "moduleId": "stage0",
+              "localSignalId": "stage0_valid_q"
+            },
+            "expected": "true",
+            "actual": "false"
+          },
+          {
+            "code": "VALID_PHASE",
+            "edge": 27,
+            "phase": "pre",
+            "stage": 1,
+            "transaction": "T11",
+            "state": {
+              "moduleId": "stage1",
+              "localSignalId": "stage1_valid_q"
+            },
+            "expected": "true",
+            "actual": "false"
+          }
+        ]
+      },
+      {
+        "edge": 28,
+        "events": [
+          {
+            "kind": "cancel",
+            "phase": "pre",
+            "edge": 28,
+            "transaction": "T12",
+            "payload": "28",
+            "stage": 0,
+            "state": {
+              "moduleId": "stage0",
+              "localSignalId": "stage0_valid_q"
+            },
+            "branch": "reset",
+            "matched": true
+          },
+          {
+            "kind": "cancel",
+            "phase": "pre",
+            "edge": 28,
+            "transaction": "T11",
+            "payload": "27",
+            "stage": 1,
+            "state": {
+              "moduleId": "stage1",
+              "localSignalId": "stage1_valid_q"
+            },
+            "branch": "reset",
+            "matched": true
+          }
+        ],
+        "locations": [],
+        "blocked": [],
+        "issues": []
+      },
+      {
+        "edge": 29,
+        "events": [],
+        "locations": [],
+        "blocked": [],
+        "issues": []
+      },
+      {
+        "edge": 30,
+        "events": [
+          {
+            "kind": "accept",
+            "phase": "pre",
+            "edge": 30,
+            "transaction": "T13",
+            "payload": "29",
+            "stage": 0,
+            "state": {
+              "moduleId": "stage0",
+              "localSignalId": "stage0_data_q"
+            },
+            "branch": "load",
+            "matched": true
+          },
+          {
+            "kind": "visible",
+            "phase": "post",
+            "edge": 30,
+            "transaction": "T13",
+            "payload": "29",
+            "stage": 0,
+            "state": {
+              "moduleId": "stage0",
+              "localSignalId": "stage0_data_q"
+            },
+            "branch": "load",
+            "matched": false
+          }
+        ],
+        "locations": [
+          {
+            "transaction": "T13",
+            "payload": "29",
+            "state": {
+              "moduleId": "stage0",
+              "localSignalId": "stage0_data_q"
+            }
+          }
+        ],
+        "blocked": [],
+        "issues": [
+          {
+            "code": "VALID_PHASE",
+            "edge": 30,
+            "phase": "post",
+            "stage": 0,
+            "transaction": "T13",
+            "state": {
+              "moduleId": "stage0",
+              "localSignalId": "stage0_valid_q"
+            },
+            "expected": "true",
+            "actual": "false"
+          }
+        ]
+      },
+      {
+        "edge": 31,
+        "events": [],
+        "locations": [
+          {
+            "transaction": "T13",
+            "payload": "29",
+            "state": {
+              "moduleId": "stage0",
+              "localSignalId": "stage0_data_q"
+            }
+          }
+        ],
+        "blocked": [],
+        "issues": [
+          {
+            "code": "VALID_PHASE",
+            "edge": 31,
+            "phase": "pre",
+            "stage": 0,
+            "transaction": "T13",
+            "state": {
+              "moduleId": "stage0",
+              "localSignalId": "stage0_valid_q"
+            },
+            "expected": "true",
+            "actual": "false"
+          }
+        ]
+      },
+      {
+        "edge": 32,
+        "events": [
+          {
+            "kind": "accept",
+            "phase": "pre",
+            "edge": 32,
+            "transaction": "T14",
+            "payload": "30",
+            "stage": 0,
+            "state": {
+              "moduleId": "stage0",
+              "localSignalId": "stage0_data_q"
+            },
+            "branch": "load",
+            "matched": true
+          },
+          {
+            "kind": "visible",
+            "phase": "post",
+            "edge": 32,
+            "transaction": "T14",
+            "payload": "30",
+            "stage": 0,
+            "state": {
+              "moduleId": "stage0",
+              "localSignalId": "stage0_data_q"
+            },
+            "branch": "load",
+            "matched": false
+          },
+          {
+            "kind": "visible",
+            "phase": "post",
+            "edge": 32,
+            "transaction": "T13",
+            "payload": "29",
+            "stage": 1,
+            "state": {
+              "moduleId": "stage1",
+              "localSignalId": "stage1_data_q"
+            },
+            "branch": "load",
+            "matched": false
+          }
+        ],
+        "locations": [
+          {
+            "transaction": "T14",
+            "payload": "30",
+            "state": {
+              "moduleId": "stage0",
+              "localSignalId": "stage0_data_q"
+            }
+          },
+          {
+            "transaction": "T13",
+            "payload": "29",
+            "state": {
+              "moduleId": "stage1",
+              "localSignalId": "stage1_data_q"
+            }
+          }
+        ],
+        "blocked": [],
+        "issues": [
+          {
+            "code": "VALID_PHASE",
+            "edge": 32,
+            "phase": "post",
+            "stage": 0,
+            "transaction": "T14",
+            "state": {
+              "moduleId": "stage0",
+              "localSignalId": "stage0_valid_q"
+            },
+            "expected": "true",
+            "actual": "false"
+          },
+          {
+            "code": "VALID_PHASE",
+            "edge": 32,
+            "phase": "post",
+            "stage": 1,
+            "transaction": "T13",
+            "state": {
+              "moduleId": "stage1",
+              "localSignalId": "stage1_valid_q"
+            },
+            "expected": "true",
+            "actual": "false"
+          }
+        ]
+      },
+      {
+        "edge": 33,
+        "events": [],
+        "locations": [
+          {
+            "transaction": "T14",
+            "payload": "30",
+            "state": {
+              "moduleId": "stage0",
+              "localSignalId": "stage0_data_q"
+            }
+          },
+          {
+            "transaction": "T13",
+            "payload": "29",
+            "state": {
+              "moduleId": "stage1",
+              "localSignalId": "stage1_data_q"
+            }
+          }
+        ],
+        "blocked": [],
+        "issues": [
+          {
+            "code": "VALID_PHASE",
+            "edge": 33,
+            "phase": "pre",
+            "stage": 0,
+            "transaction": "T14",
+            "state": {
+              "moduleId": "stage0",
+              "localSignalId": "stage0_valid_q"
+            },
+            "expected": "true",
+            "actual": "false"
+          },
+          {
+            "code": "VALID_PHASE",
+            "edge": 33,
+            "phase": "pre",
+            "stage": 1,
+            "transaction": "T13",
+            "state": {
+              "moduleId": "stage1",
+              "localSignalId": "stage1_valid_q"
+            },
+            "expected": "true",
+            "actual": "false"
+          }
+        ]
+      },
+      {
+        "edge": 34,
+        "events": [
+          {
+            "kind": "accept",
+            "phase": "pre",
+            "edge": 34,
+            "transaction": "T15",
+            "payload": "31",
+            "stage": 0,
+            "state": {
+              "moduleId": "stage0",
+              "localSignalId": "stage0_data_q"
+            },
+            "branch": "load",
+            "matched": true
+          },
+          {
+            "kind": "consume",
+            "phase": "pre",
+            "edge": 34,
+            "transaction": "T13",
+            "payload": "29",
+            "stage": 1,
+            "state": {
+              "moduleId": "stage1",
+              "localSignalId": "stage1_data_q"
+            },
+            "branch": null,
+            "matched": true
+          },
+          {
+            "kind": "visible",
+            "phase": "post",
+            "edge": 34,
+            "transaction": "T15",
+            "payload": "31",
+            "stage": 0,
+            "state": {
+              "moduleId": "stage0",
+              "localSignalId": "stage0_data_q"
+            },
+            "branch": "load",
+            "matched": false
+          },
+          {
+            "kind": "visible",
+            "phase": "post",
+            "edge": 34,
+            "transaction": "T14",
+            "payload": "30",
+            "stage": 1,
+            "state": {
+              "moduleId": "stage1",
+              "localSignalId": "stage1_data_q"
+            },
+            "branch": "load",
+            "matched": false
+          }
+        ],
+        "locations": [
+          {
+            "transaction": "T15",
+            "payload": "31",
+            "state": {
+              "moduleId": "stage0",
+              "localSignalId": "stage0_data_q"
+            }
+          },
+          {
+            "transaction": "T14",
+            "payload": "30",
+            "state": {
+              "moduleId": "stage1",
+              "localSignalId": "stage1_data_q"
+            }
+          }
+        ],
+        "blocked": [],
+        "issues": [
+          {
+            "code": "VALID_PHASE",
+            "edge": 34,
+            "phase": "post",
+            "stage": 0,
+            "transaction": "T15",
+            "state": {
+              "moduleId": "stage0",
+              "localSignalId": "stage0_valid_q"
+            },
+            "expected": "true",
+            "actual": "false"
+          },
+          {
+            "code": "VALID_PHASE",
+            "edge": 34,
+            "phase": "post",
+            "stage": 1,
+            "transaction": "T14",
+            "state": {
+              "moduleId": "stage1",
+              "localSignalId": "stage1_valid_q"
+            },
+            "expected": "true",
+            "actual": "false"
+          }
+        ]
+      },
+      {
+        "edge": 35,
+        "events": [],
+        "locations": [
+          {
+            "transaction": "T15",
+            "payload": "31",
+            "state": {
+              "moduleId": "stage0",
+              "localSignalId": "stage0_data_q"
+            }
+          },
+          {
+            "transaction": "T14",
+            "payload": "30",
+            "state": {
+              "moduleId": "stage1",
+              "localSignalId": "stage1_data_q"
+            }
+          }
+        ],
+        "blocked": [],
+        "issues": [
+          {
+            "code": "VALID_PHASE",
+            "edge": 35,
+            "phase": "pre",
+            "stage": 0,
+            "transaction": "T15",
+            "state": {
+              "moduleId": "stage0",
+              "localSignalId": "stage0_valid_q"
+            },
+            "expected": "true",
+            "actual": "false"
+          },
+          {
+            "code": "VALID_PHASE",
+            "edge": 35,
+            "phase": "pre",
+            "stage": 1,
+            "transaction": "T14",
+            "state": {
+              "moduleId": "stage1",
+              "localSignalId": "stage1_valid_q"
+            },
+            "expected": "true",
+            "actual": "false"
+          }
+        ]
+      },
+      {
+        "edge": 36,
+        "events": [
+          {
+            "kind": "accept",
+            "phase": "pre",
+            "edge": 36,
+            "transaction": "T16",
+            "payload": "32",
+            "stage": 0,
+            "state": {
+              "moduleId": "stage0",
+              "localSignalId": "stage0_data_q"
+            },
+            "branch": "load",
+            "matched": true
+          },
+          {
+            "kind": "consume",
+            "phase": "pre",
+            "edge": 36,
+            "transaction": "T14",
+            "payload": "30",
+            "stage": 1,
+            "state": {
+              "moduleId": "stage1",
+              "localSignalId": "stage1_data_q"
+            },
+            "branch": null,
+            "matched": true
+          },
+          {
+            "kind": "visible",
+            "phase": "post",
+            "edge": 36,
+            "transaction": "T16",
+            "payload": "32",
+            "stage": 0,
+            "state": {
+              "moduleId": "stage0",
+              "localSignalId": "stage0_data_q"
+            },
+            "branch": "load",
+            "matched": false
+          },
+          {
+            "kind": "visible",
+            "phase": "post",
+            "edge": 36,
+            "transaction": "T15",
+            "payload": "31",
+            "stage": 1,
+            "state": {
+              "moduleId": "stage1",
+              "localSignalId": "stage1_data_q"
+            },
+            "branch": "load",
+            "matched": false
+          }
+        ],
+        "locations": [
+          {
+            "transaction": "T16",
+            "payload": "32",
+            "state": {
+              "moduleId": "stage0",
+              "localSignalId": "stage0_data_q"
+            }
+          },
+          {
+            "transaction": "T15",
+            "payload": "31",
+            "state": {
+              "moduleId": "stage1",
+              "localSignalId": "stage1_data_q"
+            }
+          }
+        ],
+        "blocked": [],
+        "issues": [
+          {
+            "code": "VALID_PHASE",
+            "edge": 36,
+            "phase": "post",
+            "stage": 0,
+            "transaction": "T16",
+            "state": {
+              "moduleId": "stage0",
+              "localSignalId": "stage0_valid_q"
+            },
+            "expected": "true",
+            "actual": "false"
+          },
+          {
+            "code": "VALID_PHASE",
+            "edge": 36,
+            "phase": "post",
+            "stage": 1,
+            "transaction": "T15",
+            "state": {
+              "moduleId": "stage1",
+              "localSignalId": "stage1_valid_q"
+            },
+            "expected": "true",
+            "actual": "false"
+          }
+        ]
+      },
+      {
+        "edge": 37,
+        "events": [],
+        "locations": [
+          {
+            "transaction": "T16",
+            "payload": "32",
+            "state": {
+              "moduleId": "stage0",
+              "localSignalId": "stage0_data_q"
+            }
+          },
+          {
+            "transaction": "T15",
+            "payload": "31",
+            "state": {
+              "moduleId": "stage1",
+              "localSignalId": "stage1_data_q"
+            }
+          }
+        ],
+        "blocked": [],
+        "issues": [
+          {
+            "code": "VALID_PHASE",
+            "edge": 37,
+            "phase": "pre",
+            "stage": 0,
+            "transaction": "T16",
+            "state": {
+              "moduleId": "stage0",
+              "localSignalId": "stage0_valid_q"
+            },
+            "expected": "true",
+            "actual": "false"
+          },
+          {
+            "code": "VALID_PHASE",
+            "edge": 37,
+            "phase": "pre",
+            "stage": 1,
+            "transaction": "T15",
+            "state": {
+              "moduleId": "stage1",
+              "localSignalId": "stage1_valid_q"
+            },
+            "expected": "true",
+            "actual": "false"
+          }
+        ]
+      },
+      {
+        "edge": 38,
+        "events": [
+          {
+            "kind": "accept",
+            "phase": "pre",
+            "edge": 38,
+            "transaction": "T17",
+            "payload": "33",
+            "stage": 0,
+            "state": {
+              "moduleId": "stage0",
+              "localSignalId": "stage0_data_q"
+            },
+            "branch": "load",
+            "matched": true
+          },
+          {
+            "kind": "consume",
+            "phase": "pre",
+            "edge": 38,
+            "transaction": "T15",
+            "payload": "31",
+            "stage": 1,
+            "state": {
+              "moduleId": "stage1",
+              "localSignalId": "stage1_data_q"
+            },
+            "branch": null,
+            "matched": true
+          },
+          {
+            "kind": "visible",
+            "phase": "post",
+            "edge": 38,
+            "transaction": "T17",
+            "payload": "33",
+            "stage": 0,
+            "state": {
+              "moduleId": "stage0",
+              "localSignalId": "stage0_data_q"
+            },
+            "branch": "load",
+            "matched": false
+          },
+          {
+            "kind": "visible",
+            "phase": "post",
+            "edge": 38,
+            "transaction": "T16",
+            "payload": "32",
+            "stage": 1,
+            "state": {
+              "moduleId": "stage1",
+              "localSignalId": "stage1_data_q"
+            },
+            "branch": "load",
+            "matched": false
+          }
+        ],
+        "locations": [
+          {
+            "transaction": "T17",
+            "payload": "33",
+            "state": {
+              "moduleId": "stage0",
+              "localSignalId": "stage0_data_q"
+            }
+          },
+          {
+            "transaction": "T16",
+            "payload": "32",
+            "state": {
+              "moduleId": "stage1",
+              "localSignalId": "stage1_data_q"
+            }
+          }
+        ],
+        "blocked": [],
+        "issues": [
+          {
+            "code": "VALID_PHASE",
+            "edge": 38,
+            "phase": "post",
+            "stage": 0,
+            "transaction": "T17",
+            "state": {
+              "moduleId": "stage0",
+              "localSignalId": "stage0_valid_q"
+            },
+            "expected": "true",
+            "actual": "false"
+          },
+          {
+            "code": "VALID_PHASE",
+            "edge": 38,
+            "phase": "post",
+            "stage": 1,
+            "transaction": "T16",
+            "state": {
+              "moduleId": "stage1",
+              "localSignalId": "stage1_valid_q"
+            },
+            "expected": "true",
+            "actual": "false"
+          }
+        ]
+      },
+      {
+        "edge": 39,
+        "events": [],
+        "locations": [
+          {
+            "transaction": "T17",
+            "payload": "33",
+            "state": {
+              "moduleId": "stage0",
+              "localSignalId": "stage0_data_q"
+            }
+          },
+          {
+            "transaction": "T16",
+            "payload": "32",
+            "state": {
+              "moduleId": "stage1",
+              "localSignalId": "stage1_data_q"
+            }
+          }
+        ],
+        "blocked": [],
+        "issues": [
+          {
+            "code": "VALID_PHASE",
+            "edge": 39,
+            "phase": "pre",
+            "stage": 0,
+            "transaction": "T17",
+            "state": {
+              "moduleId": "stage0",
+              "localSignalId": "stage0_valid_q"
+            },
+            "expected": "true",
+            "actual": "false"
+          },
+          {
+            "code": "VALID_PHASE",
+            "edge": 39,
+            "phase": "pre",
+            "stage": 1,
+            "transaction": "T16",
+            "state": {
+              "moduleId": "stage1",
+              "localSignalId": "stage1_valid_q"
+            },
+            "expected": "true",
+            "actual": "false"
+          }
+        ]
+      },
+      {
+        "edge": 40,
+        "events": [
+          {
+            "kind": "accept",
+            "phase": "pre",
+            "edge": 40,
+            "transaction": "T18",
+            "payload": "34",
+            "stage": 0,
+            "state": {
+              "moduleId": "stage0",
+              "localSignalId": "stage0_data_q"
+            },
+            "branch": "load",
+            "matched": true
+          },
+          {
+            "kind": "consume",
+            "phase": "pre",
+            "edge": 40,
+            "transaction": "T16",
+            "payload": "32",
+            "stage": 1,
+            "state": {
+              "moduleId": "stage1",
+              "localSignalId": "stage1_data_q"
+            },
+            "branch": null,
+            "matched": true
+          },
+          {
+            "kind": "visible",
+            "phase": "post",
+            "edge": 40,
+            "transaction": "T18",
+            "payload": "34",
+            "stage": 0,
+            "state": {
+              "moduleId": "stage0",
+              "localSignalId": "stage0_data_q"
+            },
+            "branch": "load",
+            "matched": false
+          },
+          {
+            "kind": "visible",
+            "phase": "post",
+            "edge": 40,
+            "transaction": "T17",
+            "payload": "33",
+            "stage": 1,
+            "state": {
+              "moduleId": "stage1",
+              "localSignalId": "stage1_data_q"
+            },
+            "branch": "load",
+            "matched": false
+          }
+        ],
+        "locations": [
+          {
+            "transaction": "T18",
+            "payload": "34",
+            "state": {
+              "moduleId": "stage0",
+              "localSignalId": "stage0_data_q"
+            }
+          },
+          {
+            "transaction": "T17",
+            "payload": "33",
+            "state": {
+              "moduleId": "stage1",
+              "localSignalId": "stage1_data_q"
+            }
+          }
+        ],
+        "blocked": [],
+        "issues": [
+          {
+            "code": "VALID_PHASE",
+            "edge": 40,
+            "phase": "post",
+            "stage": 0,
+            "transaction": "T18",
+            "state": {
+              "moduleId": "stage0",
+              "localSignalId": "stage0_valid_q"
+            },
+            "expected": "true",
+            "actual": "false"
+          },
+          {
+            "code": "VALID_PHASE",
+            "edge": 40,
+            "phase": "post",
+            "stage": 1,
+            "transaction": "T17",
+            "state": {
+              "moduleId": "stage1",
+              "localSignalId": "stage1_valid_q"
+            },
+            "expected": "true",
+            "actual": "false"
+          }
+        ]
+      },
+      {
+        "edge": 41,
+        "events": [],
+        "locations": [
+          {
+            "transaction": "T18",
+            "payload": "34",
+            "state": {
+              "moduleId": "stage0",
+              "localSignalId": "stage0_data_q"
+            }
+          },
+          {
+            "transaction": "T17",
+            "payload": "33",
+            "state": {
+              "moduleId": "stage1",
+              "localSignalId": "stage1_data_q"
+            }
+          }
+        ],
+        "blocked": [],
+        "issues": [
+          {
+            "code": "VALID_PHASE",
+            "edge": 41,
+            "phase": "pre",
+            "stage": 0,
+            "transaction": "T18",
+            "state": {
+              "moduleId": "stage0",
+              "localSignalId": "stage0_valid_q"
+            },
+            "expected": "true",
+            "actual": "false"
+          },
+          {
+            "code": "VALID_PHASE",
+            "edge": 41,
+            "phase": "pre",
+            "stage": 1,
+            "transaction": "T17",
+            "state": {
+              "moduleId": "stage1",
+              "localSignalId": "stage1_valid_q"
+            },
+            "expected": "true",
+            "actual": "false"
+          }
+        ]
+      },
+      {
+        "edge": 42,
+        "events": [
+          {
+            "kind": "accept",
+            "phase": "pre",
+            "edge": 42,
+            "transaction": "T19",
+            "payload": "35",
+            "stage": 0,
+            "state": {
+              "moduleId": "stage0",
+              "localSignalId": "stage0_data_q"
+            },
+            "branch": "load",
+            "matched": true
+          },
+          {
+            "kind": "consume",
+            "phase": "pre",
+            "edge": 42,
+            "transaction": "T17",
+            "payload": "33",
+            "stage": 1,
+            "state": {
+              "moduleId": "stage1",
+              "localSignalId": "stage1_data_q"
+            },
+            "branch": null,
+            "matched": true
+          },
+          {
+            "kind": "visible",
+            "phase": "post",
+            "edge": 42,
+            "transaction": "T19",
+            "payload": "35",
+            "stage": 0,
+            "state": {
+              "moduleId": "stage0",
+              "localSignalId": "stage0_data_q"
+            },
+            "branch": "load",
+            "matched": false
+          },
+          {
+            "kind": "visible",
+            "phase": "post",
+            "edge": 42,
+            "transaction": "T18",
+            "payload": "34",
+            "stage": 1,
+            "state": {
+              "moduleId": "stage1",
+              "localSignalId": "stage1_data_q"
+            },
+            "branch": "load",
+            "matched": false
+          }
+        ],
+        "locations": [
+          {
+            "transaction": "T19",
+            "payload": "35",
+            "state": {
+              "moduleId": "stage0",
+              "localSignalId": "stage0_data_q"
+            }
+          },
+          {
+            "transaction": "T18",
+            "payload": "34",
+            "state": {
+              "moduleId": "stage1",
+              "localSignalId": "stage1_data_q"
+            }
+          }
+        ],
+        "blocked": [],
+        "issues": [
+          {
+            "code": "VALID_PHASE",
+            "edge": 42,
+            "phase": "post",
+            "stage": 0,
+            "transaction": "T19",
+            "state": {
+              "moduleId": "stage0",
+              "localSignalId": "stage0_valid_q"
+            },
+            "expected": "true",
+            "actual": "false"
+          },
+          {
+            "code": "VALID_PHASE",
+            "edge": 42,
+            "phase": "post",
+            "stage": 1,
+            "transaction": "T18",
+            "state": {
+              "moduleId": "stage1",
+              "localSignalId": "stage1_valid_q"
+            },
+            "expected": "true",
+            "actual": "false"
+          }
+        ]
+      },
+      {
+        "edge": 43,
+        "events": [],
+        "locations": [
+          {
+            "transaction": "T19",
+            "payload": "35",
+            "state": {
+              "moduleId": "stage0",
+              "localSignalId": "stage0_data_q"
+            }
+          },
+          {
+            "transaction": "T18",
+            "payload": "34",
+            "state": {
+              "moduleId": "stage1",
+              "localSignalId": "stage1_data_q"
+            }
+          }
+        ],
+        "blocked": [],
+        "issues": [
+          {
+            "code": "VALID_PHASE",
+            "edge": 43,
+            "phase": "pre",
+            "stage": 0,
+            "transaction": "T19",
+            "state": {
+              "moduleId": "stage0",
+              "localSignalId": "stage0_valid_q"
+            },
+            "expected": "true",
+            "actual": "false"
+          },
+          {
+            "code": "VALID_PHASE",
+            "edge": 43,
+            "phase": "pre",
+            "stage": 1,
+            "transaction": "T18",
+            "state": {
+              "moduleId": "stage1",
+              "localSignalId": "stage1_valid_q"
+            },
+            "expected": "true",
+            "actual": "false"
+          }
+        ]
+      },
+      {
+        "edge": 44,
+        "events": [
+          {
+            "kind": "accept",
+            "phase": "pre",
+            "edge": 44,
+            "transaction": "T20",
+            "payload": "36",
+            "stage": 0,
+            "state": {
+              "moduleId": "stage0",
+              "localSignalId": "stage0_data_q"
+            },
+            "branch": "load",
+            "matched": true
+          },
+          {
+            "kind": "consume",
+            "phase": "pre",
+            "edge": 44,
+            "transaction": "T18",
+            "payload": "34",
+            "stage": 1,
+            "state": {
+              "moduleId": "stage1",
+              "localSignalId": "stage1_data_q"
+            },
+            "branch": null,
+            "matched": true
+          },
+          {
+            "kind": "visible",
+            "phase": "post",
+            "edge": 44,
+            "transaction": "T20",
+            "payload": "36",
+            "stage": 0,
+            "state": {
+              "moduleId": "stage0",
+              "localSignalId": "stage0_data_q"
+            },
+            "branch": "load",
+            "matched": false
+          },
+          {
+            "kind": "visible",
+            "phase": "post",
+            "edge": 44,
+            "transaction": "T19",
+            "payload": "35",
+            "stage": 1,
+            "state": {
+              "moduleId": "stage1",
+              "localSignalId": "stage1_data_q"
+            },
+            "branch": "load",
+            "matched": false
+          }
+        ],
+        "locations": [
+          {
+            "transaction": "T20",
+            "payload": "36",
+            "state": {
+              "moduleId": "stage0",
+              "localSignalId": "stage0_data_q"
+            }
+          },
+          {
+            "transaction": "T19",
+            "payload": "35",
+            "state": {
+              "moduleId": "stage1",
+              "localSignalId": "stage1_data_q"
+            }
+          }
+        ],
+        "blocked": [],
+        "issues": [
+          {
+            "code": "VALID_PHASE",
+            "edge": 44,
+            "phase": "post",
+            "stage": 0,
+            "transaction": "T20",
+            "state": {
+              "moduleId": "stage0",
+              "localSignalId": "stage0_valid_q"
+            },
+            "expected": "true",
+            "actual": "false"
+          },
+          {
+            "code": "VALID_PHASE",
+            "edge": 44,
+            "phase": "post",
+            "stage": 1,
+            "transaction": "T19",
+            "state": {
+              "moduleId": "stage1",
+              "localSignalId": "stage1_valid_q"
+            },
+            "expected": "true",
+            "actual": "false"
+          }
+        ]
+      },
+      {
+        "edge": 45,
+        "events": [],
+        "locations": [
+          {
+            "transaction": "T20",
+            "payload": "36",
+            "state": {
+              "moduleId": "stage0",
+              "localSignalId": "stage0_data_q"
+            }
+          },
+          {
+            "transaction": "T19",
+            "payload": "35",
+            "state": {
+              "moduleId": "stage1",
+              "localSignalId": "stage1_data_q"
+            }
+          }
+        ],
+        "blocked": [],
+        "issues": [
+          {
+            "code": "VALID_PHASE",
+            "edge": 45,
+            "phase": "pre",
+            "stage": 0,
+            "transaction": "T20",
+            "state": {
+              "moduleId": "stage0",
+              "localSignalId": "stage0_valid_q"
+            },
+            "expected": "true",
+            "actual": "false"
+          },
+          {
+            "code": "VALID_PHASE",
+            "edge": 45,
+            "phase": "pre",
+            "stage": 1,
+            "transaction": "T19",
+            "state": {
+              "moduleId": "stage1",
+              "localSignalId": "stage1_valid_q"
+            },
+            "expected": "true",
+            "actual": "false"
+          }
+        ]
+      },
+      {
+        "edge": 46,
+        "events": [
+          {
+            "kind": "consume",
+            "phase": "pre",
+            "edge": 46,
+            "transaction": "T19",
+            "payload": "35",
+            "stage": 1,
+            "state": {
+              "moduleId": "stage1",
+              "localSignalId": "stage1_data_q"
+            },
+            "branch": null,
+            "matched": true
+          },
+          {
+            "kind": "visible",
+            "phase": "post",
+            "edge": 46,
+            "transaction": "T20",
+            "payload": "36",
+            "stage": 1,
+            "state": {
+              "moduleId": "stage1",
+              "localSignalId": "stage1_data_q"
+            },
+            "branch": "load",
+            "matched": false
+          }
+        ],
+        "locations": [
+          {
+            "transaction": "T20",
+            "payload": "36",
+            "state": {
+              "moduleId": "stage1",
+              "localSignalId": "stage1_data_q"
+            }
+          }
+        ],
+        "blocked": [],
+        "issues": [
+          {
+            "code": "VALID_PHASE",
+            "edge": 46,
+            "phase": "post",
+            "stage": 1,
+            "transaction": "T20",
+            "state": {
+              "moduleId": "stage1",
+              "localSignalId": "stage1_valid_q"
+            },
+            "expected": "true",
+            "actual": "false"
+          }
+        ]
+      },
+      {
+        "edge": 47,
+        "events": [],
+        "locations": [
+          {
+            "transaction": "T20",
+            "payload": "36",
+            "state": {
+              "moduleId": "stage1",
+              "localSignalId": "stage1_data_q"
+            }
+          }
+        ],
+        "blocked": [],
+        "issues": [
+          {
+            "code": "VALID_PHASE",
+            "edge": 47,
+            "phase": "pre",
+            "stage": 1,
+            "transaction": "T20",
+            "state": {
+              "moduleId": "stage1",
+              "localSignalId": "stage1_valid_q"
+            },
+            "expected": "true",
+            "actual": "false"
+          }
+        ]
+      },
+      {
+        "edge": 48,
+        "events": [
+          {
+            "kind": "consume",
+            "phase": "pre",
+            "edge": 48,
+            "transaction": "T20",
+            "payload": "36",
+            "stage": 1,
+            "state": {
+              "moduleId": "stage1",
+              "localSignalId": "stage1_data_q"
+            },
+            "branch": null,
+            "matched": true
+          }
+        ],
+        "locations": [],
+        "blocked": [],
+        "issues": []
+      },
+      {
+        "edge": 49,
+        "events": [],
+        "locations": [],
+        "blocked": [],
+        "issues": []
+      },
+      {
+        "edge": 50,
+        "events": [],
+        "locations": [],
+        "blocked": [],
+        "issues": []
+      },
+      {
+        "edge": 51,
+        "events": [],
+        "locations": [],
+        "blocked": [],
+        "issues": []
+      },
+      {
+        "edge": 52,
+        "events": [],
+        "locations": [],
+        "blocked": [],
+        "issues": []
+      },
+      {
+        "edge": 53,
+        "events": [],
+        "locations": [],
+        "blocked": [],
+        "issues": []
+      },
+      {
+        "edge": 54,
+        "events": [],
+        "locations": [],
+        "blocked": [],
+        "issues": []
+      },
+      {
+        "edge": 55,
+        "events": [],
+        "locations": [],
+        "blocked": [],
+        "issues": []
+      }
+    ],
+    "unprocessed": 0,
+    "inFlight": [],
+    "note": "visible 为合同所期望的沿后可见事件；数据/有效实际不符保留该沿诊断。身份按输入接受顺序分配，不从 payload 猜身份；只核对本次二态、有序、无数据变换的单槽路径，不证明任意 RTL 或完整时序。"
+  },
+  "verificationStatus": "passed",
+  "assurance": "FAILED"
+}

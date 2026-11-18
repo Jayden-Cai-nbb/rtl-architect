@@ -1,0 +1,9 @@
+
+> rtl-architect@2.0.0 check:work-objects
+> node --import tsx scripts/check-work-objects.ts
+
+PASS 1: same RTL definition and state display name remain distinct instances
+PASS 2: branch, requirement, obligation and checkpoint restore exact identities
+PASS 3: changed/deleted branch and same display name never rebind old questions
+PASS 4: legacy workbench hash is unchanged and discussions preserve model and approval bytes
+完成第一步 4 组对象协作检查；所有提交与批准仅在临时 fixture。

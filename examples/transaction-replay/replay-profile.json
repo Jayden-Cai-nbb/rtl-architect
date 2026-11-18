@@ -1,0 +1,59 @@
+{
+  "schemaVersion": 1,
+  "name": "事务 JSON：连续输入、阻塞恢复、在途复位",
+  "stage": "simulation",
+  "moduleIds": [
+    "top",
+    "stage0",
+    "stage1"
+  ],
+  "inputs": [
+    "vendor/axis_register.v",
+    "rtl/axis_pair.sv",
+    "tb_replay.sv",
+    "replay-profile.json",
+    "upstream.json"
+  ],
+  "inputClosure": {
+    "status": "declared_complete",
+    "note": "固定双级配置，显式 TB；无包含或生成依赖"
+  },
+  "timeoutMs": 120000,
+  "commands": [
+    {
+      "program": "verilator",
+      "versionArgs": [
+        "--version"
+      ],
+      "args": [
+        "--binary",
+        "--timing",
+        "-Wno-fatal",
+        "--top-module",
+        "tb_replay",
+        "--Mdir",
+        "{runDir}/obj",
+        "vendor/axis_register.v",
+        "rtl/axis_pair.sv",
+        "tb_replay.sv"
+      ]
+    },
+    {
+      "program": "{runDir}/obj/Vtb_replay",
+      "args": [
+        "+TRACE={runDir}/trace.json"
+      ]
+    }
+  ],
+  "checks": [
+    {
+      "kind": "artifact",
+      "file": "trace.json"
+    },
+    {
+      "kind": "contains",
+      "file": "step-1.stdout.log",
+      "text": "REPLAY_CAPTURED"
+    }
+  ]
+}

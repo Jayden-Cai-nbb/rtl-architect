@@ -1,0 +1,10 @@
+{
+  "architecture/model.json": "65c2e4e3ccda3c5c8c1d42badd7f4375ac771805ef4a446978fa2dd742d1d201",
+  "architecture/layout.json": "d83bc465f2bb8e6c8cc6f9d5fa6d474e5d107a68e3b7fb394affd27b8499def5",
+  "architecture/workbench.json": null,
+  "architecture/review.json": null,
+  "architecture/module-reviews.json": null,
+  "package-lock.json": "f069245bb14051145ad39f1b54b973d4392d433e724a7e9335138c53e8abd8aa",
+  "examples/external-axis/architecture/model.json": "0cb6704b8d147cee793875adb9c9c29bdb8c4613a7c5af79232d25deda328803",
+  "examples/external-axis/vendor/axis_register.v": "599fde2d6c2d806643bbffb7c444297e69a71871f962d4b741ec1914342e0d39"
+}

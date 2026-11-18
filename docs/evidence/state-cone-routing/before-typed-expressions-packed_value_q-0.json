@@ -1,0 +1,1457 @@
+{
+  "cone": {
+    "source": "model_ast",
+    "identity": "2cd22e38e8248095a270a45eb113ea2d37b9edd87872ccb66ecbd362c886f4bf",
+    "nodes": [
+      {
+        "id": "n0",
+        "kind": "D",
+        "label": "packed_value_q · D（下一沿）",
+        "width": 8,
+        "signed": false,
+        "origin": "local:top:packed_value_q/D"
+      },
+      {
+        "id": "n1",
+        "kind": "Q",
+        "label": "packed_value_q · Q（沿前）",
+        "width": 8,
+        "signed": false,
+        "origin": "local:top:packed_value_q"
+      },
+      {
+        "id": "n2",
+        "kind": "hold",
+        "label": "保持 Q",
+        "width": 8,
+        "signed": false,
+        "origin": "packed_value_q/otherwise"
+      },
+      {
+        "id": "n3",
+        "kind": "mux",
+        "label": "MUX · 优先级 2 · load",
+        "width": 8,
+        "signed": false,
+        "origin": "local:top:packed_value_q/update/branches/0",
+        "priority": 2
+      },
+      {
+        "id": "n4",
+        "kind": "endpoint",
+        "label": "top.enable",
+        "width": 1,
+        "signed": false,
+        "origin": "local:top:packed_value_q/update/branches/0/condition",
+        "references": [
+          {
+            "path": "local:top:packed_value_q/update/branches/0/condition",
+            "consumer": "packed_value_q",
+            "role": "state_condition"
+          }
+        ]
+      },
+      {
+        "id": "n5",
+        "kind": "cast",
+        "label": "truncate [7:0]",
+        "width": 8,
+        "signed": false,
+        "origin": "local:top:packed_value_q/update/branches/0/value"
+      },
+      {
+        "id": "n6",
+        "kind": "operator",
+        "label": ">>>",
+        "width": 12,
+        "signed": true,
+        "origin": "local:top:packed_value_q/update/branches/0/value/0"
+      },
+      {
+        "id": "n7",
+        "kind": "cast",
+        "label": "sign_extend",
+        "width": 12,
+        "signed": true,
+        "origin": "local:top:packed_value_q/update/branches/0/value/0/0"
+      },
+      {
+        "id": "n8",
+        "kind": "endpoint",
+        "label": "top.sample",
+        "width": 8,
+        "signed": false,
+        "origin": "local:top:packed_value_q/update/branches/0/value/0/0/0",
+        "references": [
+          {
+            "path": "local:top:packed_value_q/update/branches/0/value/0/0/0",
+            "consumer": "packed_value_q",
+            "role": "state_data"
+          }
+        ]
+      },
+      {
+        "id": "n9",
+        "kind": "endpoint",
+        "label": "top.shift",
+        "width": 4,
+        "signed": false,
+        "origin": "local:top:packed_value_q/update/branches/0/value/0/1",
+        "references": [
+          {
+            "path": "local:top:packed_value_q/update/branches/0/value/0/1",
+            "consumer": "packed_value_q",
+            "role": "state_data"
+          }
+        ]
+      },
+      {
+        "id": "n10",
+        "kind": "reset",
+        "label": "同步复位 MUX · 优先级 1",
+        "width": 8,
+        "signed": false,
+        "origin": "local:top:packed_value_q/update/reset",
+        "priority": 1
+      },
+      {
+        "id": "n11",
+        "kind": "endpoint",
+        "label": "top.rst_n",
+        "width": 1,
+        "signed": false,
+        "origin": "local:top:packed_value_q/update/reset/signal",
+        "references": [
+          {
+            "path": "local:top:packed_value_q/update/reset/signal",
+            "consumer": "packed_value_q",
+            "role": "state_reset"
+          }
+        ]
+      },
+      {
+        "id": "n12",
+        "kind": "operator",
+        "label": "!（低有效复位）",
+        "width": 1,
+        "signed": false,
+        "origin": "local:top:packed_value_q/update/reset/activeLevel"
+      },
+      {
+        "id": "n13",
+        "kind": "constant",
+        "label": "0",
+        "width": 8,
+        "signed": false,
+        "origin": "local:top:packed_value_q/update/reset/value"
+      }
+    ],
+    "edges": [
+      {
+        "source": "n1",
+        "target": "n2",
+        "role": "hold"
+      },
+      {
+        "source": "n4",
+        "target": "n3",
+        "role": "condition / select"
+      },
+      {
+        "source": "n8",
+        "target": "n7",
+        "role": "data:0"
+      },
+      {
+        "source": "n7",
+        "target": "n6",
+        "role": "data:0"
+      },
+      {
+        "source": "n9",
+        "target": "n6",
+        "role": "shift amount"
+      },
+      {
+        "source": "n6",
+        "target": "n5",
+        "role": "data:0"
+      },
+      {
+        "source": "n5",
+        "target": "n3",
+        "role": "data:1"
+      },
+      {
+        "source": "n2",
+        "target": "n3",
+        "role": "data:0"
+      },
+      {
+        "source": "n11",
+        "target": "n12",
+        "role": "condition"
+      },
+      {
+        "source": "n12",
+        "target": "n10",
+        "role": "reset / select"
+      },
+      {
+        "source": "n13",
+        "target": "n10",
+        "role": "data:1"
+      },
+      {
+        "source": "n3",
+        "target": "n10",
+        "role": "data:0"
+      },
+      {
+        "source": "n10",
+        "target": "n0",
+        "role": "data"
+      }
+    ],
+    "boundaries": [],
+    "rules": [
+      {
+        "id": "reset",
+        "condition": "top.rst_n = 0",
+        "action": "8bit(0)",
+        "role": "复位"
+      },
+      {
+        "id": "load",
+        "condition": "top.enable",
+        "action": "截取低位→8 位无符号((符号扩展→12 位有符号(top.sample) >>> top.shift))",
+        "role": "更新"
+      },
+      {
+        "id": "otherwise",
+        "condition": "以上条件均不成立",
+        "action": "保持原值",
+        "role": "保持"
+      }
+    ],
+    "note": "模型声明的下一状态表达式；不是综合后门级结构。Q 为沿前值，D 在有效沿写入；位置不代表优先级或周期。 来源完整性：partial。"
+  },
+  "graph": {
+    "nodes": [
+      {
+        "id": "n0",
+        "type": "rtlModule",
+        "position": {
+          "x": 2268,
+          "y": 40
+        },
+        "width": 270,
+        "height": 116,
+        "data": {
+          "label": "packed_value_q · D（下一沿）",
+          "moduleId": "projection",
+          "kind": "D",
+          "boundary": false,
+          "summary": "表达式投影",
+          "geometry": {
+            "width": 270,
+            "height": 116,
+            "ports": [
+              {
+                "id": "out",
+                "direction": "source",
+                "side": "EAST",
+                "x": 270,
+                "y": 58
+              },
+              {
+                "id": "in:12",
+                "direction": "target",
+                "side": "WEST",
+                "x": 0,
+                "y": 96,
+                "label": "data"
+              }
+            ]
+          },
+          "ports": [
+            {
+              "id": "out"
+            },
+            {
+              "id": "in:12"
+            }
+          ]
+        }
+      },
+      {
+        "id": "n1",
+        "type": "rtlModule",
+        "position": {
+          "x": 48,
+          "y": 40
+        },
+        "width": 270,
+        "height": 116,
+        "data": {
+          "label": "packed_value_q · Q（沿前）",
+          "moduleId": "projection",
+          "kind": "Q",
+          "boundary": false,
+          "summary": "表达式投影",
+          "geometry": {
+            "width": 270,
+            "height": 116,
+            "ports": [
+              {
+                "id": "out",
+                "direction": "source",
+                "side": "EAST",
+                "x": 270,
+                "y": 58
+              }
+            ]
+          },
+          "ports": [
+            {
+              "id": "out"
+            }
+          ]
+        }
+      },
+      {
+        "id": "n2",
+        "type": "rtlModule",
+        "position": {
+          "x": 418,
+          "y": 40
+        },
+        "width": 270,
+        "height": 116,
+        "data": {
+          "label": "保持 Q",
+          "moduleId": "projection",
+          "kind": "hold",
+          "boundary": false,
+          "summary": "表达式投影",
+          "geometry": {
+            "width": 270,
+            "height": 116,
+            "ports": [
+              {
+                "id": "out",
+                "direction": "source",
+                "side": "EAST",
+                "x": 270,
+                "y": 58
+              },
+              {
+                "id": "in:0",
+                "direction": "target",
+                "side": "WEST",
+                "x": 0,
+                "y": 96,
+                "label": "hold"
+              }
+            ]
+          },
+          "ports": [
+            {
+              "id": "out"
+            },
+            {
+              "id": "in:0"
+            }
+          ]
+        }
+      },
+      {
+        "id": "n3",
+        "type": "rtlModule",
+        "position": {
+          "x": 1528,
+          "y": 40
+        },
+        "width": 270,
+        "height": 160,
+        "data": {
+          "label": "MUX · 优先级 2 · load",
+          "moduleId": "projection",
+          "kind": "mux",
+          "boundary": false,
+          "summary": "表达式投影",
+          "geometry": {
+            "width": 270,
+            "height": 160,
+            "ports": [
+              {
+                "id": "out",
+                "direction": "source",
+                "side": "EAST",
+                "x": 270,
+                "y": 80
+              },
+              {
+                "id": "in:1",
+                "direction": "target",
+                "side": "WEST",
+                "x": 0,
+                "y": 96,
+                "label": "condition / select"
+              },
+              {
+                "id": "in:6",
+                "direction": "target",
+                "side": "WEST",
+                "x": 0,
+                "y": 118,
+                "label": "data:1"
+              },
+              {
+                "id": "in:7",
+                "direction": "target",
+                "side": "WEST",
+                "x": 0,
+                "y": 140,
+                "label": "data:0"
+              }
+            ]
+          },
+          "ports": [
+            {
+              "id": "out"
+            },
+            {
+              "id": "in:1"
+            },
+            {
+              "id": "in:6"
+            },
+            {
+              "id": "in:7"
+            }
+          ]
+        }
+      },
+      {
+        "id": "n4",
+        "type": "rtlModule",
+        "position": {
+          "x": 48,
+          "y": 204
+        },
+        "width": 270,
+        "height": 116,
+        "data": {
+          "label": "top.enable",
+          "moduleId": "projection",
+          "kind": "endpoint",
+          "boundary": false,
+          "summary": "表达式投影",
+          "geometry": {
+            "width": 270,
+            "height": 116,
+            "ports": [
+              {
+                "id": "out",
+                "direction": "source",
+                "side": "EAST",
+                "x": 270,
+                "y": 58
+              }
+            ]
+          },
+          "ports": [
+            {
+              "id": "out"
+            }
+          ]
+        }
+      },
+      {
+        "id": "n5",
+        "type": "rtlModule",
+        "position": {
+          "x": 1158,
+          "y": 40
+        },
+        "width": 270,
+        "height": 116,
+        "data": {
+          "label": "truncate [7:0]",
+          "moduleId": "projection",
+          "kind": "cast",
+          "boundary": false,
+          "summary": "表达式投影",
+          "geometry": {
+            "width": 270,
+            "height": 116,
+            "ports": [
+              {
+                "id": "out",
+                "direction": "source",
+                "side": "EAST",
+                "x": 270,
+                "y": 58
+              },
+              {
+                "id": "in:5",
+                "direction": "target",
+                "side": "WEST",
+                "x": 0,
+                "y": 96,
+                "label": "data:0"
+              }
+            ]
+          },
+          "ports": [
+            {
+              "id": "out"
+            },
+            {
+              "id": "in:5"
+            }
+          ]
+        }
+      },
+      {
+        "id": "n6",
+        "type": "rtlModule",
+        "position": {
+          "x": 788,
+          "y": 40
+        },
+        "width": 270,
+        "height": 138,
+        "data": {
+          "label": ">>>",
+          "moduleId": "projection",
+          "kind": "operator",
+          "boundary": false,
+          "summary": "表达式投影",
+          "geometry": {
+            "width": 270,
+            "height": 138,
+            "ports": [
+              {
+                "id": "out",
+                "direction": "source",
+                "side": "EAST",
+                "x": 270,
+                "y": 69
+              },
+              {
+                "id": "in:3",
+                "direction": "target",
+                "side": "WEST",
+                "x": 0,
+                "y": 96,
+                "label": "data:0"
+              },
+              {
+                "id": "in:4",
+                "direction": "target",
+                "side": "WEST",
+                "x": 0,
+                "y": 118,
+                "label": "shift amount"
+              }
+            ]
+          },
+          "ports": [
+            {
+              "id": "out"
+            },
+            {
+              "id": "in:3"
+            },
+            {
+              "id": "in:4"
+            }
+          ]
+        }
+      },
+      {
+        "id": "n7",
+        "type": "rtlModule",
+        "position": {
+          "x": 418,
+          "y": 204
+        },
+        "width": 270,
+        "height": 116,
+        "data": {
+          "label": "sign_extend",
+          "moduleId": "projection",
+          "kind": "cast",
+          "boundary": false,
+          "summary": "表达式投影",
+          "geometry": {
+            "width": 270,
+            "height": 116,
+            "ports": [
+              {
+                "id": "out",
+                "direction": "source",
+                "side": "EAST",
+                "x": 270,
+                "y": 58
+              },
+              {
+                "id": "in:2",
+                "direction": "target",
+                "side": "WEST",
+                "x": 0,
+                "y": 96,
+                "label": "data:0"
+              }
+            ]
+          },
+          "ports": [
+            {
+              "id": "out"
+            },
+            {
+              "id": "in:2"
+            }
+          ]
+        }
+      },
+      {
+        "id": "n8",
+        "type": "rtlModule",
+        "position": {
+          "x": 48,
+          "y": 368
+        },
+        "width": 270,
+        "height": 116,
+        "data": {
+          "label": "top.sample",
+          "moduleId": "projection",
+          "kind": "endpoint",
+          "boundary": false,
+          "summary": "表达式投影",
+          "geometry": {
+            "width": 270,
+            "height": 116,
+            "ports": [
+              {
+                "id": "out",
+                "direction": "source",
+                "side": "EAST",
+                "x": 270,
+                "y": 58
+              }
+            ]
+          },
+          "ports": [
+            {
+              "id": "out"
+            }
+          ]
+        }
+      },
+      {
+        "id": "n9",
+        "type": "rtlModule",
+        "position": {
+          "x": 48,
+          "y": 532
+        },
+        "width": 270,
+        "height": 116,
+        "data": {
+          "label": "top.shift",
+          "moduleId": "projection",
+          "kind": "endpoint",
+          "boundary": false,
+          "summary": "表达式投影",
+          "geometry": {
+            "width": 270,
+            "height": 116,
+            "ports": [
+              {
+                "id": "out",
+                "direction": "source",
+                "side": "EAST",
+                "x": 270,
+                "y": 58
+              }
+            ]
+          },
+          "ports": [
+            {
+              "id": "out"
+            }
+          ]
+        }
+      },
+      {
+        "id": "n10",
+        "type": "rtlModule",
+        "position": {
+          "x": 1898,
+          "y": 40
+        },
+        "width": 270,
+        "height": 160,
+        "data": {
+          "label": "同步复位 MUX · 优先级 1",
+          "moduleId": "projection",
+          "kind": "reset",
+          "boundary": false,
+          "summary": "表达式投影",
+          "geometry": {
+            "width": 270,
+            "height": 160,
+            "ports": [
+              {
+                "id": "out",
+                "direction": "source",
+                "side": "EAST",
+                "x": 270,
+                "y": 80
+              },
+              {
+                "id": "in:9",
+                "direction": "target",
+                "side": "WEST",
+                "x": 0,
+                "y": 96,
+                "label": "reset / select"
+              },
+              {
+                "id": "in:10",
+                "direction": "target",
+                "side": "WEST",
+                "x": 0,
+                "y": 118,
+                "label": "data:1"
+              },
+              {
+                "id": "in:11",
+                "direction": "target",
+                "side": "WEST",
+                "x": 0,
+                "y": 140,
+                "label": "data:0"
+              }
+            ]
+          },
+          "ports": [
+            {
+              "id": "out"
+            },
+            {
+              "id": "in:9"
+            },
+            {
+              "id": "in:10"
+            },
+            {
+              "id": "in:11"
+            }
+          ]
+        }
+      },
+      {
+        "id": "n11",
+        "type": "rtlModule",
+        "position": {
+          "x": 48,
+          "y": 696
+        },
+        "width": 270,
+        "height": 116,
+        "data": {
+          "label": "top.rst_n",
+          "moduleId": "projection",
+          "kind": "endpoint",
+          "boundary": false,
+          "summary": "表达式投影",
+          "geometry": {
+            "width": 270,
+            "height": 116,
+            "ports": [
+              {
+                "id": "out",
+                "direction": "source",
+                "side": "EAST",
+                "x": 270,
+                "y": 58
+              }
+            ]
+          },
+          "ports": [
+            {
+              "id": "out"
+            }
+          ]
+        }
+      },
+      {
+        "id": "n12",
+        "type": "rtlModule",
+        "position": {
+          "x": 418,
+          "y": 368
+        },
+        "width": 270,
+        "height": 116,
+        "data": {
+          "label": "!（低有效复位）",
+          "moduleId": "projection",
+          "kind": "operator",
+          "boundary": false,
+          "summary": "表达式投影",
+          "geometry": {
+            "width": 270,
+            "height": 116,
+            "ports": [
+              {
+                "id": "out",
+                "direction": "source",
+                "side": "EAST",
+                "x": 270,
+                "y": 58
+              },
+              {
+                "id": "in:8",
+                "direction": "target",
+                "side": "WEST",
+                "x": 0,
+                "y": 96,
+                "label": "condition"
+              }
+            ]
+          },
+          "ports": [
+            {
+              "id": "out"
+            },
+            {
+              "id": "in:8"
+            }
+          ]
+        }
+      },
+      {
+        "id": "n13",
+        "type": "rtlModule",
+        "position": {
+          "x": 48,
+          "y": 860
+        },
+        "width": 270,
+        "height": 116,
+        "data": {
+          "label": "0",
+          "moduleId": "projection",
+          "kind": "constant",
+          "boundary": false,
+          "summary": "表达式投影",
+          "geometry": {
+            "width": 270,
+            "height": 116,
+            "ports": [
+              {
+                "id": "out",
+                "direction": "source",
+                "side": "EAST",
+                "x": 270,
+                "y": 58
+              }
+            ]
+          },
+          "ports": [
+            {
+              "id": "out"
+            }
+          ]
+        }
+      }
+    ],
+    "edges": [
+      {
+        "id": "cone:0",
+        "source": "n1",
+        "target": "n2",
+        "sourceHandle": "out",
+        "targetHandle": "in:0",
+        "data": {
+          "semanticKind": "dependency",
+          "role": "hold",
+          "routingWork": 0,
+          "routingSimplified": false,
+          "route": {
+            "path": "M 318 98 L 350 98 L 350 136 L 418 136",
+            "x": 384,
+            "y": 136
+          },
+          "routePoints": [
+            {
+              "x": 318,
+              "y": 98
+            },
+            {
+              "x": 350,
+              "y": 98
+            },
+            {
+              "x": 350,
+              "y": 136
+            },
+            {
+              "x": 418,
+              "y": 136
+            }
+          ],
+          "labelHidden": false,
+          "labelBox": {
+            "left": 378,
+            "right": 390,
+            "top": 123,
+            "bottom": 149
+          }
+        }
+      },
+      {
+        "id": "cone:1",
+        "source": "n4",
+        "target": "n3",
+        "sourceHandle": "out",
+        "targetHandle": "in:1",
+        "data": {
+          "semanticKind": "dependency",
+          "role": "condition / select",
+          "routingWork": 0,
+          "routingSimplified": false,
+          "route": {
+            "path": "M 318 262 L 350 262 L 350 0 L 1496 0 L 1496 136 L 1528 136",
+            "x": 923,
+            "y": 0
+          },
+          "routePoints": [
+            {
+              "x": 318,
+              "y": 262
+            },
+            {
+              "x": 350,
+              "y": 262
+            },
+            {
+              "x": 350,
+              "y": 0
+            },
+            {
+              "x": 1496,
+              "y": 0
+            },
+            {
+              "x": 1496,
+              "y": 136
+            },
+            {
+              "x": 1528,
+              "y": 136
+            }
+          ],
+          "labelHidden": false,
+          "labelBox": {
+            "left": 917,
+            "right": 929,
+            "top": -13,
+            "bottom": 13
+          }
+        }
+      },
+      {
+        "id": "cone:2",
+        "source": "n8",
+        "target": "n7",
+        "sourceHandle": "out",
+        "targetHandle": "in:2",
+        "data": {
+          "semanticKind": "dependency",
+          "role": "data:0",
+          "routingWork": 0,
+          "routingSimplified": false,
+          "route": {
+            "path": "M 318 426 L 350 426 L 350 300 L 418 300",
+            "x": 384,
+            "y": 300
+          },
+          "routePoints": [
+            {
+              "x": 318,
+              "y": 426
+            },
+            {
+              "x": 350,
+              "y": 426
+            },
+            {
+              "x": 350,
+              "y": 300
+            },
+            {
+              "x": 418,
+              "y": 300
+            }
+          ],
+          "labelHidden": false,
+          "labelBox": {
+            "left": 378,
+            "right": 390,
+            "top": 287,
+            "bottom": 313
+          }
+        }
+      },
+      {
+        "id": "cone:3",
+        "source": "n7",
+        "target": "n6",
+        "sourceHandle": "out",
+        "targetHandle": "in:3",
+        "data": {
+          "semanticKind": "dependency",
+          "role": "data:0",
+          "routingWork": 0,
+          "routingSimplified": false,
+          "route": {
+            "path": "M 688 262 L 720 262 L 720 136 L 788 136",
+            "x": 754,
+            "y": 136
+          },
+          "routePoints": [
+            {
+              "x": 688,
+              "y": 262
+            },
+            {
+              "x": 720,
+              "y": 262
+            },
+            {
+              "x": 720,
+              "y": 136
+            },
+            {
+              "x": 788,
+              "y": 136
+            }
+          ],
+          "labelHidden": false,
+          "labelBox": {
+            "left": 748,
+            "right": 760,
+            "top": 123,
+            "bottom": 149
+          }
+        }
+      },
+      {
+        "id": "cone:4",
+        "source": "n9",
+        "target": "n6",
+        "sourceHandle": "out",
+        "targetHandle": "in:4",
+        "data": {
+          "semanticKind": "dependency",
+          "role": "shift amount",
+          "routingWork": 0,
+          "routingSimplified": false,
+          "route": {
+            "path": "M 318 590 L 756 590 L 756 158 L 788 158",
+            "x": 537,
+            "y": 590
+          },
+          "routePoints": [
+            {
+              "x": 318,
+              "y": 590
+            },
+            {
+              "x": 756,
+              "y": 590
+            },
+            {
+              "x": 756,
+              "y": 158
+            },
+            {
+              "x": 788,
+              "y": 158
+            }
+          ],
+          "labelHidden": false,
+          "labelBox": {
+            "left": 531,
+            "right": 543,
+            "top": 577,
+            "bottom": 603
+          }
+        }
+      },
+      {
+        "id": "cone:5",
+        "source": "n6",
+        "target": "n5",
+        "sourceHandle": "out",
+        "targetHandle": "in:5",
+        "data": {
+          "semanticKind": "dependency",
+          "role": "data:0",
+          "routingWork": 0,
+          "routingSimplified": false,
+          "route": {
+            "path": "M 1058 109 L 1090 109 L 1090 136 L 1158 136",
+            "x": 1124,
+            "y": 136
+          },
+          "routePoints": [
+            {
+              "x": 1058,
+              "y": 109
+            },
+            {
+              "x": 1090,
+              "y": 109
+            },
+            {
+              "x": 1090,
+              "y": 136
+            },
+            {
+              "x": 1158,
+              "y": 136
+            }
+          ],
+          "labelHidden": false,
+          "labelBox": {
+            "left": 1118,
+            "right": 1130,
+            "top": 123,
+            "bottom": 149
+          }
+        }
+      },
+      {
+        "id": "cone:6",
+        "source": "n5",
+        "target": "n3",
+        "sourceHandle": "out",
+        "targetHandle": "in:6",
+        "data": {
+          "semanticKind": "dependency",
+          "role": "data:1",
+          "routingWork": 0,
+          "routingSimplified": false,
+          "route": {
+            "path": "M 1428 98 L 1460 98 L 1460 158 L 1528 158",
+            "x": 1494,
+            "y": 158
+          },
+          "routePoints": [
+            {
+              "x": 1428,
+              "y": 98
+            },
+            {
+              "x": 1460,
+              "y": 98
+            },
+            {
+              "x": 1460,
+              "y": 158
+            },
+            {
+              "x": 1528,
+              "y": 158
+            }
+          ],
+          "labelHidden": false,
+          "labelBox": {
+            "left": 1488,
+            "right": 1500,
+            "top": 145,
+            "bottom": 171
+          }
+        }
+      },
+      {
+        "id": "cone:7",
+        "source": "n2",
+        "target": "n3",
+        "sourceHandle": "out",
+        "targetHandle": "in:7",
+        "data": {
+          "semanticKind": "dependency",
+          "role": "data:0",
+          "routingWork": 0,
+          "routingSimplified": false,
+          "route": {
+            "path": "M 688 98 L 720 98 L 720 212 L 1496 212 L 1496 180 L 1528 180",
+            "x": 1108,
+            "y": 212
+          },
+          "routePoints": [
+            {
+              "x": 688,
+              "y": 98
+            },
+            {
+              "x": 720,
+              "y": 98
+            },
+            {
+              "x": 720,
+              "y": 212
+            },
+            {
+              "x": 1496,
+              "y": 212
+            },
+            {
+              "x": 1496,
+              "y": 180
+            },
+            {
+              "x": 1528,
+              "y": 180
+            }
+          ],
+          "labelHidden": false,
+          "labelBox": {
+            "left": 1102,
+            "right": 1114,
+            "top": 199,
+            "bottom": 225
+          }
+        }
+      },
+      {
+        "id": "cone:8",
+        "source": "n11",
+        "target": "n12",
+        "sourceHandle": "out",
+        "targetHandle": "in:8",
+        "data": {
+          "semanticKind": "dependency",
+          "role": "condition",
+          "routingWork": 0,
+          "routingSimplified": false,
+          "route": {
+            "path": "M 318 754 L 350 754 L 350 464 L 418 464",
+            "x": 384,
+            "y": 464
+          },
+          "routePoints": [
+            {
+              "x": 318,
+              "y": 754
+            },
+            {
+              "x": 350,
+              "y": 754
+            },
+            {
+              "x": 350,
+              "y": 464
+            },
+            {
+              "x": 418,
+              "y": 464
+            }
+          ],
+          "labelHidden": false,
+          "labelBox": {
+            "left": 378,
+            "right": 390,
+            "top": 451,
+            "bottom": 477
+          }
+        }
+      },
+      {
+        "id": "cone:9",
+        "source": "n12",
+        "target": "n10",
+        "sourceHandle": "out",
+        "targetHandle": "in:9",
+        "data": {
+          "semanticKind": "dependency",
+          "role": "reset / select",
+          "routingWork": 0,
+          "routingSimplified": false,
+          "route": {
+            "path": "M 688 426 L 1830 426 L 1830 136 L 1898 136",
+            "x": 1259,
+            "y": 426
+          },
+          "routePoints": [
+            {
+              "x": 688,
+              "y": 426
+            },
+            {
+              "x": 1830,
+              "y": 426
+            },
+            {
+              "x": 1830,
+              "y": 136
+            },
+            {
+              "x": 1898,
+              "y": 136
+            }
+          ],
+          "labelHidden": false,
+          "labelBox": {
+            "left": 1253,
+            "right": 1265,
+            "top": 413,
+            "bottom": 439
+          }
+        }
+      },
+      {
+        "id": "cone:10",
+        "source": "n13",
+        "target": "n10",
+        "sourceHandle": "out",
+        "targetHandle": "in:10",
+        "data": {
+          "semanticKind": "dependency",
+          "role": "data:1",
+          "routingWork": 0,
+          "routingSimplified": false,
+          "route": {
+            "path": "M 318 918 L 1866 918 L 1866 158 L 1898 158",
+            "x": 1092,
+            "y": 918
+          },
+          "routePoints": [
+            {
+              "x": 318,
+              "y": 918
+            },
+            {
+              "x": 1866,
+              "y": 918
+            },
+            {
+              "x": 1866,
+              "y": 158
+            },
+            {
+              "x": 1898,
+              "y": 158
+            }
+          ],
+          "labelHidden": false,
+          "labelBox": {
+            "left": 1086,
+            "right": 1098,
+            "top": 905,
+            "bottom": 931
+          }
+        }
+      },
+      {
+        "id": "cone:11",
+        "source": "n3",
+        "target": "n10",
+        "sourceHandle": "out",
+        "targetHandle": "in:11",
+        "data": {
+          "semanticKind": "dependency",
+          "role": "data:0",
+          "routingWork": 0,
+          "routingSimplified": false,
+          "route": {
+            "path": "M 1798 120 L 1830 120 L 1830 180 L 1898 180",
+            "x": 1814,
+            "y": 120
+          },
+          "routePoints": [
+            {
+              "x": 1798,
+              "y": 120
+            },
+            {
+              "x": 1830,
+              "y": 120
+            },
+            {
+              "x": 1830,
+              "y": 180
+            },
+            {
+              "x": 1898,
+              "y": 180
+            }
+          ],
+          "labelHidden": false,
+          "labelBox": {
+            "left": 1808,
+            "right": 1820,
+            "top": 107,
+            "bottom": 133
+          }
+        }
+      },
+      {
+        "id": "cone:12",
+        "source": "n10",
+        "target": "n0",
+        "sourceHandle": "out",
+        "targetHandle": "in:12",
+        "data": {
+          "semanticKind": "dependency",
+          "role": "data",
+          "routingWork": 0,
+          "routingSimplified": false,
+          "route": {
+            "path": "M 2168 120 L 2200 120 L 2200 136 L 2268 136",
+            "x": 2234,
+            "y": 136
+          },
+          "routePoints": [
+            {
+              "x": 2168,
+              "y": 120
+            },
+            {
+              "x": 2200,
+              "y": 120
+            },
+            {
+              "x": 2200,
+              "y": 136
+            },
+            {
+              "x": 2268,
+              "y": 136
+            }
+          ],
+          "labelHidden": false,
+          "labelBox": {
+            "left": 2228,
+            "right": 2240,
+            "top": 123,
+            "bottom": 149
+          }
+        }
+      }
+    ],
+    "left": 0,
+    "top": -20,
+    "width": 2558,
+    "height": 1016
+  }
+}

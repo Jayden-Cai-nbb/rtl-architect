@@ -64,3 +64,24 @@ export function inspectScope(model:Model,scope:string,inspection?:Inspection){
   resolved:links.map(link=>({link,width:resolveEndpoint(model,scope,link.from)?.width,group:linkGroup(model,link)})),
   summaryCount:stored.filter(l=>!array||[l.from,l.to].some(e=>e.moduleId===array.moduleId)).length};
 }
+
+/** Selected state plus its declared inputs and direct consumers. Stop at upstream state. */
+export function stateNeighborhood(model:Model,scope:string,stateId:string){
+ const locals=new Map((model.localSignals??[]).filter(n=>n.scope===scope).map(n=>[n.id,n]));
+ const node=(e:Endpoint)=>e.local?`local:${scope}:${e.interfaceId}`:e.moduleId;
+ const nodes=new Set<string>([`local:${scope}:${stateId}`]);let limited=false;
+ const visit=(id:string,depth:number)=>{
+  const local=locals.get(id);if(!local)return;
+  for(const e of driverReads(local)){
+   if(nodes.size>=48){limited=true;return;}
+   const key=node(e),fresh=!nodes.has(key);nodes.add(key);
+   if(e.local&&fresh&&locals.get(e.interfaceId)?.driver.kind==='comb'){
+    if(depth<2)visit(e.interfaceId,depth+1);else limited=true;
+   }
+  }
+ };
+ visit(stateId,0);
+ for(const l of model.connections.filter(l=>l.scope===scope))if(l.from.local&&l.from.interfaceId===stateId)nodes.add(node(l.to));
+ for(const l of locals.values())if(driverReads(l).some(e=>e.local&&e.interfaceId===stateId))nodes.add(`local:${scope}:${l.id}`);
+ return {nodes:[...nodes],limited};
+}

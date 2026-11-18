@@ -1,3 +1,5 @@
+import {projectReadingDiagram,type ReadingDiagramProjection} from './readingProjection';
+import type {ReadingTask} from '../../core/readingProjection';
 import {stateDescription} from '../../core/stateUpdates';
 import {hardwareView,viewNames,type ViewMode} from '../../core/hardwareView';
 import {dependencyRelations} from './dependencies';
@@ -15,10 +17,13 @@ import {annotateWireNets} from './wireNets';
 import {orientPorts} from './ports';
 import {routeEdges} from './orthogonal';
 export type Positions=Record<string,{x:number;y:number}>;
-export type DiagramOptions={mode?:ViewMode;positions?:Positions;inspection?:Inspection;showAuxiliary?:boolean;showLocals?:boolean;showState?:boolean;reading?:ScopeLayout['reading'];detail?:'architecture'|'signals';measureOnly?:boolean;showPortNames?:boolean};
+export type DiagramOptions={task?:ReadingTask;mode?:ViewMode;positions?:Positions;inspection?:Inspection;showAuxiliary?:boolean;showLocals?:boolean;showState?:boolean;reading?:ScopeLayout['reading'];detail?:'architecture'|'signals';measureOnly?:boolean;showPortNames?:boolean};
 export const diagramColors:Record<string,string>={data:'#326ea1',request:'#7c61ab',response:'#267e80',writeback:'#b07435',configuration:'#82919c',clock_reset:'#82919c',control:'#64758b',other:'#64758b'};
 const width=240,baseHeight=120;
 export function scopeDiagram(model:Model,scope:string,options:DiagramOptions={},inspection=inspectScope(model,scope,options.inspection)){
+ const requested=options;
+ validateReadingRefs(model,scope,options.reading);
+ if(options.task)options={...options,showLocals:true,showState:true,showAuxiliary:true,reading:undefined,inspection:undefined,positions:undefined};
  const mode=options.mode??(options.detail==='signals'?'signals':'architecture');
  options={...options,...(mode==='microarchitecture'?{showLocals:true,showState:true}:mode==='signals'?{showLocals:true,showState:true,showAuxiliary:true}:{}),detail:mode==='signals'?'signals':options.detail};
  if(options.inspection?.kind==='local'&&options.inspection.purpose==='control')options={...options,showAuxiliary:true};
@@ -172,7 +177,7 @@ export function scopeDiagram(model:Model,scope:string,options:DiagramOptions={},
  const contentRight=Math.max(minX+width,...nodes.filter(n=>!n.data.boundary).map(n=>n.position.x+n.data.geometry.width));
  const outputRack=nodes.find(n=>n.id===`rack:${scope}:producer`);if(outputRack)outputRack.position.x=contentRight+boundaryGap;
  frame.width=contentRight-allMinX+frameMargin*2;nodes[0].width=frame.width;nodes[0].data.geometry.width=frame.width;
- const graph={reading:options.reading,omissions,mode,modeLabel:viewNames[mode],semantics,nodes,edges,inspection,frame,auxiliaryCount,foldedLocalCount,foldedDependencyCount,localCount:localSignals.length,stateCount:localSignals.filter(n=>n.driver.kind==='register').length};
+ const graph={projection:undefined as ReadingDiagramProjection|undefined,reading:options.reading,omissions,mode,modeLabel:viewNames[mode],semantics,nodes,edges,inspection,frame,auxiliaryCount,foldedLocalCount,foldedDependencyCount,localCount:localSignals.length,stateCount:localSignals.filter(n=>n.driver.kind==='register').length};
  for(const stage of options.reading?.stages??[]){
   const members=nodes.filter(n=>stage.nodes.includes(n.id));if(!members.length)continue;
   const left=Math.min(...members.map(n=>n.position.x))-24,top=Math.min(...members.map(n=>n.position.y))-60;
@@ -182,8 +187,9 @@ export function scopeDiagram(model:Model,scope:string,options:DiagramOptions={},
  // Port reorientation may grow a node, including in measurement-only layout passes.
  const contentBottom=Math.max(frame.position.y+frame.height,...nodes.slice(1).map(n=>n.position.y+n.data.geometry.height+34));
  frame.height=contentBottom-frame.position.y;nodes[0].height=frame.height;nodes[0].data.geometry.height=frame.height;
- if(!options.measureOnly)return routeDiagram(graph);
- return graph;
+ const visible=requested.task?projectReadingDiagram(model,scope,requested,graph):graph;
+ if(!options.measureOnly)return routeDiagram(visible);
+ return visible;
 }
 export type ScopeDiagram=ReturnType<typeof scopeDiagram>;
 /** Shared by the Worker, CLI and SVG export; mutates only newly constructed geometry. */

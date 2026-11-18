@@ -1,0 +1,47 @@
+{
+  "executedAt": "2026-11-16T07:57:39.005210+00:00",
+  "build": {
+    "status": "passed",
+    "log": "build-final.log",
+    "toolVersion": "2.0.0",
+    "sourceHash": "f98b2ba3d5fc7a85293dc014f1c2f4449bb59895556e2208bc4782b705c04a9c"
+  },
+  "fullCheck": {
+    "status": "passed",
+    "log": "check.log",
+    "note": "完整检查通过后，成员详情默认收起的纯 UI 调整另做最终 build、相关检查与浏览器复核。"
+  },
+  "focusedCheck": {
+    "status": "passed",
+    "groups": 5,
+    "log": "check-candidate-final.log"
+  },
+  "rtlTest": {
+    "status": "passed",
+    "log": "rtl.log",
+    "scope": "tiny-stream 初始 fixture；不证明任意模型或 RTL 等价"
+  },
+  "browser": {
+    "status": "passed",
+    "report": "browser.json",
+    "viewport": "1440x1000",
+    "actualScreenshotsReviewed": true,
+    "userReadingEfficiency": "not_run"
+  },
+  "protectedFiles": {
+    "unchanged": true,
+    "count": 8,
+    "digests": "protected-before.json"
+  },
+  "savedExampleProjectionMembersUnchanged": true,
+  "candidateCommits": "only in temporary check workspace",
+  "realWorkspaceApproval": "not_performed",
+  "notRun": [
+    "remote CI",
+    "check:workflow",
+    "check:release",
+    "STA",
+    "user reading efficiency experiment"
+  ],
+  "temporaryServicesStopped": true
+}

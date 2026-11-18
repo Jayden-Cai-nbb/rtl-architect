@@ -1,15 +1,11 @@
 import {diagramQuality} from './quality';
-import {scopeDiagram,type DiagramOptions} from './scopeDiagram';
-import {arrangeScope} from './readingLayout';
+import {type DiagramOptions} from './scopeDiagram';
+import {prepareDiagram} from './prepareDiagram';
 import type {Model} from '../../core/schema';
 self.onmessage=async(event:MessageEvent<{id:number;model:Model;scope:string;hash:string;options:DiagramOptions;arrange:boolean}>)=>{
  const {id,model,scope,hash,options,arrange}=event.data;
  try{
-  if(options.reading&&options.reading.modelHash!==hash)throw new Error('阅读布局对应旧模型，请核对后重新导入。');
-  const required=scopeDiagram(model,scope,{...options,measureOnly:true}).nodes.filter(n=>!n.data.boundary);
-  const missing=!options.positions||required.some(n=>!options.positions?.[n.id]);
-  const positions=arrange||missing?await arrangeScope(model,scope,hash,options.reading,options):options.positions;
-  const graph=scopeDiagram(model,scope,{...options,positions});
-  self.postMessage({id,graph,quality:diagramQuality(graph),positions});
+  const result=await prepareDiagram(model,scope,hash,undefined,options,arrange);
+  self.postMessage({id,...result,quality:diagramQuality(result.graph)});
  }catch(e){self.postMessage({id,error:e instanceof Error?e.message:String(e)})}
 };

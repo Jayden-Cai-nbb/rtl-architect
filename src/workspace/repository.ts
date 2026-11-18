@@ -4,15 +4,15 @@ import {contextView,type ContextViewOptions} from './contextView';
 import {architectureContext} from './context';
 import {verificationRuns} from './verification';
 import {reviewDependencies,reviewState} from '../core/reviewImpact';
-import {workbenchSchema,workActionSchema,emptyWorkbench,type WorkbenchSnapshot} from '../core/workbench';
-import {evaluateStudy} from '../core/studies';
+import {workbenchSchema,workActionSchema,emptyWorkbench,workTargetState,type WorkTarget,type WorkbenchSnapshot} from '../core/workbench';
+import {candidateRefSchema,evaluateStudy,type CandidateRef,type Study} from '../core/studies';
 import {toolVersion} from './environment';
 import { mkdir, readFile, readdir, rename, rm, writeFile } from 'node:fs/promises';
 import { dirname, resolve } from 'node:path';
 import { randomUUID } from 'node:crypto';
 import { z } from 'zod';
 import { applyCommands, EngineError, validateModel } from '../core/engine';
-import { semanticDiff, stableStringify } from '../core/diff';
+import { semanticDiff, stableStringify, hardwareChangeSummary } from '../core/diff';
 import { idSchema, hashSchema, moduleReviewsSchema, layoutSchema, modelSchema, proposalSchema, reviewSchema, type Layout, type Model, type Review } from '../core/schema';
 import { moduleDocument, moduleIssues, specMarkdown } from '../core/spec';
 import { contractData, hashValue, modelHash, specText } from '../core/export';
@@ -44,15 +44,56 @@ export class Repository {
     return {model, modelHash:hash, issues, ...reviewState(model,hash,review,records)};
   }
   getModel() { return this.queue(() => this.snapshot()); }
+  private async candidateModel(ref:CandidateRef,current:{model:Model;modelHash:string}){
+    const record=await this.readProposal(ref.proposalId),state=this.proposalState(record,current.modelHash);
+    if(record.candidateHash!==ref.modelHash||state==='STALE')throw new ApiError(409,'候选 ID/hash 已过期或不匹配','CANDIDATE_STALE');
+    const model=state==='APPLIED'?current.model:this.candidate(current.model,current.modelHash,record.proposal).model;
+    if(modelHash(model)!==ref.modelHash)throw new ApiError(409,'候选重建版本不符','CANDIDATE_STALE');return model;
+  }
+  private async candidateEvaluation(ref:CandidateRef,current:{model:Model;modelHash:string}){
+    const model=await this.candidateModel(ref,current),runs=await verificationRuns(this.workspace,ref.modelHash);
+    return {candidate:ref,issues:validateModel(model),runs:runs.filter(r=>'modelHash' in r&&r.modelHash===ref.modelHash),note:'只读核对该候选版本及已有证据；未执行新实验，也不把结构检查当作性能测量。'};
+  }
+  getCandidateEvaluation(input:unknown){return this.queue(async()=>this.candidateEvaluation(candidateRefSchema.parse(input),await this.snapshot()));}
+  compareCandidates(input:unknown){return this.queue(async()=>{
+    const {before,after}=z.strictObject({before:modelSchema,after:modelSchema}).parse(input);
+    const side=async(model:Model)=>{const hash=modelHash(model);return {modelHash:hash,issues:validateModel(model),runs:(await verificationRuns(this.workspace,hash)).filter(r=>'modelHash' in r&&r.modelHash===hash)};};
+    return {readOnly:true,before:await side(before),after:await side(after),diff:semanticDiff(before,after),summary:hardwareChangeSummary(before,after)};
+  });}
+  private async studyState(study:Study,current:{model:Model;modelHash:string}){
+    try{
+      if(study.modelHash!==current.modelHash)throw new Error('预算基线已变化');
+      for(const option of study.options){if(option.candidate)await this.candidateModel(option.candidate,current);
+        const hash=option.candidate?.modelHash??study.modelHash,runs=option.runIds.length?await verificationRuns(this.workspace,hash):[];
+        if(option.runIds.some(id=>!runs.some(r=>r.id===id&&r.fresh&&'modelHash' in r&&r.modelHash===hash)))throw new Error('预算关联实验已过期或不属于此版本');
+      }
+      return {id:study.id,stale:false,reason:'预算仍绑定所记录的候选与假设；数值为派生下界'};
+    }catch(e){return {id:study.id,stale:true,reason:String(e)};}
+  }
   private async workbenchSnapshot():Promise<WorkbenchSnapshot> {
     const snapshot=await this.snapshot(),workbench=workbenchSchema.parse(await this.optional('architecture/workbench.json')??emptyWorkbench());
-    const threadStates=await Promise.all(workbench.threads.map(async t=>{
-      const proposal=t.target.proposalId?await this.readProposal(t.target.proposalId).catch(()=>undefined):undefined;
+    const state=async(target:WorkTarget)=>{
+      const proposal=target.proposalId?await this.readProposal(target.proposalId).catch(()=>undefined):undefined;
       const proposalState=proposal?this.proposalState(proposal,snapshot.modelHash):undefined;
       const targetModel=proposal&&proposalState==='READY'?this.candidate(snapshot.model,snapshot.modelHash,proposal.proposal).model:snapshot.model;
-      return {id:t.id,versionChanged:modelHash(targetModel)!==t.target.modelHash,missingTargets:[...(t.target.moduleId&&!targetModel.modules.some(m=>m.id===t.target.moduleId)?[t.target.moduleId]:[]),...t.target.connectionIds.filter(id=>!targetModel.connections.some(l=>l.id===id))],...(proposalState?{proposalState}:{})};
-    }));
-    return {workbench,workbenchHash:hashValue(workbench),modelHash:snapshot.modelHash,threadStates};
+      const result=workTargetState(targetModel,modelHash(targetModel),target);
+      if(target.proposalId&&(!proposal||proposalState==='STALE'))return {...result,canLocate:false,reason:'原候选已过期或不可用',proposalState:proposalState??'MISSING'};
+      return {...result,...(proposalState?{proposalState}:{})};
+    };
+    const threadStates=await Promise.all(workbench.threads.map(async t=>({id:t.id,...await state(t.target)})));
+    const studyStates=await Promise.all(workbench.studies.map(s=>this.studyState(s,snapshot)));
+    const decisionStates=await Promise.all((workbench.decisions??[]).map(async d=>({id:d.id,options:await Promise.all(d.options.map(async o=>{
+      let stale=false,reason='记录的候选版本可读；选择不代表验证通过';
+      const history=await verificationRuns(this.workspace,o.candidate.modelHash);
+      const experiments=o.experiments.map(e=>{const r=history.find(r=>r.id===e.runId&&'modelHash' in r&&r.modelHash===e.modelHash);return {runId:e.runId,status:r?.status??'UNKNOWN',fresh:!!r?.fresh};});
+      try{
+        await this.candidateModel(o.candidate,snapshot);
+        if(experiments.some(e=>!e.fresh))throw new Error('实验版本、来源或报告已失效');
+        if(o.budget){const s=workbench.studies.find(s=>s.id===o.budget!.studyId),b=s?.options.find(b=>b.id===o.budget!.optionId);if(!s||studyStates.find(x=>x.id===s.id)?.stale||stableStringify(b?.candidate)!==stableStringify(o.candidate))throw new Error('关联预算已过期或对应其他候选');}
+      }catch(e){stale=true;reason=String(e);}
+      return {id:o.id,stale,reason,experiments};
+    }))})));
+    return {workbench,workbenchHash:hashValue(workbench),modelHash:snapshot.modelHash,threadStates,checkpointState:workbench.checkpoint?await state(workbench.checkpoint.target):null,studyStates,decisionStates};
   }
   getWorkbench(){return this.queue(()=>this.workbenchSnapshot());}
   getContextView(options:ContextViewOptions){return this.queue(async()=>contextView(await this.snapshot(),options));}
@@ -61,13 +102,13 @@ export class Repository {
     const owner=snapshot.model.modules.find(m=>m.id===moduleId);
     if(moduleId&&!owner)throw new ApiError(422,'模块不存在','MODULE_NOT_FOUND');
     if(index!==undefined&&(!Number.isSafeInteger(index)||!owner?.instances||index<owner.instances.from||index>owner.instances.to))throw new ApiError(422,'数组索引超出范围','INSTANCE_INDEX');
-    const threads=work.workbench.threads.filter(t=>t.status!=='resolved'&&(!moduleId||!t.target.moduleId||t.target.moduleId===moduleId||t.target.connectionIds.some(id=>snapshot.model.connections.some(l=>l.id===id&&(l.from.moduleId===moduleId||l.to.moduleId===moduleId)))));
+    const threads=work.workbench.threads.filter(t=>t.status!=='resolved'&&(!t.target.object||index===undefined||t.target.object.instancePath.at(-1)?.index===index)&&(!moduleId||!t.target.moduleId||t.target.moduleId===moduleId||t.target.connectionIds.some(id=>snapshot.model.connections.some(l=>l.id===id&&(l.from.moduleId===moduleId||l.to.moduleId===moduleId)))));
     return {...architectureContext(snapshot,moduleId,index),collaboration:{workbenchHash:work.workbenchHash,checkpoint:work.workbench.checkpoint,openCount:threads.length,threads:threads.slice(-25).map(t=>({...t,messages:t.messages.slice(-4),...work.threadStates.find(s=>s.id===t.id)})),studies:work.workbench.studies.filter(s=>!moduleId||s.moduleIds.includes(moduleId)).map(s=>({id:s.id,title:s.title,modelHash:s.modelHash,versionChanged:s.modelHash!==snapshot.modelHash})),note:'讨论是独立记录；回答用 workbench 命令提交，用户确认解决不等于架构批准。完整历史可用 workbench 读取。'}};
   });}
   getResume(){return this.queue(async()=>{
     const snapshot=await this.snapshot(),work=await this.workbenchSnapshot();
     const names=await readdir(this.path('proposals/registered')).catch(e=>{if(e.code==='ENOENT')return [] as string[];throw e;});
-    const proposals=await Promise.all(names.filter(n=>/^[a-f0-9]{64}\.json$/.test(n)).map(async name=>{const p=await this.readProposal(name.slice(0,-5));return {id:p.id,reason:p.proposal.reason,createdAt:p.createdAt,state:this.proposalState(p,snapshot.modelHash)};}));
+    const proposals=await Promise.all(names.filter(n=>/^[a-f0-9]{64}\.json$/.test(n)).map(async name=>{const p=await this.readProposal(name.slice(0,-5));return {id:p.id,reason:p.proposal.reason,createdAt:p.createdAt,candidateHash:p.candidateHash,state:this.proposalState(p,snapshot.modelHash)};}));
     proposals.sort((a,b)=>b.createdAt.localeCompare(a.createdAt));
     const active=work.workbench.threads.filter(t=>t.status!=='resolved'),pending=active.filter(t=>t.status==='open').length;
     return {...work,design:snapshot.model.design,reviewStatus:snapshot.reviewStatus,reviewNeeded:snapshot.moduleReviews.filter(r=>r.status!=='APPROVED').map(r=>({moduleId:r.moduleId,reasons:r.reasons})),proposals,runs:await verificationRuns(this.workspace,snapshot.modelHash),nextActions:[...(pending?[`回答 ${pending} 个尚未处理的问题`]:[]),...(active.length>pending?[`核对 ${active.length-pending} 个已答复问题`]:[]),...(proposals.some(p=>p.state==='READY')?['查看尚未保存的候选方案']:[]),...(work.workbench.checkpoint?[work.workbench.checkpoint.nextStep]:[])]};
@@ -78,11 +119,11 @@ export class Repository {
     if(current.workbenchHash!==parsed.baseHash)throw new ApiError(409,'讨论记录已更新；请重新加载后再发送，输入内容不会自动丢弃。','WORKBENCH_CONFLICT');
     const {model,modelHash:hash}=await this.snapshot(),a=parsed.action,w=current.workbench,now=new Date().toISOString();
     const uid=()=>`w_${randomUUID().replaceAll('-','')}`;
-    const checkTarget=async(target:{modelHash:string;moduleId?:string;connectionIds?:string[];proposalId?:string})=>{
+    const checkTarget=async(target:WorkTarget)=>{
       const record=target.proposalId?await this.readProposal(target.proposalId):undefined;
       const candidate=record&&this.proposalState(record,hash)==='READY'?this.candidate(model,hash,record.proposal).model:model;
       if(modelHash(candidate)!==target.modelHash)throw new ApiError(409,'讨论对象的版本已变化；请核对当前对象后重新发送。');
-      if(target.moduleId&&!candidate.modules.some(m=>m.id===target.moduleId)||(target.connectionIds??[]).some(id=>!candidate.connections.some(l=>l.id===id)))throw new ApiError(422,'讨论对象不存在');
+      const state=workTargetState(candidate,modelHash(candidate),target);if(!state.canLocate||record&&this.proposalState(record,hash)==='STALE')throw new ApiError(422,state.reason,'WORK_TARGET_INVALID');
     };
     if(a.kind==='ask'){
       await checkTarget(a.target);w.threads.push({id:uid(),target:a.target,title:a.title,status:'open',createdAt:now,updatedAt:now,messages:[{id:uid(),author:'user',text:a.text,createdAt:now,modelHash:a.target.modelHash}]});
@@ -90,13 +131,32 @@ export class Repository {
       await checkTarget(a.target);w.checkpoint={intent:a.intent,nextStep:a.nextStep,target:a.target,updatedAt:now};
     }else if(a.kind==='study'){
       if(a.study.modelHash!==hash)throw new ApiError(409,'方案预算对应旧模型');
-      if(a.study.moduleIds.some(id=>!model.modules.some(m=>m.id===id)))throw new ApiError(422,'预算引用不存在的模块');
       evaluateStudy(a.study);
-      const runs=await verificationRuns(this.workspace,hash);
-      for(const id of a.study.options.flatMap(o=>o.runIds)){const run=runs.find(r=>r.id===id);if(!run||!run.fresh||run.status!=='passed'||!('moduleIds' in run)||!a.study.moduleIds.every(m=>run.moduleIds?.includes(m)))throw new ApiError(422,'关联验证必须通过、输入新鲜、对应当前模型并覆盖预算模块');}
+      if(a.study.options.some(o=>o.candidate)&&a.study.options.some(o=>!o.candidate))throw new ApiError(422,'候选预算的每个方案都必须绑定自己的 ID/hash');
+      for(const o of a.study.options){
+        const target=o.candidate?await this.candidateModel(o.candidate,{model,modelHash:hash}):model;
+        if(a.study.moduleIds.some(id=>!target.modules.some(m=>m.id===id)))throw new ApiError(422,'预算引用不存在的候选模块');
+        const runs=await verificationRuns(this.workspace,o.candidate?.modelHash??hash);
+        for(const id of o.runIds){const run=runs.find(r=>r.id===id);if(!run||!run.fresh||!o.candidate&&run.status!=='passed'||!('moduleIds' in run)||!a.study.moduleIds.every(m=>run.moduleIds?.includes(m)))throw new ApiError(422,'关联验证必须对应此方案版本、输入新鲜并覆盖预算模块');}
+      }
       const index=w.studies.findIndex(s=>s.id===a.study.id);
       if(index>=0)throw new ApiError(409,'此预算已保存；修订请使用新的 ID，保留原始假设与结果。','STUDY_EXISTS');
       w.studies.push(a.study);
+    }else if(a.kind==='decision'){
+      const d=a.decision;
+      if(w.decisions?.some(x=>x.id===d.id))throw new ApiError(409,'决策记录已存在；修订使用新 ID');
+      if(d.threadIds.some(id=>!w.threads.some(t=>t.id===id)))throw new ApiError(422,'关联问题不存在');
+      for(const o of d.options){
+        const evaluated=await this.candidateEvaluation(o.candidate,{model,modelHash:hash});
+        if(o.budget){const s=w.studies.find(s=>s.id===o.budget!.studyId),b=s?.options.find(b=>b.id===o.budget!.optionId);if(!s||stableStringify(b?.candidate)!==stableStringify(o.candidate)||(await this.studyState(s,{model,modelHash:hash})).stale)throw new ApiError(422,'预算不属于该候选版本或已过期');}
+        if(o.experiments.some(e=>e.modelHash!==o.candidate.modelHash||!evaluated.runs.some(r=>r.id===e.runId&&r.modelHash===e.modelHash&&r.fresh)))throw new ApiError(422,'实验不属于该候选版本或已过期','EXPERIMENT_VERSION');
+      }
+      (w.decisions??=[]).push({...d,createdAt:now,choices:[]});
+    }else if(a.kind==='choose_decision'){
+      const d=w.decisions?.find(d=>d.id===a.decisionId),option=d?.options.find(o=>o.id===a.optionId),state=current.decisionStates.find(s=>s.id===a.decisionId)?.options.find(o=>o.id===a.optionId);
+      if(!d||!option)throw new ApiError(422,'决策或选项不存在');
+      if(!state||state.stale)throw new ApiError(409,'选项版本或关联依据已过期；修订决策记录后再选择');
+      d.choices.push({optionId:a.optionId,reason:a.reason,author:'user',createdAt:now});
     }else{
       const t=w.threads.find(t=>t.id===a.threadId);if(!t)throw new ApiError(404,'讨论不存在');
       if(a.modelHash!==hash)throw new ApiError(409,'当前模型已变化，请重新读取上下文');
@@ -142,7 +202,7 @@ export class Repository {
     const proposal = proposalSchema.parse(input);
     if (proposal.baseHash !== hash) throw new ApiError(409, '模型版本冲突：请保留提案，重新加载并显式重新预览');
     const result = applyCommands(model, proposal.commands);
-    return { model: result.model, candidateHash: modelHash(result.model), diff: semanticDiff(model, result.model), impact:verificationImpact(model,result.model), issues: result.issues };
+    return { model: result.model, candidateHash: modelHash(result.model), diff: semanticDiff(model, result.model), summary:hardwareChangeSummary(model,result.model), impact:verificationImpact(model,result.model), issues: result.issues };
   }
   preview(input: unknown) { return this.queue(async () => { const current = await this.snapshot(); const { model, ...preview } = this.candidate(current.model, current.modelHash, input); return { ...preview, candidate: model }; }); }
   private async readProposal(id: string) {

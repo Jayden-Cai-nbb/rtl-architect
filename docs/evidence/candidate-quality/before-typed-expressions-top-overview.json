@@ -1,0 +1,2143 @@
+{
+  "report": {
+    "id": "typed-expressions-top-overview",
+    "hash": "2cd22e38e8248095a270a45eb113ea2d37b9edd87872ccb66ecbd362c886f4bf",
+    "task": {
+      "kind": "overview"
+    },
+    "elapsedMs": 248.14313299999992,
+    "nodes": 4,
+    "edges": 8,
+    "quality": {
+      "readingConstraints": {
+        "status": "not_requested",
+        "issues": [],
+        "counts": {
+          "parallel": 0,
+          "shared": 0,
+          "feedback": 0
+        }
+      },
+      "structuralFidelity": {
+        "status": "passed",
+        "missing": [],
+        "extra": [],
+        "duplicates": [],
+        "wrongEndpoints": [],
+        "omissions": [],
+        "note": "仅检查当前视图及聚合清单对应模型连接；折叠有明确原因，不证明 RTL 覆盖。"
+      },
+      "semanticClarity": {
+        "status": "needs_review",
+        "issues": [
+          {
+            "code": "PROVENANCE_UNKNOWN",
+            "target": "limits",
+            "reason": "unknown：只核对有限二态状态更新；未证明四态、初始状态和任意时序需求。"
+          },
+          {
+            "code": "PARTIAL_MODEL",
+            "target": "top",
+            "reason": "模型尚未完整；图中没有显示的结构不代表 RTL 中不存在。"
+          }
+        ],
+        "humanReview": "not_run"
+      },
+      "geometricReadability": {
+        "status": "needs_review",
+        "note": "交叉、共线和隐藏线名与基本几何完整性分开；仍需沿真实事务人工阅读。"
+      },
+      "sharedLabels": [],
+      "labelStatus": "named",
+      "status": "passed",
+      "overlaps": [],
+      "nodeHits": [],
+      "unrouted": [],
+      "crossings": 6,
+      "unrelatedSharedLength": 0,
+      "bends": 8,
+      "wireLength": 3272,
+      "hiddenLabels": [],
+      "folded": {
+        "auxiliary": 5,
+        "local": 0
+      },
+      "connections": [
+        {
+          "id": "scaled_out",
+          "from": {
+            "moduleId": "top",
+            "interfaceId": "scaled_q",
+            "local": true
+          },
+          "to": {
+            "moduleId": "top",
+            "interfaceId": "scaled"
+          },
+          "retainedIn": [],
+          "visibleIn": [
+            "reading-relation:[\"aggregate:top:parallel:sample_states\",\"rack:top:producer\",\"wire\",\"data\",\"\",\"算术缩放\",\"\",\"\",\"in:scaled_result\"]"
+          ]
+        },
+        {
+          "id": "packed_value_out",
+          "from": {
+            "moduleId": "top",
+            "interfaceId": "packed_value_q",
+            "local": true
+          },
+          "to": {
+            "moduleId": "top",
+            "interfaceId": "packed_value"
+          },
+          "retainedIn": [],
+          "visibleIn": [
+            "reading-relation:[\"aggregate:top:parallel:sample_states\",\"rack:top:producer\",\"wire\",\"data\",\"\",\"低位打包\",\"\",\"\",\"in:packed_value_result\"]"
+          ]
+        },
+        {
+          "id": "logical_value_out",
+          "from": {
+            "moduleId": "top",
+            "interfaceId": "logical_value_q",
+            "local": true
+          },
+          "to": {
+            "moduleId": "top",
+            "interfaceId": "logical_value"
+          },
+          "retainedIn": [],
+          "visibleIn": [
+            "reading-relation:[\"aggregate:top:parallel:sample_states\",\"rack:top:producer\",\"wire\",\"data\",\"\",\"逻辑右移\",\"\",\"\",\"in:logical_value_result\"]"
+          ]
+        },
+        {
+          "id": "negative_out",
+          "from": {
+            "moduleId": "top",
+            "interfaceId": "negative_q",
+            "local": true
+          },
+          "to": {
+            "moduleId": "top",
+            "interfaceId": "negative"
+          },
+          "retainedIn": [],
+          "visibleIn": [
+            "reading-relation:[\"aggregate:top:parallel:sample_states\",\"rack:top:producer\",\"wire\",\"data\",\"\",\"负数标志\",\"\",\"\",\"in:negative_result\"]"
+          ]
+        },
+        {
+          "id": "parity_out",
+          "from": {
+            "moduleId": "top",
+            "interfaceId": "parity_q",
+            "local": true
+          },
+          "to": {
+            "moduleId": "top",
+            "interfaceId": "parity"
+          },
+          "retainedIn": [],
+          "visibleIn": [
+            "reading-relation:[\"aggregate:top:parallel:sample_states\",\"rack:top:producer\",\"wire\",\"data\",\"\",\"异或校验\",\"\",\"\",\"in:parity_result\"]"
+          ]
+        }
+      ],
+      "visualReview": "not_run",
+      "note": "几何检查不证明文字可读、硬件正确或所有交叉可辨认。"
+    }
+  },
+  "graph": {
+    "projection": {
+      "task": {
+        "kind": "overview"
+      },
+      "groups": [
+        {
+          "id": "aggregate:top:parallel:sample_states",
+          "label": "并行采样状态",
+          "members": [
+            "local:top:scaled_q",
+            "local:top:packed_value_q",
+            "local:top:logical_value_q",
+            "local:top:negative_q",
+            "local:top:parity_q"
+          ],
+          "basis": "parallel",
+          "expanded": false
+        }
+      ],
+      "members": [
+        "local:top:scaled_q",
+        "local:top:packed_value_q",
+        "local:top:logical_value_q",
+        "local:top:negative_q",
+        "local:top:parity_q"
+      ],
+      "nodeFor": {
+        "local:top:scaled_q": "aggregate:top:parallel:sample_states",
+        "local:top:packed_value_q": "aggregate:top:parallel:sample_states",
+        "local:top:logical_value_q": "aggregate:top:parallel:sample_states",
+        "local:top:negative_q": "aggregate:top:parallel:sample_states",
+        "local:top:parity_q": "aggregate:top:parallel:sample_states"
+      },
+      "focus": [],
+      "issues": [],
+      "note": "只读阅读集合；不是 RTL 实例、物理网络或周期。范围外内容仍可展开。",
+      "internal": {
+        "aggregate:top:parallel:sample_states": []
+      },
+      "auxiliary": [
+        {
+          "id": "dependency:top>logical_value_q/domain/state_reset",
+          "source": "rack:top:consumer",
+          "target": "local:top:logical_value_q",
+          "label": "复位 · 时钟与复位",
+          "connectionIds": [],
+          "connections": [],
+          "dependencyEndpoints": [
+            {
+              "moduleId": "top",
+              "interfaceId": "rst_n"
+            }
+          ],
+          "localSignalId": "logical_value_q",
+          "semanticKind": "dependency"
+        },
+        {
+          "id": "dependency:top>negative_q/domain/state_reset",
+          "source": "rack:top:consumer",
+          "target": "local:top:negative_q",
+          "label": "复位 · 时钟与复位",
+          "connectionIds": [],
+          "connections": [],
+          "dependencyEndpoints": [
+            {
+              "moduleId": "top",
+              "interfaceId": "rst_n"
+            }
+          ],
+          "localSignalId": "negative_q",
+          "semanticKind": "dependency"
+        },
+        {
+          "id": "dependency:top>packed_value_q/domain/state_reset",
+          "source": "rack:top:consumer",
+          "target": "local:top:packed_value_q",
+          "label": "复位 · 时钟与复位",
+          "connectionIds": [],
+          "connections": [],
+          "dependencyEndpoints": [
+            {
+              "moduleId": "top",
+              "interfaceId": "rst_n"
+            }
+          ],
+          "localSignalId": "packed_value_q",
+          "semanticKind": "dependency"
+        },
+        {
+          "id": "dependency:top>parity_q/domain/state_reset",
+          "source": "rack:top:consumer",
+          "target": "local:top:parity_q",
+          "label": "复位 · 时钟与复位",
+          "connectionIds": [],
+          "connections": [],
+          "dependencyEndpoints": [
+            {
+              "moduleId": "top",
+              "interfaceId": "rst_n"
+            }
+          ],
+          "localSignalId": "parity_q",
+          "semanticKind": "dependency"
+        },
+        {
+          "id": "dependency:top>scaled_q/domain/state_reset",
+          "source": "rack:top:consumer",
+          "target": "local:top:scaled_q",
+          "label": "复位 · 时钟与复位",
+          "connectionIds": [],
+          "connections": [],
+          "dependencyEndpoints": [
+            {
+              "moduleId": "top",
+              "interfaceId": "rst_n"
+            }
+          ],
+          "localSignalId": "scaled_q",
+          "semanticKind": "dependency"
+        }
+      ],
+      "relationCount": 23
+    },
+    "omissions": [],
+    "mode": "architecture",
+    "modeLabel": "主事务总览",
+    "semantics": {
+      "relationships": [
+        {
+          "id": "scaled_out",
+          "from": {
+            "moduleId": "top",
+            "interfaceId": "scaled_q",
+            "local": true
+          },
+          "to": {
+            "moduleId": "top",
+            "interfaceId": "scaled"
+          },
+          "toRole": "producer",
+          "kind": "wire",
+          "classification": "declared",
+          "group": {
+            "id": "scaled_result",
+            "label": "算术缩放",
+            "category": "data",
+            "description": "独立并行计算的输出。",
+            "auxiliary": false
+          },
+          "width": 12,
+          "evidenceIds": [],
+          "members": [
+            {
+              "part": "scaled_q",
+              "direction": "forward",
+              "width": 12
+            }
+          ],
+          "meaning": "模型记录的直接连接；业务分类不代表协议成员关系。"
+        },
+        {
+          "id": "packed_value_out",
+          "from": {
+            "moduleId": "top",
+            "interfaceId": "packed_value_q",
+            "local": true
+          },
+          "to": {
+            "moduleId": "top",
+            "interfaceId": "packed_value"
+          },
+          "toRole": "producer",
+          "kind": "wire",
+          "classification": "declared",
+          "group": {
+            "id": "packed_value_result",
+            "label": "低位打包",
+            "category": "data",
+            "description": "独立并行计算的输出。",
+            "auxiliary": false
+          },
+          "width": 8,
+          "evidenceIds": [],
+          "members": [
+            {
+              "part": "packed_value_q",
+              "direction": "forward",
+              "width": 8
+            }
+          ],
+          "meaning": "模型记录的直接连接；业务分类不代表协议成员关系。"
+        },
+        {
+          "id": "logical_value_out",
+          "from": {
+            "moduleId": "top",
+            "interfaceId": "logical_value_q",
+            "local": true
+          },
+          "to": {
+            "moduleId": "top",
+            "interfaceId": "logical_value"
+          },
+          "toRole": "producer",
+          "kind": "wire",
+          "classification": "declared",
+          "group": {
+            "id": "logical_value_result",
+            "label": "逻辑右移",
+            "category": "data",
+            "description": "独立并行计算的输出。",
+            "auxiliary": false
+          },
+          "width": 8,
+          "evidenceIds": [],
+          "members": [
+            {
+              "part": "logical_value_q",
+              "direction": "forward",
+              "width": 8
+            }
+          ],
+          "meaning": "模型记录的直接连接；业务分类不代表协议成员关系。"
+        },
+        {
+          "id": "negative_out",
+          "from": {
+            "moduleId": "top",
+            "interfaceId": "negative_q",
+            "local": true
+          },
+          "to": {
+            "moduleId": "top",
+            "interfaceId": "negative"
+          },
+          "toRole": "producer",
+          "kind": "wire",
+          "classification": "declared",
+          "group": {
+            "id": "negative_result",
+            "label": "负数标志",
+            "category": "data",
+            "description": "独立并行计算的输出。",
+            "auxiliary": false
+          },
+          "width": 1,
+          "evidenceIds": [],
+          "members": [
+            {
+              "part": "negative_q",
+              "direction": "forward",
+              "width": 1
+            }
+          ],
+          "meaning": "模型记录的直接连接；业务分类不代表协议成员关系。"
+        },
+        {
+          "id": "parity_out",
+          "from": {
+            "moduleId": "top",
+            "interfaceId": "parity_q",
+            "local": true
+          },
+          "to": {
+            "moduleId": "top",
+            "interfaceId": "parity"
+          },
+          "toRole": "producer",
+          "kind": "wire",
+          "classification": "declared",
+          "group": {
+            "id": "parity_result",
+            "label": "异或校验",
+            "category": "data",
+            "description": "独立并行计算的输出。",
+            "auxiliary": false
+          },
+          "width": 1,
+          "evidenceIds": [],
+          "members": [
+            {
+              "part": "parity_q",
+              "direction": "forward",
+              "width": 1
+            }
+          ],
+          "meaning": "模型记录的直接连接；业务分类不代表协议成员关系。"
+        }
+      ],
+      "issues": [
+        {
+          "code": "PROVENANCE_UNKNOWN",
+          "target": "limits",
+          "reason": "unknown：只核对有限二态状态更新；未证明四态、初始状态和任意时序需求。"
+        },
+        {
+          "code": "PARTIAL_MODEL",
+          "target": "top",
+          "reason": "模型尚未完整；图中没有显示的结构不代表 RTL 中不存在。"
+        }
+      ],
+      "note": "显示投影不修改 IR；位置不表示周期、真实线长或物理布局。"
+    },
+    "nodes": [
+      {
+        "id": "frame:top",
+        "type": "rtlModule",
+        "position": {
+          "x": -520,
+          "y": 0
+        },
+        "width": 1312,
+        "height": 526,
+        "draggable": false,
+        "selectable": false,
+        "zIndex": -1,
+        "data": {
+          "label": "有符号缩放寄存级",
+          "moduleId": "top",
+          "kind": "frame",
+          "boundary": true,
+          "geometry": {
+            "width": 1312,
+            "height": 526,
+            "ports": []
+          },
+          "ports": [],
+          "summary": "5 个原始成员 · 1 个阅读集合",
+          "activeHandles": []
+        }
+      },
+      {
+        "id": "aggregate:top:parallel:sample_states",
+        "type": "rtlModule",
+        "position": {
+          "x": 12,
+          "y": 100
+        },
+        "data": {
+          "label": "并行采样状态",
+          "moduleId": "top",
+          "kind": "aggregate",
+          "boundary": false,
+          "mainDiagram": true,
+          "memberIds": [
+            "local:top:scaled_q",
+            "local:top:packed_value_q",
+            "local:top:logical_value_q",
+            "local:top:negative_q",
+            "local:top:parity_q"
+          ],
+          "groupBasis": "parallel",
+          "summary": "5 项 · 只读集合",
+          "title": "并行采样状态 · 5 项\n只读阅读集合；不是 RTL 实例、物理网络或周期。范围外内容仍可展开。\nlocal:top:scaled_q\nlocal:top:packed_value_q\nlocal:top:logical_value_q\nlocal:top:negative_q\nlocal:top:parity_q",
+          "statePattern": "阅读集合 · 5 项",
+          "ports": [
+            {
+              "id": "in:reading-relation:[\"rack:top:consumer\",\"aggregate:top:parallel:sample_states\",\"dependency\",\"control\",\"state_condition\",\"更新条件 · 采样使能\",\"\",\"out:load_control\",\"\"]"
+            },
+            {
+              "id": "in:reading-relation:[\"rack:top:consumer\",\"aggregate:top:parallel:sample_states\",\"dependency\",\"data\",\"state_data\",\"写入值 · 采样数据\",\"\",\"out:sample_data\",\"\"]"
+            },
+            {
+              "id": "in:reading-relation:[\"rack:top:consumer\",\"aggregate:top:parallel:sample_states\",\"dependency\",\"control\",\"state_data\",\"写入值 · 移位量\",\"\",\"out:shift_control\",\"\"]"
+            },
+            {
+              "id": "out:reading-relation:[\"aggregate:top:parallel:sample_states\",\"rack:top:producer\",\"wire\",\"data\",\"\",\"逻辑右移\",\"\",\"\",\"in:logical_value_result\"]"
+            },
+            {
+              "id": "out:reading-relation:[\"aggregate:top:parallel:sample_states\",\"rack:top:producer\",\"wire\",\"data\",\"\",\"负数标志\",\"\",\"\",\"in:negative_result\"]"
+            },
+            {
+              "id": "out:reading-relation:[\"aggregate:top:parallel:sample_states\",\"rack:top:producer\",\"wire\",\"data\",\"\",\"低位打包\",\"\",\"\",\"in:packed_value_result\"]"
+            },
+            {
+              "id": "out:reading-relation:[\"aggregate:top:parallel:sample_states\",\"rack:top:producer\",\"wire\",\"data\",\"\",\"异或校验\",\"\",\"\",\"in:parity_result\"]"
+            },
+            {
+              "id": "out:reading-relation:[\"aggregate:top:parallel:sample_states\",\"rack:top:producer\",\"wire\",\"data\",\"\",\"算术缩放\",\"\",\"\",\"in:scaled_result\"]"
+            }
+          ],
+          "geometry": {
+            "width": 260,
+            "height": 270,
+            "captionY": 24,
+            "ports": [
+              {
+                "id": "in:reading-relation:[\"rack:top:consumer\",\"aggregate:top:parallel:sample_states\",\"dependency\",\"control\",\"state_condition\",\"更新条件 · 采样使能\",\"\",\"out:load_control\",\"\"]",
+                "direction": "target",
+                "side": "WEST",
+                "x": 0,
+                "y": 100,
+                "category": "control"
+              },
+              {
+                "id": "in:reading-relation:[\"rack:top:consumer\",\"aggregate:top:parallel:sample_states\",\"dependency\",\"data\",\"state_data\",\"写入值 · 采样数据\",\"\",\"out:sample_data\",\"\"]",
+                "direction": "target",
+                "side": "WEST",
+                "x": 0,
+                "y": 136,
+                "category": "data"
+              },
+              {
+                "id": "in:reading-relation:[\"rack:top:consumer\",\"aggregate:top:parallel:sample_states\",\"dependency\",\"control\",\"state_data\",\"写入值 · 移位量\",\"\",\"out:shift_control\",\"\"]",
+                "direction": "target",
+                "side": "WEST",
+                "x": 0,
+                "y": 172,
+                "category": "control"
+              },
+              {
+                "id": "out:reading-relation:[\"aggregate:top:parallel:sample_states\",\"rack:top:producer\",\"wire\",\"data\",\"\",\"逻辑右移\",\"\",\"\",\"in:logical_value_result\"]",
+                "direction": "source",
+                "side": "EAST",
+                "x": 260,
+                "y": 100,
+                "category": "data"
+              },
+              {
+                "id": "out:reading-relation:[\"aggregate:top:parallel:sample_states\",\"rack:top:producer\",\"wire\",\"data\",\"\",\"负数标志\",\"\",\"\",\"in:negative_result\"]",
+                "direction": "source",
+                "side": "EAST",
+                "x": 260,
+                "y": 136,
+                "category": "data"
+              },
+              {
+                "id": "out:reading-relation:[\"aggregate:top:parallel:sample_states\",\"rack:top:producer\",\"wire\",\"data\",\"\",\"低位打包\",\"\",\"\",\"in:packed_value_result\"]",
+                "direction": "source",
+                "side": "EAST",
+                "x": 260,
+                "y": 172,
+                "category": "data"
+              },
+              {
+                "id": "out:reading-relation:[\"aggregate:top:parallel:sample_states\",\"rack:top:producer\",\"wire\",\"data\",\"\",\"异或校验\",\"\",\"\",\"in:parity_result\"]",
+                "direction": "source",
+                "side": "EAST",
+                "x": 260,
+                "y": 208,
+                "category": "data"
+              },
+              {
+                "id": "out:reading-relation:[\"aggregate:top:parallel:sample_states\",\"rack:top:producer\",\"wire\",\"data\",\"\",\"算术缩放\",\"\",\"\",\"in:scaled_result\"]",
+                "direction": "source",
+                "side": "EAST",
+                "x": 260,
+                "y": 244,
+                "category": "data"
+              }
+            ]
+          },
+          "activeHandles": [
+            "in:reading-relation:[\"rack:top:consumer\",\"aggregate:top:parallel:sample_states\",\"dependency\",\"control\",\"state_condition\",\"更新条件 · 采样使能\",\"\",\"out:load_control\",\"\"]",
+            "in:reading-relation:[\"rack:top:consumer\",\"aggregate:top:parallel:sample_states\",\"dependency\",\"data\",\"state_data\",\"写入值 · 采样数据\",\"\",\"out:sample_data\",\"\"]",
+            "in:reading-relation:[\"rack:top:consumer\",\"aggregate:top:parallel:sample_states\",\"dependency\",\"control\",\"state_data\",\"写入值 · 移位量\",\"\",\"out:shift_control\",\"\"]",
+            "out:reading-relation:[\"aggregate:top:parallel:sample_states\",\"rack:top:producer\",\"wire\",\"data\",\"\",\"逻辑右移\",\"\",\"\",\"in:logical_value_result\"]",
+            "out:reading-relation:[\"aggregate:top:parallel:sample_states\",\"rack:top:producer\",\"wire\",\"data\",\"\",\"负数标志\",\"\",\"\",\"in:negative_result\"]",
+            "out:reading-relation:[\"aggregate:top:parallel:sample_states\",\"rack:top:producer\",\"wire\",\"data\",\"\",\"低位打包\",\"\",\"\",\"in:packed_value_result\"]",
+            "out:reading-relation:[\"aggregate:top:parallel:sample_states\",\"rack:top:producer\",\"wire\",\"data\",\"\",\"异或校验\",\"\",\"\",\"in:parity_result\"]",
+            "out:reading-relation:[\"aggregate:top:parallel:sample_states\",\"rack:top:producer\",\"wire\",\"data\",\"\",\"算术缩放\",\"\",\"\",\"in:scaled_result\"]"
+          ],
+          "internalRelationCount": 0
+        },
+        "width": 260,
+        "height": 270
+      },
+      {
+        "id": "rack:top:consumer",
+        "type": "rtlModule",
+        "position": {
+          "x": -496,
+          "y": 64
+        },
+        "width": 156,
+        "height": 374,
+        "draggable": false,
+        "selectable": false,
+        "data": {
+          "label": "输入",
+          "moduleId": "top",
+          "kind": "rack",
+          "boundary": true,
+          "role": "consumer",
+          "groups": [
+            {
+              "id": "shift_control",
+              "label": "移位量",
+              "count": 1,
+              "auxiliary": false
+            },
+            {
+              "id": "sample_data",
+              "label": "采样数据",
+              "count": 1,
+              "auxiliary": false
+            },
+            {
+              "id": "load_control",
+              "label": "采样使能",
+              "count": 1,
+              "auxiliary": false
+            },
+            {
+              "id": "domain",
+              "label": "时钟与复位",
+              "count": 2,
+              "auxiliary": true
+            }
+          ],
+          "summary": "当前层级接口",
+          "ports": [
+            {
+              "id": "out:sample_data"
+            },
+            {
+              "id": "out:shift_control"
+            },
+            {
+              "id": "out:load_control"
+            },
+            {
+              "id": "out:domain"
+            },
+            {
+              "id": "out"
+            }
+          ],
+          "geometry": {
+            "width": 156,
+            "height": 374,
+            "ports": [
+              {
+                "id": "out:sample_data",
+                "direction": "source",
+                "side": "EAST",
+                "x": 156,
+                "y": 252
+              },
+              {
+                "id": "out:shift_control",
+                "direction": "source",
+                "side": "EAST",
+                "x": 156,
+                "y": 208
+              },
+              {
+                "id": "out:load_control",
+                "direction": "source",
+                "side": "EAST",
+                "x": 156,
+                "y": 296
+              },
+              {
+                "id": "out:domain",
+                "direction": "source",
+                "side": "EAST",
+                "x": 156,
+                "y": 340
+              },
+              {
+                "id": "out",
+                "direction": "source",
+                "side": "EAST",
+                "x": 156,
+                "y": 42
+              }
+            ]
+          },
+          "activeHandles": [
+            "out:domain",
+            "out:load_control",
+            "out:sample_data",
+            "out:shift_control",
+            "out:domain",
+            "out:load_control",
+            "out:sample_data",
+            "out:domain",
+            "out:load_control",
+            "out:sample_data",
+            "out:shift_control",
+            "out:domain",
+            "out:load_control",
+            "out:sample_data",
+            "out:domain",
+            "out:load_control",
+            "out:sample_data",
+            "out:shift_control"
+          ]
+        }
+      },
+      {
+        "id": "rack:top:producer",
+        "type": "rtlModule",
+        "position": {
+          "x": 612,
+          "y": 64
+        },
+        "width": 156,
+        "height": 402,
+        "draggable": false,
+        "selectable": false,
+        "data": {
+          "label": "输出",
+          "moduleId": "top",
+          "kind": "rack",
+          "boundary": true,
+          "role": "producer",
+          "groups": [
+            {
+              "id": "logical_value_result",
+              "label": "逻辑右移",
+              "count": 1,
+              "auxiliary": false
+            },
+            {
+              "id": "packed_value_result",
+              "label": "低位打包",
+              "count": 1,
+              "auxiliary": false
+            },
+            {
+              "id": "scaled_result",
+              "label": "算术缩放",
+              "count": 1,
+              "auxiliary": false
+            },
+            {
+              "id": "negative_result",
+              "label": "负数标志",
+              "count": 1,
+              "auxiliary": false
+            },
+            {
+              "id": "parity_result",
+              "label": "异或校验",
+              "count": 1,
+              "auxiliary": false
+            }
+          ],
+          "summary": "当前层级接口",
+          "ports": [
+            {
+              "id": "in:scaled_result"
+            },
+            {
+              "id": "in:packed_value_result"
+            },
+            {
+              "id": "in:logical_value_result"
+            },
+            {
+              "id": "in:negative_result"
+            },
+            {
+              "id": "in:parity_result"
+            },
+            {
+              "id": "in"
+            }
+          ],
+          "geometry": {
+            "width": 156,
+            "height": 402,
+            "ports": [
+              {
+                "id": "in:scaled_result",
+                "direction": "target",
+                "side": "WEST",
+                "x": 0,
+                "y": 280
+              },
+              {
+                "id": "in:packed_value_result",
+                "direction": "target",
+                "side": "WEST",
+                "x": 0,
+                "y": 208
+              },
+              {
+                "id": "in:logical_value_result",
+                "direction": "target",
+                "side": "WEST",
+                "x": 0,
+                "y": 136
+              },
+              {
+                "id": "in:negative_result",
+                "direction": "target",
+                "side": "WEST",
+                "x": 0,
+                "y": 324
+              },
+              {
+                "id": "in:parity_result",
+                "direction": "target",
+                "side": "WEST",
+                "x": 0,
+                "y": 368
+              },
+              {
+                "id": "in",
+                "direction": "target",
+                "side": "WEST",
+                "x": 0,
+                "y": 42
+              }
+            ]
+          },
+          "activeHandles": [
+            "in:logical_value_result",
+            "in:negative_result",
+            "in:packed_value_result",
+            "in:parity_result",
+            "in:scaled_result"
+          ]
+        }
+      }
+    ],
+    "edges": [
+      {
+        "id": "reading-relation:[\"aggregate:top:parallel:sample_states\",\"rack:top:producer\",\"wire\",\"data\",\"\",\"逻辑右移\",\"\",\"\",\"in:logical_value_result\"]",
+        "source": "aggregate:top:parallel:sample_states",
+        "sourceHandle": "out:reading-relation:[\"aggregate:top:parallel:sample_states\",\"rack:top:producer\",\"wire\",\"data\",\"\",\"逻辑右移\",\"\",\"\",\"in:logical_value_result\"]",
+        "target": "rack:top:producer",
+        "targetHandle": "in:logical_value_result",
+        "type": "relationship",
+        "reconnectable": false,
+        "markerEnd": {
+          "type": "arrow",
+          "color": "#326ea1"
+        },
+        "data": {
+          "connectionIds": [
+            "logical_value_out"
+          ],
+          "category": "data",
+          "title": "阅读关系集合；不是物理网络\n逻辑右移\nrelation:local:top:logical_value_q>rack:top:producer/local:top:logical_value_q/logical_value_result/logical_value_result/wire\nlogical_value_out",
+          "semanticKind": "aggregate",
+          "classification": "declared",
+          "members": [
+            {
+              "part": "logical_value_q",
+              "direction": "forward",
+              "width": 8
+            }
+          ],
+          "selected": false,
+          "color": "#326ea1",
+          "feedback": false,
+          "laneOffset": 0,
+          "relationMembers": [
+            {
+              "id": "relation:local:top:logical_value_q>rack:top:producer/local:top:logical_value_q/logical_value_result/logical_value_result/wire",
+              "source": "local:top:logical_value_q",
+              "target": "rack:top:producer",
+              "label": "逻辑右移",
+              "connectionIds": [
+                "logical_value_out"
+              ],
+              "connections": [
+                {
+                  "id": "logical_value_out",
+                  "scope": "top",
+                  "from": {
+                    "moduleId": "top",
+                    "interfaceId": "logical_value_q",
+                    "local": true
+                  },
+                  "to": {
+                    "moduleId": "top",
+                    "interfaceId": "logical_value"
+                  }
+                }
+              ],
+              "dependencyEndpoints": [],
+              "semanticKind": "wire"
+            }
+          ],
+          "dependencyEndpoints": [],
+          "relationBundle": true,
+          "routingWork": 0,
+          "routingSimplified": false,
+          "route": {
+            "path": "M 272 200 L 612 200",
+            "x": 442,
+            "y": 200
+          },
+          "routePoints": [
+            {
+              "x": 272,
+              "y": 200
+            },
+            {
+              "x": 612,
+              "y": 200
+            }
+          ],
+          "labelHidden": false,
+          "labelBox": {
+            "left": 404,
+            "right": 480,
+            "top": 187,
+            "bottom": 213
+          },
+          "crossings": []
+        },
+        "style": {
+          "stroke": "#326ea1",
+          "strokeWidth": 2,
+          "opacity": 0.9
+        },
+        "label": "逻辑右移"
+      },
+      {
+        "id": "reading-relation:[\"aggregate:top:parallel:sample_states\",\"rack:top:producer\",\"wire\",\"data\",\"\",\"负数标志\",\"\",\"\",\"in:negative_result\"]",
+        "source": "aggregate:top:parallel:sample_states",
+        "sourceHandle": "out:reading-relation:[\"aggregate:top:parallel:sample_states\",\"rack:top:producer\",\"wire\",\"data\",\"\",\"负数标志\",\"\",\"\",\"in:negative_result\"]",
+        "target": "rack:top:producer",
+        "targetHandle": "in:negative_result",
+        "type": "relationship",
+        "reconnectable": false,
+        "markerEnd": {
+          "type": "arrow",
+          "color": "#326ea1"
+        },
+        "data": {
+          "connectionIds": [
+            "negative_out"
+          ],
+          "category": "data",
+          "title": "阅读关系集合；不是物理网络\n负数标志\nrelation:local:top:negative_q>rack:top:producer/local:top:negative_q/negative_result/negative_result/wire\nnegative_out",
+          "semanticKind": "aggregate",
+          "classification": "declared",
+          "members": [
+            {
+              "part": "negative_q",
+              "direction": "forward",
+              "width": 1
+            }
+          ],
+          "selected": false,
+          "color": "#326ea1",
+          "feedback": false,
+          "laneOffset": 0,
+          "relationMembers": [
+            {
+              "id": "relation:local:top:negative_q>rack:top:producer/local:top:negative_q/negative_result/negative_result/wire",
+              "source": "local:top:negative_q",
+              "target": "rack:top:producer",
+              "label": "负数标志",
+              "connectionIds": [
+                "negative_out"
+              ],
+              "connections": [
+                {
+                  "id": "negative_out",
+                  "scope": "top",
+                  "from": {
+                    "moduleId": "top",
+                    "interfaceId": "negative_q",
+                    "local": true
+                  },
+                  "to": {
+                    "moduleId": "top",
+                    "interfaceId": "negative"
+                  }
+                }
+              ],
+              "dependencyEndpoints": [],
+              "semanticKind": "wire"
+            }
+          ],
+          "dependencyEndpoints": [],
+          "relationBundle": true,
+          "routingWork": 0,
+          "routingSimplified": false,
+          "route": {
+            "path": "M 272 236 L 580 236 L 580 388 L 612 388",
+            "x": 426,
+            "y": 236
+          },
+          "routePoints": [
+            {
+              "x": 272,
+              "y": 236
+            },
+            {
+              "x": 580,
+              "y": 236
+            },
+            {
+              "x": 580,
+              "y": 388
+            },
+            {
+              "x": 612,
+              "y": 388
+            }
+          ],
+          "labelHidden": false,
+          "labelBox": {
+            "left": 388,
+            "right": 464,
+            "top": 223,
+            "bottom": 249
+          },
+          "crossings": []
+        },
+        "style": {
+          "stroke": "#326ea1",
+          "strokeWidth": 2,
+          "opacity": 0.9
+        },
+        "label": "负数标志"
+      },
+      {
+        "id": "reading-relation:[\"aggregate:top:parallel:sample_states\",\"rack:top:producer\",\"wire\",\"data\",\"\",\"低位打包\",\"\",\"\",\"in:packed_value_result\"]",
+        "source": "aggregate:top:parallel:sample_states",
+        "sourceHandle": "out:reading-relation:[\"aggregate:top:parallel:sample_states\",\"rack:top:producer\",\"wire\",\"data\",\"\",\"低位打包\",\"\",\"\",\"in:packed_value_result\"]",
+        "target": "rack:top:producer",
+        "targetHandle": "in:packed_value_result",
+        "type": "relationship",
+        "reconnectable": false,
+        "markerEnd": {
+          "type": "arrow",
+          "color": "#326ea1"
+        },
+        "data": {
+          "connectionIds": [
+            "packed_value_out"
+          ],
+          "category": "data",
+          "title": "阅读关系集合；不是物理网络\n低位打包\nrelation:local:top:packed_value_q>rack:top:producer/local:top:packed_value_q/packed_value_result/packed_value_result/wire\npacked_value_out",
+          "semanticKind": "aggregate",
+          "classification": "declared",
+          "members": [
+            {
+              "part": "packed_value_q",
+              "direction": "forward",
+              "width": 8
+            }
+          ],
+          "selected": false,
+          "color": "#326ea1",
+          "feedback": false,
+          "laneOffset": 0,
+          "relationMembers": [
+            {
+              "id": "relation:local:top:packed_value_q>rack:top:producer/local:top:packed_value_q/packed_value_result/packed_value_result/wire",
+              "source": "local:top:packed_value_q",
+              "target": "rack:top:producer",
+              "label": "低位打包",
+              "connectionIds": [
+                "packed_value_out"
+              ],
+              "connections": [
+                {
+                  "id": "packed_value_out",
+                  "scope": "top",
+                  "from": {
+                    "moduleId": "top",
+                    "interfaceId": "packed_value_q",
+                    "local": true
+                  },
+                  "to": {
+                    "moduleId": "top",
+                    "interfaceId": "packed_value"
+                  }
+                }
+              ],
+              "dependencyEndpoints": [],
+              "semanticKind": "wire"
+            }
+          ],
+          "dependencyEndpoints": [],
+          "relationBundle": true,
+          "routingWork": 0,
+          "routingSimplified": false,
+          "route": {
+            "path": "M 272 272 L 612 272",
+            "x": 442,
+            "y": 272
+          },
+          "routePoints": [
+            {
+              "x": 272,
+              "y": 272
+            },
+            {
+              "x": 612,
+              "y": 272
+            }
+          ],
+          "labelHidden": false,
+          "labelBox": {
+            "left": 404,
+            "right": 480,
+            "top": 259,
+            "bottom": 285
+          },
+          "crossings": [
+            {
+              "x": 580,
+              "y": 272
+            }
+          ]
+        },
+        "style": {
+          "stroke": "#326ea1",
+          "strokeWidth": 2,
+          "opacity": 0.9
+        },
+        "label": "低位打包"
+      },
+      {
+        "id": "reading-relation:[\"aggregate:top:parallel:sample_states\",\"rack:top:producer\",\"wire\",\"data\",\"\",\"异或校验\",\"\",\"\",\"in:parity_result\"]",
+        "source": "aggregate:top:parallel:sample_states",
+        "sourceHandle": "out:reading-relation:[\"aggregate:top:parallel:sample_states\",\"rack:top:producer\",\"wire\",\"data\",\"\",\"异或校验\",\"\",\"\",\"in:parity_result\"]",
+        "target": "rack:top:producer",
+        "targetHandle": "in:parity_result",
+        "type": "relationship",
+        "reconnectable": false,
+        "markerEnd": {
+          "type": "arrow",
+          "color": "#326ea1"
+        },
+        "data": {
+          "connectionIds": [
+            "parity_out"
+          ],
+          "category": "data",
+          "title": "阅读关系集合；不是物理网络\n异或校验\nrelation:local:top:parity_q>rack:top:producer/local:top:parity_q/parity_result/parity_result/wire\nparity_out",
+          "semanticKind": "aggregate",
+          "classification": "declared",
+          "members": [
+            {
+              "part": "parity_q",
+              "direction": "forward",
+              "width": 1
+            }
+          ],
+          "selected": false,
+          "color": "#326ea1",
+          "feedback": false,
+          "laneOffset": 0,
+          "relationMembers": [
+            {
+              "id": "relation:local:top:parity_q>rack:top:producer/local:top:parity_q/parity_result/parity_result/wire",
+              "source": "local:top:parity_q",
+              "target": "rack:top:producer",
+              "label": "异或校验",
+              "connectionIds": [
+                "parity_out"
+              ],
+              "connections": [
+                {
+                  "id": "parity_out",
+                  "scope": "top",
+                  "from": {
+                    "moduleId": "top",
+                    "interfaceId": "parity_q",
+                    "local": true
+                  },
+                  "to": {
+                    "moduleId": "top",
+                    "interfaceId": "parity"
+                  }
+                }
+              ],
+              "dependencyEndpoints": [],
+              "semanticKind": "wire"
+            }
+          ],
+          "dependencyEndpoints": [],
+          "relationBundle": true,
+          "routingWork": 0,
+          "routingSimplified": false,
+          "route": {
+            "path": "M 272 308 L 304 308 L 304 432 L 612 432",
+            "x": 458,
+            "y": 432
+          },
+          "routePoints": [
+            {
+              "x": 272,
+              "y": 308
+            },
+            {
+              "x": 304,
+              "y": 308
+            },
+            {
+              "x": 304,
+              "y": 432
+            },
+            {
+              "x": 612,
+              "y": 432
+            }
+          ],
+          "labelHidden": false,
+          "labelBox": {
+            "left": 420,
+            "right": 496,
+            "top": 419,
+            "bottom": 445
+          },
+          "crossings": []
+        },
+        "style": {
+          "stroke": "#326ea1",
+          "strokeWidth": 2,
+          "opacity": 0.9
+        },
+        "label": "异或校验"
+      },
+      {
+        "id": "reading-relation:[\"aggregate:top:parallel:sample_states\",\"rack:top:producer\",\"wire\",\"data\",\"\",\"算术缩放\",\"\",\"\",\"in:scaled_result\"]",
+        "source": "aggregate:top:parallel:sample_states",
+        "sourceHandle": "out:reading-relation:[\"aggregate:top:parallel:sample_states\",\"rack:top:producer\",\"wire\",\"data\",\"\",\"算术缩放\",\"\",\"\",\"in:scaled_result\"]",
+        "target": "rack:top:producer",
+        "targetHandle": "in:scaled_result",
+        "type": "relationship",
+        "reconnectable": false,
+        "markerEnd": {
+          "type": "arrow",
+          "color": "#326ea1"
+        },
+        "data": {
+          "connectionIds": [
+            "scaled_out"
+          ],
+          "category": "data",
+          "title": "阅读关系集合；不是物理网络\n算术缩放\nrelation:local:top:scaled_q>rack:top:producer/local:top:scaled_q/scaled_result/scaled_result/wire\nscaled_out",
+          "semanticKind": "aggregate",
+          "classification": "declared",
+          "members": [
+            {
+              "part": "scaled_q",
+              "direction": "forward",
+              "width": 12
+            }
+          ],
+          "selected": false,
+          "color": "#326ea1",
+          "feedback": false,
+          "laneOffset": 0,
+          "relationMembers": [
+            {
+              "id": "relation:local:top:scaled_q>rack:top:producer/local:top:scaled_q/scaled_result/scaled_result/wire",
+              "source": "local:top:scaled_q",
+              "target": "rack:top:producer",
+              "label": "算术缩放",
+              "connectionIds": [
+                "scaled_out"
+              ],
+              "connections": [
+                {
+                  "id": "scaled_out",
+                  "scope": "top",
+                  "from": {
+                    "moduleId": "top",
+                    "interfaceId": "scaled_q",
+                    "local": true
+                  },
+                  "to": {
+                    "moduleId": "top",
+                    "interfaceId": "scaled"
+                  }
+                }
+              ],
+              "dependencyEndpoints": [],
+              "semanticKind": "wire"
+            }
+          ],
+          "dependencyEndpoints": [],
+          "relationBundle": true,
+          "routingWork": 0,
+          "routingSimplified": false,
+          "route": {
+            "path": "M 272 344 L 612 344",
+            "x": 442,
+            "y": 344
+          },
+          "routePoints": [
+            {
+              "x": 272,
+              "y": 344
+            },
+            {
+              "x": 612,
+              "y": 344
+            }
+          ],
+          "labelHidden": false,
+          "labelBox": {
+            "left": 404,
+            "right": 480,
+            "top": 331,
+            "bottom": 357
+          },
+          "crossings": [
+            {
+              "x": 580,
+              "y": 344
+            },
+            {
+              "x": 304,
+              "y": 344
+            }
+          ]
+        },
+        "style": {
+          "stroke": "#326ea1",
+          "strokeWidth": 2,
+          "opacity": 0.9
+        },
+        "label": "算术缩放"
+      },
+      {
+        "id": "reading-relation:[\"rack:top:consumer\",\"aggregate:top:parallel:sample_states\",\"dependency\",\"control\",\"state_condition\",\"更新条件 · 采样使能\",\"\",\"out:load_control\",\"\"]",
+        "source": "rack:top:consumer",
+        "target": "aggregate:top:parallel:sample_states",
+        "sourceHandle": "out:load_control",
+        "targetHandle": "in:reading-relation:[\"rack:top:consumer\",\"aggregate:top:parallel:sample_states\",\"dependency\",\"control\",\"state_condition\",\"更新条件 · 采样使能\",\"\",\"out:load_control\",\"\"]",
+        "type": "relationship",
+        "label": "更新条件 · 采样使能 · 5 关系",
+        "reconnectable": false,
+        "data": {
+          "localSignalId": "logical_value_q",
+          "dependencyEndpoint": {
+            "moduleId": "top",
+            "interfaceId": "enable"
+          },
+          "dependencyEndpoints": [
+            {
+              "moduleId": "top",
+              "interfaceId": "enable"
+            },
+            {
+              "moduleId": "top",
+              "interfaceId": "enable"
+            },
+            {
+              "moduleId": "top",
+              "interfaceId": "enable"
+            },
+            {
+              "moduleId": "top",
+              "interfaceId": "enable"
+            },
+            {
+              "moduleId": "top",
+              "interfaceId": "enable"
+            }
+          ],
+          "semanticKind": "aggregate",
+          "dependencyRole": "state_condition",
+          "category": "control",
+          "relationBundle": true,
+          "title": "阅读关系集合；不是物理网络\n更新条件 · 采样使能\ndependency:top>logical_value_q/load_control/state_condition\n\n更新条件 · 采样使能\ndependency:top>negative_q/load_control/state_condition\n\n更新条件 · 采样使能\ndependency:top>packed_value_q/load_control/state_condition\n\n更新条件 · 采样使能\ndependency:top>parity_q/load_control/state_condition\n\n更新条件 · 采样使能\ndependency:top>scaled_q/load_control/state_condition\n",
+          "color": "#64758b",
+          "granularity": "expression",
+          "feedback": false,
+          "laneOffset": -15,
+          "relationMembers": [
+            {
+              "id": "dependency:top>logical_value_q/load_control/state_condition",
+              "source": "rack:top:consumer",
+              "target": "local:top:logical_value_q",
+              "label": "更新条件 · 采样使能",
+              "connectionIds": [],
+              "connections": [],
+              "dependencyEndpoints": [
+                {
+                  "moduleId": "top",
+                  "interfaceId": "enable"
+                }
+              ],
+              "localSignalId": "logical_value_q",
+              "semanticKind": "dependency"
+            },
+            {
+              "id": "dependency:top>negative_q/load_control/state_condition",
+              "source": "rack:top:consumer",
+              "target": "local:top:negative_q",
+              "label": "更新条件 · 采样使能",
+              "connectionIds": [],
+              "connections": [],
+              "dependencyEndpoints": [
+                {
+                  "moduleId": "top",
+                  "interfaceId": "enable"
+                }
+              ],
+              "localSignalId": "negative_q",
+              "semanticKind": "dependency"
+            },
+            {
+              "id": "dependency:top>packed_value_q/load_control/state_condition",
+              "source": "rack:top:consumer",
+              "target": "local:top:packed_value_q",
+              "label": "更新条件 · 采样使能",
+              "connectionIds": [],
+              "connections": [],
+              "dependencyEndpoints": [
+                {
+                  "moduleId": "top",
+                  "interfaceId": "enable"
+                }
+              ],
+              "localSignalId": "packed_value_q",
+              "semanticKind": "dependency"
+            },
+            {
+              "id": "dependency:top>parity_q/load_control/state_condition",
+              "source": "rack:top:consumer",
+              "target": "local:top:parity_q",
+              "label": "更新条件 · 采样使能",
+              "connectionIds": [],
+              "connections": [],
+              "dependencyEndpoints": [
+                {
+                  "moduleId": "top",
+                  "interfaceId": "enable"
+                }
+              ],
+              "localSignalId": "parity_q",
+              "semanticKind": "dependency"
+            },
+            {
+              "id": "dependency:top>scaled_q/load_control/state_condition",
+              "source": "rack:top:consumer",
+              "target": "local:top:scaled_q",
+              "label": "更新条件 · 采样使能",
+              "connectionIds": [],
+              "connections": [],
+              "dependencyEndpoints": [
+                {
+                  "moduleId": "top",
+                  "interfaceId": "enable"
+                }
+              ],
+              "localSignalId": "scaled_q",
+              "semanticKind": "dependency"
+            }
+          ],
+          "connectionIds": [],
+          "routingWork": 0,
+          "routingSimplified": false,
+          "route": {
+            "path": "M -340 360 L -20 360 L -20 200 L 12 200",
+            "x": -180,
+            "y": 360
+          },
+          "routePoints": [
+            {
+              "x": -340,
+              "y": 360
+            },
+            {
+              "x": -20,
+              "y": 360
+            },
+            {
+              "x": -20,
+              "y": 200
+            },
+            {
+              "x": 12,
+              "y": 200
+            }
+          ],
+          "labelHidden": false,
+          "labelBox": {
+            "left": -300,
+            "right": -60,
+            "top": 347,
+            "bottom": 373
+          },
+          "crossings": []
+        },
+        "style": {
+          "stroke": "#64758b",
+          "strokeWidth": 2,
+          "opacity": 0.9
+        },
+        "markerEnd": {
+          "type": "arrow",
+          "color": "#64758b"
+        }
+      },
+      {
+        "id": "reading-relation:[\"rack:top:consumer\",\"aggregate:top:parallel:sample_states\",\"dependency\",\"data\",\"state_data\",\"写入值 · 采样数据\",\"\",\"out:sample_data\",\"\"]",
+        "source": "rack:top:consumer",
+        "target": "aggregate:top:parallel:sample_states",
+        "sourceHandle": "out:sample_data",
+        "targetHandle": "in:reading-relation:[\"rack:top:consumer\",\"aggregate:top:parallel:sample_states\",\"dependency\",\"data\",\"state_data\",\"写入值 · 采样数据\",\"\",\"out:sample_data\",\"\"]",
+        "type": "relationship",
+        "label": "写入值 · 采样数据 · 5 关系",
+        "reconnectable": false,
+        "data": {
+          "localSignalId": "logical_value_q",
+          "dependencyEndpoint": {
+            "moduleId": "top",
+            "interfaceId": "sample"
+          },
+          "dependencyEndpoints": [
+            {
+              "moduleId": "top",
+              "interfaceId": "sample"
+            },
+            {
+              "moduleId": "top",
+              "interfaceId": "sample"
+            },
+            {
+              "moduleId": "top",
+              "interfaceId": "sample"
+            },
+            {
+              "moduleId": "top",
+              "interfaceId": "sample"
+            },
+            {
+              "moduleId": "top",
+              "interfaceId": "sample"
+            }
+          ],
+          "semanticKind": "aggregate",
+          "dependencyRole": "state_data",
+          "category": "data",
+          "relationBundle": true,
+          "title": "阅读关系集合；不是物理网络\n写入值 · 采样数据\ndependency:top>logical_value_q/sample_data/state_data\n\n写入值 · 采样数据\ndependency:top>negative_q/sample_data/state_data\n\n写入值 · 采样数据\ndependency:top>packed_value_q/sample_data/state_data\n\n写入值 · 采样数据\ndependency:top>parity_q/sample_data/state_data\n\n写入值 · 采样数据\ndependency:top>scaled_q/sample_data/state_data\n",
+          "color": "#326ea1",
+          "granularity": "expression",
+          "feedback": false,
+          "laneOffset": 15,
+          "relationMembers": [
+            {
+              "id": "dependency:top>logical_value_q/sample_data/state_data",
+              "source": "rack:top:consumer",
+              "target": "local:top:logical_value_q",
+              "label": "写入值 · 采样数据",
+              "connectionIds": [],
+              "connections": [],
+              "dependencyEndpoints": [
+                {
+                  "moduleId": "top",
+                  "interfaceId": "sample"
+                }
+              ],
+              "localSignalId": "logical_value_q",
+              "semanticKind": "dependency"
+            },
+            {
+              "id": "dependency:top>negative_q/sample_data/state_data",
+              "source": "rack:top:consumer",
+              "target": "local:top:negative_q",
+              "label": "写入值 · 采样数据",
+              "connectionIds": [],
+              "connections": [],
+              "dependencyEndpoints": [
+                {
+                  "moduleId": "top",
+                  "interfaceId": "sample"
+                }
+              ],
+              "localSignalId": "negative_q",
+              "semanticKind": "dependency"
+            },
+            {
+              "id": "dependency:top>packed_value_q/sample_data/state_data",
+              "source": "rack:top:consumer",
+              "target": "local:top:packed_value_q",
+              "label": "写入值 · 采样数据",
+              "connectionIds": [],
+              "connections": [],
+              "dependencyEndpoints": [
+                {
+                  "moduleId": "top",
+                  "interfaceId": "sample"
+                }
+              ],
+              "localSignalId": "packed_value_q",
+              "semanticKind": "dependency"
+            },
+            {
+              "id": "dependency:top>parity_q/sample_data/state_data",
+              "source": "rack:top:consumer",
+              "target": "local:top:parity_q",
+              "label": "写入值 · 采样数据",
+              "connectionIds": [],
+              "connections": [],
+              "dependencyEndpoints": [
+                {
+                  "moduleId": "top",
+                  "interfaceId": "sample"
+                }
+              ],
+              "localSignalId": "parity_q",
+              "semanticKind": "dependency"
+            },
+            {
+              "id": "dependency:top>scaled_q/sample_data/state_data",
+              "source": "rack:top:consumer",
+              "target": "local:top:scaled_q",
+              "label": "写入值 · 采样数据",
+              "connectionIds": [],
+              "connections": [],
+              "dependencyEndpoints": [
+                {
+                  "moduleId": "top",
+                  "interfaceId": "sample"
+                }
+              ],
+              "localSignalId": "scaled_q",
+              "semanticKind": "dependency"
+            }
+          ],
+          "connectionIds": [],
+          "routingWork": 0,
+          "routingSimplified": false,
+          "route": {
+            "path": "M -340 316 L -308 316 L -308 236 L 12 236",
+            "x": -148,
+            "y": 236
+          },
+          "routePoints": [
+            {
+              "x": -340,
+              "y": 316
+            },
+            {
+              "x": -308,
+              "y": 316
+            },
+            {
+              "x": -308,
+              "y": 236
+            },
+            {
+              "x": 12,
+              "y": 236
+            }
+          ],
+          "labelHidden": false,
+          "labelBox": {
+            "left": -260,
+            "right": -36,
+            "top": 223,
+            "bottom": 249
+          },
+          "crossings": [
+            {
+              "x": -20,
+              "y": 236
+            }
+          ]
+        },
+        "style": {
+          "stroke": "#326ea1",
+          "strokeWidth": 2,
+          "opacity": 0.9
+        },
+        "markerEnd": {
+          "type": "arrow",
+          "color": "#326ea1"
+        }
+      },
+      {
+        "id": "reading-relation:[\"rack:top:consumer\",\"aggregate:top:parallel:sample_states\",\"dependency\",\"control\",\"state_data\",\"写入值 · 移位量\",\"\",\"out:shift_control\",\"\"]",
+        "source": "rack:top:consumer",
+        "target": "aggregate:top:parallel:sample_states",
+        "sourceHandle": "out:shift_control",
+        "targetHandle": "in:reading-relation:[\"rack:top:consumer\",\"aggregate:top:parallel:sample_states\",\"dependency\",\"control\",\"state_data\",\"写入值 · 移位量\",\"\",\"out:shift_control\",\"\"]",
+        "type": "relationship",
+        "label": "写入值 · 移位量 · 3 关系",
+        "reconnectable": false,
+        "data": {
+          "localSignalId": "logical_value_q",
+          "dependencyEndpoint": {
+            "moduleId": "top",
+            "interfaceId": "shift"
+          },
+          "dependencyEndpoints": [
+            {
+              "moduleId": "top",
+              "interfaceId": "shift"
+            },
+            {
+              "moduleId": "top",
+              "interfaceId": "shift"
+            },
+            {
+              "moduleId": "top",
+              "interfaceId": "shift"
+            }
+          ],
+          "semanticKind": "aggregate",
+          "dependencyRole": "state_data",
+          "category": "control",
+          "relationBundle": true,
+          "title": "阅读关系集合；不是物理网络\n写入值 · 移位量\ndependency:top>logical_value_q/shift_control/state_data\n\n写入值 · 移位量\ndependency:top>packed_value_q/shift_control/state_data\n\n写入值 · 移位量\ndependency:top>scaled_q/shift_control/state_data\n",
+          "color": "#64758b",
+          "granularity": "expression",
+          "feedback": false,
+          "laneOffset": 45,
+          "relationMembers": [
+            {
+              "id": "dependency:top>logical_value_q/shift_control/state_data",
+              "source": "rack:top:consumer",
+              "target": "local:top:logical_value_q",
+              "label": "写入值 · 移位量",
+              "connectionIds": [],
+              "connections": [],
+              "dependencyEndpoints": [
+                {
+                  "moduleId": "top",
+                  "interfaceId": "shift"
+                }
+              ],
+              "localSignalId": "logical_value_q",
+              "semanticKind": "dependency"
+            },
+            {
+              "id": "dependency:top>packed_value_q/shift_control/state_data",
+              "source": "rack:top:consumer",
+              "target": "local:top:packed_value_q",
+              "label": "写入值 · 移位量",
+              "connectionIds": [],
+              "connections": [],
+              "dependencyEndpoints": [
+                {
+                  "moduleId": "top",
+                  "interfaceId": "shift"
+                }
+              ],
+              "localSignalId": "packed_value_q",
+              "semanticKind": "dependency"
+            },
+            {
+              "id": "dependency:top>scaled_q/shift_control/state_data",
+              "source": "rack:top:consumer",
+              "target": "local:top:scaled_q",
+              "label": "写入值 · 移位量",
+              "connectionIds": [],
+              "connections": [],
+              "dependencyEndpoints": [
+                {
+                  "moduleId": "top",
+                  "interfaceId": "shift"
+                }
+              ],
+              "localSignalId": "scaled_q",
+              "semanticKind": "dependency"
+            }
+          ],
+          "connectionIds": [],
+          "routingWork": 0,
+          "routingSimplified": false,
+          "route": {
+            "path": "M -340 272 L 12 272",
+            "x": -164,
+            "y": 272
+          },
+          "routePoints": [
+            {
+              "x": -340,
+              "y": 272
+            },
+            {
+              "x": 12,
+              "y": 272
+            }
+          ],
+          "labelHidden": false,
+          "labelBox": {
+            "left": -268,
+            "right": -60,
+            "top": 259,
+            "bottom": 285
+          },
+          "crossings": [
+            {
+              "x": -20,
+              "y": 272
+            },
+            {
+              "x": -308,
+              "y": 272
+            }
+          ],
+          "junctions": []
+        },
+        "style": {
+          "stroke": "#64758b",
+          "strokeWidth": 2,
+          "opacity": 0.9
+        },
+        "markerEnd": {
+          "type": "arrow",
+          "color": "#64758b"
+        }
+      }
+    ],
+    "inspection": {
+      "stored": [
+        {
+          "id": "scaled_out",
+          "scope": "top",
+          "from": {
+            "moduleId": "top",
+            "interfaceId": "scaled_q",
+            "local": true
+          },
+          "to": {
+            "moduleId": "top",
+            "interfaceId": "scaled"
+          }
+        },
+        {
+          "id": "packed_value_out",
+          "scope": "top",
+          "from": {
+            "moduleId": "top",
+            "interfaceId": "packed_value_q",
+            "local": true
+          },
+          "to": {
+            "moduleId": "top",
+            "interfaceId": "packed_value"
+          }
+        },
+        {
+          "id": "logical_value_out",
+          "scope": "top",
+          "from": {
+            "moduleId": "top",
+            "interfaceId": "logical_value_q",
+            "local": true
+          },
+          "to": {
+            "moduleId": "top",
+            "interfaceId": "logical_value"
+          }
+        },
+        {
+          "id": "negative_out",
+          "scope": "top",
+          "from": {
+            "moduleId": "top",
+            "interfaceId": "negative_q",
+            "local": true
+          },
+          "to": {
+            "moduleId": "top",
+            "interfaceId": "negative"
+          }
+        },
+        {
+          "id": "parity_out",
+          "scope": "top",
+          "from": {
+            "moduleId": "top",
+            "interfaceId": "parity_q",
+            "local": true
+          },
+          "to": {
+            "moduleId": "top",
+            "interfaceId": "parity"
+          }
+        }
+      ],
+      "links": [
+        {
+          "id": "scaled_out",
+          "scope": "top",
+          "from": {
+            "moduleId": "top",
+            "interfaceId": "scaled_q",
+            "local": true
+          },
+          "to": {
+            "moduleId": "top",
+            "interfaceId": "scaled"
+          }
+        },
+        {
+          "id": "packed_value_out",
+          "scope": "top",
+          "from": {
+            "moduleId": "top",
+            "interfaceId": "packed_value_q",
+            "local": true
+          },
+          "to": {
+            "moduleId": "top",
+            "interfaceId": "packed_value"
+          }
+        },
+        {
+          "id": "logical_value_out",
+          "scope": "top",
+          "from": {
+            "moduleId": "top",
+            "interfaceId": "logical_value_q",
+            "local": true
+          },
+          "to": {
+            "moduleId": "top",
+            "interfaceId": "logical_value"
+          }
+        },
+        {
+          "id": "negative_out",
+          "scope": "top",
+          "from": {
+            "moduleId": "top",
+            "interfaceId": "negative_q",
+            "local": true
+          },
+          "to": {
+            "moduleId": "top",
+            "interfaceId": "negative"
+          }
+        },
+        {
+          "id": "parity_out",
+          "scope": "top",
+          "from": {
+            "moduleId": "top",
+            "interfaceId": "parity_q",
+            "local": true
+          },
+          "to": {
+            "moduleId": "top",
+            "interfaceId": "parity"
+          }
+        }
+      ],
+      "stateBoundaries": [],
+      "limited": [],
+      "depth": 1,
+      "localIds": [],
+      "dependencies": [],
+      "moduleIds": [
+        "top"
+      ],
+      "missing": [],
+      "resolved": [
+        {
+          "link": {
+            "id": "scaled_out",
+            "scope": "top",
+            "from": {
+              "moduleId": "top",
+              "interfaceId": "scaled_q",
+              "local": true
+            },
+            "to": {
+              "moduleId": "top",
+              "interfaceId": "scaled"
+            }
+          },
+          "width": 12,
+          "group": {
+            "id": "scaled_result",
+            "label": "算术缩放",
+            "category": "data",
+            "description": "独立并行计算的输出。",
+            "auxiliary": false
+          }
+        },
+        {
+          "link": {
+            "id": "packed_value_out",
+            "scope": "top",
+            "from": {
+              "moduleId": "top",
+              "interfaceId": "packed_value_q",
+              "local": true
+            },
+            "to": {
+              "moduleId": "top",
+              "interfaceId": "packed_value"
+            }
+          },
+          "width": 8,
+          "group": {
+            "id": "packed_value_result",
+            "label": "低位打包",
+            "category": "data",
+            "description": "独立并行计算的输出。",
+            "auxiliary": false
+          }
+        },
+        {
+          "link": {
+            "id": "logical_value_out",
+            "scope": "top",
+            "from": {
+              "moduleId": "top",
+              "interfaceId": "logical_value_q",
+              "local": true
+            },
+            "to": {
+              "moduleId": "top",
+              "interfaceId": "logical_value"
+            }
+          },
+          "width": 8,
+          "group": {
+            "id": "logical_value_result",
+            "label": "逻辑右移",
+            "category": "data",
+            "description": "独立并行计算的输出。",
+            "auxiliary": false
+          }
+        },
+        {
+          "link": {
+            "id": "negative_out",
+            "scope": "top",
+            "from": {
+              "moduleId": "top",
+              "interfaceId": "negative_q",
+              "local": true
+            },
+            "to": {
+              "moduleId": "top",
+              "interfaceId": "negative"
+            }
+          },
+          "width": 1,
+          "group": {
+            "id": "negative_result",
+            "label": "负数标志",
+            "category": "data",
+            "description": "独立并行计算的输出。",
+            "auxiliary": false
+          }
+        },
+        {
+          "link": {
+            "id": "parity_out",
+            "scope": "top",
+            "from": {
+              "moduleId": "top",
+              "interfaceId": "parity_q",
+              "local": true
+            },
+            "to": {
+              "moduleId": "top",
+              "interfaceId": "parity"
+            }
+          },
+          "width": 1,
+          "group": {
+            "id": "parity_result",
+            "label": "异或校验",
+            "category": "data",
+            "description": "独立并行计算的输出。",
+            "auxiliary": false
+          }
+        }
+      ],
+      "summaryCount": 5
+    },
+    "frame": {
+      "id": "frame:top",
+      "position": {
+        "x": -520,
+        "y": 0
+      },
+      "width": 1312,
+      "height": 526
+    },
+    "auxiliaryCount": 5,
+    "foldedLocalCount": 0,
+    "foldedDependencyCount": 0,
+    "localCount": 5,
+    "stateCount": 5
+  },
+  "positions": {
+    "aggregate:top:parallel:sample_states": {
+      "x": 12,
+      "y": 100
+    }
+  }
+}

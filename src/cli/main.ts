@@ -1,3 +1,4 @@
+import {importReplay,replayRecords} from '../workspace/transactionReplay';
 import {prepareDiagram} from '../web/graph/prepareDiagram';
 import {diagramQuality} from '../web/graph/quality';
 import {verificationImpact} from '../core/verificationImpact';
@@ -13,7 +14,7 @@ import {studySchema,evaluateStudy} from '../core/studies';
 import {yosysManifestSchema,importYosys,importImpact} from '../workspace/importYosys';
 import {verificationProfileSchema,runVerification,verificationRuns} from '../workspace/verification';
 import {RequestSizeError,serializeRequest} from '../core/transport';
-import { semanticDiff } from '../core/diff';
+import { hardwareChangeSummary, semanticDiff } from '../core/diff';
 import { validateModel } from '../core/engine';
 import { mkdir, readFile, writeFile, realpath } from 'node:fs/promises';
 import { basename, dirname, join, relative, resolve } from 'node:path';
@@ -34,7 +35,7 @@ import { inputManifestSchema, sourceInventory } from '../workspace/inventory';
 import { evidenceFreshness } from '../workspace/freshness';
 import { exportBundle } from '../workspace/bundle';
 
-type Options = { purpose?:string; maxBytes?:number; offset?:number; limit?:number; model?: string; layout?: string; index?:number; workspace?: string; module?: string; apiPort?: number; port?: number; name?: string; json: boolean; open: boolean; user: boolean; offline: boolean; restart:boolean; init:boolean };
+type Options = { task?:'overview'|'state'|'full'; state?:string; mode?:'architecture'|'microarchitecture'|'signals'; purpose?:string; maxBytes?:number; offset?:number; limit?:number; model?: string; layout?: string; index?:number; workspace?: string; module?: string; apiPort?: number; port?: number; name?: string; json: boolean; open: boolean; user: boolean; offline: boolean; restart:boolean; init:boolean };
 function parseArgs() {
   const options: Options = { json: false, open: false, user: false, offline: false, restart:false, init:false }, positionals: string[] = [];
   const args = process.argv.slice(2);
@@ -42,8 +43,11 @@ function parseArgs() {
     const arg = args[i];
     if (arg === '--') { positionals.push(...args.slice(i + 1)); break; }
     if (['--json', '--open', '--user', '--offline', '--restart', '--init'].includes(arg)) { options[arg.slice(2) as 'json' | 'open' | 'user' | 'offline' | 'restart' | 'init'] = true; continue; }
-    if (['--workspace', '--module', '--api-port', '--port', '--name', '--index', '--model', '--layout', '--purpose', '--max-bytes', '--offset', '--limit'].includes(arg)) {
+    if (['--workspace', '--module', '--api-port', '--port', '--name', '--index', '--model', '--layout', '--purpose', '--max-bytes', '--offset', '--limit', '--task', '--state', '--mode'].includes(arg)) {
       const value = args[++i]; if (!value || value.startsWith('--')) throw new ToolError('USAGE', `${arg} 缺少参数`);
+      if(arg==='--task'){options.task=z.enum(['overview','state','full']).parse(value);continue;}
+      if(arg==='--mode'){options.mode=z.enum(['architecture','microarchitecture','signals']).parse(value);continue;}
+      if(arg==='--state'){options.state=value;continue;}
       if(arg==='--purpose'){options.purpose=value;continue;}
       if(['--max-bytes','--offset','--limit'].includes(arg)){const key=arg==='--max-bytes'?'maxBytes':arg.slice(2) as 'offset'|'limit';options[key]=Number(value);continue;}
       if(arg==='--index'){options.index=Number(value);if(!Number.isSafeInteger(options.index)||options.index<0)throw new ToolError('USAGE','index 必须为非负整数');continue;}
@@ -70,7 +74,8 @@ async function main() {
     'observe-state':'observe-state <mapping.json> --workspace . --json（提取 RTL 状态；可选比较更新规则）',checks:'checks <bindings.json> <新目录> --workspace . --json',conform:'conform <mapping.json> --workspace . --json',assurance:'assurance [--module ID] --workspace . --json', 'context-index':'context-index [--module ID] [--offset N] [--limit N] [--max-bytes N] --offline --json',
     open:'open --workspace . [--init] [--restart] [--json]（构建、续接并打开当前页面）', resume:'resume --workspace . --json（继续工作、问题、候选与验证）',workbench:'workbench [action.json] --workspace . --json',study:'study <budget.json> --json（只读计算，保存使用 workbench）',verify:'verify <profile.json> --workspace . --json（显式运行）',runs:'runs --workspace . --json',
     'import-yosys':'import-yosys <manifest.json> <新目录> --workspace . --json', 'import-impact':'import-impact <import.json> --workspace . --json',
-    'diagram-quality':'diagram-quality [--module ID] [--model candidate.json] [--layout layout.json] --workspace . --json（只读检查，不启动服务）',
+    'replay':'replay [mapping.json] --workspace . --json（导入 verify 事务产物或只读列出）',
+    'diagram-quality':'diagram-quality [--module ID] [--model candidate.json] [--layout layout.json] [--task full|overview|state] [--state ID] [--mode architecture|microarchitecture|signals] --workspace . --json（只读检查，不启动服务）',
     evidence: 'evidence [--model candidate.json] --workspace . --json（只读，不启动服务）', bundle: 'bundle <新目录> [--model candidate.json] [--layout layout.json] --workspace . --json',
     doctor: 'doctor --workspace . --json', init: 'init --workspace . [--name 名称]', start: 'start --workspace .', stop: 'stop --workspace .',
     serve: 'serve --workspace . [--port 0] [--api-port 4317]', context: 'context [moduleId] [--module moduleId] [--index N] [--purpose design|review|implementation|debug] [--max-bytes N] [--offline] --workspace . --json',
@@ -80,9 +85,12 @@ async function main() {
     validate: 'validate --workspace . --json', spec: 'spec [moduleId] --workspace . [--json]', export: 'export spec|contract --workspace .',
     install: 'install --workspace <目标项目> 或 install --user',
   }, note: '--open 返回可直接打开的审阅链接；不自动提交或批准。不弹出浏览器，适用于终端和 WSL。' };
-  const supported = ['diagram-quality','observe-state','checks','conform','assurance','context-index','open','resume','workbench','study','verify','runs','import-yosys','import-impact','evidence', 'bundle', 'compare','doctor', 'init', 'start', 'stop', 'serve', 'context', 'schema', 'inventory', 'draft', 'preview', 'propose', 'proposals', 'handoff', 'status', 'validate', 'spec', 'export', 'install'];
+  const supported = ['replay','diagram-quality','observe-state','checks','conform','assurance','context-index','open','resume','workbench','study','verify','runs','import-yosys','import-impact','evidence', 'bundle', 'compare','doctor', 'init', 'start', 'stop', 'serve', 'context', 'schema', 'inventory', 'draft', 'preview', 'propose', 'proposals', 'handoff', 'status', 'validate', 'spec', 'export', 'install'];
   if (!supported.includes(command)) throw new ToolError('USAGE', `未知命令 ${command}，运行 rtlarch help 查看用法。`);
-  const maxArgs = ['checks','draft','compare','import-yosys'].includes(command) ? 3 : ['observe-state','conform','workbench','study','verify','import-impact','bundle', 'context', 'schema', 'inventory', 'preview', 'propose', 'handoff', 'spec', 'export'].includes(command) ? 2 : 1;
+  if((options.task||options.state||options.mode)&&command!=='diagram-quality')throw new ToolError('USAGE','--task/--state/--mode 仅用于 diagram-quality');
+  if((options.task==='state')!==!!options.state)throw new ToolError('USAGE','--task state 必须与 --state ID 同时使用');
+  if(options.mode&&options.task&&options.task!=='full')throw new ToolError('USAGE','--mode 仅用于完整硬件视图；请使用 --task full');
+  const maxArgs = ['checks','draft','compare','import-yosys'].includes(command) ? 3 : ['replay','observe-state','conform','workbench','study','verify','import-impact','bundle', 'context', 'schema', 'inventory', 'preview', 'propose', 'handoff', 'spec', 'export'].includes(command) ? 2 : 1;
   if (positionals.length > maxArgs) throw new ToolError('USAGE', '命令包含多余参数');
   if((options.purpose||options.maxBytes!==undefined||options.offset!==undefined||options.limit!==undefined)&&!['context','context-index'].includes(command))throw new ToolError('USAGE','上下文选项仅用于 context/context-index');
   if(command==='context'&&!options.purpose&&(options.maxBytes!==undefined||options.offset!==undefined||options.limit!==undefined))throw new ToolError('USAGE','局部字节预算需配合 --purpose');
@@ -103,7 +111,7 @@ async function main() {
   if(command==='compare'){
     if(!argument||!destination)throw new ToolError('USAGE','compare 需要两个模型 JSON 文件');
     const [before,after]=await Promise.all([argument,destination].map(async file=>modelSchema.parse(JSON.parse(await readFile(resolve(file),'utf8')))));
-    return {ok:true,toolVersion,command,readOnly:true,beforeHash:modelHash(before),afterHash:modelHash(after),diff:semanticDiff(before,after),impact:verificationImpact(before,after),beforeIssues:validateModel(before),afterIssues:validateModel(after),note:'候选比较不影响提交基线；提交仍须以工作区当前 hash 预览。'};
+    return {ok:true,toolVersion,command,readOnly:true,beforeHash:modelHash(before),afterHash:modelHash(after),diff:semanticDiff(before,after),summary:hardwareChangeSummary(before,after),impact:verificationImpact(before,after),beforeIssues:validateModel(before),afterIssues:validateModel(after),note:'候选比较不影响提交基线；提交仍须以工作区当前 hash 预览。'};
   }
   if(command==='study'){if(!argument)throw new ToolError('USAGE','study 需要预算文件');return {ok:true,toolVersion,...evaluateStudy(JSON.parse(await readFile(resolve(argument),'utf8')))};}
   if (command === 'schema') {
@@ -127,6 +135,7 @@ async function main() {
   if(command==='verify'){if(!argument)throw new ToolError('USAGE','verify 需要显式验证清单');const run=await runVerification(workspace,JSON.parse(await readFile(resolve(argument),'utf8')));if(run.status!=='passed')process.exitCode=1;return envelope({...run,ok:run.status==='passed',...(run.status!=='passed'?{error:{code:'VERIFICATION_FAILED',message:`验证未通过：${run.status}`}}:{})});}
   if(command==='checks'){if(!argument||!destination)throw new ToolError('USAGE','checks 需要映射与新目录');return envelope(await generateChecks(workspace,JSON.parse(await readFile(resolve(argument),'utf8')),resolve(destination)));}
   if(command==='conform'){if(!argument)throw new ToolError('USAGE','conform 需要显式映射');const report=await runConformance(workspace,JSON.parse(await readFile(resolve(argument),'utf8')));if(report.status!=='MATCH')process.exitCode=1;return envelope({...report,ok:report.status==='MATCH'});}
+  if(command==='replay')return envelope(argument?await importReplay(workspace,JSON.parse(await readFile(resolve(argument),'utf8'))):await replayRecords(workspace));
   if(command==='assurance')return envelope(await assurance(workspace,await new Repository(workspace).getModel(),options.module));
   if(command==='runs'){const current=await new Repository(workspace).getModel();return envelope({runs:await verificationRuns(workspace,current.modelHash)});}
   if(options.offline&&command==='resume')return envelope({...await new Repository(workspace).getResume(),readMode:'disk'});
@@ -148,10 +157,13 @@ async function main() {
       const blocking=validateModel(model).filter(i=>i.blocks.includes('commit'));
       if(blocking.length)throw new ToolError('MODEL_INVALID','先修正模型结构，再检查框图布局。',blocking);
       const scope=options.module??model.design.top,hash=modelHash(model);
-      const {graph,positions}=await prepareDiagram(model,scope,hash,layout?.scopes[scope]);
+      const task=options.task==='overview'?{kind:'overview' as const}:options.task==='state'?{kind:'state' as const,stateId:options.state!}:undefined;
+      const started=performance.now();
+      const {graph,positions,layoutSource,readingSource}=await prepareDiagram(model,scope,hash,layout?.scopes[scope],{task,mode:options.mode});
+      const generatedMs=performance.now()-started;
       const quality=diagramQuality(graph),ok=quality.status==='passed'&&quality.structuralFidelity.status==='passed'&&quality.readingConstraints.status!=='needs_attention';
       if(!ok)process.exitCode=1;
-      return envelope({ok,readOnly:true,modelHash:hash,scope,quality,positions,...(!ok?{error:{code:'DIAGRAM_QUALITY_FAILED',message:'图形或阅读约束需修正；详见 quality。'}}:{})});
+      return envelope({ok,readOnly:true,modelHash:hash,scope,view:{task:task??{kind:'full'},mode:graph.mode,layoutSource,readingSource,modelSource:options.model?'candidate_file':'saved_model'},generatedMs,quality,positions,...(!ok?{error:{code:'DIAGRAM_QUALITY_FAILED',message:'图形或阅读约束需修正；详见 quality。'}}:{})});
     }
     const result = await exportBundle(workspace, argument, model, snapshot, layout);
     if (!result.geometryPassed) process.exitCode = 1;

@@ -7,6 +7,10 @@ import { autoReadingLayout } from './autoReadingLayout';
 
 /** Shared online/offline layout: explicit plans take priority over automatic display hints. */
 export async function arrangeScope(model: Model, scope: string, hash: string, reading?: ScopeLayout['reading'],options:DiagramOptions={}): Promise<Positions> {
+  if(options.task){
+    if(reading&&reading.modelHash!==hash)throw new Error('阅读布局对应旧模型；核对后重试。');
+    return autoReadingLayout(model,scope,{...options,reading});
+  }
   const diagram = scopeDiagram(model, scope,{...options,measureOnly:true,reading}), nodes = diagram.nodes.filter(n => !n.data.boundary);
   const ids = new Set(nodes.map(n => n.id));
   if (!reading) return autoReadingLayout(model, scope,options);

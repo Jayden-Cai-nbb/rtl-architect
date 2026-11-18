@@ -1,0 +1,18 @@
+{
+  "ok": true,
+  "toolVersion": "2.0.0",
+  "command": "stop",
+  "workspaceRoot": "/tmp/rtlarch-cone-browser/typed-expressions",
+  "workspaceId": "1a66eab48cf171c4d91dad88948a8b4f28a35aa12212888f5ee8f42a3f6e7232",
+  "stopped": true,
+  "instanceId": "0c74bace-e1ab-4f0d-a999-6e98917686e4"
+}
+{
+  "ok": true,
+  "toolVersion": "2.0.0",
+  "command": "stop",
+  "workspaceRoot": "/tmp/rtlarch-cone-browser/state-updates",
+  "workspaceId": "3ff1df27747297dafc92454bbb4bac666332031930c9456a77807da2f7932862",
+  "stopped": true,
+  "instanceId": "6b41b48f-d489-4ce9-b109-b77d5beb1877"
+}

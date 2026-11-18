@@ -1,0 +1,18 @@
+{
+  "build": "passed",
+  "specialized": "passed",
+  "check": "passed",
+  "rtlTest": {
+    "status": "passed",
+    "scope": "tiny-stream initial fixture"
+  },
+  "browser": "passed",
+  "initialBrowserNavigation": "timeout preserved; explicit entry retest passed",
+  "sameProjectionBeforeAfter": true,
+  "modelHashesUnchanged": true,
+  "protectedFilesUnchanged": true,
+  "realWorkspaceApproval": "not performed",
+  "remoteCI": "not run",
+  "workflow": "not run",
+  "release": "not run"
+}

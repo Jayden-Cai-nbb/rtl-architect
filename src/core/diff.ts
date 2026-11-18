@@ -1,4 +1,5 @@
 import type { Model } from './schema';
+import {widthValue} from './parameters';
 export type Change = { kind: 'create' | 'delete' | 'rename' | 'update' | 'connect' | 'disconnect'; target: string; path?:string; moduleId?:string; before?: unknown; after?: unknown };
 export function stableStringify(value: unknown): string {
   if (Array.isArray(value)) return `[${value.map(stableStringify).join(',')}]`;
@@ -40,4 +41,32 @@ export function semanticDiff(before: Model, after: Model): Change[] {
     if (b) result.push({ kind: 'connect', target: id, after: b });
   }
   return result;
+}
+
+export type HardwareChange={category:'state'|'priority'|'width'|'truncation'|'connection';target:string;before:unknown;after:unknown;text:string};
+/** Reading summary only. Raw semanticDiff and ordered ASTs remain authoritative. */
+export function hardwareChangeSummary(before:Model,after:Model){
+ const collect=(m:Model)=>{
+  const values=new Map<string,{category:HardwareChange['category'];target:string;value:unknown}>();
+  const add=(category:HardwareChange['category'],target:string,value:unknown)=>values.set(category+':'+target,{category,target,value});
+  const width=(scope:string,value:Parameters<typeof widthValue>[2])=>{const owner=m.modules.find(n=>n.id===scope);try{return {declared:value,resolved:owner&&!owner.instances?widthValue(m,owner,value):null};}catch{return {declared:value,resolved:null};}};
+  const casts=(v:unknown,path:string)=>{
+   if(!v||typeof v!=='object')return;
+   if(Array.isArray(v)){v.forEach((x,i)=>casts(x,path+'/'+(x&&typeof x==='object'&&'id' in x?String(x.id):i)));return;}
+   const obj=v as Record<string,unknown>;
+   if(obj.kind==='cast'){add('width',path,{width:obj.width,signed:obj.signed,mode:obj.mode});if(obj.mode==='truncate')add('truncation',path,obj);}
+   for(const key of Object.keys(obj).sort())casts(obj[key],path+'/'+key);
+  };
+  for(const l of m.localSignals??[]){const path=l.scope+'/'+l.id;add('width',path,width(l.scope,l.width));if(l.driver.kind==='register'){add('state',path,{width:l.width,driver:l.driver});if(l.driver.update)add('priority',path,l.driver.update.branches.map(b=>b.id));}casts(l.driver,path+'/driver');}
+  for(const owner of m.modules)for(const port of owner.interfaces)add('width',owner.id+'/interface/'+port.id,width(owner.id,port.width));
+  for(const c of m.connections)add('connection',c.scope+'/'+c.id,c);
+  return values;
+ };
+ const a=collect(before),b=collect(after),items:HardwareChange[]=[];
+ const labels={state:'状态、更新、复位或保持声明',priority:'真实规则匹配顺序',width:'声明/可解析结果位宽或符号',truncation:'显式截断节点及输入顺序',connection:'连接与完整端点/位域'};
+ for(const key of [...new Set([...a.keys(),...b.keys()])].sort()){
+  const x=a.get(key),y=b.get(key);if(stableStringify(x?.value)===stableStringify(y?.value))continue;const item=y??x!;
+  items.push({category:item.category,target:item.target,before:x?.value??null,after:y?.value??null,text:`${labels[item.category]}${!x?'新增':!y?'移除':'变化'}`});
+ }
+ return {items,note:'确定性声明摘要；原始 diff 完整保留。规则优先级来自数组顺序，位宽未知/数组逐实例解析保留 null。没有推断端到端延迟、吞吐、频率或资源实测。'};
 }

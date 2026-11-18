@@ -1,0 +1,61 @@
+{
+  "id": "pair",
+  "description": "固定 REG_TYPE=1 双级有序 payload 路径；每级单槽，复位取消在途事务",
+  "clock": "clk",
+  "reset": "rst",
+  "width": 8,
+  "semantics": "ordered_lossless_single_slot_stages",
+  "resetPolicy": "cancel_all",
+  "sampling": "pre_edge_handshake_post_edge_settled",
+  "stages": [
+    {
+      "dataState": {
+        "moduleId": "stage0",
+        "localSignalId": "stage0_data_q"
+      },
+      "validState": {
+        "moduleId": "stage0",
+        "localSignalId": "stage0_valid_q"
+      },
+      "loadBranch": "load",
+      "evidenceIds": [
+        "upstream"
+      ]
+    },
+    {
+      "dataState": {
+        "moduleId": "stage1",
+        "localSignalId": "stage1_data_q"
+      },
+      "validState": {
+        "moduleId": "stage1",
+        "localSignalId": "stage1_valid_q"
+      },
+      "loadBranch": "load",
+      "evidenceIds": [
+        "upstream"
+      ]
+    }
+  ],
+  "connectionIds": [
+    "stage0_data_q",
+    "stage0_valid_q",
+    "stage0_ready_q",
+    "stage1_data_q",
+    "stage1_valid_q",
+    "stage1_ready_q",
+    "boundary_s_axis_tdata",
+    "boundary_s_axis_tvalid",
+    "boundary_s_axis_tready",
+    "boundary_m_axis_tdata",
+    "boundary_m_axis_tvalid",
+    "boundary_m_axis_tready",
+    "stage0_clk",
+    "stage1_clk",
+    "stage0_rst",
+    "stage1_rst",
+    "middle_tdata",
+    "middle_tvalid",
+    "middle_tready"
+  ]
+}

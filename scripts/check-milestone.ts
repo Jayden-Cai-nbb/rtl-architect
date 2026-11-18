@@ -42,7 +42,7 @@ try{
   const s=study(initial),r=evaluateStudy(s);assert.equal(r.options[0].cyclesLowerBound,32);assert.equal(r.options[1].cyclesLowerBound,17);assert.equal(r.options[1].intervalLowerBound,1.5);
   s.options[0].memory={words:8,width:16,copies:2,readsPerItem:1,writesPerItem:0,readPorts:0,writePorts:0};
   s.options[1].flow={producedPerCycle:2,maxStallCycles:3,inFlight:4,capacity:9};
-  const bad=evaluateStudy(s);assert.equal(bad.options[0].cyclesLowerBound,null);assert.equal(bad.options[0].storageBits,256);assert.equal(bad.options[1].requiredCapacity,10);assert.equal(bad.options[1].feasible,false);
+  const bad=evaluateStudy(s);assert.equal(bad.options[0].cyclesLowerBound,null);assert.equal(bad.options[0].storageBits,256);assert.equal(bad.options[1].requiredCapacity,10);assert.equal(bad.options[1].capacitySufficient,false);
   const huge=study(initial);huge.workItems=1e9;huge.options[0].compute.operationsPerItem=1e9;assert.throws(()=>evaluateStudy(huge));
  });
  await check('review retains a disconnected module but invalidates changed modules and parents; legacy remains conservative',async()=>{

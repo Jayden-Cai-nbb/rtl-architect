@@ -1,0 +1,28 @@
+import {chromium} from 'playwright';
+import {readFile,writeFile} from 'node:fs/promises';
+import assert from 'node:assert/strict';
+const out='/home/cjjnbb/projects/rtl-architect/docs/evidence/transaction-replay',open=JSON.parse(await readFile('/tmp/rtlarch-replay-browser/open.json','utf8'));
+const api=async(path,body)=>{const r=await fetch(open.service.apiUrl+'/api/'+path,{headers:{'Content-Type':'application/json'},...(body?{method:'POST',body:JSON.stringify(body)}:{})});assert.equal(r.status,200);return r.json()};
+const current=await api('model'),work=await api('workbench');
+if(!work.workbench.threads.length)await api('workbench',{baseHash:work.workbenchHash,action:{kind:'ask',target:{modelHash:current.modelHash,moduleId:'stage0',connectionIds:[]},title:'T0 在 E2+ 的可见条件',text:'维护用临时讨论：核对 load 与 visible 的关系。'}});
+const before=await api('model'),browser=await chromium.launch({headless:true,args:['--no-sandbox']}),page=await browser.newPage({viewport:{width:1600,height:1100}}),errors=[];page.on('pageerror',e=>errors.push(String(e)));
+const geometry=()=>page.evaluate(()=>({nodes:[...document.querySelectorAll('.react-flow__node')].map(n=>[n.dataset.id,n.style.transform,n.style.width,n.style.height]),edges:[...document.querySelectorAll('.react-flow__edge-path')].map(e=>[e.id,e.getAttribute('d')])}));
+try{
+ await page.goto(open.reviewUrl);await page.getByTestId('tab-replay').click();const replay=page.getByTestId('transaction-replay');await replay.getByRole('button',{name:'E10',exact:true}).waitFor();
+ await page.waitForTimeout(600);const g=await geometry();await replay.getByRole('button',{name:'E10',exact:true}).click();await page.waitForTimeout(250);assert.deepEqual(await geometry(),g);assert(await page.locator('.replay-location').count()>0);
+ assert.equal(await replay.locator('th').first().evaluate(e=>getComputedStyle(e).position),'sticky');
+ await page.screenshot({path:out+'/table-and-structure.png'});
+ await replay.getByRole('button',{name:'visible T0',exact:true}).first().click();assert.deepEqual(await geometry(),g);await page.getByText('T0 在 E2+ 的可见条件',{exact:false}).last().waitFor();
+ await replay.getByRole('button',{name:'查看状态更新分支',exact:true}).click();await page.getByRole('dialog',{name:'局部信号'}).waitFor();assert(await page.locator('[data-branch="load"]').getAttribute('style'));
+ await page.screenshot({path:out+'/branch.png'});await page.getByRole('dialog',{name:'局部信号'}).getByRole('button',{name:'关闭',exact:true}).click();
+ await replay.getByRole('button',{name:'源码依据 upstream',exact:true}).click();await page.waitForTimeout(400);await page.screenshot({path:out+'/source.png'});
+ await page.getByRole('button',{name:'关闭',exact:true}).last().click();
+ await replay.getByRole('button',{name:'打开该对象的讨论',exact:true}).click();assert.equal(await page.getByTestId('tab-work').getAttribute('aria-selected'),'true');
+ await page.getByTestId('tab-replay').click();await replay.getByRole('combobox',{name:'事务回放记录'}).waitFor();
+ const records=await api('replays'),failed=records.records.find(r=>r.result?.status==='FAILED');assert(failed);await replay.getByRole('combobox',{name:'事务回放记录'}).selectOption(failed.id);
+ await replay.getByRole('button',{name:'E10',exact:true}).click();assert(await replay.getByRole('button',{name:'定位状态',exact:true}).first().isDisabled());
+ await page.screenshot({path:out+'/stale-failure.png'});assert(await replay.getByText('旧模型、旧来源或候选：仅查看历史，已禁用当前结构定位。').count());
+ const manual=records.records.find(r=>r.mapping?.origin==='manual');assert(manual);await replay.getByRole('combobox',{name:'事务回放记录'}).selectOption(manual.id);assert(await replay.getByText('人工推演，非仿真证据',{exact:false}).count());
+ assert.deepEqual(errors,[]);assert.equal((await api('model')).modelHash,before.modelHash);
+ await writeFile(out+'/browser.json',JSON.stringify({checkedAt:new Date().toISOString(),buildId:open.service.buildId,modelHash:before.modelHash,geometryStable:true,eventGeometryStable:true,stickyHeader:true,locationOverlay:true,branchLinked:true,sourceOpened:true,discussionLinked:true,staleFailureRetained:true,manualDistinguished:true,errors},null,2));
+}catch(e){await page.screenshot({path:out+'/browser-failure.png'});await writeFile(out+'/browser-failure.json',JSON.stringify({error:String(e),errors},null,2));throw e;}finally{await browser.close()}

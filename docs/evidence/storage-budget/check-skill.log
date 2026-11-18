@@ -1,0 +1,16 @@
+
+> rtl-architect@2.0.0 check:skill
+> node --import tsx scripts/check-skill.ts
+
+PASS 1: doctor is read-only and reports an uninitialized workspace
+PASS 2: init creates an explicit draft and refuses to overwrite it
+PASS 3: concurrent CLI requests automatically start exactly one service for the workspace
+PASS 4: nested directories and symlinks resolve to the same workspace; module context is scoped
+PASS 5: two projects have isolated services; explicit wrong port and copied runtime record are rejected
+PASS 6: stop releases metadata and dead service locks are recovered on restart
+PASS 7: draft --open registers an immutable proposal and returns a workspace-bound review link without committing
+PASS 8: module context excludes unrelated architecture and unapproved handoff returns a stable error code
+PASS 9: registered proposals become stale after another commit and retain their original baseHash
+PASS 10: an incompatible running tool version is rejected with VERSION_MISMATCH
+PASS 11: project skill installation is idempotent and its entry works from an unrelated cwd
+完成 11 组 skill 入口检查；所有项目及服务均为临时创建。

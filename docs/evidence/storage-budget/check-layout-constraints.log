@@ -1,0 +1,14 @@
+
+> rtl-architect@2.0.0 check:layout-constraints
+> node --import tsx scripts/check-layout-constraints.ts
+
+PASS 1: pipeline: real RTL elaboration, net correspondence, three views and explicit reading constraints
+PASS 2: fork_join: real RTL elaboration, net correspondence, three views and explicit reading constraints
+PASS 3: arbiter: real RTL elaboration, net correspondence, three views and explicit reading constraints
+PASS 4: shared_ram: real RTL elaboration, net correspondence, three views and explicit reading constraints
+PASS 5: accumulator: real RTL elaboration, net correspondence, three views and explicit reading constraints
+PASS 6: fifo: real RTL elaboration, net correspondence, three views and explicit reading constraints
+PASS 7: conflicting / fabricated reading constraints are rejected, including saved positions
+PASS 8: manual displacement reports unmet constraints without moving nodes or changing semantics
+PASS 9: offline quality command: local-only scope arranged, stale layout / invalid scope rejected, no source writes
+完成 9 组布局约束检查。

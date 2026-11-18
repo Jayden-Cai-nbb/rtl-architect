@@ -1,0 +1,10 @@
+
+> rtl-architect@2.0.0 check:state-cone
+> node --import tsx scripts/check-state-cone.ts
+
+PASS scaled_q: exhaustive sign-extension → arithmetic shift, reset and hold
+PASS packed_value_q: exhaustive sign-extension → arithmetic shift → truncate, reset and hold
+PASS state-updates: explicit upstream expansion, priority and rule/checker validation
+PASS independent RTL observation source, unsupported unit / missing mapping / stale boundaries
+PASS typed-expressions: fresh verify/Yosys artifact, explicit mapping, independent observed cone
+PASS state-updates: fresh verify/Yosys artifact, explicit mapping, independent observed cone

@@ -1,0 +1,8 @@
+
+> rtl-architect@2.0.0 check:open
+> node --import tsx scripts/check-open.ts
+
+PASS 1: same-version stale sources require explicit workspace restart; a second workspace is untouched
+PASS 2: missing web build is rebuilt, identity is current and --json returns a usable URL without browser launch
+PASS 3: failed rebuild reports a saved build log, never a stale success link
+完成 3 组统一打开与升级恢复检查。

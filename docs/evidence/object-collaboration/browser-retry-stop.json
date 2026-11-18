@@ -1,0 +1,9 @@
+{
+  "ok": true,
+  "toolVersion": "2.0.0",
+  "command": "stop",
+  "workspaceRoot": "/tmp/rtlarch-object-workspace",
+  "workspaceId": "f0e1131e27d25ca43de2559088238452c853b16f21d03ea1ffd010fc64c19a63",
+  "stopped": true,
+  "instanceId": "f99b4328-1095-45b4-88be-f6535f3cd91e"
+}

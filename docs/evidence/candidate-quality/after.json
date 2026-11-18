@@ -1,0 +1,4932 @@
+[
+  {
+    "id": "typed-expressions-top-full",
+    "hash": "2cd22e38e8248095a270a45eb113ea2d37b9edd87872ccb66ecbd362c886f4bf",
+    "task": null,
+    "elapsedMs": 49.823683000000074,
+    "nodes": 8,
+    "edges": 18,
+    "quality": {
+      "readingConstraints": {
+        "status": "satisfied",
+        "issues": [],
+        "counts": {
+          "parallel": 1,
+          "shared": 0,
+          "feedback": 0
+        },
+        "note": "只核对展示约束，不证明并行时序、资源仲裁、反馈可达性或 RTL 正确性。"
+      },
+      "structuralFidelity": {
+        "status": "passed",
+        "missing": [],
+        "extra": [],
+        "duplicates": [],
+        "wrongEndpoints": [],
+        "omissions": [],
+        "note": "仅检查当前视图及聚合清单对应模型连接；折叠有明确原因，不证明 RTL 覆盖。"
+      },
+      "semanticClarity": {
+        "status": "needs_review",
+        "issues": [
+          {
+            "code": "PROVENANCE_UNKNOWN",
+            "target": "limits",
+            "reason": "unknown：只核对有限二态状态更新；未证明四态、初始状态和任意时序需求。"
+          },
+          {
+            "code": "PARTIAL_MODEL",
+            "target": "top",
+            "reason": "模型尚未完整；图中没有显示的结构不代表 RTL 中不存在。"
+          }
+        ],
+        "humanReview": "not_run"
+      },
+      "geometricReadability": {
+        "status": "needs_review",
+        "note": "交叉、共线和隐藏线名与基本几何完整性分开；仍需沿真实事务人工阅读。"
+      },
+      "sharedLabels": [],
+      "labelStatus": "needs_attention",
+      "status": "passed",
+      "overlaps": [],
+      "nodeHits": [],
+      "unrouted": [],
+      "crossings": 28,
+      "unrelatedSharedLength": 1323.2,
+      "bends": 30,
+      "wireLength": 9748.6,
+      "maxRouteLength": 954.3,
+      "routeReview": {
+        "units": "diagram_units",
+        "routes": [
+          {
+            "id": "dependency:top>scaled_q/sample_data/state_data",
+            "label": "写入值 · 采样数据",
+            "source": "rack:top:consumer",
+            "target": "local:top:scaled_q",
+            "length": 954.3,
+            "directLength": 954.3,
+            "detour": 0,
+            "ratio": 1,
+            "routed": true,
+            "connectionIds": [],
+            "dependencyEndpoints": [
+              {
+                "moduleId": "top",
+                "interfaceId": "sample"
+              }
+            ],
+            "relationMembers": []
+          },
+          {
+            "id": "dependency:top>scaled_q/load_control/state_condition",
+            "label": "更新条件 · 采样使能",
+            "source": "rack:top:consumer",
+            "target": "local:top:scaled_q",
+            "length": 939.9,
+            "directLength": 939.9,
+            "detour": 0,
+            "ratio": 1,
+            "routed": true,
+            "connectionIds": [],
+            "dependencyEndpoints": [
+              {
+                "moduleId": "top",
+                "interfaceId": "enable"
+              }
+            ],
+            "relationMembers": []
+          },
+          {
+            "id": "dependency:top>parity_q/sample_data/state_data",
+            "label": "写入值 · 采样数据",
+            "source": "rack:top:consumer",
+            "target": "local:top:parity_q",
+            "length": 932.7,
+            "directLength": 932.7,
+            "detour": 0,
+            "ratio": 1,
+            "routed": true,
+            "connectionIds": [],
+            "dependencyEndpoints": [
+              {
+                "moduleId": "top",
+                "interfaceId": "sample"
+              }
+            ],
+            "relationMembers": []
+          },
+          {
+            "id": "dependency:top>parity_q/load_control/state_condition",
+            "label": "更新条件 · 采样使能",
+            "source": "rack:top:consumer",
+            "target": "local:top:parity_q",
+            "length": 911.1,
+            "directLength": 911.1,
+            "detour": 0,
+            "ratio": 1,
+            "routed": true,
+            "connectionIds": [],
+            "dependencyEndpoints": [
+              {
+                "moduleId": "top",
+                "interfaceId": "enable"
+              }
+            ],
+            "relationMembers": []
+          },
+          {
+            "id": "dependency:top>negative_q/sample_data/state_data",
+            "label": "写入值 · 采样数据",
+            "source": "rack:top:consumer",
+            "target": "local:top:negative_q",
+            "length": 618.7,
+            "directLength": 618.7,
+            "detour": 0,
+            "ratio": 1,
+            "routed": true,
+            "connectionIds": [],
+            "dependencyEndpoints": [
+              {
+                "moduleId": "top",
+                "interfaceId": "sample"
+              }
+            ],
+            "relationMembers": []
+          },
+          {
+            "id": "dependency:top>logical_value_q/shift_control/state_data",
+            "label": "写入值 · 移位量",
+            "source": "rack:top:consumer",
+            "target": "local:top:logical_value_q",
+            "length": 611.5,
+            "directLength": 611.5,
+            "detour": 0,
+            "ratio": 1,
+            "routed": true,
+            "connectionIds": [],
+            "dependencyEndpoints": [
+              {
+                "moduleId": "top",
+                "interfaceId": "shift"
+              }
+            ],
+            "relationMembers": []
+          },
+          {
+            "id": "dependency:top>scaled_q/shift_control/state_data",
+            "label": "写入值 · 移位量",
+            "source": "rack:top:consumer",
+            "target": "local:top:scaled_q",
+            "length": 611.5,
+            "directLength": 611.5,
+            "detour": 0,
+            "ratio": 1,
+            "routed": true,
+            "connectionIds": [],
+            "dependencyEndpoints": [
+              {
+                "moduleId": "top",
+                "interfaceId": "shift"
+              }
+            ],
+            "relationMembers": []
+          },
+          {
+            "id": "dependency:top>packed_value_q/sample_data/state_data",
+            "label": "写入值 · 采样数据",
+            "source": "rack:top:consumer",
+            "target": "local:top:packed_value_q",
+            "length": 604.3,
+            "directLength": 604.3,
+            "detour": 0,
+            "ratio": 1,
+            "routed": true,
+            "connectionIds": [],
+            "dependencyEndpoints": [
+              {
+                "moduleId": "top",
+                "interfaceId": "sample"
+              }
+            ],
+            "relationMembers": []
+          },
+          {
+            "id": "dependency:top>negative_q/load_control/state_condition",
+            "label": "更新条件 · 采样使能",
+            "source": "rack:top:consumer",
+            "target": "local:top:negative_q",
+            "length": 597.1,
+            "directLength": 597.1,
+            "detour": 0,
+            "ratio": 1,
+            "routed": true,
+            "connectionIds": [],
+            "dependencyEndpoints": [
+              {
+                "moduleId": "top",
+                "interfaceId": "enable"
+              }
+            ],
+            "relationMembers": []
+          },
+          {
+            "id": "dependency:top>packed_value_q/load_control/state_condition",
+            "label": "更新条件 · 采样使能",
+            "source": "rack:top:consumer",
+            "target": "local:top:packed_value_q",
+            "length": 589.9,
+            "directLength": 589.9,
+            "detour": 0,
+            "ratio": 1,
+            "routed": true,
+            "connectionIds": [],
+            "dependencyEndpoints": [
+              {
+                "moduleId": "top",
+                "interfaceId": "enable"
+              }
+            ],
+            "relationMembers": []
+          },
+          {
+            "id": "dependency:top>packed_value_q/shift_control/state_data",
+            "label": "写入值 · 移位量",
+            "source": "rack:top:consumer",
+            "target": "local:top:packed_value_q",
+            "length": 325.5,
+            "directLength": 261.5,
+            "detour": 64,
+            "ratio": 1.2447418738049714,
+            "routed": true,
+            "connectionIds": [],
+            "dependencyEndpoints": [
+              {
+                "moduleId": "top",
+                "interfaceId": "shift"
+              }
+            ],
+            "relationMembers": []
+          },
+          {
+            "id": "relation:local:top:negative_q>rack:top:producer/local:top:negative_q/negative_result/negative_result/wire",
+            "label": "负数标志",
+            "source": "local:top:negative_q",
+            "target": "rack:top:producer",
+            "length": 309.5,
+            "directLength": 309.5,
+            "detour": 0,
+            "ratio": 1,
+            "routed": true,
+            "connectionIds": [
+              "negative_out"
+            ],
+            "dependencyEndpoints": [],
+            "relationMembers": []
+          },
+          {
+            "id": "relation:local:top:parity_q>rack:top:producer/local:top:parity_q/parity_result/parity_result/wire",
+            "label": "异或校验",
+            "source": "local:top:parity_q",
+            "target": "rack:top:producer",
+            "length": 309.5,
+            "directLength": 309.5,
+            "detour": 0,
+            "ratio": 1,
+            "routed": true,
+            "connectionIds": [
+              "parity_out"
+            ],
+            "dependencyEndpoints": [],
+            "relationMembers": []
+          },
+          {
+            "id": "relation:local:top:scaled_q>rack:top:producer/local:top:scaled_q/scaled_result/scaled_result/wire",
+            "label": "算术缩放",
+            "source": "local:top:scaled_q",
+            "target": "rack:top:producer",
+            "length": 309.5,
+            "directLength": 309.5,
+            "detour": 0,
+            "ratio": 1,
+            "routed": true,
+            "connectionIds": [
+              "scaled_out"
+            ],
+            "dependencyEndpoints": [],
+            "relationMembers": []
+          },
+          {
+            "id": "relation:local:top:packed_value_q>rack:top:producer/local:top:packed_value_q/packed_value_result/packed_value_result/wire",
+            "label": "低位打包",
+            "source": "local:top:packed_value_q",
+            "target": "rack:top:producer",
+            "length": 289.5,
+            "directLength": 289.5,
+            "detour": 0,
+            "ratio": 1,
+            "routed": true,
+            "connectionIds": [
+              "packed_value_out"
+            ],
+            "dependencyEndpoints": [],
+            "relationMembers": []
+          },
+          {
+            "id": "dependency:top>logical_value_q/load_control/state_condition",
+            "label": "更新条件 · 采样使能",
+            "source": "rack:top:consumer",
+            "target": "local:top:logical_value_q",
+            "length": 283.1,
+            "directLength": 283.1,
+            "detour": 0,
+            "ratio": 1,
+            "routed": true,
+            "connectionIds": [],
+            "dependencyEndpoints": [
+              {
+                "moduleId": "top",
+                "interfaceId": "enable"
+              }
+            ],
+            "relationMembers": []
+          },
+          {
+            "id": "relation:local:top:logical_value_q>rack:top:producer/local:top:logical_value_q/logical_value_result/logical_value_result/wire",
+            "label": "逻辑右移",
+            "source": "local:top:logical_value_q",
+            "target": "rack:top:producer",
+            "length": 282.29999999999995,
+            "directLength": 282.29999999999995,
+            "detour": 0,
+            "ratio": 1,
+            "routed": true,
+            "connectionIds": [
+              "logical_value_out"
+            ],
+            "dependencyEndpoints": [],
+            "relationMembers": []
+          },
+          {
+            "id": "dependency:top>logical_value_q/sample_data/state_data",
+            "label": "写入值 · 采样数据",
+            "source": "rack:top:consumer",
+            "target": "local:top:logical_value_q",
+            "length": 268.70000000000005,
+            "directLength": 268.70000000000005,
+            "detour": 0,
+            "ratio": 1,
+            "routed": true,
+            "connectionIds": [],
+            "dependencyEndpoints": [
+              {
+                "moduleId": "top",
+                "interfaceId": "sample"
+              }
+            ],
+            "relationMembers": []
+          }
+        ],
+        "longest": [
+          "dependency:top>scaled_q/sample_data/state_data",
+          "dependency:top>scaled_q/load_control/state_condition",
+          "dependency:top>parity_q/sample_data/state_data",
+          "dependency:top>parity_q/load_control/state_condition",
+          "dependency:top>negative_q/sample_data/state_data"
+        ],
+        "detours": [],
+        "note": "最长关系用于定位；绕行提示阈值为多走至少 256 图单位且达到端点曼哈顿距离的 2 倍，不是 RTL 时序或失败判据。"
+      },
+      "hiddenLabels": [
+        "dependency:top>logical_value_q/load_control/state_condition",
+        "dependency:top>logical_value_q/sample_data/state_data",
+        "dependency:top>packed_value_q/load_control/state_condition",
+        "dependency:top>packed_value_q/sample_data/state_data",
+        "dependency:top>packed_value_q/shift_control/state_data"
+      ],
+      "folded": {
+        "auxiliary": 0,
+        "local": 0
+      },
+      "connections": [
+        {
+          "id": "scaled_out",
+          "from": {
+            "moduleId": "top",
+            "interfaceId": "scaled_q",
+            "local": true
+          },
+          "to": {
+            "moduleId": "top",
+            "interfaceId": "scaled"
+          },
+          "retainedIn": [],
+          "visibleIn": [
+            "relation:local:top:scaled_q>rack:top:producer/local:top:scaled_q/scaled_result/scaled_result/wire"
+          ]
+        },
+        {
+          "id": "packed_value_out",
+          "from": {
+            "moduleId": "top",
+            "interfaceId": "packed_value_q",
+            "local": true
+          },
+          "to": {
+            "moduleId": "top",
+            "interfaceId": "packed_value"
+          },
+          "retainedIn": [],
+          "visibleIn": [
+            "relation:local:top:packed_value_q>rack:top:producer/local:top:packed_value_q/packed_value_result/packed_value_result/wire"
+          ]
+        },
+        {
+          "id": "logical_value_out",
+          "from": {
+            "moduleId": "top",
+            "interfaceId": "logical_value_q",
+            "local": true
+          },
+          "to": {
+            "moduleId": "top",
+            "interfaceId": "logical_value"
+          },
+          "retainedIn": [],
+          "visibleIn": [
+            "relation:local:top:logical_value_q>rack:top:producer/local:top:logical_value_q/logical_value_result/logical_value_result/wire"
+          ]
+        },
+        {
+          "id": "negative_out",
+          "from": {
+            "moduleId": "top",
+            "interfaceId": "negative_q",
+            "local": true
+          },
+          "to": {
+            "moduleId": "top",
+            "interfaceId": "negative"
+          },
+          "retainedIn": [],
+          "visibleIn": [
+            "relation:local:top:negative_q>rack:top:producer/local:top:negative_q/negative_result/negative_result/wire"
+          ]
+        },
+        {
+          "id": "parity_out",
+          "from": {
+            "moduleId": "top",
+            "interfaceId": "parity_q",
+            "local": true
+          },
+          "to": {
+            "moduleId": "top",
+            "interfaceId": "parity"
+          },
+          "retainedIn": [],
+          "visibleIn": [
+            "relation:local:top:parity_q>rack:top:producer/local:top:parity_q/parity_result/parity_result/wire"
+          ]
+        }
+      ],
+      "visualReview": "not_run",
+      "note": "几何检查不证明文字可读、硬件正确或所有交叉可辨认。"
+    }
+  },
+  {
+    "id": "typed-expressions-top-overview",
+    "hash": "2cd22e38e8248095a270a45eb113ea2d37b9edd87872ccb66ecbd362c886f4bf",
+    "task": {
+      "kind": "overview"
+    },
+    "elapsedMs": 357.8921069999999,
+    "nodes": 4,
+    "edges": 8,
+    "quality": {
+      "readingConstraints": {
+        "status": "not_requested",
+        "issues": [],
+        "counts": {
+          "parallel": 0,
+          "shared": 0,
+          "feedback": 0
+        }
+      },
+      "structuralFidelity": {
+        "status": "passed",
+        "missing": [],
+        "extra": [],
+        "duplicates": [],
+        "wrongEndpoints": [],
+        "omissions": [],
+        "note": "仅检查当前视图及聚合清单对应模型连接；折叠有明确原因，不证明 RTL 覆盖。"
+      },
+      "semanticClarity": {
+        "status": "needs_review",
+        "issues": [
+          {
+            "code": "PROVENANCE_UNKNOWN",
+            "target": "limits",
+            "reason": "unknown：只核对有限二态状态更新；未证明四态、初始状态和任意时序需求。"
+          },
+          {
+            "code": "PARTIAL_MODEL",
+            "target": "top",
+            "reason": "模型尚未完整；图中没有显示的结构不代表 RTL 中不存在。"
+          }
+        ],
+        "humanReview": "not_run"
+      },
+      "geometricReadability": {
+        "status": "needs_review",
+        "note": "交叉、共线和隐藏线名与基本几何完整性分开；仍需沿真实事务人工阅读。"
+      },
+      "sharedLabels": [],
+      "labelStatus": "named",
+      "status": "passed",
+      "overlaps": [],
+      "nodeHits": [],
+      "unrouted": [],
+      "crossings": 6,
+      "unrelatedSharedLength": 0,
+      "bends": 8,
+      "wireLength": 3272,
+      "maxRouteLength": 512,
+      "routeReview": {
+        "units": "diagram_units",
+        "routes": [
+          {
+            "id": "reading-relation:[\"rack:top:consumer\",\"aggregate:top:parallel:sample_states\",\"dependency\",\"control\",\"state_condition\",\"更新条件 · 采样使能\",\"\",\"out:load_control\",\"\"]",
+            "label": "更新条件 · 采样使能 · 5 关系",
+            "source": "rack:top:consumer",
+            "target": "aggregate:top:parallel:sample_states",
+            "length": 512,
+            "directLength": 512,
+            "detour": 0,
+            "ratio": 1,
+            "routed": true,
+            "connectionIds": [],
+            "dependencyEndpoints": [
+              {
+                "moduleId": "top",
+                "interfaceId": "enable"
+              },
+              {
+                "moduleId": "top",
+                "interfaceId": "enable"
+              },
+              {
+                "moduleId": "top",
+                "interfaceId": "enable"
+              },
+              {
+                "moduleId": "top",
+                "interfaceId": "enable"
+              },
+              {
+                "moduleId": "top",
+                "interfaceId": "enable"
+              }
+            ],
+            "relationMembers": [
+              {
+                "id": "dependency:top>logical_value_q/load_control/state_condition",
+                "source": "rack:top:consumer",
+                "target": "local:top:logical_value_q",
+                "label": "更新条件 · 采样使能",
+                "connectionIds": [],
+                "connections": [],
+                "dependencyEndpoints": [
+                  {
+                    "moduleId": "top",
+                    "interfaceId": "enable"
+                  }
+                ],
+                "localSignalId": "logical_value_q",
+                "semanticKind": "dependency"
+              },
+              {
+                "id": "dependency:top>negative_q/load_control/state_condition",
+                "source": "rack:top:consumer",
+                "target": "local:top:negative_q",
+                "label": "更新条件 · 采样使能",
+                "connectionIds": [],
+                "connections": [],
+                "dependencyEndpoints": [
+                  {
+                    "moduleId": "top",
+                    "interfaceId": "enable"
+                  }
+                ],
+                "localSignalId": "negative_q",
+                "semanticKind": "dependency"
+              },
+              {
+                "id": "dependency:top>packed_value_q/load_control/state_condition",
+                "source": "rack:top:consumer",
+                "target": "local:top:packed_value_q",
+                "label": "更新条件 · 采样使能",
+                "connectionIds": [],
+                "connections": [],
+                "dependencyEndpoints": [
+                  {
+                    "moduleId": "top",
+                    "interfaceId": "enable"
+                  }
+                ],
+                "localSignalId": "packed_value_q",
+                "semanticKind": "dependency"
+              },
+              {
+                "id": "dependency:top>parity_q/load_control/state_condition",
+                "source": "rack:top:consumer",
+                "target": "local:top:parity_q",
+                "label": "更新条件 · 采样使能",
+                "connectionIds": [],
+                "connections": [],
+                "dependencyEndpoints": [
+                  {
+                    "moduleId": "top",
+                    "interfaceId": "enable"
+                  }
+                ],
+                "localSignalId": "parity_q",
+                "semanticKind": "dependency"
+              },
+              {
+                "id": "dependency:top>scaled_q/load_control/state_condition",
+                "source": "rack:top:consumer",
+                "target": "local:top:scaled_q",
+                "label": "更新条件 · 采样使能",
+                "connectionIds": [],
+                "connections": [],
+                "dependencyEndpoints": [
+                  {
+                    "moduleId": "top",
+                    "interfaceId": "enable"
+                  }
+                ],
+                "localSignalId": "scaled_q",
+                "semanticKind": "dependency"
+              }
+            ]
+          },
+          {
+            "id": "reading-relation:[\"aggregate:top:parallel:sample_states\",\"rack:top:producer\",\"wire\",\"data\",\"\",\"负数标志\",\"\",\"\",\"in:negative_result\"]",
+            "label": "负数标志",
+            "source": "aggregate:top:parallel:sample_states",
+            "target": "rack:top:producer",
+            "length": 492,
+            "directLength": 492,
+            "detour": 0,
+            "ratio": 1,
+            "routed": true,
+            "connectionIds": [
+              "negative_out"
+            ],
+            "dependencyEndpoints": [],
+            "relationMembers": [
+              {
+                "id": "relation:local:top:negative_q>rack:top:producer/local:top:negative_q/negative_result/negative_result/wire",
+                "source": "local:top:negative_q",
+                "target": "rack:top:producer",
+                "label": "负数标志",
+                "connectionIds": [
+                  "negative_out"
+                ],
+                "connections": [
+                  {
+                    "id": "negative_out",
+                    "scope": "top",
+                    "from": {
+                      "moduleId": "top",
+                      "interfaceId": "negative_q",
+                      "local": true
+                    },
+                    "to": {
+                      "moduleId": "top",
+                      "interfaceId": "negative"
+                    }
+                  }
+                ],
+                "dependencyEndpoints": [],
+                "semanticKind": "wire"
+              }
+            ]
+          },
+          {
+            "id": "reading-relation:[\"aggregate:top:parallel:sample_states\",\"rack:top:producer\",\"wire\",\"data\",\"\",\"异或校验\",\"\",\"\",\"in:parity_result\"]",
+            "label": "异或校验",
+            "source": "aggregate:top:parallel:sample_states",
+            "target": "rack:top:producer",
+            "length": 464,
+            "directLength": 464,
+            "detour": 0,
+            "ratio": 1,
+            "routed": true,
+            "connectionIds": [
+              "parity_out"
+            ],
+            "dependencyEndpoints": [],
+            "relationMembers": [
+              {
+                "id": "relation:local:top:parity_q>rack:top:producer/local:top:parity_q/parity_result/parity_result/wire",
+                "source": "local:top:parity_q",
+                "target": "rack:top:producer",
+                "label": "异或校验",
+                "connectionIds": [
+                  "parity_out"
+                ],
+                "connections": [
+                  {
+                    "id": "parity_out",
+                    "scope": "top",
+                    "from": {
+                      "moduleId": "top",
+                      "interfaceId": "parity_q",
+                      "local": true
+                    },
+                    "to": {
+                      "moduleId": "top",
+                      "interfaceId": "parity"
+                    }
+                  }
+                ],
+                "dependencyEndpoints": [],
+                "semanticKind": "wire"
+              }
+            ]
+          },
+          {
+            "id": "reading-relation:[\"rack:top:consumer\",\"aggregate:top:parallel:sample_states\",\"dependency\",\"data\",\"state_data\",\"写入值 · 采样数据\",\"\",\"out:sample_data\",\"\"]",
+            "label": "写入值 · 采样数据 · 5 关系",
+            "source": "rack:top:consumer",
+            "target": "aggregate:top:parallel:sample_states",
+            "length": 432,
+            "directLength": 432,
+            "detour": 0,
+            "ratio": 1,
+            "routed": true,
+            "connectionIds": [],
+            "dependencyEndpoints": [
+              {
+                "moduleId": "top",
+                "interfaceId": "sample"
+              },
+              {
+                "moduleId": "top",
+                "interfaceId": "sample"
+              },
+              {
+                "moduleId": "top",
+                "interfaceId": "sample"
+              },
+              {
+                "moduleId": "top",
+                "interfaceId": "sample"
+              },
+              {
+                "moduleId": "top",
+                "interfaceId": "sample"
+              }
+            ],
+            "relationMembers": [
+              {
+                "id": "dependency:top>logical_value_q/sample_data/state_data",
+                "source": "rack:top:consumer",
+                "target": "local:top:logical_value_q",
+                "label": "写入值 · 采样数据",
+                "connectionIds": [],
+                "connections": [],
+                "dependencyEndpoints": [
+                  {
+                    "moduleId": "top",
+                    "interfaceId": "sample"
+                  }
+                ],
+                "localSignalId": "logical_value_q",
+                "semanticKind": "dependency"
+              },
+              {
+                "id": "dependency:top>negative_q/sample_data/state_data",
+                "source": "rack:top:consumer",
+                "target": "local:top:negative_q",
+                "label": "写入值 · 采样数据",
+                "connectionIds": [],
+                "connections": [],
+                "dependencyEndpoints": [
+                  {
+                    "moduleId": "top",
+                    "interfaceId": "sample"
+                  }
+                ],
+                "localSignalId": "negative_q",
+                "semanticKind": "dependency"
+              },
+              {
+                "id": "dependency:top>packed_value_q/sample_data/state_data",
+                "source": "rack:top:consumer",
+                "target": "local:top:packed_value_q",
+                "label": "写入值 · 采样数据",
+                "connectionIds": [],
+                "connections": [],
+                "dependencyEndpoints": [
+                  {
+                    "moduleId": "top",
+                    "interfaceId": "sample"
+                  }
+                ],
+                "localSignalId": "packed_value_q",
+                "semanticKind": "dependency"
+              },
+              {
+                "id": "dependency:top>parity_q/sample_data/state_data",
+                "source": "rack:top:consumer",
+                "target": "local:top:parity_q",
+                "label": "写入值 · 采样数据",
+                "connectionIds": [],
+                "connections": [],
+                "dependencyEndpoints": [
+                  {
+                    "moduleId": "top",
+                    "interfaceId": "sample"
+                  }
+                ],
+                "localSignalId": "parity_q",
+                "semanticKind": "dependency"
+              },
+              {
+                "id": "dependency:top>scaled_q/sample_data/state_data",
+                "source": "rack:top:consumer",
+                "target": "local:top:scaled_q",
+                "label": "写入值 · 采样数据",
+                "connectionIds": [],
+                "connections": [],
+                "dependencyEndpoints": [
+                  {
+                    "moduleId": "top",
+                    "interfaceId": "sample"
+                  }
+                ],
+                "localSignalId": "scaled_q",
+                "semanticKind": "dependency"
+              }
+            ]
+          },
+          {
+            "id": "reading-relation:[\"rack:top:consumer\",\"aggregate:top:parallel:sample_states\",\"dependency\",\"control\",\"state_data\",\"写入值 · 移位量\",\"\",\"out:shift_control\",\"\"]",
+            "label": "写入值 · 移位量 · 3 关系",
+            "source": "rack:top:consumer",
+            "target": "aggregate:top:parallel:sample_states",
+            "length": 352,
+            "directLength": 352,
+            "detour": 0,
+            "ratio": 1,
+            "routed": true,
+            "connectionIds": [],
+            "dependencyEndpoints": [
+              {
+                "moduleId": "top",
+                "interfaceId": "shift"
+              },
+              {
+                "moduleId": "top",
+                "interfaceId": "shift"
+              },
+              {
+                "moduleId": "top",
+                "interfaceId": "shift"
+              }
+            ],
+            "relationMembers": [
+              {
+                "id": "dependency:top>logical_value_q/shift_control/state_data",
+                "source": "rack:top:consumer",
+                "target": "local:top:logical_value_q",
+                "label": "写入值 · 移位量",
+                "connectionIds": [],
+                "connections": [],
+                "dependencyEndpoints": [
+                  {
+                    "moduleId": "top",
+                    "interfaceId": "shift"
+                  }
+                ],
+                "localSignalId": "logical_value_q",
+                "semanticKind": "dependency"
+              },
+              {
+                "id": "dependency:top>packed_value_q/shift_control/state_data",
+                "source": "rack:top:consumer",
+                "target": "local:top:packed_value_q",
+                "label": "写入值 · 移位量",
+                "connectionIds": [],
+                "connections": [],
+                "dependencyEndpoints": [
+                  {
+                    "moduleId": "top",
+                    "interfaceId": "shift"
+                  }
+                ],
+                "localSignalId": "packed_value_q",
+                "semanticKind": "dependency"
+              },
+              {
+                "id": "dependency:top>scaled_q/shift_control/state_data",
+                "source": "rack:top:consumer",
+                "target": "local:top:scaled_q",
+                "label": "写入值 · 移位量",
+                "connectionIds": [],
+                "connections": [],
+                "dependencyEndpoints": [
+                  {
+                    "moduleId": "top",
+                    "interfaceId": "shift"
+                  }
+                ],
+                "localSignalId": "scaled_q",
+                "semanticKind": "dependency"
+              }
+            ]
+          },
+          {
+            "id": "reading-relation:[\"aggregate:top:parallel:sample_states\",\"rack:top:producer\",\"wire\",\"data\",\"\",\"低位打包\",\"\",\"\",\"in:packed_value_result\"]",
+            "label": "低位打包",
+            "source": "aggregate:top:parallel:sample_states",
+            "target": "rack:top:producer",
+            "length": 340,
+            "directLength": 340,
+            "detour": 0,
+            "ratio": 1,
+            "routed": true,
+            "connectionIds": [
+              "packed_value_out"
+            ],
+            "dependencyEndpoints": [],
+            "relationMembers": [
+              {
+                "id": "relation:local:top:packed_value_q>rack:top:producer/local:top:packed_value_q/packed_value_result/packed_value_result/wire",
+                "source": "local:top:packed_value_q",
+                "target": "rack:top:producer",
+                "label": "低位打包",
+                "connectionIds": [
+                  "packed_value_out"
+                ],
+                "connections": [
+                  {
+                    "id": "packed_value_out",
+                    "scope": "top",
+                    "from": {
+                      "moduleId": "top",
+                      "interfaceId": "packed_value_q",
+                      "local": true
+                    },
+                    "to": {
+                      "moduleId": "top",
+                      "interfaceId": "packed_value"
+                    }
+                  }
+                ],
+                "dependencyEndpoints": [],
+                "semanticKind": "wire"
+              }
+            ]
+          },
+          {
+            "id": "reading-relation:[\"aggregate:top:parallel:sample_states\",\"rack:top:producer\",\"wire\",\"data\",\"\",\"算术缩放\",\"\",\"\",\"in:scaled_result\"]",
+            "label": "算术缩放",
+            "source": "aggregate:top:parallel:sample_states",
+            "target": "rack:top:producer",
+            "length": 340,
+            "directLength": 340,
+            "detour": 0,
+            "ratio": 1,
+            "routed": true,
+            "connectionIds": [
+              "scaled_out"
+            ],
+            "dependencyEndpoints": [],
+            "relationMembers": [
+              {
+                "id": "relation:local:top:scaled_q>rack:top:producer/local:top:scaled_q/scaled_result/scaled_result/wire",
+                "source": "local:top:scaled_q",
+                "target": "rack:top:producer",
+                "label": "算术缩放",
+                "connectionIds": [
+                  "scaled_out"
+                ],
+                "connections": [
+                  {
+                    "id": "scaled_out",
+                    "scope": "top",
+                    "from": {
+                      "moduleId": "top",
+                      "interfaceId": "scaled_q",
+                      "local": true
+                    },
+                    "to": {
+                      "moduleId": "top",
+                      "interfaceId": "scaled"
+                    }
+                  }
+                ],
+                "dependencyEndpoints": [],
+                "semanticKind": "wire"
+              }
+            ]
+          },
+          {
+            "id": "reading-relation:[\"aggregate:top:parallel:sample_states\",\"rack:top:producer\",\"wire\",\"data\",\"\",\"逻辑右移\",\"\",\"\",\"in:logical_value_result\"]",
+            "label": "逻辑右移",
+            "source": "aggregate:top:parallel:sample_states",
+            "target": "rack:top:producer",
+            "length": 340,
+            "directLength": 340,
+            "detour": 0,
+            "ratio": 1,
+            "routed": true,
+            "connectionIds": [
+              "logical_value_out"
+            ],
+            "dependencyEndpoints": [],
+            "relationMembers": [
+              {
+                "id": "relation:local:top:logical_value_q>rack:top:producer/local:top:logical_value_q/logical_value_result/logical_value_result/wire",
+                "source": "local:top:logical_value_q",
+                "target": "rack:top:producer",
+                "label": "逻辑右移",
+                "connectionIds": [
+                  "logical_value_out"
+                ],
+                "connections": [
+                  {
+                    "id": "logical_value_out",
+                    "scope": "top",
+                    "from": {
+                      "moduleId": "top",
+                      "interfaceId": "logical_value_q",
+                      "local": true
+                    },
+                    "to": {
+                      "moduleId": "top",
+                      "interfaceId": "logical_value"
+                    }
+                  }
+                ],
+                "dependencyEndpoints": [],
+                "semanticKind": "wire"
+              }
+            ]
+          }
+        ],
+        "longest": [
+          "reading-relation:[\"rack:top:consumer\",\"aggregate:top:parallel:sample_states\",\"dependency\",\"control\",\"state_condition\",\"更新条件 · 采样使能\",\"\",\"out:load_control\",\"\"]",
+          "reading-relation:[\"aggregate:top:parallel:sample_states\",\"rack:top:producer\",\"wire\",\"data\",\"\",\"负数标志\",\"\",\"\",\"in:negative_result\"]",
+          "reading-relation:[\"aggregate:top:parallel:sample_states\",\"rack:top:producer\",\"wire\",\"data\",\"\",\"异或校验\",\"\",\"\",\"in:parity_result\"]",
+          "reading-relation:[\"rack:top:consumer\",\"aggregate:top:parallel:sample_states\",\"dependency\",\"data\",\"state_data\",\"写入值 · 采样数据\",\"\",\"out:sample_data\",\"\"]",
+          "reading-relation:[\"rack:top:consumer\",\"aggregate:top:parallel:sample_states\",\"dependency\",\"control\",\"state_data\",\"写入值 · 移位量\",\"\",\"out:shift_control\",\"\"]"
+        ],
+        "detours": [],
+        "note": "最长关系用于定位；绕行提示阈值为多走至少 256 图单位且达到端点曼哈顿距离的 2 倍，不是 RTL 时序或失败判据。"
+      },
+      "hiddenLabels": [],
+      "folded": {
+        "auxiliary": 5,
+        "local": 0
+      },
+      "connections": [
+        {
+          "id": "scaled_out",
+          "from": {
+            "moduleId": "top",
+            "interfaceId": "scaled_q",
+            "local": true
+          },
+          "to": {
+            "moduleId": "top",
+            "interfaceId": "scaled"
+          },
+          "retainedIn": [],
+          "visibleIn": [
+            "reading-relation:[\"aggregate:top:parallel:sample_states\",\"rack:top:producer\",\"wire\",\"data\",\"\",\"算术缩放\",\"\",\"\",\"in:scaled_result\"]"
+          ]
+        },
+        {
+          "id": "packed_value_out",
+          "from": {
+            "moduleId": "top",
+            "interfaceId": "packed_value_q",
+            "local": true
+          },
+          "to": {
+            "moduleId": "top",
+            "interfaceId": "packed_value"
+          },
+          "retainedIn": [],
+          "visibleIn": [
+            "reading-relation:[\"aggregate:top:parallel:sample_states\",\"rack:top:producer\",\"wire\",\"data\",\"\",\"低位打包\",\"\",\"\",\"in:packed_value_result\"]"
+          ]
+        },
+        {
+          "id": "logical_value_out",
+          "from": {
+            "moduleId": "top",
+            "interfaceId": "logical_value_q",
+            "local": true
+          },
+          "to": {
+            "moduleId": "top",
+            "interfaceId": "logical_value"
+          },
+          "retainedIn": [],
+          "visibleIn": [
+            "reading-relation:[\"aggregate:top:parallel:sample_states\",\"rack:top:producer\",\"wire\",\"data\",\"\",\"逻辑右移\",\"\",\"\",\"in:logical_value_result\"]"
+          ]
+        },
+        {
+          "id": "negative_out",
+          "from": {
+            "moduleId": "top",
+            "interfaceId": "negative_q",
+            "local": true
+          },
+          "to": {
+            "moduleId": "top",
+            "interfaceId": "negative"
+          },
+          "retainedIn": [],
+          "visibleIn": [
+            "reading-relation:[\"aggregate:top:parallel:sample_states\",\"rack:top:producer\",\"wire\",\"data\",\"\",\"负数标志\",\"\",\"\",\"in:negative_result\"]"
+          ]
+        },
+        {
+          "id": "parity_out",
+          "from": {
+            "moduleId": "top",
+            "interfaceId": "parity_q",
+            "local": true
+          },
+          "to": {
+            "moduleId": "top",
+            "interfaceId": "parity"
+          },
+          "retainedIn": [],
+          "visibleIn": [
+            "reading-relation:[\"aggregate:top:parallel:sample_states\",\"rack:top:producer\",\"wire\",\"data\",\"\",\"异或校验\",\"\",\"\",\"in:parity_result\"]"
+          ]
+        }
+      ],
+      "visualReview": "not_run",
+      "note": "几何检查不证明文字可读、硬件正确或所有交叉可辨认。"
+    }
+  },
+  {
+    "id": "typed-expressions-top-state",
+    "hash": "2cd22e38e8248095a270a45eb113ea2d37b9edd87872ccb66ecbd362c886f4bf",
+    "task": {
+      "kind": "state",
+      "stateId": "scaled_q"
+    },
+    "elapsedMs": 39.24447200000009,
+    "nodes": 5,
+    "edges": 4,
+    "quality": {
+      "readingConstraints": {
+        "status": "not_requested",
+        "issues": [],
+        "counts": {
+          "parallel": 0,
+          "shared": 0,
+          "feedback": 0
+        }
+      },
+      "structuralFidelity": {
+        "status": "passed",
+        "missing": [],
+        "extra": [],
+        "duplicates": [],
+        "wrongEndpoints": [],
+        "omissions": [],
+        "note": "仅检查当前视图及聚合清单对应模型连接；折叠有明确原因，不证明 RTL 覆盖。"
+      },
+      "semanticClarity": {
+        "status": "needs_review",
+        "issues": [
+          {
+            "code": "PROVENANCE_UNKNOWN",
+            "target": "limits",
+            "reason": "unknown：只核对有限二态状态更新；未证明四态、初始状态和任意时序需求。"
+          },
+          {
+            "code": "PARTIAL_MODEL",
+            "target": "top",
+            "reason": "模型尚未完整；图中没有显示的结构不代表 RTL 中不存在。"
+          }
+        ],
+        "humanReview": "not_run"
+      },
+      "geometricReadability": {
+        "status": "needs_review",
+        "note": "交叉、共线和隐藏线名与基本几何完整性分开；仍需沿真实事务人工阅读。"
+      },
+      "sharedLabels": [],
+      "labelStatus": "named",
+      "status": "passed",
+      "overlaps": [],
+      "nodeHits": [],
+      "unrouted": [],
+      "crossings": 3,
+      "unrelatedSharedLength": 0,
+      "bends": 4,
+      "wireLength": 1636,
+      "maxRouteLength": 512,
+      "routeReview": {
+        "units": "diagram_units",
+        "routes": [
+          {
+            "id": "dependency:top>scaled_q/load_control/state_condition",
+            "label": "更新条件 · 采样使能",
+            "source": "rack:top:consumer",
+            "target": "local:top:scaled_q",
+            "length": 512,
+            "directLength": 512,
+            "detour": 0,
+            "ratio": 1,
+            "routed": true,
+            "connectionIds": [],
+            "dependencyEndpoints": [
+              {
+                "moduleId": "top",
+                "interfaceId": "enable"
+              }
+            ],
+            "relationMembers": [
+              {
+                "id": "dependency:top>scaled_q/load_control/state_condition",
+                "source": "rack:top:consumer",
+                "target": "local:top:scaled_q",
+                "label": "更新条件 · 采样使能",
+                "connectionIds": [],
+                "connections": [],
+                "dependencyEndpoints": [
+                  {
+                    "moduleId": "top",
+                    "interfaceId": "enable"
+                  }
+                ],
+                "localSignalId": "scaled_q",
+                "semanticKind": "dependency"
+              }
+            ]
+          },
+          {
+            "id": "dependency:top>scaled_q/sample_data/state_data",
+            "label": "写入值 · 采样数据",
+            "source": "rack:top:consumer",
+            "target": "local:top:scaled_q",
+            "length": 432,
+            "directLength": 432,
+            "detour": 0,
+            "ratio": 1,
+            "routed": true,
+            "connectionIds": [],
+            "dependencyEndpoints": [
+              {
+                "moduleId": "top",
+                "interfaceId": "sample"
+              }
+            ],
+            "relationMembers": [
+              {
+                "id": "dependency:top>scaled_q/sample_data/state_data",
+                "source": "rack:top:consumer",
+                "target": "local:top:scaled_q",
+                "label": "写入值 · 采样数据",
+                "connectionIds": [],
+                "connections": [],
+                "dependencyEndpoints": [
+                  {
+                    "moduleId": "top",
+                    "interfaceId": "sample"
+                  }
+                ],
+                "localSignalId": "scaled_q",
+                "semanticKind": "dependency"
+              }
+            ]
+          },
+          {
+            "id": "dependency:top>scaled_q/shift_control/state_data",
+            "label": "写入值 · 移位量",
+            "source": "rack:top:consumer",
+            "target": "local:top:scaled_q",
+            "length": 352,
+            "directLength": 352,
+            "detour": 0,
+            "ratio": 1,
+            "routed": true,
+            "connectionIds": [],
+            "dependencyEndpoints": [
+              {
+                "moduleId": "top",
+                "interfaceId": "shift"
+              }
+            ],
+            "relationMembers": [
+              {
+                "id": "dependency:top>scaled_q/shift_control/state_data",
+                "source": "rack:top:consumer",
+                "target": "local:top:scaled_q",
+                "label": "写入值 · 移位量",
+                "connectionIds": [],
+                "connections": [],
+                "dependencyEndpoints": [
+                  {
+                    "moduleId": "top",
+                    "interfaceId": "shift"
+                  }
+                ],
+                "localSignalId": "scaled_q",
+                "semanticKind": "dependency"
+              }
+            ]
+          },
+          {
+            "id": "relation:local:top:scaled_q>rack:top:producer/local:top:scaled_q/scaled_result/scaled_result/wire",
+            "label": "算术缩放",
+            "source": "local:top:scaled_q",
+            "target": "rack:top:producer",
+            "length": 340,
+            "directLength": 340,
+            "detour": 0,
+            "ratio": 1,
+            "routed": true,
+            "connectionIds": [
+              "scaled_out"
+            ],
+            "dependencyEndpoints": [],
+            "relationMembers": [
+              {
+                "id": "relation:local:top:scaled_q>rack:top:producer/local:top:scaled_q/scaled_result/scaled_result/wire",
+                "source": "local:top:scaled_q",
+                "target": "rack:top:producer",
+                "label": "算术缩放",
+                "connectionIds": [
+                  "scaled_out"
+                ],
+                "connections": [
+                  {
+                    "id": "scaled_out",
+                    "scope": "top",
+                    "from": {
+                      "moduleId": "top",
+                      "interfaceId": "scaled_q",
+                      "local": true
+                    },
+                    "to": {
+                      "moduleId": "top",
+                      "interfaceId": "scaled"
+                    }
+                  }
+                ],
+                "dependencyEndpoints": [],
+                "semanticKind": "wire"
+              }
+            ]
+          }
+        ],
+        "longest": [
+          "dependency:top>scaled_q/load_control/state_condition",
+          "dependency:top>scaled_q/sample_data/state_data",
+          "dependency:top>scaled_q/shift_control/state_data",
+          "relation:local:top:scaled_q>rack:top:producer/local:top:scaled_q/scaled_result/scaled_result/wire"
+        ],
+        "detours": [],
+        "note": "最长关系用于定位；绕行提示阈值为多走至少 256 图单位且达到端点曼哈顿距离的 2 倍，不是 RTL 时序或失败判据。"
+      },
+      "hiddenLabels": [],
+      "folded": {
+        "auxiliary": 1,
+        "local": 0
+      },
+      "connections": [
+        {
+          "id": "scaled_out",
+          "from": {
+            "moduleId": "top",
+            "interfaceId": "scaled_q",
+            "local": true
+          },
+          "to": {
+            "moduleId": "top",
+            "interfaceId": "scaled"
+          },
+          "retainedIn": [],
+          "visibleIn": [
+            "relation:local:top:scaled_q>rack:top:producer/local:top:scaled_q/scaled_result/scaled_result/wire"
+          ]
+        },
+        {
+          "id": "packed_value_out",
+          "from": {
+            "moduleId": "top",
+            "interfaceId": "packed_value_q",
+            "local": true
+          },
+          "to": {
+            "moduleId": "top",
+            "interfaceId": "packed_value"
+          },
+          "retainedIn": [
+            "aggregate:top:context"
+          ],
+          "visibleIn": []
+        },
+        {
+          "id": "logical_value_out",
+          "from": {
+            "moduleId": "top",
+            "interfaceId": "logical_value_q",
+            "local": true
+          },
+          "to": {
+            "moduleId": "top",
+            "interfaceId": "logical_value"
+          },
+          "retainedIn": [
+            "aggregate:top:context"
+          ],
+          "visibleIn": []
+        },
+        {
+          "id": "negative_out",
+          "from": {
+            "moduleId": "top",
+            "interfaceId": "negative_q",
+            "local": true
+          },
+          "to": {
+            "moduleId": "top",
+            "interfaceId": "negative"
+          },
+          "retainedIn": [
+            "aggregate:top:context"
+          ],
+          "visibleIn": []
+        },
+        {
+          "id": "parity_out",
+          "from": {
+            "moduleId": "top",
+            "interfaceId": "parity_q",
+            "local": true
+          },
+          "to": {
+            "moduleId": "top",
+            "interfaceId": "parity"
+          },
+          "retainedIn": [
+            "aggregate:top:context"
+          ],
+          "visibleIn": []
+        }
+      ],
+      "visualReview": "not_run",
+      "note": "几何检查不证明文字可读、硬件正确或所有交叉可辨认。"
+    }
+  },
+  {
+    "id": "external-axis-top-full",
+    "hash": "0c376d420bf9f3aab4c18449e23b548cfae3e9c039fc138099d39011d5f0b8e9",
+    "task": null,
+    "elapsedMs": 56.1150869999999,
+    "nodes": 5,
+    "edges": 9,
+    "quality": {
+      "readingConstraints": {
+        "status": "not_requested",
+        "issues": [],
+        "counts": {
+          "parallel": 0,
+          "shared": 0,
+          "feedback": 0
+        }
+      },
+      "structuralFidelity": {
+        "status": "passed",
+        "missing": [],
+        "extra": [],
+        "duplicates": [],
+        "wrongEndpoints": [],
+        "omissions": [
+          {
+            "connectionId": "stage0_clk",
+            "reason": "显式时钟/配置折叠"
+          },
+          {
+            "connectionId": "stage1_clk",
+            "reason": "显式时钟/配置折叠"
+          },
+          {
+            "connectionId": "stage0_rst",
+            "reason": "显式时钟/配置折叠"
+          },
+          {
+            "connectionId": "stage1_rst",
+            "reason": "显式时钟/配置折叠"
+          }
+        ],
+        "note": "仅检查当前视图及聚合清单对应模型连接；折叠有明确原因，不证明 RTL 覆盖。"
+      },
+      "semanticClarity": {
+        "status": "needs_review",
+        "issues": [
+          {
+            "code": "PARTIAL_MODEL",
+            "target": "top",
+            "reason": "模型尚未完整；图中没有显示的结构不代表 RTL 中不存在。"
+          }
+        ],
+        "humanReview": "not_run"
+      },
+      "geometricReadability": {
+        "status": "needs_review",
+        "note": "交叉、共线和隐藏线名与基本几何完整性分开；仍需沿真实事务人工阅读。"
+      },
+      "sharedLabels": [],
+      "labelStatus": "named",
+      "status": "passed",
+      "overlaps": [],
+      "nodeHits": [],
+      "unrouted": [],
+      "crossings": 6,
+      "unrelatedSharedLength": 278,
+      "bends": 22,
+      "wireLength": 4981.4,
+      "maxRouteLength": 1154,
+      "routeReview": {
+        "units": "diagram_units",
+        "routes": [
+          {
+            "id": "relation:stage0>rack:top:producer/control/control/control/wire",
+            "label": "握手控制",
+            "source": "stage0",
+            "target": "rack:top:producer",
+            "length": 1154,
+            "directLength": 714,
+            "detour": 440,
+            "ratio": 1.6162464985994398,
+            "routed": true,
+            "connectionIds": [
+              "boundary_s_axis_tready"
+            ],
+            "dependencyEndpoints": [],
+            "relationMembers": []
+          },
+          {
+            "id": "relation:rack:top:consumer>stage1/control/control/control/wire",
+            "label": "握手控制",
+            "source": "rack:top:consumer",
+            "target": "stage1",
+            "length": 1141,
+            "directLength": 737,
+            "detour": 404,
+            "ratio": 1.548168249660787,
+            "routed": true,
+            "connectionIds": [
+              "boundary_m_axis_tready"
+            ],
+            "dependencyEndpoints": [],
+            "relationMembers": []
+          },
+          {
+            "id": "relation:stage1>rack:top:producer/control/control/control/wire",
+            "label": "握手控制",
+            "source": "stage1",
+            "target": "rack:top:producer",
+            "length": 793.6,
+            "directLength": 449.6,
+            "detour": 344,
+            "ratio": 1.7651245551601422,
+            "routed": true,
+            "connectionIds": [
+              "boundary_m_axis_tvalid"
+            ],
+            "dependencyEndpoints": [],
+            "relationMembers": []
+          },
+          {
+            "id": "relation:rack:top:consumer>stage0/control/control/control/wire",
+            "label": "握手控制",
+            "source": "rack:top:consumer",
+            "target": "stage0",
+            "length": 576.6,
+            "directLength": 448.6,
+            "detour": 128,
+            "ratio": 1.2853321444493981,
+            "routed": true,
+            "connectionIds": [
+              "boundary_s_axis_tvalid"
+            ],
+            "dependencyEndpoints": [],
+            "relationMembers": []
+          },
+          {
+            "id": "relation:stage1>stage0/control/control/control/wire",
+            "label": "握手控制",
+            "source": "stage1",
+            "target": "stage0",
+            "length": 380.4,
+            "directLength": 380.4,
+            "detour": 0,
+            "ratio": 1,
+            "routed": true,
+            "connectionIds": [
+              "middle_tready"
+            ],
+            "dependencyEndpoints": [],
+            "relationMembers": []
+          },
+          {
+            "id": "relation:stage0>stage1/control/control/control/wire",
+            "label": "握手控制",
+            "source": "stage0",
+            "target": "stage1",
+            "length": 300.4,
+            "directLength": 300.4,
+            "detour": 0,
+            "ratio": 1,
+            "routed": true,
+            "connectionIds": [
+              "middle_tvalid"
+            ],
+            "dependencyEndpoints": [],
+            "relationMembers": []
+          },
+          {
+            "id": "relation:stage0>stage1/payload/payload/payload/wire",
+            "label": "数据",
+            "source": "stage0",
+            "target": "stage1",
+            "length": 300.4,
+            "directLength": 300.4,
+            "detour": 0,
+            "ratio": 1,
+            "routed": true,
+            "connectionIds": [
+              "middle_tdata"
+            ],
+            "dependencyEndpoints": [],
+            "relationMembers": []
+          },
+          {
+            "id": "relation:rack:top:consumer>stage0/payload/payload/payload/wire",
+            "label": "数据",
+            "source": "rack:top:consumer",
+            "target": "stage0",
+            "length": 175,
+            "directLength": 175,
+            "detour": 0,
+            "ratio": 1,
+            "routed": true,
+            "connectionIds": [
+              "boundary_s_axis_tdata"
+            ],
+            "dependencyEndpoints": [],
+            "relationMembers": []
+          },
+          {
+            "id": "relation:stage1>rack:top:producer/payload/payload/payload/wire",
+            "label": "数据",
+            "source": "stage1",
+            "target": "rack:top:producer",
+            "length": 160,
+            "directLength": 160,
+            "detour": 0,
+            "ratio": 1,
+            "routed": true,
+            "connectionIds": [
+              "boundary_m_axis_tdata"
+            ],
+            "dependencyEndpoints": [],
+            "relationMembers": []
+          }
+        ],
+        "longest": [
+          "relation:stage0>rack:top:producer/control/control/control/wire",
+          "relation:rack:top:consumer>stage1/control/control/control/wire",
+          "relation:stage1>rack:top:producer/control/control/control/wire",
+          "relation:rack:top:consumer>stage0/control/control/control/wire",
+          "relation:stage1>stage0/control/control/control/wire"
+        ],
+        "detours": [],
+        "note": "最长关系用于定位；绕行提示阈值为多走至少 256 图单位且达到端点曼哈顿距离的 2 倍，不是 RTL 时序或失败判据。"
+      },
+      "hiddenLabels": [],
+      "folded": {
+        "auxiliary": 4,
+        "local": 0
+      },
+      "connections": [
+        {
+          "id": "boundary_s_axis_tdata",
+          "from": {
+            "moduleId": "top",
+            "interfaceId": "s_axis_tdata"
+          },
+          "to": {
+            "moduleId": "stage0",
+            "interfaceId": "s_axis_tdata"
+          },
+          "retainedIn": [],
+          "visibleIn": [
+            "relation:rack:top:consumer>stage0/payload/payload/payload/wire"
+          ]
+        },
+        {
+          "id": "boundary_s_axis_tvalid",
+          "from": {
+            "moduleId": "top",
+            "interfaceId": "s_axis_tvalid"
+          },
+          "to": {
+            "moduleId": "stage0",
+            "interfaceId": "s_axis_tvalid"
+          },
+          "retainedIn": [],
+          "visibleIn": [
+            "relation:rack:top:consumer>stage0/control/control/control/wire"
+          ]
+        },
+        {
+          "id": "boundary_s_axis_tready",
+          "from": {
+            "moduleId": "stage0",
+            "interfaceId": "s_axis_tready"
+          },
+          "to": {
+            "moduleId": "top",
+            "interfaceId": "s_axis_tready"
+          },
+          "retainedIn": [],
+          "visibleIn": [
+            "relation:stage0>rack:top:producer/control/control/control/wire"
+          ]
+        },
+        {
+          "id": "boundary_m_axis_tdata",
+          "from": {
+            "moduleId": "stage1",
+            "interfaceId": "m_axis_tdata"
+          },
+          "to": {
+            "moduleId": "top",
+            "interfaceId": "m_axis_tdata"
+          },
+          "retainedIn": [],
+          "visibleIn": [
+            "relation:stage1>rack:top:producer/payload/payload/payload/wire"
+          ]
+        },
+        {
+          "id": "boundary_m_axis_tvalid",
+          "from": {
+            "moduleId": "stage1",
+            "interfaceId": "m_axis_tvalid"
+          },
+          "to": {
+            "moduleId": "top",
+            "interfaceId": "m_axis_tvalid"
+          },
+          "retainedIn": [],
+          "visibleIn": [
+            "relation:stage1>rack:top:producer/control/control/control/wire"
+          ]
+        },
+        {
+          "id": "boundary_m_axis_tready",
+          "from": {
+            "moduleId": "top",
+            "interfaceId": "m_axis_tready"
+          },
+          "to": {
+            "moduleId": "stage1",
+            "interfaceId": "m_axis_tready"
+          },
+          "retainedIn": [],
+          "visibleIn": [
+            "relation:rack:top:consumer>stage1/control/control/control/wire"
+          ]
+        },
+        {
+          "id": "stage0_clk",
+          "from": {
+            "moduleId": "top",
+            "interfaceId": "clk"
+          },
+          "to": {
+            "moduleId": "stage0",
+            "interfaceId": "clk"
+          },
+          "retainedIn": [],
+          "visibleIn": []
+        },
+        {
+          "id": "stage1_clk",
+          "from": {
+            "moduleId": "top",
+            "interfaceId": "clk"
+          },
+          "to": {
+            "moduleId": "stage1",
+            "interfaceId": "clk"
+          },
+          "retainedIn": [],
+          "visibleIn": []
+        },
+        {
+          "id": "stage0_rst",
+          "from": {
+            "moduleId": "top",
+            "interfaceId": "rst"
+          },
+          "to": {
+            "moduleId": "stage0",
+            "interfaceId": "rst"
+          },
+          "retainedIn": [],
+          "visibleIn": []
+        },
+        {
+          "id": "stage1_rst",
+          "from": {
+            "moduleId": "top",
+            "interfaceId": "rst"
+          },
+          "to": {
+            "moduleId": "stage1",
+            "interfaceId": "rst"
+          },
+          "retainedIn": [],
+          "visibleIn": []
+        },
+        {
+          "id": "middle_tdata",
+          "from": {
+            "moduleId": "stage0",
+            "interfaceId": "m_axis_tdata"
+          },
+          "to": {
+            "moduleId": "stage1",
+            "interfaceId": "s_axis_tdata"
+          },
+          "retainedIn": [],
+          "visibleIn": [
+            "relation:stage0>stage1/payload/payload/payload/wire"
+          ]
+        },
+        {
+          "id": "middle_tvalid",
+          "from": {
+            "moduleId": "stage0",
+            "interfaceId": "m_axis_tvalid"
+          },
+          "to": {
+            "moduleId": "stage1",
+            "interfaceId": "s_axis_tvalid"
+          },
+          "retainedIn": [],
+          "visibleIn": [
+            "relation:stage0>stage1/control/control/control/wire"
+          ]
+        },
+        {
+          "id": "middle_tready",
+          "from": {
+            "moduleId": "stage1",
+            "interfaceId": "s_axis_tready"
+          },
+          "to": {
+            "moduleId": "stage0",
+            "interfaceId": "m_axis_tready"
+          },
+          "retainedIn": [],
+          "visibleIn": [
+            "relation:stage1>stage0/control/control/control/wire"
+          ]
+        }
+      ],
+      "visualReview": "not_run",
+      "note": "几何检查不证明文字可读、硬件正确或所有交叉可辨认。"
+    }
+  },
+  {
+    "id": "external-axis-top-overview",
+    "hash": "0c376d420bf9f3aab4c18449e23b548cfae3e9c039fc138099d39011d5f0b8e9",
+    "task": {
+      "kind": "overview"
+    },
+    "elapsedMs": 43.40608300000008,
+    "nodes": 5,
+    "edges": 9,
+    "quality": {
+      "readingConstraints": {
+        "status": "not_requested",
+        "issues": [],
+        "counts": {
+          "parallel": 0,
+          "shared": 0,
+          "feedback": 0
+        }
+      },
+      "structuralFidelity": {
+        "status": "passed",
+        "missing": [],
+        "extra": [],
+        "duplicates": [],
+        "wrongEndpoints": [],
+        "omissions": [
+          {
+            "connectionId": "stage0_clk",
+            "reason": "显式时钟/配置折叠；阅读清单保留原始成员"
+          },
+          {
+            "connectionId": "stage0_rst",
+            "reason": "显式时钟/配置折叠；阅读清单保留原始成员"
+          },
+          {
+            "connectionId": "stage1_clk",
+            "reason": "显式时钟/配置折叠；阅读清单保留原始成员"
+          },
+          {
+            "connectionId": "stage1_rst",
+            "reason": "显式时钟/配置折叠；阅读清单保留原始成员"
+          }
+        ],
+        "note": "仅检查当前视图及聚合清单对应模型连接；折叠有明确原因，不证明 RTL 覆盖。"
+      },
+      "semanticClarity": {
+        "status": "needs_review",
+        "issues": [
+          {
+            "code": "PARTIAL_MODEL",
+            "target": "top",
+            "reason": "模型尚未完整；图中没有显示的结构不代表 RTL 中不存在。"
+          }
+        ],
+        "humanReview": "not_run"
+      },
+      "geometricReadability": {
+        "status": "needs_review",
+        "note": "交叉、共线和隐藏线名与基本几何完整性分开；仍需沿真实事务人工阅读。"
+      },
+      "sharedLabels": [],
+      "labelStatus": "named",
+      "status": "passed",
+      "overlaps": [],
+      "nodeHits": [],
+      "unrouted": [],
+      "crossings": 4,
+      "unrelatedSharedLength": 64,
+      "bends": 16,
+      "wireLength": 4980,
+      "maxRouteLength": 1132,
+      "routeReview": {
+        "units": "diagram_units",
+        "routes": [
+          {
+            "id": "relation:stage0>rack:top:producer/control/control/control/wire",
+            "label": "握手控制",
+            "source": "stage0",
+            "target": "rack:top:producer",
+            "length": 1132,
+            "directLength": 780,
+            "detour": 352,
+            "ratio": 1.4512820512820512,
+            "routed": true,
+            "connectionIds": [
+              "boundary_s_axis_tready"
+            ],
+            "dependencyEndpoints": [],
+            "relationMembers": [
+              {
+                "id": "relation:stage0>rack:top:producer/control/control/control/wire",
+                "source": "stage0",
+                "target": "rack:top:producer",
+                "label": "握手控制",
+                "connectionIds": [
+                  "boundary_s_axis_tready"
+                ],
+                "connections": [
+                  {
+                    "id": "boundary_s_axis_tready",
+                    "scope": "top",
+                    "from": {
+                      "moduleId": "stage0",
+                      "interfaceId": "s_axis_tready"
+                    },
+                    "to": {
+                      "moduleId": "top",
+                      "interfaceId": "s_axis_tready"
+                    }
+                  }
+                ],
+                "dependencyEndpoints": [],
+                "semanticKind": "wire"
+              }
+            ]
+          },
+          {
+            "id": "relation:stage1>stage0/control/control/control/wire",
+            "label": "握手控制",
+            "source": "stage1",
+            "target": "stage0",
+            "length": 1080,
+            "directLength": 700,
+            "detour": 380,
+            "ratio": 1.542857142857143,
+            "routed": true,
+            "connectionIds": [
+              "middle_tready"
+            ],
+            "dependencyEndpoints": [],
+            "relationMembers": [
+              {
+                "id": "relation:stage1>stage0/control/control/control/wire",
+                "source": "stage1",
+                "target": "stage0",
+                "label": "握手控制",
+                "connectionIds": [
+                  "middle_tready"
+                ],
+                "connections": [
+                  {
+                    "id": "middle_tready",
+                    "scope": "top",
+                    "from": {
+                      "moduleId": "stage1",
+                      "interfaceId": "s_axis_tready"
+                    },
+                    "to": {
+                      "moduleId": "stage0",
+                      "interfaceId": "m_axis_tready"
+                    }
+                  }
+                ],
+                "dependencyEndpoints": [],
+                "semanticKind": "wire"
+              }
+            ]
+          },
+          {
+            "id": "relation:rack:top:consumer>stage1/control/control/control/wire",
+            "label": "握手控制",
+            "source": "rack:top:consumer",
+            "target": "stage1",
+            "length": 936,
+            "directLength": 872,
+            "detour": 64,
+            "ratio": 1.073394495412844,
+            "routed": true,
+            "connectionIds": [
+              "boundary_m_axis_tready"
+            ],
+            "dependencyEndpoints": [],
+            "relationMembers": [
+              {
+                "id": "relation:rack:top:consumer>stage1/control/control/control/wire",
+                "source": "rack:top:consumer",
+                "target": "stage1",
+                "label": "握手控制",
+                "connectionIds": [
+                  "boundary_m_axis_tready"
+                ],
+                "connections": [
+                  {
+                    "id": "boundary_m_axis_tready",
+                    "scope": "top",
+                    "from": {
+                      "moduleId": "top",
+                      "interfaceId": "m_axis_tready"
+                    },
+                    "to": {
+                      "moduleId": "stage1",
+                      "interfaceId": "m_axis_tready"
+                    }
+                  }
+                ],
+                "dependencyEndpoints": [],
+                "semanticKind": "wire"
+              }
+            ]
+          },
+          {
+            "id": "relation:rack:top:consumer>stage0/control/control/control/wire",
+            "label": "握手控制",
+            "source": "rack:top:consumer",
+            "target": "stage0",
+            "length": 432,
+            "directLength": 432,
+            "detour": 0,
+            "ratio": 1,
+            "routed": true,
+            "connectionIds": [
+              "boundary_s_axis_tvalid"
+            ],
+            "dependencyEndpoints": [],
+            "relationMembers": [
+              {
+                "id": "relation:rack:top:consumer>stage0/control/control/control/wire",
+                "source": "rack:top:consumer",
+                "target": "stage0",
+                "label": "握手控制",
+                "connectionIds": [
+                  "boundary_s_axis_tvalid"
+                ],
+                "connections": [
+                  {
+                    "id": "boundary_s_axis_tvalid",
+                    "scope": "top",
+                    "from": {
+                      "moduleId": "top",
+                      "interfaceId": "s_axis_tvalid"
+                    },
+                    "to": {
+                      "moduleId": "stage0",
+                      "interfaceId": "s_axis_tvalid"
+                    }
+                  }
+                ],
+                "dependencyEndpoints": [],
+                "semanticKind": "wire"
+              }
+            ]
+          },
+          {
+            "id": "relation:rack:top:consumer>stage0/payload/payload/payload/wire",
+            "label": "数据",
+            "source": "rack:top:consumer",
+            "target": "stage0",
+            "length": 352,
+            "directLength": 352,
+            "detour": 0,
+            "ratio": 1,
+            "routed": true,
+            "connectionIds": [
+              "boundary_s_axis_tdata"
+            ],
+            "dependencyEndpoints": [],
+            "relationMembers": [
+              {
+                "id": "relation:rack:top:consumer>stage0/payload/payload/payload/wire",
+                "source": "rack:top:consumer",
+                "target": "stage0",
+                "label": "数据",
+                "connectionIds": [
+                  "boundary_s_axis_tdata"
+                ],
+                "connections": [
+                  {
+                    "id": "boundary_s_axis_tdata",
+                    "scope": "top",
+                    "from": {
+                      "moduleId": "top",
+                      "interfaceId": "s_axis_tdata"
+                    },
+                    "to": {
+                      "moduleId": "stage0",
+                      "interfaceId": "s_axis_tdata"
+                    }
+                  }
+                ],
+                "dependencyEndpoints": [],
+                "semanticKind": "wire"
+              }
+            ]
+          },
+          {
+            "id": "relation:stage1>rack:top:producer/payload/payload/payload/wire",
+            "label": "数据",
+            "source": "stage1",
+            "target": "rack:top:producer",
+            "length": 348,
+            "directLength": 348,
+            "detour": 0,
+            "ratio": 1,
+            "routed": true,
+            "connectionIds": [
+              "boundary_m_axis_tdata"
+            ],
+            "dependencyEndpoints": [],
+            "relationMembers": [
+              {
+                "id": "relation:stage1>rack:top:producer/payload/payload/payload/wire",
+                "source": "stage1",
+                "target": "rack:top:producer",
+                "label": "数据",
+                "connectionIds": [
+                  "boundary_m_axis_tdata"
+                ],
+                "connections": [
+                  {
+                    "id": "boundary_m_axis_tdata",
+                    "scope": "top",
+                    "from": {
+                      "moduleId": "stage1",
+                      "interfaceId": "m_axis_tdata"
+                    },
+                    "to": {
+                      "moduleId": "top",
+                      "interfaceId": "m_axis_tdata"
+                    }
+                  }
+                ],
+                "dependencyEndpoints": [],
+                "semanticKind": "wire"
+              }
+            ]
+          },
+          {
+            "id": "relation:stage1>rack:top:producer/control/control/control/wire",
+            "label": "握手控制",
+            "source": "stage1",
+            "target": "rack:top:producer",
+            "length": 340,
+            "directLength": 340,
+            "detour": 0,
+            "ratio": 1,
+            "routed": true,
+            "connectionIds": [
+              "boundary_m_axis_tvalid"
+            ],
+            "dependencyEndpoints": [],
+            "relationMembers": [
+              {
+                "id": "relation:stage1>rack:top:producer/control/control/control/wire",
+                "source": "stage1",
+                "target": "rack:top:producer",
+                "label": "握手控制",
+                "connectionIds": [
+                  "boundary_m_axis_tvalid"
+                ],
+                "connections": [
+                  {
+                    "id": "boundary_m_axis_tvalid",
+                    "scope": "top",
+                    "from": {
+                      "moduleId": "stage1",
+                      "interfaceId": "m_axis_tvalid"
+                    },
+                    "to": {
+                      "moduleId": "top",
+                      "interfaceId": "m_axis_tvalid"
+                    }
+                  }
+                ],
+                "dependencyEndpoints": [],
+                "semanticKind": "wire"
+              }
+            ]
+          },
+          {
+            "id": "relation:stage0>stage1/control/control/control/wire",
+            "label": "握手控制",
+            "source": "stage0",
+            "target": "stage1",
+            "length": 180,
+            "directLength": 180,
+            "detour": 0,
+            "ratio": 1,
+            "routed": true,
+            "connectionIds": [
+              "middle_tvalid"
+            ],
+            "dependencyEndpoints": [],
+            "relationMembers": [
+              {
+                "id": "relation:stage0>stage1/control/control/control/wire",
+                "source": "stage0",
+                "target": "stage1",
+                "label": "握手控制",
+                "connectionIds": [
+                  "middle_tvalid"
+                ],
+                "connections": [
+                  {
+                    "id": "middle_tvalid",
+                    "scope": "top",
+                    "from": {
+                      "moduleId": "stage0",
+                      "interfaceId": "m_axis_tvalid"
+                    },
+                    "to": {
+                      "moduleId": "stage1",
+                      "interfaceId": "s_axis_tvalid"
+                    }
+                  }
+                ],
+                "dependencyEndpoints": [],
+                "semanticKind": "wire"
+              }
+            ]
+          },
+          {
+            "id": "relation:stage0>stage1/payload/payload/payload/wire",
+            "label": "数据",
+            "source": "stage0",
+            "target": "stage1",
+            "length": 180,
+            "directLength": 180,
+            "detour": 0,
+            "ratio": 1,
+            "routed": true,
+            "connectionIds": [
+              "middle_tdata"
+            ],
+            "dependencyEndpoints": [],
+            "relationMembers": [
+              {
+                "id": "relation:stage0>stage1/payload/payload/payload/wire",
+                "source": "stage0",
+                "target": "stage1",
+                "label": "数据",
+                "connectionIds": [
+                  "middle_tdata"
+                ],
+                "connections": [
+                  {
+                    "id": "middle_tdata",
+                    "scope": "top",
+                    "from": {
+                      "moduleId": "stage0",
+                      "interfaceId": "m_axis_tdata"
+                    },
+                    "to": {
+                      "moduleId": "stage1",
+                      "interfaceId": "s_axis_tdata"
+                    }
+                  }
+                ],
+                "dependencyEndpoints": [],
+                "semanticKind": "wire"
+              }
+            ]
+          }
+        ],
+        "longest": [
+          "relation:stage0>rack:top:producer/control/control/control/wire",
+          "relation:stage1>stage0/control/control/control/wire",
+          "relation:rack:top:consumer>stage1/control/control/control/wire",
+          "relation:rack:top:consumer>stage0/control/control/control/wire",
+          "relation:rack:top:consumer>stage0/payload/payload/payload/wire"
+        ],
+        "detours": [],
+        "note": "最长关系用于定位；绕行提示阈值为多走至少 256 图单位且达到端点曼哈顿距离的 2 倍，不是 RTL 时序或失败判据。"
+      },
+      "hiddenLabels": [],
+      "folded": {
+        "auxiliary": 2,
+        "local": 0
+      },
+      "connections": [
+        {
+          "id": "boundary_s_axis_tdata",
+          "from": {
+            "moduleId": "top",
+            "interfaceId": "s_axis_tdata"
+          },
+          "to": {
+            "moduleId": "stage0",
+            "interfaceId": "s_axis_tdata"
+          },
+          "retainedIn": [],
+          "visibleIn": [
+            "relation:rack:top:consumer>stage0/payload/payload/payload/wire"
+          ]
+        },
+        {
+          "id": "boundary_s_axis_tvalid",
+          "from": {
+            "moduleId": "top",
+            "interfaceId": "s_axis_tvalid"
+          },
+          "to": {
+            "moduleId": "stage0",
+            "interfaceId": "s_axis_tvalid"
+          },
+          "retainedIn": [],
+          "visibleIn": [
+            "relation:rack:top:consumer>stage0/control/control/control/wire"
+          ]
+        },
+        {
+          "id": "boundary_s_axis_tready",
+          "from": {
+            "moduleId": "stage0",
+            "interfaceId": "s_axis_tready"
+          },
+          "to": {
+            "moduleId": "top",
+            "interfaceId": "s_axis_tready"
+          },
+          "retainedIn": [],
+          "visibleIn": [
+            "relation:stage0>rack:top:producer/control/control/control/wire"
+          ]
+        },
+        {
+          "id": "boundary_m_axis_tdata",
+          "from": {
+            "moduleId": "stage1",
+            "interfaceId": "m_axis_tdata"
+          },
+          "to": {
+            "moduleId": "top",
+            "interfaceId": "m_axis_tdata"
+          },
+          "retainedIn": [],
+          "visibleIn": [
+            "relation:stage1>rack:top:producer/payload/payload/payload/wire"
+          ]
+        },
+        {
+          "id": "boundary_m_axis_tvalid",
+          "from": {
+            "moduleId": "stage1",
+            "interfaceId": "m_axis_tvalid"
+          },
+          "to": {
+            "moduleId": "top",
+            "interfaceId": "m_axis_tvalid"
+          },
+          "retainedIn": [],
+          "visibleIn": [
+            "relation:stage1>rack:top:producer/control/control/control/wire"
+          ]
+        },
+        {
+          "id": "boundary_m_axis_tready",
+          "from": {
+            "moduleId": "top",
+            "interfaceId": "m_axis_tready"
+          },
+          "to": {
+            "moduleId": "stage1",
+            "interfaceId": "m_axis_tready"
+          },
+          "retainedIn": [],
+          "visibleIn": [
+            "relation:rack:top:consumer>stage1/control/control/control/wire"
+          ]
+        },
+        {
+          "id": "stage0_clk",
+          "from": {
+            "moduleId": "top",
+            "interfaceId": "clk"
+          },
+          "to": {
+            "moduleId": "stage0",
+            "interfaceId": "clk"
+          },
+          "retainedIn": [],
+          "visibleIn": []
+        },
+        {
+          "id": "stage1_clk",
+          "from": {
+            "moduleId": "top",
+            "interfaceId": "clk"
+          },
+          "to": {
+            "moduleId": "stage1",
+            "interfaceId": "clk"
+          },
+          "retainedIn": [],
+          "visibleIn": []
+        },
+        {
+          "id": "stage0_rst",
+          "from": {
+            "moduleId": "top",
+            "interfaceId": "rst"
+          },
+          "to": {
+            "moduleId": "stage0",
+            "interfaceId": "rst"
+          },
+          "retainedIn": [],
+          "visibleIn": []
+        },
+        {
+          "id": "stage1_rst",
+          "from": {
+            "moduleId": "top",
+            "interfaceId": "rst"
+          },
+          "to": {
+            "moduleId": "stage1",
+            "interfaceId": "rst"
+          },
+          "retainedIn": [],
+          "visibleIn": []
+        },
+        {
+          "id": "middle_tdata",
+          "from": {
+            "moduleId": "stage0",
+            "interfaceId": "m_axis_tdata"
+          },
+          "to": {
+            "moduleId": "stage1",
+            "interfaceId": "s_axis_tdata"
+          },
+          "retainedIn": [],
+          "visibleIn": [
+            "relation:stage0>stage1/payload/payload/payload/wire"
+          ]
+        },
+        {
+          "id": "middle_tvalid",
+          "from": {
+            "moduleId": "stage0",
+            "interfaceId": "m_axis_tvalid"
+          },
+          "to": {
+            "moduleId": "stage1",
+            "interfaceId": "s_axis_tvalid"
+          },
+          "retainedIn": [],
+          "visibleIn": [
+            "relation:stage0>stage1/control/control/control/wire"
+          ]
+        },
+        {
+          "id": "middle_tready",
+          "from": {
+            "moduleId": "stage1",
+            "interfaceId": "s_axis_tready"
+          },
+          "to": {
+            "moduleId": "stage0",
+            "interfaceId": "m_axis_tready"
+          },
+          "retainedIn": [],
+          "visibleIn": [
+            "relation:stage1>stage0/control/control/control/wire"
+          ]
+        }
+      ],
+      "visualReview": "not_run",
+      "note": "几何检查不证明文字可读、硬件正确或所有交叉可辨认。"
+    }
+  },
+  {
+    "id": "external-axis-stage0-full",
+    "hash": "0c376d420bf9f3aab4c18449e23b548cfae3e9c039fc138099d39011d5f0b8e9",
+    "task": null,
+    "elapsedMs": 81.61489800000004,
+    "nodes": 6,
+    "edges": 11,
+    "quality": {
+      "readingConstraints": {
+        "status": "not_requested",
+        "issues": [],
+        "counts": {
+          "parallel": 0,
+          "shared": 0,
+          "feedback": 0
+        }
+      },
+      "structuralFidelity": {
+        "status": "passed",
+        "missing": [],
+        "extra": [],
+        "duplicates": [],
+        "wrongEndpoints": [],
+        "omissions": [],
+        "note": "仅检查当前视图及聚合清单对应模型连接；折叠有明确原因，不证明 RTL 覆盖。"
+      },
+      "semanticClarity": {
+        "status": "needs_review",
+        "issues": [
+          {
+            "code": "PARTIAL_MODEL",
+            "target": "stage0",
+            "reason": "模型尚未完整；图中没有显示的结构不代表 RTL 中不存在。"
+          }
+        ],
+        "humanReview": "not_run"
+      },
+      "geometricReadability": {
+        "status": "needs_review",
+        "note": "交叉、共线和隐藏线名与基本几何完整性分开；仍需沿真实事务人工阅读。"
+      },
+      "sharedLabels": [],
+      "labelStatus": "named",
+      "status": "passed",
+      "overlaps": [],
+      "nodeHits": [],
+      "unrouted": [],
+      "crossings": 5,
+      "unrelatedSharedLength": 321.3333333333333,
+      "bends": 24,
+      "wireLength": 7545.133333333332,
+      "maxRouteLength": 1177.3333333333333,
+      "routeReview": {
+        "units": "diagram_units",
+        "routes": [
+          {
+            "id": "dependency:stage0>stage0_valid_q/control/state_data",
+            "label": "写入值 · 握手控制",
+            "source": "rack:stage0:consumer",
+            "target": "local:stage0:stage0_valid_q",
+            "length": 1177.3333333333333,
+            "directLength": 1113.3333333333333,
+            "detour": 64,
+            "ratio": 1.0574850299401197,
+            "routed": true,
+            "connectionIds": [],
+            "dependencyEndpoints": [
+              {
+                "moduleId": "stage0",
+                "interfaceId": "s_axis_tvalid"
+              }
+            ],
+            "relationMembers": []
+          },
+          {
+            "id": "dependency:stage0>stage0_valid_q/control/state_condition",
+            "label": "更新条件 · 握手控制",
+            "source": "rack:stage0:consumer",
+            "target": "local:stage0:stage0_valid_q",
+            "length": 1141.3333333333333,
+            "directLength": 1077.3333333333333,
+            "detour": 64,
+            "ratio": 1.0594059405940595,
+            "routed": true,
+            "connectionIds": [],
+            "dependencyEndpoints": [
+              {
+                "moduleId": "stage0",
+                "interfaceId": "m_axis_tready"
+              }
+            ],
+            "relationMembers": []
+          },
+          {
+            "id": "relation:local:stage0:stage0_ready_q>rack:stage0:producer/local:stage0:stage0_ready_q/control/control/wire",
+            "label": "握手控制",
+            "source": "local:stage0:stage0_ready_q",
+            "target": "rack:stage0:producer",
+            "length": 1090.6,
+            "directLength": 1090.6,
+            "detour": 0,
+            "ratio": 1,
+            "routed": true,
+            "connectionIds": [
+              "stage0_ready_q"
+            ],
+            "dependencyEndpoints": [],
+            "relationMembers": []
+          },
+          {
+            "id": "dependency:stage0>stage0_data_q/payload/state_data",
+            "label": "写入值 · 数据",
+            "source": "rack:stage0:consumer",
+            "target": "local:stage0:stage0_data_q",
+            "length": 1028,
+            "directLength": 1028,
+            "detour": 0,
+            "ratio": 1,
+            "routed": true,
+            "connectionIds": [],
+            "dependencyEndpoints": [
+              {
+                "moduleId": "stage0",
+                "interfaceId": "s_axis_tdata"
+              }
+            ],
+            "relationMembers": []
+          },
+          {
+            "id": "dependency:local:stage0:stage0_valid_q>stage0_ready_q/local:stage0:stage0_valid_q/state_data",
+            "label": "写入值 · stage0_valid_q",
+            "source": "local:stage0:stage0_valid_q",
+            "target": "local:stage0:stage0_ready_q",
+            "length": 673,
+            "directLength": 609,
+            "detour": 64,
+            "ratio": 1.1050903119868638,
+            "routed": true,
+            "connectionIds": [],
+            "dependencyEndpoints": [
+              {
+                "moduleId": "stage0",
+                "interfaceId": "stage0_valid_q",
+                "local": true
+              }
+            ],
+            "relationMembers": []
+          },
+          {
+            "id": "dependency:local:stage0:stage0_ready_q>stage0_valid_q/local:stage0:stage0_ready_q/state_condition",
+            "label": "更新条件 · stage0_ready_q",
+            "source": "local:stage0:stage0_ready_q",
+            "target": "local:stage0:stage0_valid_q",
+            "length": 609,
+            "directLength": 609,
+            "detour": 0,
+            "ratio": 1,
+            "routed": true,
+            "connectionIds": [],
+            "dependencyEndpoints": [
+              {
+                "moduleId": "stage0",
+                "interfaceId": "stage0_ready_q",
+                "local": true
+              }
+            ],
+            "relationMembers": []
+          },
+          {
+            "id": "dependency:local:stage0:stage0_ready_q>stage0_data_q/local:stage0:stage0_ready_q/state_condition",
+            "label": "更新条件 · stage0_ready_q",
+            "source": "local:stage0:stage0_ready_q",
+            "target": "local:stage0:stage0_data_q",
+            "length": 601,
+            "directLength": 601,
+            "detour": 0,
+            "ratio": 1,
+            "routed": true,
+            "connectionIds": [],
+            "dependencyEndpoints": [
+              {
+                "moduleId": "stage0",
+                "interfaceId": "stage0_ready_q",
+                "local": true
+              }
+            ],
+            "relationMembers": []
+          },
+          {
+            "id": "dependency:stage0>stage0_ready_q/control/state_data",
+            "label": "写入值 · 握手控制 · 2 项",
+            "source": "rack:stage0:consumer",
+            "target": "local:stage0:stage0_ready_q",
+            "length": 441.6666666666667,
+            "directLength": 441.6666666666667,
+            "detour": 0,
+            "ratio": 1,
+            "routed": true,
+            "connectionIds": [],
+            "dependencyEndpoints": [
+              {
+                "moduleId": "stage0",
+                "interfaceId": "m_axis_tready"
+              },
+              {
+                "moduleId": "stage0",
+                "interfaceId": "s_axis_tvalid"
+              }
+            ],
+            "relationMembers": []
+          },
+          {
+            "id": "relation:local:stage0:stage0_valid_q>rack:stage0:producer/local:stage0:stage0_valid_q/control/control/wire",
+            "label": "握手控制",
+            "source": "local:stage0:stage0_valid_q",
+            "target": "rack:stage0:producer",
+            "length": 383.9999999999999,
+            "directLength": 383.9999999999999,
+            "detour": 0,
+            "ratio": 1,
+            "routed": true,
+            "connectionIds": [
+              "stage0_valid_q"
+            ],
+            "dependencyEndpoints": [],
+            "relationMembers": []
+          },
+          {
+            "id": "relation:local:stage0:stage0_data_q>rack:stage0:producer/local:stage0:stage0_data_q/payload/payload/wire",
+            "label": "数据",
+            "source": "local:stage0:stage0_data_q",
+            "target": "rack:stage0:producer",
+            "length": 299.1999999999998,
+            "directLength": 299.1999999999998,
+            "detour": 0,
+            "ratio": 1,
+            "routed": true,
+            "connectionIds": [
+              "stage0_data_q"
+            ],
+            "dependencyEndpoints": [],
+            "relationMembers": []
+          },
+          {
+            "id": "dependency:local:stage0:stage0_ready_q>stage0_ready_q/local:stage0:stage0_ready_q/state_data",
+            "label": "写入值 · stage0_ready_q",
+            "source": "local:stage0:stage0_ready_q",
+            "target": "local:stage0:stage0_ready_q",
+            "length": 100,
+            "directLength": 36,
+            "detour": 64,
+            "ratio": 2.7777777777777777,
+            "routed": true,
+            "connectionIds": [],
+            "dependencyEndpoints": [
+              {
+                "moduleId": "stage0",
+                "interfaceId": "stage0_ready_q",
+                "local": true
+              }
+            ],
+            "relationMembers": []
+          }
+        ],
+        "longest": [
+          "dependency:stage0>stage0_valid_q/control/state_data",
+          "dependency:stage0>stage0_valid_q/control/state_condition",
+          "relation:local:stage0:stage0_ready_q>rack:stage0:producer/local:stage0:stage0_ready_q/control/control/wire",
+          "dependency:stage0>stage0_data_q/payload/state_data",
+          "dependency:local:stage0:stage0_valid_q>stage0_ready_q/local:stage0:stage0_valid_q/state_data"
+        ],
+        "detours": [],
+        "note": "最长关系用于定位；绕行提示阈值为多走至少 256 图单位且达到端点曼哈顿距离的 2 倍，不是 RTL 时序或失败判据。"
+      },
+      "hiddenLabels": [],
+      "folded": {
+        "auxiliary": 0,
+        "local": 0
+      },
+      "connections": [
+        {
+          "id": "stage0_data_q",
+          "from": {
+            "moduleId": "stage0",
+            "interfaceId": "stage0_data_q",
+            "local": true
+          },
+          "to": {
+            "moduleId": "stage0",
+            "interfaceId": "m_axis_tdata"
+          },
+          "retainedIn": [],
+          "visibleIn": [
+            "relation:local:stage0:stage0_data_q>rack:stage0:producer/local:stage0:stage0_data_q/payload/payload/wire"
+          ]
+        },
+        {
+          "id": "stage0_valid_q",
+          "from": {
+            "moduleId": "stage0",
+            "interfaceId": "stage0_valid_q",
+            "local": true
+          },
+          "to": {
+            "moduleId": "stage0",
+            "interfaceId": "m_axis_tvalid"
+          },
+          "retainedIn": [],
+          "visibleIn": [
+            "relation:local:stage0:stage0_valid_q>rack:stage0:producer/local:stage0:stage0_valid_q/control/control/wire"
+          ]
+        },
+        {
+          "id": "stage0_ready_q",
+          "from": {
+            "moduleId": "stage0",
+            "interfaceId": "stage0_ready_q",
+            "local": true
+          },
+          "to": {
+            "moduleId": "stage0",
+            "interfaceId": "s_axis_tready"
+          },
+          "retainedIn": [],
+          "visibleIn": [
+            "relation:local:stage0:stage0_ready_q>rack:stage0:producer/local:stage0:stage0_ready_q/control/control/wire"
+          ]
+        }
+      ],
+      "visualReview": "not_run",
+      "note": "几何检查不证明文字可读、硬件正确或所有交叉可辨认。"
+    }
+  },
+  {
+    "id": "external-axis-stage0-overview",
+    "hash": "0c376d420bf9f3aab4c18449e23b548cfae3e9c039fc138099d39011d5f0b8e9",
+    "task": {
+      "kind": "overview"
+    },
+    "elapsedMs": 18.787251000000197,
+    "nodes": 4,
+    "edges": 6,
+    "quality": {
+      "readingConstraints": {
+        "status": "not_requested",
+        "issues": [],
+        "counts": {
+          "parallel": 0,
+          "shared": 0,
+          "feedback": 0
+        }
+      },
+      "structuralFidelity": {
+        "status": "passed",
+        "missing": [],
+        "extra": [],
+        "duplicates": [],
+        "wrongEndpoints": [],
+        "omissions": [],
+        "note": "仅检查当前视图及聚合清单对应模型连接；折叠有明确原因，不证明 RTL 覆盖。"
+      },
+      "semanticClarity": {
+        "status": "needs_review",
+        "issues": [
+          {
+            "code": "PARTIAL_MODEL",
+            "target": "stage0",
+            "reason": "模型尚未完整；图中没有显示的结构不代表 RTL 中不存在。"
+          }
+        ],
+        "humanReview": "not_run"
+      },
+      "geometricReadability": {
+        "status": "needs_review",
+        "note": "交叉、共线和隐藏线名与基本几何完整性分开；仍需沿真实事务人工阅读。"
+      },
+      "sharedLabels": [],
+      "labelStatus": "named",
+      "status": "passed",
+      "overlaps": [],
+      "nodeHits": [],
+      "unrouted": [],
+      "crossings": 0,
+      "unrelatedSharedLength": 96,
+      "bends": 6,
+      "wireLength": 2168,
+      "maxRouteLength": 388,
+      "routeReview": {
+        "units": "diagram_units",
+        "routes": [
+          {
+            "id": "reading-relation:[\"rack:stage0:consumer\",\"aggregate:stage0:states\",\"dependency\",\"control\",\"state_data\",\"写入值 · 握手控制 · 2 项\",\"\",\"out:control\",\"\"]",
+            "label": "写入值 · 握手控制 · 2 项",
+            "source": "rack:stage0:consumer",
+            "target": "aggregate:stage0:states",
+            "length": 388,
+            "directLength": 388,
+            "detour": 0,
+            "ratio": 1,
+            "routed": true,
+            "connectionIds": [],
+            "dependencyEndpoints": [
+              {
+                "moduleId": "stage0",
+                "interfaceId": "m_axis_tready"
+              },
+              {
+                "moduleId": "stage0",
+                "interfaceId": "s_axis_tvalid"
+              }
+            ],
+            "relationMembers": [
+              {
+                "id": "dependency:stage0>stage0_ready_q/control/state_data",
+                "source": "rack:stage0:consumer",
+                "target": "local:stage0:stage0_ready_q",
+                "label": "写入值 · 握手控制 · 2 项",
+                "connectionIds": [],
+                "connections": [],
+                "dependencyEndpoints": [
+                  {
+                    "moduleId": "stage0",
+                    "interfaceId": "m_axis_tready"
+                  },
+                  {
+                    "moduleId": "stage0",
+                    "interfaceId": "s_axis_tvalid"
+                  }
+                ],
+                "localSignalId": "stage0_ready_q",
+                "semanticKind": "dependency"
+              }
+            ]
+          },
+          {
+            "id": "reading-relation:[\"rack:stage0:consumer\",\"aggregate:stage0:states\",\"dependency\",\"control\",\"state_data\",\"写入值 · 握手控制\",\"\",\"out:control\",\"\"]",
+            "label": "写入值 · 握手控制",
+            "source": "rack:stage0:consumer",
+            "target": "aggregate:stage0:states",
+            "length": 388,
+            "directLength": 388,
+            "detour": 0,
+            "ratio": 1,
+            "routed": true,
+            "connectionIds": [],
+            "dependencyEndpoints": [
+              {
+                "moduleId": "stage0",
+                "interfaceId": "s_axis_tvalid"
+              }
+            ],
+            "relationMembers": [
+              {
+                "id": "dependency:stage0>stage0_valid_q/control/state_data",
+                "source": "rack:stage0:consumer",
+                "target": "local:stage0:stage0_valid_q",
+                "label": "写入值 · 握手控制",
+                "connectionIds": [],
+                "connections": [],
+                "dependencyEndpoints": [
+                  {
+                    "moduleId": "stage0",
+                    "interfaceId": "s_axis_tvalid"
+                  }
+                ],
+                "localSignalId": "stage0_valid_q",
+                "semanticKind": "dependency"
+              }
+            ]
+          },
+          {
+            "id": "reading-relation:[\"rack:stage0:consumer\",\"aggregate:stage0:states\",\"dependency\",\"control\",\"state_condition\",\"更新条件 · 握手控制\",\"\",\"out:control\",\"\"]",
+            "label": "更新条件 · 握手控制",
+            "source": "rack:stage0:consumer",
+            "target": "aggregate:stage0:states",
+            "length": 352,
+            "directLength": 352,
+            "detour": 0,
+            "ratio": 1,
+            "routed": true,
+            "connectionIds": [],
+            "dependencyEndpoints": [
+              {
+                "moduleId": "stage0",
+                "interfaceId": "m_axis_tready"
+              }
+            ],
+            "relationMembers": [
+              {
+                "id": "dependency:stage0>stage0_valid_q/control/state_condition",
+                "source": "rack:stage0:consumer",
+                "target": "local:stage0:stage0_valid_q",
+                "label": "更新条件 · 握手控制",
+                "connectionIds": [],
+                "connections": [],
+                "dependencyEndpoints": [
+                  {
+                    "moduleId": "stage0",
+                    "interfaceId": "m_axis_tready"
+                  }
+                ],
+                "localSignalId": "stage0_valid_q",
+                "semanticKind": "dependency"
+              }
+            ]
+          },
+          {
+            "id": "reading-relation:[\"rack:stage0:consumer\",\"aggregate:stage0:states\",\"dependency\",\"data\",\"state_data\",\"写入值 · 数据\",\"\",\"out:payload\",\"\"]",
+            "label": "写入值 · 数据",
+            "source": "rack:stage0:consumer",
+            "target": "aggregate:stage0:states",
+            "length": 352,
+            "directLength": 352,
+            "detour": 0,
+            "ratio": 1,
+            "routed": true,
+            "connectionIds": [],
+            "dependencyEndpoints": [
+              {
+                "moduleId": "stage0",
+                "interfaceId": "s_axis_tdata"
+              }
+            ],
+            "relationMembers": [
+              {
+                "id": "dependency:stage0>stage0_data_q/payload/state_data",
+                "source": "rack:stage0:consumer",
+                "target": "local:stage0:stage0_data_q",
+                "label": "写入值 · 数据",
+                "connectionIds": [],
+                "connections": [],
+                "dependencyEndpoints": [
+                  {
+                    "moduleId": "stage0",
+                    "interfaceId": "s_axis_tdata"
+                  }
+                ],
+                "localSignalId": "stage0_data_q",
+                "semanticKind": "dependency"
+              }
+            ]
+          },
+          {
+            "id": "reading-relation:[\"aggregate:stage0:states\",\"rack:stage0:producer\",\"wire\",\"control\",\"\",\"握手控制\",\"\",\"\",\"in:control\"]",
+            "label": "握手控制 · 2 关系",
+            "source": "aggregate:stage0:states",
+            "target": "rack:stage0:producer",
+            "length": 348,
+            "directLength": 348,
+            "detour": 0,
+            "ratio": 1,
+            "routed": true,
+            "connectionIds": [
+              "stage0_ready_q",
+              "stage0_valid_q"
+            ],
+            "dependencyEndpoints": [],
+            "relationMembers": [
+              {
+                "id": "relation:local:stage0:stage0_ready_q>rack:stage0:producer/local:stage0:stage0_ready_q/control/control/wire",
+                "source": "local:stage0:stage0_ready_q",
+                "target": "rack:stage0:producer",
+                "label": "握手控制",
+                "connectionIds": [
+                  "stage0_ready_q"
+                ],
+                "connections": [
+                  {
+                    "id": "stage0_ready_q",
+                    "scope": "stage0",
+                    "from": {
+                      "moduleId": "stage0",
+                      "interfaceId": "stage0_ready_q",
+                      "local": true
+                    },
+                    "to": {
+                      "moduleId": "stage0",
+                      "interfaceId": "s_axis_tready"
+                    }
+                  }
+                ],
+                "dependencyEndpoints": [],
+                "semanticKind": "wire"
+              },
+              {
+                "id": "relation:local:stage0:stage0_valid_q>rack:stage0:producer/local:stage0:stage0_valid_q/control/control/wire",
+                "source": "local:stage0:stage0_valid_q",
+                "target": "rack:stage0:producer",
+                "label": "握手控制",
+                "connectionIds": [
+                  "stage0_valid_q"
+                ],
+                "connections": [
+                  {
+                    "id": "stage0_valid_q",
+                    "scope": "stage0",
+                    "from": {
+                      "moduleId": "stage0",
+                      "interfaceId": "stage0_valid_q",
+                      "local": true
+                    },
+                    "to": {
+                      "moduleId": "stage0",
+                      "interfaceId": "m_axis_tvalid"
+                    }
+                  }
+                ],
+                "dependencyEndpoints": [],
+                "semanticKind": "wire"
+              }
+            ]
+          },
+          {
+            "id": "reading-relation:[\"aggregate:stage0:states\",\"rack:stage0:producer\",\"wire\",\"data\",\"\",\"数据\",\"\",\"\",\"in:payload\"]",
+            "label": "数据",
+            "source": "aggregate:stage0:states",
+            "target": "rack:stage0:producer",
+            "length": 340,
+            "directLength": 340,
+            "detour": 0,
+            "ratio": 1,
+            "routed": true,
+            "connectionIds": [
+              "stage0_data_q"
+            ],
+            "dependencyEndpoints": [],
+            "relationMembers": [
+              {
+                "id": "relation:local:stage0:stage0_data_q>rack:stage0:producer/local:stage0:stage0_data_q/payload/payload/wire",
+                "source": "local:stage0:stage0_data_q",
+                "target": "rack:stage0:producer",
+                "label": "数据",
+                "connectionIds": [
+                  "stage0_data_q"
+                ],
+                "connections": [
+                  {
+                    "id": "stage0_data_q",
+                    "scope": "stage0",
+                    "from": {
+                      "moduleId": "stage0",
+                      "interfaceId": "stage0_data_q",
+                      "local": true
+                    },
+                    "to": {
+                      "moduleId": "stage0",
+                      "interfaceId": "m_axis_tdata"
+                    }
+                  }
+                ],
+                "dependencyEndpoints": [],
+                "semanticKind": "wire"
+              }
+            ]
+          }
+        ],
+        "longest": [
+          "reading-relation:[\"rack:stage0:consumer\",\"aggregate:stage0:states\",\"dependency\",\"control\",\"state_data\",\"写入值 · 握手控制 · 2 项\",\"\",\"out:control\",\"\"]",
+          "reading-relation:[\"rack:stage0:consumer\",\"aggregate:stage0:states\",\"dependency\",\"control\",\"state_data\",\"写入值 · 握手控制\",\"\",\"out:control\",\"\"]",
+          "reading-relation:[\"rack:stage0:consumer\",\"aggregate:stage0:states\",\"dependency\",\"control\",\"state_condition\",\"更新条件 · 握手控制\",\"\",\"out:control\",\"\"]",
+          "reading-relation:[\"rack:stage0:consumer\",\"aggregate:stage0:states\",\"dependency\",\"data\",\"state_data\",\"写入值 · 数据\",\"\",\"out:payload\",\"\"]",
+          "reading-relation:[\"aggregate:stage0:states\",\"rack:stage0:producer\",\"wire\",\"control\",\"\",\"握手控制\",\"\",\"\",\"in:control\"]"
+        ],
+        "detours": [],
+        "note": "最长关系用于定位；绕行提示阈值为多走至少 256 图单位且达到端点曼哈顿距离的 2 倍，不是 RTL 时序或失败判据。"
+      },
+      "hiddenLabels": [],
+      "folded": {
+        "auxiliary": 2,
+        "local": 0
+      },
+      "connections": [
+        {
+          "id": "stage0_data_q",
+          "from": {
+            "moduleId": "stage0",
+            "interfaceId": "stage0_data_q",
+            "local": true
+          },
+          "to": {
+            "moduleId": "stage0",
+            "interfaceId": "m_axis_tdata"
+          },
+          "retainedIn": [],
+          "visibleIn": [
+            "reading-relation:[\"aggregate:stage0:states\",\"rack:stage0:producer\",\"wire\",\"data\",\"\",\"数据\",\"\",\"\",\"in:payload\"]"
+          ]
+        },
+        {
+          "id": "stage0_valid_q",
+          "from": {
+            "moduleId": "stage0",
+            "interfaceId": "stage0_valid_q",
+            "local": true
+          },
+          "to": {
+            "moduleId": "stage0",
+            "interfaceId": "m_axis_tvalid"
+          },
+          "retainedIn": [],
+          "visibleIn": [
+            "reading-relation:[\"aggregate:stage0:states\",\"rack:stage0:producer\",\"wire\",\"control\",\"\",\"握手控制\",\"\",\"\",\"in:control\"]"
+          ]
+        },
+        {
+          "id": "stage0_ready_q",
+          "from": {
+            "moduleId": "stage0",
+            "interfaceId": "stage0_ready_q",
+            "local": true
+          },
+          "to": {
+            "moduleId": "stage0",
+            "interfaceId": "s_axis_tready"
+          },
+          "retainedIn": [],
+          "visibleIn": [
+            "reading-relation:[\"aggregate:stage0:states\",\"rack:stage0:producer\",\"wire\",\"control\",\"\",\"握手控制\",\"\",\"\",\"in:control\"]"
+          ]
+        }
+      ],
+      "visualReview": "not_run",
+      "note": "几何检查不证明文字可读、硬件正确或所有交叉可辨认。"
+    }
+  },
+  {
+    "id": "external-axis-stage0-state",
+    "hash": "0c376d420bf9f3aab4c18449e23b548cfae3e9c039fc138099d39011d5f0b8e9",
+    "task": {
+      "kind": "state",
+      "stateId": "stage0_data_q"
+    },
+    "elapsedMs": 30.135496000000103,
+    "nodes": 6,
+    "edges": 8,
+    "quality": {
+      "readingConstraints": {
+        "status": "not_requested",
+        "issues": [],
+        "counts": {
+          "parallel": 0,
+          "shared": 0,
+          "feedback": 0
+        }
+      },
+      "structuralFidelity": {
+        "status": "passed",
+        "missing": [],
+        "extra": [],
+        "duplicates": [],
+        "wrongEndpoints": [],
+        "omissions": [],
+        "note": "仅检查当前视图及聚合清单对应模型连接；折叠有明确原因，不证明 RTL 覆盖。"
+      },
+      "semanticClarity": {
+        "status": "needs_review",
+        "issues": [
+          {
+            "code": "PARTIAL_MODEL",
+            "target": "stage0",
+            "reason": "模型尚未完整；图中没有显示的结构不代表 RTL 中不存在。"
+          }
+        ],
+        "humanReview": "not_run"
+      },
+      "geometricReadability": {
+        "status": "needs_review",
+        "note": "交叉、共线和隐藏线名与基本几何完整性分开；仍需沿真实事务人工阅读。"
+      },
+      "sharedLabels": [],
+      "labelStatus": "named",
+      "status": "passed",
+      "overlaps": [],
+      "nodeHits": [],
+      "unrouted": [],
+      "crossings": 6,
+      "unrelatedSharedLength": 224,
+      "bends": 24,
+      "wireLength": 8073,
+      "maxRouteLength": 1924,
+      "routeReview": {
+        "units": "diagram_units",
+        "routes": [
+          {
+            "id": "dependency:stage0>stage0_data_q/payload/state_data",
+            "label": "写入值 · 数据",
+            "source": "rack:stage0:consumer",
+            "target": "local:stage0:stage0_data_q",
+            "length": 1924,
+            "directLength": 1796,
+            "detour": 128,
+            "ratio": 1.0712694877505569,
+            "routed": true,
+            "connectionIds": [],
+            "dependencyEndpoints": [
+              {
+                "moduleId": "stage0",
+                "interfaceId": "s_axis_tdata"
+              }
+            ],
+            "relationMembers": [
+              {
+                "id": "dependency:stage0>stage0_data_q/payload/state_data",
+                "source": "rack:stage0:consumer",
+                "target": "local:stage0:stage0_data_q",
+                "label": "写入值 · 数据",
+                "connectionIds": [],
+                "connections": [],
+                "dependencyEndpoints": [
+                  {
+                    "moduleId": "stage0",
+                    "interfaceId": "s_axis_tdata"
+                  }
+                ],
+                "localSignalId": "stage0_data_q",
+                "semanticKind": "dependency"
+              }
+            ]
+          },
+          {
+            "id": "relation:local:stage0:stage0_ready_q>rack:stage0:producer/local:stage0:stage0_ready_q/control/control/wire",
+            "label": "握手控制",
+            "source": "local:stage0:stage0_ready_q",
+            "target": "rack:stage0:producer",
+            "length": 1455,
+            "directLength": 1147,
+            "detour": 308,
+            "ratio": 1.2685265911072363,
+            "routed": true,
+            "connectionIds": [
+              "stage0_ready_q"
+            ],
+            "dependencyEndpoints": [],
+            "relationMembers": [
+              {
+                "id": "relation:local:stage0:stage0_ready_q>rack:stage0:producer/local:stage0:stage0_ready_q/control/control/wire",
+                "source": "local:stage0:stage0_ready_q",
+                "target": "rack:stage0:producer",
+                "label": "握手控制",
+                "connectionIds": [
+                  "stage0_ready_q"
+                ],
+                "connections": [
+                  {
+                    "id": "stage0_ready_q",
+                    "scope": "stage0",
+                    "from": {
+                      "moduleId": "stage0",
+                      "interfaceId": "stage0_ready_q",
+                      "local": true
+                    },
+                    "to": {
+                      "moduleId": "stage0",
+                      "interfaceId": "s_axis_tready"
+                    }
+                  }
+                ],
+                "dependencyEndpoints": [],
+                "semanticKind": "wire"
+              }
+            ]
+          },
+          {
+            "id": "reading-relation:[\"local:stage0:stage0_ready_q\",\"aggregate:stage0:context\",\"dependency\",\"other\",\"state_condition\",\"更新条件 · stage0_ready_q\",\"dependency:local:stage0:stage0_ready_q>stage0_valid_q/local:stage0:stage0_ready_q/state_condition\",\"\",\"\"]",
+            "label": "更新条件 · stage0_ready_q",
+            "source": "local:stage0:stage0_ready_q",
+            "target": "aggregate:stage0:context",
+            "length": 1427,
+            "directLength": 1033,
+            "detour": 394,
+            "ratio": 1.3814133591481124,
+            "routed": true,
+            "connectionIds": [],
+            "dependencyEndpoints": [
+              {
+                "moduleId": "stage0",
+                "interfaceId": "stage0_ready_q",
+                "local": true
+              }
+            ],
+            "relationMembers": [
+              {
+                "id": "dependency:local:stage0:stage0_ready_q>stage0_valid_q/local:stage0:stage0_ready_q/state_condition",
+                "source": "local:stage0:stage0_ready_q",
+                "target": "local:stage0:stage0_valid_q",
+                "label": "更新条件 · stage0_ready_q",
+                "connectionIds": [],
+                "connections": [],
+                "dependencyEndpoints": [
+                  {
+                    "moduleId": "stage0",
+                    "interfaceId": "stage0_ready_q",
+                    "local": true
+                  }
+                ],
+                "localSignalId": "stage0_valid_q",
+                "semanticKind": "dependency"
+              }
+            ]
+          },
+          {
+            "id": "dependency:stage0>stage0_ready_q/control/state_data",
+            "label": "写入值 · 握手控制 · 2 项",
+            "source": "rack:stage0:consumer",
+            "target": "local:stage0:stage0_ready_q",
+            "length": 1127,
+            "directLength": 1127,
+            "detour": 0,
+            "ratio": 1,
+            "routed": true,
+            "connectionIds": [],
+            "dependencyEndpoints": [
+              {
+                "moduleId": "stage0",
+                "interfaceId": "m_axis_tready"
+              },
+              {
+                "moduleId": "stage0",
+                "interfaceId": "s_axis_tvalid"
+              }
+            ],
+            "relationMembers": [
+              {
+                "id": "dependency:stage0>stage0_ready_q/control/state_data",
+                "source": "rack:stage0:consumer",
+                "target": "local:stage0:stage0_ready_q",
+                "label": "写入值 · 握手控制 · 2 项",
+                "connectionIds": [],
+                "connections": [],
+                "dependencyEndpoints": [
+                  {
+                    "moduleId": "stage0",
+                    "interfaceId": "m_axis_tready"
+                  },
+                  {
+                    "moduleId": "stage0",
+                    "interfaceId": "s_axis_tvalid"
+                  }
+                ],
+                "localSignalId": "stage0_ready_q",
+                "semanticKind": "dependency"
+              }
+            ]
+          },
+          {
+            "id": "dependency:local:stage0:stage0_ready_q>stage0_ready_q/local:stage0:stage0_ready_q/state_data",
+            "label": "写入值 · stage0_ready_q",
+            "source": "local:stage0:stage0_ready_q",
+            "target": "local:stage0:stage0_ready_q",
+            "length": 852,
+            "directLength": 332,
+            "detour": 520,
+            "ratio": 2.566265060240964,
+            "routed": true,
+            "connectionIds": [],
+            "dependencyEndpoints": [
+              {
+                "moduleId": "stage0",
+                "interfaceId": "stage0_ready_q",
+                "local": true
+              }
+            ],
+            "relationMembers": [
+              {
+                "id": "dependency:local:stage0:stage0_ready_q>stage0_ready_q/local:stage0:stage0_ready_q/state_data",
+                "source": "local:stage0:stage0_ready_q",
+                "target": "local:stage0:stage0_ready_q",
+                "label": "写入值 · stage0_ready_q",
+                "connectionIds": [],
+                "connections": [],
+                "dependencyEndpoints": [
+                  {
+                    "moduleId": "stage0",
+                    "interfaceId": "stage0_ready_q",
+                    "local": true
+                  }
+                ],
+                "localSignalId": "stage0_ready_q",
+                "semanticKind": "dependency"
+              }
+            ]
+          },
+          {
+            "id": "reading-relation:[\"aggregate:stage0:context\",\"local:stage0:stage0_ready_q\",\"dependency\",\"other\",\"state_data\",\"写入值 · stage0_valid_q\",\"dependency:local:stage0:stage0_valid_q>stage0_ready_q/local:stage0:stage0_valid_q/state_data\",\"\",\"\"]",
+            "label": "写入值 · stage0_valid_q",
+            "source": "aggregate:stage0:context",
+            "target": "local:stage0:stage0_ready_q",
+            "length": 481,
+            "directLength": 481,
+            "detour": 0,
+            "ratio": 1,
+            "routed": true,
+            "connectionIds": [],
+            "dependencyEndpoints": [
+              {
+                "moduleId": "stage0",
+                "interfaceId": "stage0_valid_q",
+                "local": true
+              }
+            ],
+            "relationMembers": [
+              {
+                "id": "dependency:local:stage0:stage0_valid_q>stage0_ready_q/local:stage0:stage0_valid_q/state_data",
+                "source": "local:stage0:stage0_valid_q",
+                "target": "local:stage0:stage0_ready_q",
+                "label": "写入值 · stage0_valid_q",
+                "connectionIds": [],
+                "connections": [],
+                "dependencyEndpoints": [
+                  {
+                    "moduleId": "stage0",
+                    "interfaceId": "stage0_valid_q",
+                    "local": true
+                  }
+                ],
+                "localSignalId": "stage0_ready_q",
+                "semanticKind": "dependency"
+              }
+            ]
+          },
+          {
+            "id": "dependency:local:stage0:stage0_ready_q>stage0_data_q/local:stage0:stage0_ready_q/state_condition",
+            "label": "更新条件 · stage0_ready_q",
+            "source": "local:stage0:stage0_ready_q",
+            "target": "local:stage0:stage0_data_q",
+            "length": 467,
+            "directLength": 467,
+            "detour": 0,
+            "ratio": 1,
+            "routed": true,
+            "connectionIds": [],
+            "dependencyEndpoints": [
+              {
+                "moduleId": "stage0",
+                "interfaceId": "stage0_ready_q",
+                "local": true
+              }
+            ],
+            "relationMembers": [
+              {
+                "id": "dependency:local:stage0:stage0_ready_q>stage0_data_q/local:stage0:stage0_ready_q/state_condition",
+                "source": "local:stage0:stage0_ready_q",
+                "target": "local:stage0:stage0_data_q",
+                "label": "更新条件 · stage0_ready_q",
+                "connectionIds": [],
+                "connections": [],
+                "dependencyEndpoints": [
+                  {
+                    "moduleId": "stage0",
+                    "interfaceId": "stage0_ready_q",
+                    "local": true
+                  }
+                ],
+                "localSignalId": "stage0_data_q",
+                "semanticKind": "dependency"
+              }
+            ]
+          },
+          {
+            "id": "relation:local:stage0:stage0_data_q>rack:stage0:producer/local:stage0:stage0_data_q/payload/payload/wire",
+            "label": "数据",
+            "source": "local:stage0:stage0_data_q",
+            "target": "rack:stage0:producer",
+            "length": 340,
+            "directLength": 340,
+            "detour": 0,
+            "ratio": 1,
+            "routed": true,
+            "connectionIds": [
+              "stage0_data_q"
+            ],
+            "dependencyEndpoints": [],
+            "relationMembers": [
+              {
+                "id": "relation:local:stage0:stage0_data_q>rack:stage0:producer/local:stage0:stage0_data_q/payload/payload/wire",
+                "source": "local:stage0:stage0_data_q",
+                "target": "rack:stage0:producer",
+                "label": "数据",
+                "connectionIds": [
+                  "stage0_data_q"
+                ],
+                "connections": [
+                  {
+                    "id": "stage0_data_q",
+                    "scope": "stage0",
+                    "from": {
+                      "moduleId": "stage0",
+                      "interfaceId": "stage0_data_q",
+                      "local": true
+                    },
+                    "to": {
+                      "moduleId": "stage0",
+                      "interfaceId": "m_axis_tdata"
+                    }
+                  }
+                ],
+                "dependencyEndpoints": [],
+                "semanticKind": "wire"
+              }
+            ]
+          }
+        ],
+        "longest": [
+          "dependency:stage0>stage0_data_q/payload/state_data",
+          "relation:local:stage0:stage0_ready_q>rack:stage0:producer/local:stage0:stage0_ready_q/control/control/wire",
+          "reading-relation:[\"local:stage0:stage0_ready_q\",\"aggregate:stage0:context\",\"dependency\",\"other\",\"state_condition\",\"更新条件 · stage0_ready_q\",\"dependency:local:stage0:stage0_ready_q>stage0_valid_q/local:stage0:stage0_ready_q/state_condition\",\"\",\"\"]",
+          "dependency:stage0>stage0_ready_q/control/state_data",
+          "dependency:local:stage0:stage0_ready_q>stage0_ready_q/local:stage0:stage0_ready_q/state_data"
+        ],
+        "detours": [
+          "dependency:local:stage0:stage0_ready_q>stage0_ready_q/local:stage0:stage0_ready_q/state_data"
+        ],
+        "note": "最长关系用于定位；绕行提示阈值为多走至少 256 图单位且达到端点曼哈顿距离的 2 倍，不是 RTL 时序或失败判据。"
+      },
+      "hiddenLabels": [],
+      "folded": {
+        "auxiliary": 1,
+        "local": 0
+      },
+      "connections": [
+        {
+          "id": "stage0_data_q",
+          "from": {
+            "moduleId": "stage0",
+            "interfaceId": "stage0_data_q",
+            "local": true
+          },
+          "to": {
+            "moduleId": "stage0",
+            "interfaceId": "m_axis_tdata"
+          },
+          "retainedIn": [],
+          "visibleIn": [
+            "relation:local:stage0:stage0_data_q>rack:stage0:producer/local:stage0:stage0_data_q/payload/payload/wire"
+          ]
+        },
+        {
+          "id": "stage0_valid_q",
+          "from": {
+            "moduleId": "stage0",
+            "interfaceId": "stage0_valid_q",
+            "local": true
+          },
+          "to": {
+            "moduleId": "stage0",
+            "interfaceId": "m_axis_tvalid"
+          },
+          "retainedIn": [
+            "aggregate:stage0:context"
+          ],
+          "visibleIn": []
+        },
+        {
+          "id": "stage0_ready_q",
+          "from": {
+            "moduleId": "stage0",
+            "interfaceId": "stage0_ready_q",
+            "local": true
+          },
+          "to": {
+            "moduleId": "stage0",
+            "interfaceId": "s_axis_tready"
+          },
+          "retainedIn": [],
+          "visibleIn": [
+            "relation:local:stage0:stage0_ready_q>rack:stage0:producer/local:stage0:stage0_ready_q/control/control/wire"
+          ]
+        }
+      ],
+      "visualReview": "not_run",
+      "note": "几何检查不证明文字可读、硬件正确或所有交叉可辨认。"
+    }
+  },
+  {
+    "id": "external-axis-stage1-full",
+    "hash": "0c376d420bf9f3aab4c18449e23b548cfae3e9c039fc138099d39011d5f0b8e9",
+    "task": null,
+    "elapsedMs": 51.951995000000124,
+    "nodes": 6,
+    "edges": 11,
+    "quality": {
+      "readingConstraints": {
+        "status": "not_requested",
+        "issues": [],
+        "counts": {
+          "parallel": 0,
+          "shared": 0,
+          "feedback": 0
+        }
+      },
+      "structuralFidelity": {
+        "status": "passed",
+        "missing": [],
+        "extra": [],
+        "duplicates": [],
+        "wrongEndpoints": [],
+        "omissions": [],
+        "note": "仅检查当前视图及聚合清单对应模型连接；折叠有明确原因，不证明 RTL 覆盖。"
+      },
+      "semanticClarity": {
+        "status": "needs_review",
+        "issues": [
+          {
+            "code": "PARTIAL_MODEL",
+            "target": "stage1",
+            "reason": "模型尚未完整；图中没有显示的结构不代表 RTL 中不存在。"
+          }
+        ],
+        "humanReview": "not_run"
+      },
+      "geometricReadability": {
+        "status": "needs_review",
+        "note": "交叉、共线和隐藏线名与基本几何完整性分开；仍需沿真实事务人工阅读。"
+      },
+      "sharedLabels": [],
+      "labelStatus": "named",
+      "status": "passed",
+      "overlaps": [],
+      "nodeHits": [],
+      "unrouted": [],
+      "crossings": 5,
+      "unrelatedSharedLength": 321.3333333333333,
+      "bends": 24,
+      "wireLength": 7545.133333333332,
+      "maxRouteLength": 1177.3333333333333,
+      "routeReview": {
+        "units": "diagram_units",
+        "routes": [
+          {
+            "id": "dependency:stage1>stage1_valid_q/control/state_data",
+            "label": "写入值 · 握手控制",
+            "source": "rack:stage1:consumer",
+            "target": "local:stage1:stage1_valid_q",
+            "length": 1177.3333333333333,
+            "directLength": 1113.3333333333333,
+            "detour": 64,
+            "ratio": 1.0574850299401197,
+            "routed": true,
+            "connectionIds": [],
+            "dependencyEndpoints": [
+              {
+                "moduleId": "stage1",
+                "interfaceId": "s_axis_tvalid"
+              }
+            ],
+            "relationMembers": []
+          },
+          {
+            "id": "dependency:stage1>stage1_valid_q/control/state_condition",
+            "label": "更新条件 · 握手控制",
+            "source": "rack:stage1:consumer",
+            "target": "local:stage1:stage1_valid_q",
+            "length": 1141.3333333333333,
+            "directLength": 1077.3333333333333,
+            "detour": 64,
+            "ratio": 1.0594059405940595,
+            "routed": true,
+            "connectionIds": [],
+            "dependencyEndpoints": [
+              {
+                "moduleId": "stage1",
+                "interfaceId": "m_axis_tready"
+              }
+            ],
+            "relationMembers": []
+          },
+          {
+            "id": "relation:local:stage1:stage1_ready_q>rack:stage1:producer/local:stage1:stage1_ready_q/control/control/wire",
+            "label": "握手控制",
+            "source": "local:stage1:stage1_ready_q",
+            "target": "rack:stage1:producer",
+            "length": 1090.6,
+            "directLength": 1090.6,
+            "detour": 0,
+            "ratio": 1,
+            "routed": true,
+            "connectionIds": [
+              "stage1_ready_q"
+            ],
+            "dependencyEndpoints": [],
+            "relationMembers": []
+          },
+          {
+            "id": "dependency:stage1>stage1_data_q/payload/state_data",
+            "label": "写入值 · 数据",
+            "source": "rack:stage1:consumer",
+            "target": "local:stage1:stage1_data_q",
+            "length": 1028,
+            "directLength": 1028,
+            "detour": 0,
+            "ratio": 1,
+            "routed": true,
+            "connectionIds": [],
+            "dependencyEndpoints": [
+              {
+                "moduleId": "stage1",
+                "interfaceId": "s_axis_tdata"
+              }
+            ],
+            "relationMembers": []
+          },
+          {
+            "id": "dependency:local:stage1:stage1_valid_q>stage1_ready_q/local:stage1:stage1_valid_q/state_data",
+            "label": "写入值 · stage1_valid_q",
+            "source": "local:stage1:stage1_valid_q",
+            "target": "local:stage1:stage1_ready_q",
+            "length": 673,
+            "directLength": 609,
+            "detour": 64,
+            "ratio": 1.1050903119868638,
+            "routed": true,
+            "connectionIds": [],
+            "dependencyEndpoints": [
+              {
+                "moduleId": "stage1",
+                "interfaceId": "stage1_valid_q",
+                "local": true
+              }
+            ],
+            "relationMembers": []
+          },
+          {
+            "id": "dependency:local:stage1:stage1_ready_q>stage1_valid_q/local:stage1:stage1_ready_q/state_condition",
+            "label": "更新条件 · stage1_ready_q",
+            "source": "local:stage1:stage1_ready_q",
+            "target": "local:stage1:stage1_valid_q",
+            "length": 609,
+            "directLength": 609,
+            "detour": 0,
+            "ratio": 1,
+            "routed": true,
+            "connectionIds": [],
+            "dependencyEndpoints": [
+              {
+                "moduleId": "stage1",
+                "interfaceId": "stage1_ready_q",
+                "local": true
+              }
+            ],
+            "relationMembers": []
+          },
+          {
+            "id": "dependency:local:stage1:stage1_ready_q>stage1_data_q/local:stage1:stage1_ready_q/state_condition",
+            "label": "更新条件 · stage1_ready_q",
+            "source": "local:stage1:stage1_ready_q",
+            "target": "local:stage1:stage1_data_q",
+            "length": 601,
+            "directLength": 601,
+            "detour": 0,
+            "ratio": 1,
+            "routed": true,
+            "connectionIds": [],
+            "dependencyEndpoints": [
+              {
+                "moduleId": "stage1",
+                "interfaceId": "stage1_ready_q",
+                "local": true
+              }
+            ],
+            "relationMembers": []
+          },
+          {
+            "id": "dependency:stage1>stage1_ready_q/control/state_data",
+            "label": "写入值 · 握手控制 · 2 项",
+            "source": "rack:stage1:consumer",
+            "target": "local:stage1:stage1_ready_q",
+            "length": 441.6666666666667,
+            "directLength": 441.6666666666667,
+            "detour": 0,
+            "ratio": 1,
+            "routed": true,
+            "connectionIds": [],
+            "dependencyEndpoints": [
+              {
+                "moduleId": "stage1",
+                "interfaceId": "m_axis_tready"
+              },
+              {
+                "moduleId": "stage1",
+                "interfaceId": "s_axis_tvalid"
+              }
+            ],
+            "relationMembers": []
+          },
+          {
+            "id": "relation:local:stage1:stage1_valid_q>rack:stage1:producer/local:stage1:stage1_valid_q/control/control/wire",
+            "label": "握手控制",
+            "source": "local:stage1:stage1_valid_q",
+            "target": "rack:stage1:producer",
+            "length": 383.9999999999999,
+            "directLength": 383.9999999999999,
+            "detour": 0,
+            "ratio": 1,
+            "routed": true,
+            "connectionIds": [
+              "stage1_valid_q"
+            ],
+            "dependencyEndpoints": [],
+            "relationMembers": []
+          },
+          {
+            "id": "relation:local:stage1:stage1_data_q>rack:stage1:producer/local:stage1:stage1_data_q/payload/payload/wire",
+            "label": "数据",
+            "source": "local:stage1:stage1_data_q",
+            "target": "rack:stage1:producer",
+            "length": 299.1999999999998,
+            "directLength": 299.1999999999998,
+            "detour": 0,
+            "ratio": 1,
+            "routed": true,
+            "connectionIds": [
+              "stage1_data_q"
+            ],
+            "dependencyEndpoints": [],
+            "relationMembers": []
+          },
+          {
+            "id": "dependency:local:stage1:stage1_ready_q>stage1_ready_q/local:stage1:stage1_ready_q/state_data",
+            "label": "写入值 · stage1_ready_q",
+            "source": "local:stage1:stage1_ready_q",
+            "target": "local:stage1:stage1_ready_q",
+            "length": 100,
+            "directLength": 36,
+            "detour": 64,
+            "ratio": 2.7777777777777777,
+            "routed": true,
+            "connectionIds": [],
+            "dependencyEndpoints": [
+              {
+                "moduleId": "stage1",
+                "interfaceId": "stage1_ready_q",
+                "local": true
+              }
+            ],
+            "relationMembers": []
+          }
+        ],
+        "longest": [
+          "dependency:stage1>stage1_valid_q/control/state_data",
+          "dependency:stage1>stage1_valid_q/control/state_condition",
+          "relation:local:stage1:stage1_ready_q>rack:stage1:producer/local:stage1:stage1_ready_q/control/control/wire",
+          "dependency:stage1>stage1_data_q/payload/state_data",
+          "dependency:local:stage1:stage1_valid_q>stage1_ready_q/local:stage1:stage1_valid_q/state_data"
+        ],
+        "detours": [],
+        "note": "最长关系用于定位；绕行提示阈值为多走至少 256 图单位且达到端点曼哈顿距离的 2 倍，不是 RTL 时序或失败判据。"
+      },
+      "hiddenLabels": [],
+      "folded": {
+        "auxiliary": 0,
+        "local": 0
+      },
+      "connections": [
+        {
+          "id": "stage1_data_q",
+          "from": {
+            "moduleId": "stage1",
+            "interfaceId": "stage1_data_q",
+            "local": true
+          },
+          "to": {
+            "moduleId": "stage1",
+            "interfaceId": "m_axis_tdata"
+          },
+          "retainedIn": [],
+          "visibleIn": [
+            "relation:local:stage1:stage1_data_q>rack:stage1:producer/local:stage1:stage1_data_q/payload/payload/wire"
+          ]
+        },
+        {
+          "id": "stage1_valid_q",
+          "from": {
+            "moduleId": "stage1",
+            "interfaceId": "stage1_valid_q",
+            "local": true
+          },
+          "to": {
+            "moduleId": "stage1",
+            "interfaceId": "m_axis_tvalid"
+          },
+          "retainedIn": [],
+          "visibleIn": [
+            "relation:local:stage1:stage1_valid_q>rack:stage1:producer/local:stage1:stage1_valid_q/control/control/wire"
+          ]
+        },
+        {
+          "id": "stage1_ready_q",
+          "from": {
+            "moduleId": "stage1",
+            "interfaceId": "stage1_ready_q",
+            "local": true
+          },
+          "to": {
+            "moduleId": "stage1",
+            "interfaceId": "s_axis_tready"
+          },
+          "retainedIn": [],
+          "visibleIn": [
+            "relation:local:stage1:stage1_ready_q>rack:stage1:producer/local:stage1:stage1_ready_q/control/control/wire"
+          ]
+        }
+      ],
+      "visualReview": "not_run",
+      "note": "几何检查不证明文字可读、硬件正确或所有交叉可辨认。"
+    }
+  },
+  {
+    "id": "external-axis-stage1-overview",
+    "hash": "0c376d420bf9f3aab4c18449e23b548cfae3e9c039fc138099d39011d5f0b8e9",
+    "task": {
+      "kind": "overview"
+    },
+    "elapsedMs": 16.391667000000098,
+    "nodes": 4,
+    "edges": 6,
+    "quality": {
+      "readingConstraints": {
+        "status": "not_requested",
+        "issues": [],
+        "counts": {
+          "parallel": 0,
+          "shared": 0,
+          "feedback": 0
+        }
+      },
+      "structuralFidelity": {
+        "status": "passed",
+        "missing": [],
+        "extra": [],
+        "duplicates": [],
+        "wrongEndpoints": [],
+        "omissions": [],
+        "note": "仅检查当前视图及聚合清单对应模型连接；折叠有明确原因，不证明 RTL 覆盖。"
+      },
+      "semanticClarity": {
+        "status": "needs_review",
+        "issues": [
+          {
+            "code": "PARTIAL_MODEL",
+            "target": "stage1",
+            "reason": "模型尚未完整；图中没有显示的结构不代表 RTL 中不存在。"
+          }
+        ],
+        "humanReview": "not_run"
+      },
+      "geometricReadability": {
+        "status": "needs_review",
+        "note": "交叉、共线和隐藏线名与基本几何完整性分开；仍需沿真实事务人工阅读。"
+      },
+      "sharedLabels": [],
+      "labelStatus": "named",
+      "status": "passed",
+      "overlaps": [],
+      "nodeHits": [],
+      "unrouted": [],
+      "crossings": 0,
+      "unrelatedSharedLength": 96,
+      "bends": 6,
+      "wireLength": 2168,
+      "maxRouteLength": 388,
+      "routeReview": {
+        "units": "diagram_units",
+        "routes": [
+          {
+            "id": "reading-relation:[\"rack:stage1:consumer\",\"aggregate:stage1:states\",\"dependency\",\"control\",\"state_data\",\"写入值 · 握手控制 · 2 项\",\"\",\"out:control\",\"\"]",
+            "label": "写入值 · 握手控制 · 2 项",
+            "source": "rack:stage1:consumer",
+            "target": "aggregate:stage1:states",
+            "length": 388,
+            "directLength": 388,
+            "detour": 0,
+            "ratio": 1,
+            "routed": true,
+            "connectionIds": [],
+            "dependencyEndpoints": [
+              {
+                "moduleId": "stage1",
+                "interfaceId": "m_axis_tready"
+              },
+              {
+                "moduleId": "stage1",
+                "interfaceId": "s_axis_tvalid"
+              }
+            ],
+            "relationMembers": [
+              {
+                "id": "dependency:stage1>stage1_ready_q/control/state_data",
+                "source": "rack:stage1:consumer",
+                "target": "local:stage1:stage1_ready_q",
+                "label": "写入值 · 握手控制 · 2 项",
+                "connectionIds": [],
+                "connections": [],
+                "dependencyEndpoints": [
+                  {
+                    "moduleId": "stage1",
+                    "interfaceId": "m_axis_tready"
+                  },
+                  {
+                    "moduleId": "stage1",
+                    "interfaceId": "s_axis_tvalid"
+                  }
+                ],
+                "localSignalId": "stage1_ready_q",
+                "semanticKind": "dependency"
+              }
+            ]
+          },
+          {
+            "id": "reading-relation:[\"rack:stage1:consumer\",\"aggregate:stage1:states\",\"dependency\",\"control\",\"state_data\",\"写入值 · 握手控制\",\"\",\"out:control\",\"\"]",
+            "label": "写入值 · 握手控制",
+            "source": "rack:stage1:consumer",
+            "target": "aggregate:stage1:states",
+            "length": 388,
+            "directLength": 388,
+            "detour": 0,
+            "ratio": 1,
+            "routed": true,
+            "connectionIds": [],
+            "dependencyEndpoints": [
+              {
+                "moduleId": "stage1",
+                "interfaceId": "s_axis_tvalid"
+              }
+            ],
+            "relationMembers": [
+              {
+                "id": "dependency:stage1>stage1_valid_q/control/state_data",
+                "source": "rack:stage1:consumer",
+                "target": "local:stage1:stage1_valid_q",
+                "label": "写入值 · 握手控制",
+                "connectionIds": [],
+                "connections": [],
+                "dependencyEndpoints": [
+                  {
+                    "moduleId": "stage1",
+                    "interfaceId": "s_axis_tvalid"
+                  }
+                ],
+                "localSignalId": "stage1_valid_q",
+                "semanticKind": "dependency"
+              }
+            ]
+          },
+          {
+            "id": "reading-relation:[\"rack:stage1:consumer\",\"aggregate:stage1:states\",\"dependency\",\"control\",\"state_condition\",\"更新条件 · 握手控制\",\"\",\"out:control\",\"\"]",
+            "label": "更新条件 · 握手控制",
+            "source": "rack:stage1:consumer",
+            "target": "aggregate:stage1:states",
+            "length": 352,
+            "directLength": 352,
+            "detour": 0,
+            "ratio": 1,
+            "routed": true,
+            "connectionIds": [],
+            "dependencyEndpoints": [
+              {
+                "moduleId": "stage1",
+                "interfaceId": "m_axis_tready"
+              }
+            ],
+            "relationMembers": [
+              {
+                "id": "dependency:stage1>stage1_valid_q/control/state_condition",
+                "source": "rack:stage1:consumer",
+                "target": "local:stage1:stage1_valid_q",
+                "label": "更新条件 · 握手控制",
+                "connectionIds": [],
+                "connections": [],
+                "dependencyEndpoints": [
+                  {
+                    "moduleId": "stage1",
+                    "interfaceId": "m_axis_tready"
+                  }
+                ],
+                "localSignalId": "stage1_valid_q",
+                "semanticKind": "dependency"
+              }
+            ]
+          },
+          {
+            "id": "reading-relation:[\"rack:stage1:consumer\",\"aggregate:stage1:states\",\"dependency\",\"data\",\"state_data\",\"写入值 · 数据\",\"\",\"out:payload\",\"\"]",
+            "label": "写入值 · 数据",
+            "source": "rack:stage1:consumer",
+            "target": "aggregate:stage1:states",
+            "length": 352,
+            "directLength": 352,
+            "detour": 0,
+            "ratio": 1,
+            "routed": true,
+            "connectionIds": [],
+            "dependencyEndpoints": [
+              {
+                "moduleId": "stage1",
+                "interfaceId": "s_axis_tdata"
+              }
+            ],
+            "relationMembers": [
+              {
+                "id": "dependency:stage1>stage1_data_q/payload/state_data",
+                "source": "rack:stage1:consumer",
+                "target": "local:stage1:stage1_data_q",
+                "label": "写入值 · 数据",
+                "connectionIds": [],
+                "connections": [],
+                "dependencyEndpoints": [
+                  {
+                    "moduleId": "stage1",
+                    "interfaceId": "s_axis_tdata"
+                  }
+                ],
+                "localSignalId": "stage1_data_q",
+                "semanticKind": "dependency"
+              }
+            ]
+          },
+          {
+            "id": "reading-relation:[\"aggregate:stage1:states\",\"rack:stage1:producer\",\"wire\",\"control\",\"\",\"握手控制\",\"\",\"\",\"in:control\"]",
+            "label": "握手控制 · 2 关系",
+            "source": "aggregate:stage1:states",
+            "target": "rack:stage1:producer",
+            "length": 348,
+            "directLength": 348,
+            "detour": 0,
+            "ratio": 1,
+            "routed": true,
+            "connectionIds": [
+              "stage1_ready_q",
+              "stage1_valid_q"
+            ],
+            "dependencyEndpoints": [],
+            "relationMembers": [
+              {
+                "id": "relation:local:stage1:stage1_ready_q>rack:stage1:producer/local:stage1:stage1_ready_q/control/control/wire",
+                "source": "local:stage1:stage1_ready_q",
+                "target": "rack:stage1:producer",
+                "label": "握手控制",
+                "connectionIds": [
+                  "stage1_ready_q"
+                ],
+                "connections": [
+                  {
+                    "id": "stage1_ready_q",
+                    "scope": "stage1",
+                    "from": {
+                      "moduleId": "stage1",
+                      "interfaceId": "stage1_ready_q",
+                      "local": true
+                    },
+                    "to": {
+                      "moduleId": "stage1",
+                      "interfaceId": "s_axis_tready"
+                    }
+                  }
+                ],
+                "dependencyEndpoints": [],
+                "semanticKind": "wire"
+              },
+              {
+                "id": "relation:local:stage1:stage1_valid_q>rack:stage1:producer/local:stage1:stage1_valid_q/control/control/wire",
+                "source": "local:stage1:stage1_valid_q",
+                "target": "rack:stage1:producer",
+                "label": "握手控制",
+                "connectionIds": [
+                  "stage1_valid_q"
+                ],
+                "connections": [
+                  {
+                    "id": "stage1_valid_q",
+                    "scope": "stage1",
+                    "from": {
+                      "moduleId": "stage1",
+                      "interfaceId": "stage1_valid_q",
+                      "local": true
+                    },
+                    "to": {
+                      "moduleId": "stage1",
+                      "interfaceId": "m_axis_tvalid"
+                    }
+                  }
+                ],
+                "dependencyEndpoints": [],
+                "semanticKind": "wire"
+              }
+            ]
+          },
+          {
+            "id": "reading-relation:[\"aggregate:stage1:states\",\"rack:stage1:producer\",\"wire\",\"data\",\"\",\"数据\",\"\",\"\",\"in:payload\"]",
+            "label": "数据",
+            "source": "aggregate:stage1:states",
+            "target": "rack:stage1:producer",
+            "length": 340,
+            "directLength": 340,
+            "detour": 0,
+            "ratio": 1,
+            "routed": true,
+            "connectionIds": [
+              "stage1_data_q"
+            ],
+            "dependencyEndpoints": [],
+            "relationMembers": [
+              {
+                "id": "relation:local:stage1:stage1_data_q>rack:stage1:producer/local:stage1:stage1_data_q/payload/payload/wire",
+                "source": "local:stage1:stage1_data_q",
+                "target": "rack:stage1:producer",
+                "label": "数据",
+                "connectionIds": [
+                  "stage1_data_q"
+                ],
+                "connections": [
+                  {
+                    "id": "stage1_data_q",
+                    "scope": "stage1",
+                    "from": {
+                      "moduleId": "stage1",
+                      "interfaceId": "stage1_data_q",
+                      "local": true
+                    },
+                    "to": {
+                      "moduleId": "stage1",
+                      "interfaceId": "m_axis_tdata"
+                    }
+                  }
+                ],
+                "dependencyEndpoints": [],
+                "semanticKind": "wire"
+              }
+            ]
+          }
+        ],
+        "longest": [
+          "reading-relation:[\"rack:stage1:consumer\",\"aggregate:stage1:states\",\"dependency\",\"control\",\"state_data\",\"写入值 · 握手控制 · 2 项\",\"\",\"out:control\",\"\"]",
+          "reading-relation:[\"rack:stage1:consumer\",\"aggregate:stage1:states\",\"dependency\",\"control\",\"state_data\",\"写入值 · 握手控制\",\"\",\"out:control\",\"\"]",
+          "reading-relation:[\"rack:stage1:consumer\",\"aggregate:stage1:states\",\"dependency\",\"control\",\"state_condition\",\"更新条件 · 握手控制\",\"\",\"out:control\",\"\"]",
+          "reading-relation:[\"rack:stage1:consumer\",\"aggregate:stage1:states\",\"dependency\",\"data\",\"state_data\",\"写入值 · 数据\",\"\",\"out:payload\",\"\"]",
+          "reading-relation:[\"aggregate:stage1:states\",\"rack:stage1:producer\",\"wire\",\"control\",\"\",\"握手控制\",\"\",\"\",\"in:control\"]"
+        ],
+        "detours": [],
+        "note": "最长关系用于定位；绕行提示阈值为多走至少 256 图单位且达到端点曼哈顿距离的 2 倍，不是 RTL 时序或失败判据。"
+      },
+      "hiddenLabels": [],
+      "folded": {
+        "auxiliary": 2,
+        "local": 0
+      },
+      "connections": [
+        {
+          "id": "stage1_data_q",
+          "from": {
+            "moduleId": "stage1",
+            "interfaceId": "stage1_data_q",
+            "local": true
+          },
+          "to": {
+            "moduleId": "stage1",
+            "interfaceId": "m_axis_tdata"
+          },
+          "retainedIn": [],
+          "visibleIn": [
+            "reading-relation:[\"aggregate:stage1:states\",\"rack:stage1:producer\",\"wire\",\"data\",\"\",\"数据\",\"\",\"\",\"in:payload\"]"
+          ]
+        },
+        {
+          "id": "stage1_valid_q",
+          "from": {
+            "moduleId": "stage1",
+            "interfaceId": "stage1_valid_q",
+            "local": true
+          },
+          "to": {
+            "moduleId": "stage1",
+            "interfaceId": "m_axis_tvalid"
+          },
+          "retainedIn": [],
+          "visibleIn": [
+            "reading-relation:[\"aggregate:stage1:states\",\"rack:stage1:producer\",\"wire\",\"control\",\"\",\"握手控制\",\"\",\"\",\"in:control\"]"
+          ]
+        },
+        {
+          "id": "stage1_ready_q",
+          "from": {
+            "moduleId": "stage1",
+            "interfaceId": "stage1_ready_q",
+            "local": true
+          },
+          "to": {
+            "moduleId": "stage1",
+            "interfaceId": "s_axis_tready"
+          },
+          "retainedIn": [],
+          "visibleIn": [
+            "reading-relation:[\"aggregate:stage1:states\",\"rack:stage1:producer\",\"wire\",\"control\",\"\",\"握手控制\",\"\",\"\",\"in:control\"]"
+          ]
+        }
+      ],
+      "visualReview": "not_run",
+      "note": "几何检查不证明文字可读、硬件正确或所有交叉可辨认。"
+    }
+  },
+  {
+    "id": "external-axis-stage1-state",
+    "hash": "0c376d420bf9f3aab4c18449e23b548cfae3e9c039fc138099d39011d5f0b8e9",
+    "task": {
+      "kind": "state",
+      "stateId": "stage1_data_q"
+    },
+    "elapsedMs": 34.02824600000008,
+    "nodes": 6,
+    "edges": 8,
+    "quality": {
+      "readingConstraints": {
+        "status": "not_requested",
+        "issues": [],
+        "counts": {
+          "parallel": 0,
+          "shared": 0,
+          "feedback": 0
+        }
+      },
+      "structuralFidelity": {
+        "status": "passed",
+        "missing": [],
+        "extra": [],
+        "duplicates": [],
+        "wrongEndpoints": [],
+        "omissions": [],
+        "note": "仅检查当前视图及聚合清单对应模型连接；折叠有明确原因，不证明 RTL 覆盖。"
+      },
+      "semanticClarity": {
+        "status": "needs_review",
+        "issues": [
+          {
+            "code": "PARTIAL_MODEL",
+            "target": "stage1",
+            "reason": "模型尚未完整；图中没有显示的结构不代表 RTL 中不存在。"
+          }
+        ],
+        "humanReview": "not_run"
+      },
+      "geometricReadability": {
+        "status": "needs_review",
+        "note": "交叉、共线和隐藏线名与基本几何完整性分开；仍需沿真实事务人工阅读。"
+      },
+      "sharedLabels": [],
+      "labelStatus": "named",
+      "status": "passed",
+      "overlaps": [],
+      "nodeHits": [],
+      "unrouted": [],
+      "crossings": 6,
+      "unrelatedSharedLength": 224,
+      "bends": 24,
+      "wireLength": 8073,
+      "maxRouteLength": 1924,
+      "routeReview": {
+        "units": "diagram_units",
+        "routes": [
+          {
+            "id": "dependency:stage1>stage1_data_q/payload/state_data",
+            "label": "写入值 · 数据",
+            "source": "rack:stage1:consumer",
+            "target": "local:stage1:stage1_data_q",
+            "length": 1924,
+            "directLength": 1796,
+            "detour": 128,
+            "ratio": 1.0712694877505569,
+            "routed": true,
+            "connectionIds": [],
+            "dependencyEndpoints": [
+              {
+                "moduleId": "stage1",
+                "interfaceId": "s_axis_tdata"
+              }
+            ],
+            "relationMembers": [
+              {
+                "id": "dependency:stage1>stage1_data_q/payload/state_data",
+                "source": "rack:stage1:consumer",
+                "target": "local:stage1:stage1_data_q",
+                "label": "写入值 · 数据",
+                "connectionIds": [],
+                "connections": [],
+                "dependencyEndpoints": [
+                  {
+                    "moduleId": "stage1",
+                    "interfaceId": "s_axis_tdata"
+                  }
+                ],
+                "localSignalId": "stage1_data_q",
+                "semanticKind": "dependency"
+              }
+            ]
+          },
+          {
+            "id": "relation:local:stage1:stage1_ready_q>rack:stage1:producer/local:stage1:stage1_ready_q/control/control/wire",
+            "label": "握手控制",
+            "source": "local:stage1:stage1_ready_q",
+            "target": "rack:stage1:producer",
+            "length": 1455,
+            "directLength": 1147,
+            "detour": 308,
+            "ratio": 1.2685265911072363,
+            "routed": true,
+            "connectionIds": [
+              "stage1_ready_q"
+            ],
+            "dependencyEndpoints": [],
+            "relationMembers": [
+              {
+                "id": "relation:local:stage1:stage1_ready_q>rack:stage1:producer/local:stage1:stage1_ready_q/control/control/wire",
+                "source": "local:stage1:stage1_ready_q",
+                "target": "rack:stage1:producer",
+                "label": "握手控制",
+                "connectionIds": [
+                  "stage1_ready_q"
+                ],
+                "connections": [
+                  {
+                    "id": "stage1_ready_q",
+                    "scope": "stage1",
+                    "from": {
+                      "moduleId": "stage1",
+                      "interfaceId": "stage1_ready_q",
+                      "local": true
+                    },
+                    "to": {
+                      "moduleId": "stage1",
+                      "interfaceId": "s_axis_tready"
+                    }
+                  }
+                ],
+                "dependencyEndpoints": [],
+                "semanticKind": "wire"
+              }
+            ]
+          },
+          {
+            "id": "reading-relation:[\"local:stage1:stage1_ready_q\",\"aggregate:stage1:context\",\"dependency\",\"other\",\"state_condition\",\"更新条件 · stage1_ready_q\",\"dependency:local:stage1:stage1_ready_q>stage1_valid_q/local:stage1:stage1_ready_q/state_condition\",\"\",\"\"]",
+            "label": "更新条件 · stage1_ready_q",
+            "source": "local:stage1:stage1_ready_q",
+            "target": "aggregate:stage1:context",
+            "length": 1427,
+            "directLength": 1033,
+            "detour": 394,
+            "ratio": 1.3814133591481124,
+            "routed": true,
+            "connectionIds": [],
+            "dependencyEndpoints": [
+              {
+                "moduleId": "stage1",
+                "interfaceId": "stage1_ready_q",
+                "local": true
+              }
+            ],
+            "relationMembers": [
+              {
+                "id": "dependency:local:stage1:stage1_ready_q>stage1_valid_q/local:stage1:stage1_ready_q/state_condition",
+                "source": "local:stage1:stage1_ready_q",
+                "target": "local:stage1:stage1_valid_q",
+                "label": "更新条件 · stage1_ready_q",
+                "connectionIds": [],
+                "connections": [],
+                "dependencyEndpoints": [
+                  {
+                    "moduleId": "stage1",
+                    "interfaceId": "stage1_ready_q",
+                    "local": true
+                  }
+                ],
+                "localSignalId": "stage1_valid_q",
+                "semanticKind": "dependency"
+              }
+            ]
+          },
+          {
+            "id": "dependency:stage1>stage1_ready_q/control/state_data",
+            "label": "写入值 · 握手控制 · 2 项",
+            "source": "rack:stage1:consumer",
+            "target": "local:stage1:stage1_ready_q",
+            "length": 1127,
+            "directLength": 1127,
+            "detour": 0,
+            "ratio": 1,
+            "routed": true,
+            "connectionIds": [],
+            "dependencyEndpoints": [
+              {
+                "moduleId": "stage1",
+                "interfaceId": "m_axis_tready"
+              },
+              {
+                "moduleId": "stage1",
+                "interfaceId": "s_axis_tvalid"
+              }
+            ],
+            "relationMembers": [
+              {
+                "id": "dependency:stage1>stage1_ready_q/control/state_data",
+                "source": "rack:stage1:consumer",
+                "target": "local:stage1:stage1_ready_q",
+                "label": "写入值 · 握手控制 · 2 项",
+                "connectionIds": [],
+                "connections": [],
+                "dependencyEndpoints": [
+                  {
+                    "moduleId": "stage1",
+                    "interfaceId": "m_axis_tready"
+                  },
+                  {
+                    "moduleId": "stage1",
+                    "interfaceId": "s_axis_tvalid"
+                  }
+                ],
+                "localSignalId": "stage1_ready_q",
+                "semanticKind": "dependency"
+              }
+            ]
+          },
+          {
+            "id": "dependency:local:stage1:stage1_ready_q>stage1_ready_q/local:stage1:stage1_ready_q/state_data",
+            "label": "写入值 · stage1_ready_q",
+            "source": "local:stage1:stage1_ready_q",
+            "target": "local:stage1:stage1_ready_q",
+            "length": 852,
+            "directLength": 332,
+            "detour": 520,
+            "ratio": 2.566265060240964,
+            "routed": true,
+            "connectionIds": [],
+            "dependencyEndpoints": [
+              {
+                "moduleId": "stage1",
+                "interfaceId": "stage1_ready_q",
+                "local": true
+              }
+            ],
+            "relationMembers": [
+              {
+                "id": "dependency:local:stage1:stage1_ready_q>stage1_ready_q/local:stage1:stage1_ready_q/state_data",
+                "source": "local:stage1:stage1_ready_q",
+                "target": "local:stage1:stage1_ready_q",
+                "label": "写入值 · stage1_ready_q",
+                "connectionIds": [],
+                "connections": [],
+                "dependencyEndpoints": [
+                  {
+                    "moduleId": "stage1",
+                    "interfaceId": "stage1_ready_q",
+                    "local": true
+                  }
+                ],
+                "localSignalId": "stage1_ready_q",
+                "semanticKind": "dependency"
+              }
+            ]
+          },
+          {
+            "id": "reading-relation:[\"aggregate:stage1:context\",\"local:stage1:stage1_ready_q\",\"dependency\",\"other\",\"state_data\",\"写入值 · stage1_valid_q\",\"dependency:local:stage1:stage1_valid_q>stage1_ready_q/local:stage1:stage1_valid_q/state_data\",\"\",\"\"]",
+            "label": "写入值 · stage1_valid_q",
+            "source": "aggregate:stage1:context",
+            "target": "local:stage1:stage1_ready_q",
+            "length": 481,
+            "directLength": 481,
+            "detour": 0,
+            "ratio": 1,
+            "routed": true,
+            "connectionIds": [],
+            "dependencyEndpoints": [
+              {
+                "moduleId": "stage1",
+                "interfaceId": "stage1_valid_q",
+                "local": true
+              }
+            ],
+            "relationMembers": [
+              {
+                "id": "dependency:local:stage1:stage1_valid_q>stage1_ready_q/local:stage1:stage1_valid_q/state_data",
+                "source": "local:stage1:stage1_valid_q",
+                "target": "local:stage1:stage1_ready_q",
+                "label": "写入值 · stage1_valid_q",
+                "connectionIds": [],
+                "connections": [],
+                "dependencyEndpoints": [
+                  {
+                    "moduleId": "stage1",
+                    "interfaceId": "stage1_valid_q",
+                    "local": true
+                  }
+                ],
+                "localSignalId": "stage1_ready_q",
+                "semanticKind": "dependency"
+              }
+            ]
+          },
+          {
+            "id": "dependency:local:stage1:stage1_ready_q>stage1_data_q/local:stage1:stage1_ready_q/state_condition",
+            "label": "更新条件 · stage1_ready_q",
+            "source": "local:stage1:stage1_ready_q",
+            "target": "local:stage1:stage1_data_q",
+            "length": 467,
+            "directLength": 467,
+            "detour": 0,
+            "ratio": 1,
+            "routed": true,
+            "connectionIds": [],
+            "dependencyEndpoints": [
+              {
+                "moduleId": "stage1",
+                "interfaceId": "stage1_ready_q",
+                "local": true
+              }
+            ],
+            "relationMembers": [
+              {
+                "id": "dependency:local:stage1:stage1_ready_q>stage1_data_q/local:stage1:stage1_ready_q/state_condition",
+                "source": "local:stage1:stage1_ready_q",
+                "target": "local:stage1:stage1_data_q",
+                "label": "更新条件 · stage1_ready_q",
+                "connectionIds": [],
+                "connections": [],
+                "dependencyEndpoints": [
+                  {
+                    "moduleId": "stage1",
+                    "interfaceId": "stage1_ready_q",
+                    "local": true
+                  }
+                ],
+                "localSignalId": "stage1_data_q",
+                "semanticKind": "dependency"
+              }
+            ]
+          },
+          {
+            "id": "relation:local:stage1:stage1_data_q>rack:stage1:producer/local:stage1:stage1_data_q/payload/payload/wire",
+            "label": "数据",
+            "source": "local:stage1:stage1_data_q",
+            "target": "rack:stage1:producer",
+            "length": 340,
+            "directLength": 340,
+            "detour": 0,
+            "ratio": 1,
+            "routed": true,
+            "connectionIds": [
+              "stage1_data_q"
+            ],
+            "dependencyEndpoints": [],
+            "relationMembers": [
+              {
+                "id": "relation:local:stage1:stage1_data_q>rack:stage1:producer/local:stage1:stage1_data_q/payload/payload/wire",
+                "source": "local:stage1:stage1_data_q",
+                "target": "rack:stage1:producer",
+                "label": "数据",
+                "connectionIds": [
+                  "stage1_data_q"
+                ],
+                "connections": [
+                  {
+                    "id": "stage1_data_q",
+                    "scope": "stage1",
+                    "from": {
+                      "moduleId": "stage1",
+                      "interfaceId": "stage1_data_q",
+                      "local": true
+                    },
+                    "to": {
+                      "moduleId": "stage1",
+                      "interfaceId": "m_axis_tdata"
+                    }
+                  }
+                ],
+                "dependencyEndpoints": [],
+                "semanticKind": "wire"
+              }
+            ]
+          }
+        ],
+        "longest": [
+          "dependency:stage1>stage1_data_q/payload/state_data",
+          "relation:local:stage1:stage1_ready_q>rack:stage1:producer/local:stage1:stage1_ready_q/control/control/wire",
+          "reading-relation:[\"local:stage1:stage1_ready_q\",\"aggregate:stage1:context\",\"dependency\",\"other\",\"state_condition\",\"更新条件 · stage1_ready_q\",\"dependency:local:stage1:stage1_ready_q>stage1_valid_q/local:stage1:stage1_ready_q/state_condition\",\"\",\"\"]",
+          "dependency:stage1>stage1_ready_q/control/state_data",
+          "dependency:local:stage1:stage1_ready_q>stage1_ready_q/local:stage1:stage1_ready_q/state_data"
+        ],
+        "detours": [
+          "dependency:local:stage1:stage1_ready_q>stage1_ready_q/local:stage1:stage1_ready_q/state_data"
+        ],
+        "note": "最长关系用于定位；绕行提示阈值为多走至少 256 图单位且达到端点曼哈顿距离的 2 倍，不是 RTL 时序或失败判据。"
+      },
+      "hiddenLabels": [],
+      "folded": {
+        "auxiliary": 1,
+        "local": 0
+      },
+      "connections": [
+        {
+          "id": "stage1_data_q",
+          "from": {
+            "moduleId": "stage1",
+            "interfaceId": "stage1_data_q",
+            "local": true
+          },
+          "to": {
+            "moduleId": "stage1",
+            "interfaceId": "m_axis_tdata"
+          },
+          "retainedIn": [],
+          "visibleIn": [
+            "relation:local:stage1:stage1_data_q>rack:stage1:producer/local:stage1:stage1_data_q/payload/payload/wire"
+          ]
+        },
+        {
+          "id": "stage1_valid_q",
+          "from": {
+            "moduleId": "stage1",
+            "interfaceId": "stage1_valid_q",
+            "local": true
+          },
+          "to": {
+            "moduleId": "stage1",
+            "interfaceId": "m_axis_tvalid"
+          },
+          "retainedIn": [
+            "aggregate:stage1:context"
+          ],
+          "visibleIn": []
+        },
+        {
+          "id": "stage1_ready_q",
+          "from": {
+            "moduleId": "stage1",
+            "interfaceId": "stage1_ready_q",
+            "local": true
+          },
+          "to": {
+            "moduleId": "stage1",
+            "interfaceId": "s_axis_tready"
+          },
+          "retainedIn": [],
+          "visibleIn": [
+            "relation:local:stage1:stage1_ready_q>rack:stage1:producer/local:stage1:stage1_ready_q/control/control/wire"
+          ]
+        }
+      ],
+      "visualReview": "not_run",
+      "note": "几何检查不证明文字可读、硬件正确或所有交叉可辨认。"
+    }
+  }
+]

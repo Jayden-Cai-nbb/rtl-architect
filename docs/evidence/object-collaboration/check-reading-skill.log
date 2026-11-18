@@ -1,0 +1,11 @@
+
+> rtl-architect@2.0.0 check:reading-skill
+> python3 scripts/check-reading-skill.py
+
+PASS reading skill: allowed fields, ID-based ordering, foreign cwd, read-only byte hashes
+PASS reading skill: hierarchy, IDs, parameters, arrays, wiring, local drivers, clock/reset protected
+PASS reading skill: physical port fields and timing/behaviour contract protected
+PASS reading skill: partial, source digest, evidence and unresolved findings cannot disappear
+PASS reading skill: legacy summary addition allowed; requirements, decisions and questions preserved
+PASS reading skill: duplicate keys/IDs, malformed and wrapped inputs rejected
+6 reading skill checks passed.

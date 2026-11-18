@@ -1,0 +1,14 @@
+
+> rtl-architect@2.0.0 check:milestone
+> node --import tsx scripts/check-milestone.ts
+
+PASS 1: durable questions and agent replies leave architecture untouched; concurrent writes cannot overwrite
+PASS 2: checkpoint, candidate-linked replies and user resolution survive a new repository instance
+PASS 3: budget exposes fractional service bounds, absent ports, buffer insufficiency and overflow
+PASS 4: review retains a disconnected module but invalidates changed modules and parents; legacy remains conservative
+PASS 5: verification records input-bound isolated runs, checks JUnit and rejects stale results
+PASS 6: zero/skipped test reports, timeout, report traversal and live input mutation never pass
+PASS 7: real Yosys elaboration imports RTL topology and preserves unknown behavior with incremental source mapping
+PASS 8: dependency fingerprints cover neighbor contracts, global clocks and ancestor parameters without unrelated churn
+PASS 9: Yosys constants and normalized slices preserve bits while ambiguous and bidirectional drivers stay gaps
+完成 9 组 1.0 共同设计与执行检查。

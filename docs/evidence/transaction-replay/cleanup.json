@@ -1,0 +1,9 @@
+{
+  "ok": true,
+  "toolVersion": "2.0.0",
+  "command": "stop",
+  "workspaceRoot": "/tmp/rtlarch-transaction-replay",
+  "workspaceId": "9b8f5e2b1989d555cd228b057cf797f228b0c6cdf88b064e6e57a56cb7d3a0c6",
+  "stopped": true,
+  "instanceId": "6fcbe25a-32c7-4b45-a514-16a148d566df"
+}

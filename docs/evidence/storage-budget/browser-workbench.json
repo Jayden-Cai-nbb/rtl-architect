@@ -1,0 +1,197 @@
+{
+  "workbench": {
+    "schemaVersion": 1,
+    "threads": [],
+    "checkpoint": null,
+    "studies": [
+      {
+        "id": "study_1794971445031",
+        "title": "小型共享 RAM 的端口与吞吐预算",
+        "modelHash": "81f56c68d8faa7694aa7c280795c6b4a078b21b05c5087bb6caee245af6af017",
+        "moduleIds": [
+          "top"
+        ],
+        "configuration": "单时钟、16 × 32 bit、整 word；预算假设，不是器件报告",
+        "assumptions": [
+          "端口每拍接受一个请求；示例数值须经目标实现核对",
+          "有限访问只检验列出的请求，不代表完整调度"
+        ],
+        "workItems": 8,
+        "options": [
+          {
+            "id": "a",
+            "label": "共享单 R/W",
+            "compute": {
+              "lanes": 1,
+              "operationsPerItem": 1,
+              "cyclesPerOperation": 1,
+              "overheadCycles": 0,
+              "timing": {
+                "latencyCycles": 3,
+                "initiationInterval": 1
+              },
+              "launches": [
+                {
+                  "id": "op0",
+                  "cycle": 0,
+                  "lane": 0
+                },
+                {
+                  "id": "op1",
+                  "cycle": 1,
+                  "lane": 0
+                }
+              ]
+            },
+            "memory": {
+              "words": 16,
+              "width": 32,
+              "copies": 1,
+              "readsPerItem": 1,
+              "writesPerItem": 1,
+              "organization": {
+                "kind": "shared_rw",
+                "bankIds": [
+                  "ram0"
+                ],
+                "readLatencyCycles": 1,
+                "sameAddressReadWrite": "old_data",
+                "mapping": [
+                  {
+                    "address": 0,
+                    "bank": "ram0",
+                    "word": 0
+                  },
+                  {
+                    "address": 1,
+                    "bank": "ram0",
+                    "word": 1
+                  }
+                ]
+              },
+              "accesses": [
+                {
+                  "id": "read0",
+                  "cycle": 0,
+                  "kind": "read",
+                  "address": 0
+                },
+                {
+                  "id": "write0",
+                  "cycle": 0,
+                  "kind": "write",
+                  "address": 1
+                },
+                {
+                  "id": "same_read",
+                  "cycle": 1,
+                  "kind": "read",
+                  "address": 0
+                },
+                {
+                  "id": "same_write",
+                  "cycle": 1,
+                  "kind": "write",
+                  "address": 0
+                }
+              ]
+            },
+            "runIds": []
+          },
+          {
+            "id": "b",
+            "label": "独立 1R1W",
+            "compute": {
+              "lanes": 1,
+              "operationsPerItem": 1,
+              "cyclesPerOperation": 1,
+              "overheadCycles": 0,
+              "timing": {
+                "latencyCycles": 3,
+                "initiationInterval": 1
+              },
+              "launches": [
+                {
+                  "id": "op0",
+                  "cycle": 0,
+                  "lane": 0
+                },
+                {
+                  "id": "op1",
+                  "cycle": 1,
+                  "lane": 0
+                }
+              ]
+            },
+            "memory": {
+              "words": 16,
+              "width": 32,
+              "copies": 1,
+              "readsPerItem": 1,
+              "writesPerItem": 1,
+              "organization": {
+                "kind": "independent_1r1w",
+                "bankIds": [
+                  "ram0"
+                ],
+                "readLatencyCycles": null,
+                "sameAddressReadWrite": "unknown",
+                "mapping": [
+                  {
+                    "address": 0,
+                    "bank": "ram0",
+                    "word": 0
+                  },
+                  {
+                    "address": 1,
+                    "bank": "ram0",
+                    "word": 1
+                  }
+                ]
+              },
+              "accesses": [
+                {
+                  "id": "read0",
+                  "cycle": 0,
+                  "kind": "read",
+                  "address": 999
+                },
+                {
+                  "id": "write0",
+                  "cycle": 0,
+                  "kind": "write",
+                  "address": 1
+                },
+                {
+                  "id": "same_read",
+                  "cycle": 1,
+                  "kind": "read",
+                  "address": 0
+                },
+                {
+                  "id": "same_write",
+                  "cycle": 1,
+                  "kind": "write",
+                  "address": 0
+                }
+              ]
+            },
+            "runIds": []
+          }
+        ]
+      }
+    ]
+  },
+  "workbenchHash": "ac78f5d7883f7f3fd4b35cb0b82c1516b7b0c3d2da6d3d36d89dff365b37fbe4",
+  "modelHash": "81f56c68d8faa7694aa7c280795c6b4a078b21b05c5087bb6caee245af6af017",
+  "threadStates": [],
+  "checkpointState": null,
+  "studyStates": [
+    {
+      "id": "study_1794971445031",
+      "stale": false,
+      "reason": "预算仍绑定所记录的候选与假设；数值为派生下界"
+    }
+  ],
+  "decisionStates": []
+}

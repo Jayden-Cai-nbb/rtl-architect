@@ -5,12 +5,16 @@ import {tmpdir} from 'node:os';
 import {execFile} from 'node:child_process';
 import {promisify} from 'node:util';
 import {toolRoot} from '../src/workspace/environment';
+import {sourceBuildId} from '../src/workspace/build';
 const exec=promisify(execFile),root=await mkdtemp(join(tmpdir(),'rtlarch-open-')),copy=join(root,'tool'),a=join(root,'a'),b=join(root,'b');
 const env={...process.env};delete env.RTLARCH_API_PORT;delete env.RTLARCH_WORKSPACE;
 async function cli(workspace:string,args:string[],fail=false){try{const r=await exec(join(copy,'bin/rtlarch'),[...args,'--workspace',workspace,'--json'],{cwd:workspace,env,timeout:210000,maxBuffer:4*1024*1024});assert.equal(fail,false,'expected rejection');return JSON.parse(r.stdout);}catch(e){if(!fail)throw e;return JSON.parse((e as {stdout:string}).stdout);}}
 try{
- await mkdir(copy);for(const name of ['src','scripts','bin','dist','package.json','package-lock.json','vite.config.ts','tsconfig.json','index.html'])await cp(join(toolRoot,name),join(copy,name),{recursive:true});
+ await mkdir(copy);for(const name of ['src','scripts','bin','dist','examples/storage-budget','package.json','package-lock.json','vite.config.ts','tsconfig.json','index.html'])await cp(join(toolRoot,name),join(copy,name),{recursive:true});
  await symlink(join(toolRoot,'node_modules'),join(copy,'node_modules'));
+ const exampleFile=join(copy,'examples/storage-budget/shared-ram.json'),exampleBytes=await readFile(exampleFile),beforeExamples=await sourceBuildId(copy);
+ const changedExample=JSON.parse(exampleBytes.toString());changedExample.options[0].label+=' changed fixture';await writeFile(exampleFile,JSON.stringify(changedExample));assert.notEqual(await sourceBuildId(copy),beforeExamples);
+ await writeFile(exampleFile,exampleBytes);assert.equal(await sourceBuildId(copy),beforeExamples);
  for(const dir of [a,b]){await mkdir(join(dir,'architecture'),{recursive:true});await cp(join(toolRoot,'examples/packet-pipeline/model.json'),join(dir,'architecture/model.json'));}
  const first=await cli(a,['open']),other=await cli(b,['open']);assert.equal(first.rebuilt,false);
  // Same package version, different production source. Existing services must not be silently reused.
@@ -28,5 +32,6 @@ try{
  await cli(a,['stop']);await writeFile(join(copy,'src/web/broken.ts'),'this is invalid TypeScript !!!!\n');
  const bad=await cli(a,['open'],true);assert.equal(bad.error.code,'BUILD_FAILED');assert.ok((await readFile(join(a,'.rtlarch/build.log'),'utf8')).includes('error TS'));
  console.log('PASS 3: failed rebuild reports a saved build log, never a stale success link');
+ console.log('PASS 4: bundled budget examples participate in build identity and survive isolated tool copies');
 }finally{for(const workspace of [a,b]){try{const info=JSON.parse(await readFile(join(workspace,'.rtlarch/runtime.json'),'utf8'));await fetch(info.apiUrl+'/api/runtime/stop',{method:'POST',headers:{'Content-Type':'application/json','X-RTLArch-Workspace':info.workspaceId},body:'{}'});for(let i=0;i<30;i++){await new Promise(r=>setTimeout(r,100));try{await fetch(info.apiUrl+'/api/health',{signal:AbortSignal.timeout(500)});}catch{break;}}}catch{}}await rm(root,{recursive:true,force:true});}
-console.log('完成 3 组统一打开与升级恢复检查。');
+console.log('完成 4 组统一打开与升级恢复检查。');

@@ -1,0 +1,59 @@
+import {useEffect,useState} from 'react';
+import {z} from 'zod';
+import {evaluateStudy,studySchema,studyMatchesCandidates,type Study,type StudyOption} from '../../core/studies';
+import {launchesSchema,feedbackSchema,accessesSchema,memoryOrganizationSchema,portKindLabels} from '../../core/studyConstraints';
+import type {Repository} from '../../workspace/repository';
+import type {WorkbenchSnapshot} from '../../core/workbench';
+import {BudgetResult} from './BudgetResult';
+import ramExample from '../../../examples/storage-budget/shared-ram.json';
+import timingExample from '../../../examples/storage-budget/operation-timing.json';
+import bankExample from '../../../examples/storage-budget/bank-conflict.json';
+import flowExample from '../../../examples/storage-budget/feedback-flow.json';
+type Resume=Awaited<ReturnType<Repository['getResume']>>;
+const optionDefaults=(id:string):StudyOption=>({id,label:`方案 ${id.toUpperCase()}`,compute:{lanes:id==='a'?1:2,operationsPerItem:1,cyclesPerOperation:1,overheadCycles:0},runIds:[]});
+const sequenceSchema=z.strictObject({launches:launchesSchema.optional(),feedback:feedbackSchema.optional(),mapping:memoryOrganizationSchema.shape.mapping.optional(),accesses:accessesSchema.optional()});
+const traceText=(o:StudyOption)=>JSON.stringify({launches:o.compute.launches,feedback:o.feedback,...(o.memory&&'organization' in o.memory?{mapping:o.memory.organization.mapping,accesses:o.memory.accesses}:{})},null,2);
+export function BudgetEditor({modelHash,moduleId,candidate,studies,candidates,studyStates,busy,save}:{modelHash:string;moduleId:string;candidate:boolean;studies:Study[];candidates:Resume['proposals'];studyStates:WorkbenchSnapshot['studyStates'];busy:boolean;save:(s:Study)=>Promise<void>}){
+ const [title,setTitle]=useState(''),[configuration,setConfiguration]=useState(''),[assumptions,setAssumptions]=useState(''),[workItems,setWorkItems]=useState('');
+ const [options,setOptions]=useState<StudyOption[]>([optionDefaults('a'),optionDefaults('b')]),[traces,setTraces]=useState<Record<string,string>>({});
+ const [evaluated,setEvaluated]=useState<Study>(),[result,setResult]=useState<ReturnType<typeof evaluateStudy>>(),[error,setError]=useState(''),[sample,setSample]=useState('ram');
+ const clear=()=>{setResult(undefined);setEvaluated(undefined);};
+ useEffect(clear,[modelHash,moduleId]);
+ function input():Study{
+  const opts=structuredClone(options);
+  for(const o of opts){
+   const seq=sequenceSchema.parse(JSON.parse(traces[o.id]??traceText(o)));
+   o.compute.launches=seq.launches;o.feedback=seq.feedback;
+   if(o.memory&&'organization' in o.memory){o.memory.organization.mapping=seq.mapping??[];o.memory.accesses=seq.accesses;}
+   else if(seq.mapping||seq.accesses)throw new Error(`${o.label}：访问序列需要显式 bank 端口组织`);
+  }
+  return studySchema.parse({id:`study_${Date.now()}`,title,modelHash,moduleIds:[moduleId],configuration,assumptions:assumptions.split('\n').filter(s=>s.trim()),workItems:Number(workItems),options:opts});
+ }
+ function compute(){try{const s=input();setResult(evaluateStudy(s));setEvaluated(s);setError('');}catch(e){clear();setError(e instanceof z.ZodError?e.issues.map(i=>`${i.path.join('.')}：${i.message}`).join('；'):String(e));}}
+ function edit(index:number,fn:(o:StudyOption)=>void){setOptions(old=>{const next=structuredClone(old);fn(next[index]);return next;});clear();}
+ const numberField=(label:string,value:number|null,change:(n:number|null)=>void,unknown=false)=><label key={label}>{label}<input type="number" min="0" step="any" placeholder={unknown?'UNKNOWN':''} value={value===null||Number.isNaN(value)?'':value} onChange={e=>change(e.target.value===''?(unknown?null:NaN):Number(e.target.value))}/></label>;
+ const nfield=(label:string,value:number,change:(n:number)=>void)=>numberField(label,value,n=>change(n??NaN));
+ function loadSample(){const s=studySchema.parse(({ram:ramExample,timing:timingExample,bank:bankExample,flow:flowExample} as Record<string,unknown>)[sample]);setTitle(s.title);setConfiguration(s.configuration);setAssumptions(s.assumptions.join('\n'));setWorkItems(String(s.workItems));setOptions(s.options);setTraces(Object.fromEntries(s.options.map(o=>[o.id,traceText(o)])));clear();setError('');}
+ return <><p className="prose">资源、递推、存储端口和持续流率分别预算。旧输入沿用原服务量下界；新增时序与 bank 信息必须显式填写。输入为预算假设，不是另一份硬件模型。</p>
+ <div className="actions"><select aria-label="预算示例" value={sample} onChange={e=>setSample(e.target.value)}><option value="ram">共享 RAM 与独立 1R1W</option><option value="timing">三拍 latency 与三拍占用</option><option value="bank">同 bank 冲突</option><option value="flow">反馈与 8/6 GB/s 持续流</option></select><button onClick={loadSample}>载入示例（替换输入）</button></div>
+ {candidate&&<p className="collaboration-notice">可以只读计算；保存候选预算前，每个方案须明确选择各自已登记的候选版本。</p>}
+ <div className="budget-inputs"><label>比较主题<input aria-label="比较主题" value={title} onChange={e=>{setTitle(e.target.value);clear();}}/></label><label>设计配置<input aria-label="设计配置" value={configuration} onChange={e=>{setConfiguration(e.target.value);clear();}}/></label><label>工作项数量<input aria-label="工作项数量" type="number" min="1" value={workItems} onChange={e=>{setWorkItems(e.target.value);clear();}}/></label><label>成立假设（每行一条）<textarea aria-label="成立假设" rows={2} value={assumptions} onChange={e=>{setAssumptions(e.target.value);clear();}}/></label></div>
+ <div className="budget-options">{options.map((o,i)=>{const mem=o.memory,org=mem&&'organization' in mem?mem.organization:undefined;return <fieldset key={o.id}><legend>{o.label}</legend>
+ <label>绑定版本<select aria-label={`预算候选 ${o.id}`} value={o.candidate?.proposalId??''} onChange={e=>edit(i,n=>{const p=candidates.find(p=>p.id===e.target.value);n.candidate=p?{proposalId:p.id,modelHash:p.candidateHash}:undefined;n.runIds=[];})}><option value="">当前保存模型</option>{candidates.filter(p=>p.state!=='STALE').map(p=><option key={p.id} value={p.id}>{p.reason} · {p.id.slice(0,12)}</option>)}</select></label>
+ {o.candidate&&<code>{o.candidate.modelHash}</code>}<label>方案名称<input value={o.label} onChange={e=>edit(i,n=>{n.label=e.target.value;})}/></label>
+ <div className="budget-fields">{([['lanes','资源数量'],['operationsPerItem','每项运算数'],['cyclesPerOperation','每次资源独占周期'],['overheadCycles','不可重叠开销']] as const).map(([key,label])=>nfield(label,o.compute[key],v=>edit(i,n=>{n.compute[key]=v;})))}</div>
+ <label className="work-check"><input type="checkbox" checked={!!o.compute.timing} onChange={e=>edit(i,n=>{n.compute.timing=e.target.checked?{latencyCycles:null,initiationInterval:null}:undefined;})}/>显式声明运算 latency / II</label>
+ {o.compute.timing&&<div className="budget-fields">{numberField('结果 latency（拍；空白为未知）',o.compute.timing.latencyCycles,v=>edit(i,n=>{n.compute.timing!.latencyCycles=v;}),true)}{numberField('启动间隔 II（拍；空白为未知）',o.compute.timing.initiationInterval,v=>edit(i,n=>{n.compute.timing!.initiationInterval=v;}),true)}</div>}
+ <label className="work-check"><input type="checkbox" checked={!!mem} onChange={e=>edit(i,n=>{n.memory=e.target.checked?{words:1,width:1,copies:1,readsPerItem:1,writesPerItem:1,readPorts:1,writePorts:1}:undefined;})}/>计入存储端口约束</label>
+ {mem&&<><label>端口组织<select aria-label={`端口组织 ${o.id}`} value={org?.kind??'legacy'} onChange={e=>edit(i,n=>{const m=n.memory!,base={words:m.words,width:m.width,copies:m.copies,readsPerItem:m.readsPerItem,writesPerItem:m.writesPerItem};n.memory=e.target.value==='legacy'?{...base,readPorts:1,writePorts:1}:{...base,copies:org?.bankIds.length??1,organization:{kind:e.target.value as NonNullable<typeof org>['kind'],bankIds:org?.bankIds??['bank0'],readLatencyCycles:org?.readLatencyCycles??null,sameAddressReadWrite:org?.sameAddressReadWrite??'unknown',mapping:org?.mapping??[]}};})}><option value="legacy">旧输入：总独立读/写端口</option>{Object.entries(portKindLabels).map(([v,l])=><option key={v} value={v}>{l}（每 bank）</option>)}</select></label>
+ <div className="budget-fields">{([['words',org?'每 bank 深度':'每副本深度'],['width','位宽'],['readsPerItem','每项读次数'],['writesPerItem','每项写次数']] as const).map(([key,label])=>nfield(label,mem[key],v=>edit(i,n=>{n.memory![key]=v;})))}{'readPorts' in mem&&([['copies','副本数'],['readPorts','总独立读端口'],['writePorts','总独立写端口']] as const).map(([key,label])=>nfield(label,mem[key],v=>edit(i,n=>{if(n.memory&&'readPorts' in n.memory)n.memory[key]=v;})))}</div>
+ {org&&<><label>独立 bank ID（逗号分隔，每个 bank 均有上述端口）<input value={org.bankIds.join(',')} onChange={e=>edit(i,n=>{if(n.memory&&'organization' in n.memory){n.memory.organization.bankIds=e.target.value.split(',').map(s=>s.trim());n.memory.copies=n.memory.organization.bankIds.length;}})}/></label>{numberField('RAM 读延迟（拍；空白为未知）',org.readLatencyCycles,v=>edit(i,n=>{if(n.memory&&'organization' in n.memory)n.memory.organization.readLatencyCycles=v;}),true)}<label>同址读写<select value={org.sameAddressReadWrite} onChange={e=>edit(i,n=>{if(n.memory&&'organization' in n.memory)n.memory.organization.sameAddressReadWrite=e.target.value as typeof org.sameAddressReadWrite;})}>{[['unknown','UNKNOWN'],['old_data','写前值'],['new_data','本拍写值'],['no_change','输出保持，无新读结果'],['forbidden','禁止同址读写']].map(([v,l])=><option key={v} value={v}>{l}</option>)}</select></label></>}</>}
+ <label className="work-check"><input type="checkbox" checked={!!o.flow} onChange={e=>edit(i,n=>{n.flow=e.target.checked?{producedPerCycle:1,maxStallCycles:0,inFlight:0,capacity:0}:undefined;})}/>计入停顿缓存与长期流率</label>
+ {o.flow&&<><div className="budget-fields">{([['producedPerCycle','每周期继续产生（项）'],['maxStallCycles','最大停顿周期'],['inFlight','在途数据项'],['capacity','缓存容量（项）']] as const).map(([key,label])=>nfield(label,o.flow![key],v=>edit(i,n=>{n.flow![key]=v;})))}</div><label>持续流率单位<select aria-label={`持续流率 ${o.id}`} value={o.flow.sustained?.unit??''} onChange={e=>edit(i,n=>{n.flow!.sustained=e.target.value==='bytes_per_second'?{unit:'bytes_per_second',arrival:null,consumption:null,bytesPerItem:1}:e.target.value==='items_per_cycle'?{unit:'items_per_cycle',arrival:null,consumption:null}:undefined;})}><option value="">未声明</option><option value="items_per_cycle">项 / 拍</option><option value="bytes_per_second">字节 / 秒（十进制）</option></select></label>{o.flow.sustained&&<div className="budget-fields">{numberField('持续到达率（空白未知）',o.flow.sustained.arrival,v=>edit(i,n=>{n.flow!.sustained!.arrival=v;}),true)}{numberField('持续消费率（空白未知）',o.flow.sustained.consumption,v=>edit(i,n=>{n.flow!.sustained!.consumption=v;}),true)}{o.flow.sustained.unit==='bytes_per_second'&&nfield('每项字节数',o.flow.sustained.bytesPerItem,v=>edit(i,n=>{if(n.flow?.sustained?.unit==='bytes_per_second')n.flow.sustained.bytesPerItem=v;}))}</div>}</>}
+ <details><summary>有限请求、bank 映射与反馈依赖</summary><p className="hint">launches：id/cycle/lane；mapping：address/bank/word；accesses：id/cycle/kind/address（未知地址 null）；feedback：id/latencyCycles/distance。按 E0 起算，不猜测请求已被接受。最多 256 次运算启动、512 次访问、16 bank、32 条反馈。可先载入示例再修改。</p><textarea aria-label={`有限序列 ${o.id}`} rows={10} spellCheck={false} value={traces[o.id]??traceText(o)} onChange={e=>{setTraces(old=>({...old,[o.id]:e.target.value}));clear();}}/></details>
+ </fieldset>;})}</div>
+ <div className="actions"><button onClick={compute}>计算并比较</button><button disabled={busy||!result||!evaluated||candidate&&options.some(o=>!o.candidate)||options.some(o=>o.candidate)&&options.some(o=>!o.candidate)} onClick={()=>evaluated&&void save(evaluated)}>保存此次预算</button><small>对象：{moduleId}；修订会保存为新记录。</small></div>
+ {error&&<p role="alert">{error}</p>}{result&&<BudgetResult result={result}/>}
+ <details className="budget-history"><summary>历史预算 · {studies.length}</summary>{studies.slice().reverse().map(s=><article key={s.id} className="work-thread"><h3>{s.title} · {s.modelHash===modelHash&&!studyStates.find(x=>x.id===s.id)?.stale&&studyMatchesCandidates(s,options.map(o=>o.candidate))?'匹配当前比较版本':'STALE / 不适用于当前候选，需重新计算'}</h3><small>{s.configuration} · {s.moduleIds.join('、')}</small><p>假设：{s.assumptions.join('；')}</p><BudgetResult result={evaluateStudy(s)}/></article>)}</details>
+ </>;
+}

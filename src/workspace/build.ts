@@ -7,6 +7,8 @@ export async function sourceBuildId(root=toolRoot){
  const files:string[]=[];
  async function walk(dir:string){for(const e of await readdir(dir,{withFileTypes:true})){const p=join(dir,e.name);if(e.isDirectory())await walk(p);else if(e.isFile())files.push(p);}}
  await walk(join(root,'src'));
+ // These JSON fixtures are imported by BudgetEditor and are part of the browser bundle.
+ for(const name of ['shared-ram','operation-timing','bank-conflict','feedback-flow'])files.push(join(root,'examples/storage-budget',`${name}.json`));
  for(const name of ['package.json','package-lock.json','vite.config.ts','tsconfig.json','index.html'])files.push(join(root,name));
  const hash=createHash('sha256');
  for(const file of files.sort()){hash.update(relative(root,file));hash.update('\0');hash.update(await readFile(file));hash.update('\0');}

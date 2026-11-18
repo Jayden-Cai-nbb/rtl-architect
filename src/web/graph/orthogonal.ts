@@ -81,7 +81,8 @@ export function routeEdges(nodes:RtlNode[],edges:Edge[]){
  }
  // Place all names against the final wires, rather than letting a later wire cross an earlier name.
  for(const edge of ordered){
-  if(!edge.data?.routePoints)continue;
+  // Unnamed dependency edges have no text to place and must not reserve invisible boxes.
+  if(!edge.label||!edge.data?.routePoints)continue;
   const own=used.filter(s=>s.edge.id===edge.id),foreign=used.filter(s=>s.edge.id!==edge.id);
   const labelWidth=String(edge.label??'').split('').reduce((n,c)=>n+(c.charCodeAt(0)>255?16:8.5),0)+12;
   const candidates:{x:number;y:number;box:Box;score:number;leader?:{x1:number;y1:number;x2:number;y2:number}}[]=[];

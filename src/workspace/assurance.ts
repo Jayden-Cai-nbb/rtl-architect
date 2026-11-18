@@ -57,5 +57,5 @@ export async function assurance(workspace:string,snapshot:Snapshot,moduleId?:str
   const current=await evaluateConformance(workspace,saved.manifest);
   structural={status:current.modelHash!==snapshot.modelHash||!current.producerInputsCurrent?'STALE':current.status,reason:current.producerReason,record:file,scope:current.scope};break;
  }catch{structural={status:'UNKNOWN',reason:'最新结构报告不可读取'};break;}
- return {modelHash:snapshot.modelHash,moduleId:moduleId??null,approval:{status:moduleId?snapshot.moduleReviews.find(r=>r.moduleId===moduleId)?.status??'DRAFT':snapshot.reviewStatus,assurance:'local_record',note:'本地审阅记录；身份未经认证，不代表 RTL 验证。'},structural,stateObservation:await latestStateObservation(workspace,snapshot.modelHash,moduleId),behavior,requirements,limitations:['最多读取最近 100 次运行及结构报告；缺少记录保持未知。','输入闭包由清单作者声明；工具未自动发现全部构建依赖。','仿真通过仅适用于实际运行场景，不是形式证明或行为等价。']};
+ return {runs,modelHash:snapshot.modelHash,moduleId:moduleId??null,approval:{status:moduleId?snapshot.moduleReviews.find(r=>r.moduleId===moduleId)?.status??'DRAFT':snapshot.reviewStatus,assurance:'local_record',note:'本地审阅记录；身份未经认证，不代表 RTL 验证。'},structural,stateObservation:await latestStateObservation(workspace,snapshot.modelHash,moduleId),behavior,requirements,limitations:['最多读取最近 100 次运行及结构报告；缺少记录保持未知。','输入闭包由清单作者声明；工具未自动发现全部构建依赖。','仿真通过仅适用于实际运行场景，不是形式证明或行为等价。']};
 }

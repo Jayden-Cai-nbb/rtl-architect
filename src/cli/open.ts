@@ -29,7 +29,8 @@ export async function openWorkspace(workspace:string,options:ClientOptions&{rest
  const checkpoint=resume.workbench.checkpoint,target=checkpoint?.target;
  const ready=target?.proposalId&&resume.proposals.find(p=>p.id===target.proposalId&&p.state==='READY');
  if(ready)url.searchParams.set('proposal',ready.id);
- const usable=!!target&&(target.modelHash===resume.modelHash||!!ready);
+ const usable=!!target&&!!resume.checkpointState?.canLocate;
+ if(usable&&target?.object)url.searchParams.set('checkpoint','1');
  if(usable&&target?.moduleId)url.searchParams.set('module',target.moduleId);
  if(usable&&target?.connectionIds.length)url.searchParams.set('connection',target.connectionIds[0]);
  if(resume.nextActions.length)url.searchParams.set('panel','work');

@@ -12,7 +12,16 @@ export const obligationSchema=z.discriminatedUnion('kind',[
  z.strictObject({...obligationBase,kind:z.literal('fifo_ordering'),inputInterfaceId:idSchema,outputInterfaceId:idSchema,capacity:widthSchema,completion:z.literal('drained_test_end')})
 ]);
 export type Obligation=z.infer<typeof obligationSchema>;
-export const contractSchema = z.strictObject({ responsibility: z.string(), latencyMinCycles: integer.nonnegative(), latencyCondition: z.string(), backpressure: z.string(), resetBehavior: z.string(), invariants: z.array(z.string()), verificationPlan: z.array(z.string()), openQuestions: z.array(z.string()), obligations:z.array(obligationSchema).optional() });
+const transactionStateSchema=z.strictObject({moduleId:idSchema,localSignalId:idSchema});
+export const transactionPathSchema=z.strictObject({
+ id:idSchema,description:z.string().trim().min(1),clock:idSchema,reset:idSchema,width:integer.min(1).max(256),
+ semantics:z.literal('ordered_lossless_single_slot_stages'),resetPolicy:z.literal('cancel_all'),
+ sampling:z.literal('pre_edge_handshake_post_edge_settled'),
+ stages:z.array(z.strictObject({dataState:transactionStateSchema,validState:transactionStateSchema,loadBranch:idSchema,evidenceIds:z.array(idSchema)})).min(1).max(8),
+ connectionIds:z.array(idSchema).min(1).max(256)
+});
+export type TransactionPath=z.infer<typeof transactionPathSchema>;
+export const contractSchema = z.strictObject({ responsibility: z.string(), latencyMinCycles: integer.nonnegative(), latencyCondition: z.string(), backpressure: z.string(), resetBehavior: z.string(), invariants: z.array(z.string()), verificationPlan: z.array(z.string()), openQuestions: z.array(z.string()), obligations:z.array(obligationSchema).optional(), transactionPaths:z.array(transactionPathSchema).max(8).optional() });
 export const parameterSchema = z.union([integer, z.string(), z.boolean()]);
 export const kindSchema = z.enum(['subsystem', 'module', 'memory', 'compute', 'controller', 'fifo', 'add_const']);
 export const specificationSchema = z.strictObject({

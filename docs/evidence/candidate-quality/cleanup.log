@@ -1,0 +1,18 @@
+{
+  "ok": true,
+  "toolVersion": "2.0.0",
+  "command": "stop",
+  "workspaceRoot": "/tmp/rtlarch-candidate-quality/typed-expressions",
+  "workspaceId": "3b9f4f8647393706f9e55346a63cd3ee3d18becec81161b5de8132357548d26b",
+  "stopped": true,
+  "instanceId": "fb068aca-3d6a-4789-ad59-a2dd4c4c5edc"
+}
+{
+  "ok": true,
+  "toolVersion": "2.0.0",
+  "command": "stop",
+  "workspaceRoot": "/tmp/rtlarch-candidate-quality/external-axis",
+  "workspaceId": "9dcc55ba852ff9d489f5dc36bb9f59475965106ac413e8cb9e5fc7932b39bf18",
+  "stopped": true,
+  "instanceId": "d1088784-94d9-492c-9260-d1f419ec1792"
+}

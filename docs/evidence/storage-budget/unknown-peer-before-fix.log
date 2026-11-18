@@ -1,0 +1,28 @@
+
+> rtl-architect@2.0.0 check:storage-budget
+> node --import tsx scripts/check-storage-budget.ts
+
+PASS 1: legacy inputs and workbench hash stay unchanged, old lower-bound numbers remain exact
+PASS 2: three-cycle pipelined latency differs from three-cycle exclusive occupancy; II is separate
+PASS 3: shared R/W, independent 1R1W and 2RW obey an independent exhaustive port allocator
+PASS 4: identical aggregate ports cannot hide same-bank conflicts; every access ID is retained
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: unmapped peer may conflict; known address must not imply an accepted read
+
+2 !== null
+
+    at <anonymous> (/home/cjjnbb/projects/rtl-architect/scripts/check-storage-budget.ts:55:142)
+    at async check (/home/cjjnbb/projects/rtl-architect/scripts/check-storage-budget.ts:11:49)
+    at async <anonymous> (/home/cjjnbb/projects/rtl-architect/scripts/check-storage-budget.ts:45:2) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 2,
+  expected: null,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.18.1
