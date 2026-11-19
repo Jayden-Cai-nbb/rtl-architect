@@ -19,7 +19,7 @@ rtlarch help open --json
 rtlarch schema model --json
 ```
 
-`env.sh` 只设置当前 shell 的路径，锁文件固定项目依赖。保留完整的 `npm ci` 安装，因为源码入口需要 TypeScript 加载器。`open` 可根据构建身份重建缺失或过期的页面。
+`env.sh` 只设置当前 shell 的路径，锁文件固定项目依赖。若 Node 自带的 npm 版本不同，可在选定的 Node 环境执行 `npm install --global npm@11.6.2 --ignore-scripts --no-audit --no-fund`，再运行 `npm ci`。保留完整的安装，因为源码入口需要 TypeScript 加载器。`open` 可根据构建身份重建缺失或过期的页面。
 
 日常从其他目录使用时，可以为当前用户安装命令和 skill，也可为某个 RTL 工程单独安装 skill。
 

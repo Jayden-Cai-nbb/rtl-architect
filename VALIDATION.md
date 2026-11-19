@@ -65,7 +65,7 @@ npm run release -- --check
 | 固定 `axis_register` | 本轮重跑 9/9 配置、81/81 原版用例、9/9 原生回放。数据位反转和双槽 sideband 故障均保留检出结果。 |
 | 固定 `axis_fifo` | 核对整理版的 144 组、2,016 个原版产物，使用当前构建重新跑四组定向仿真，20/20 映射 MATCH。提前提交得到 MISMATCH，独立仿真回报 `check_failed`。原版 pytest 产物以 `reranUpstream=false` 标记为复用。 |
 
-本轮页面验收使用真实本机服务与 HTTP 冒烟。下节 Chromium 交互为整理版实测记录。工作区写入均在临时项目执行。远端运行由 GitHub Release 链接关联到提交。
+本轮页面验收使用真实本机服务与 HTTP 冒烟。下节 Chromium 交互为整理版实测记录。工作区写入均在临时项目执行。远端首轮在 npm 11.16.0 与锁定的 11.6.2 不符时停止，随后恢复 CI 中安装 11.6.2 的步骤。发布所用提交及远端结果由 GitHub Release 链接关联。[首轮记录](https://github.com/Jayden-Cai-nbb/rtl-architect/actions/runs/44544942368)
 
 ## 2.1.0 整理版验收
 
