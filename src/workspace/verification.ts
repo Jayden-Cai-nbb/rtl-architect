@@ -11,8 +11,9 @@ import {hashSchema,idSchema,modelSchema} from '../core/schema';
 import {hashValue,modelHash} from '../core/export';
 import {inputFile,newArtifactDirectory,workspacePath} from './artifacts';
 import {ToolError} from './environment';
+import {inputManifestSchema} from './inventory';
 const exec=promisify(execFile),text=z.string().trim().min(1);
-export const verificationProfileSchema=z.strictObject({schemaVersion:z.literal(1),name:text,stage:z.enum(['compile','elaboration','lint','simulation','synthesis','timing','formal']),moduleIds:z.array(idSchema).min(1),inputs:z.array(text).min(1).max(10000),inputClosure:z.strictObject({status:z.enum(['declared_complete','partial']),note:text}).optional(),timeoutMs:z.number().int().min(100).max(3600000),commands:z.array(z.strictObject({program:text,args:z.array(z.string()).max(1000),versionArgs:z.array(z.string()).max(20).optional()})).min(1).max(20),checks:z.array(z.discriminatedUnion('kind',[z.strictObject({kind:z.literal('artifact'),file:text}),z.strictObject({kind:z.literal('obligations'),file:text,metadata:text}),z.strictObject({kind:z.literal('exit_code')}),z.strictObject({kind:z.literal('contains'),file:text,text}),z.strictObject({kind:z.literal('junit'),file:text})])).min(1).max(30)});
+export const verificationProfileSchema=z.strictObject({schemaVersion:z.literal(1),name:text,stage:z.enum(['compile','elaboration','lint','simulation','synthesis','timing','formal']),moduleIds:z.array(idSchema).min(1),inputs:z.array(text).min(1).max(10000),elaborationInputs:text.optional(),inputClosure:z.strictObject({status:z.enum(['declared_complete','partial']),note:text}).optional(),timeoutMs:z.number().int().min(100).max(3600000),commands:z.array(z.strictObject({program:text,args:z.array(z.string()).max(1000),versionArgs:z.array(z.string()).max(20).optional()})).min(1).max(20),checks:z.array(z.discriminatedUnion('kind',[z.strictObject({kind:z.literal('artifact'),file:text}),z.strictObject({kind:z.literal('obligations'),file:text,metadata:text}),z.strictObject({kind:z.literal('exit_code')}),z.strictObject({kind:z.literal('contains'),file:text,text}),z.strictObject({kind:z.literal('junit'),file:text})])).min(1).max(30)});
 const snapshot=async(workspace:string,paths:string[])=>Promise.all(paths.map(async file=>{const {sha256}=await inputFile(workspace,file);return {file,sha256};}));
 const json=(x:unknown)=>JSON.stringify(x,null,2)+'\n';
 async function command(program:string,args:string[],cwd:string,timeoutMs:number){
@@ -34,6 +35,18 @@ export async function runVerification(workspace:string,input:unknown){
  const obligationTargets=[];for(const c of profile.checks)if(c.kind==='obligations'){const meta=await loadChecks(workspace,c.metadata,profile.inputs);for(const item of meta.items){if(!profile.moduleIds.includes(item.moduleId))throw new ToolError('CHECK_SCOPE_INVALID','验证清单需包含每个监视器所属模块');obligationTargets.push(item);}}
  const basis=await verificationBasis(workspace,model);
  const before=await snapshot(workspace,profile.inputs),id=`run_${Date.now()}_${randomUUID().replaceAll('-','')}`;
+ if(profile.elaborationInputs){
+  if(profile.stage!=='elaboration'||profile.inputClosure?.status!=='declared_complete'||!profile.inputs.includes(profile.elaborationInputs))
+   throw new ToolError('ELABORATION_INPUTS','复用展开需要 elaboration 阶段、已声明完整的输入闭包和登记在 inputs 的清单。');
+  const inventory=await inputFile(workspace,profile.elaborationInputs);
+  const declared=inputManifestSchema.parse(JSON.parse(inventory.bytes.toString()));
+  const required=[...declared.files,...declared.assets].filter(e=>typeof e==='string'||e.stages.includes('compile')).map(e=>typeof e==='string'?e:e.path);
+  const missing=required.filter(f=>!profile.inputs.includes(f));
+  const base=await workspacePath(workspace,'.');
+  const dependent=await Promise.all(profile.inputs.map(async f=>/^(architecture|generated|\.rtlarch)(\/|$)/.test(relative(base,await workspacePath(workspace,f)))));
+  if(!required.length||missing.length||dependent.some(Boolean)||inventory.sha256!==before.find(f=>f.file===inventory.file)?.sha256)
+   throw new ToolError('ELABORATION_INPUTS','源文件展开须包含清单中的编译输入，且不能依赖已保存的架构、生成合同或运行状态。',{missing});
+ }
  // Resolve the evidence parent before accepting it as a workspace-owned destination.
  await mkdir(join(workspace,'evidence'),{recursive:true});await workspacePath(workspace,'evidence');await mkdir(join(workspace,'evidence/runs'),{recursive:true});await workspacePath(workspace,'evidence/runs');
  const dir=await newArtifactDirectory(workspace,join(workspace,'evidence/runs',id)),startedAt=new Date().toISOString(),start=Date.now();
@@ -77,17 +90,36 @@ export async function runVerification(workspace:string,input:unknown){
  await writeFile(join(dir,'run.json'),json(record),{flag:'wx'});return {...record,directory:dir};
 }
 const runSchema=z.object({schemaVersion:z.literal(1),id:idSchema,name:text,stage:text,moduleIds:z.array(idSchema),modelHash:hashSchema,status:text,finishedAt:text,durationMs:z.number(),inputs:z.array(z.object({file:text,sha256:hashSchema})),artifacts:z.array(z.object({file:text,sha256:hashSchema}))});
+const runIdPattern=/^run_\d+_[a-f0-9]{32}$/;
+type RunMetadata=z.infer<typeof runSchema>;
+type RunSummary=Pick<RunMetadata,'id'|'name'|'status'> &
+ Partial<Pick<RunMetadata,'stage'|'moduleIds'|'modelHash'|'finishedAt'|'durationMs'>> &
+ {inputClosure?:string;toolVersionsKnown?:boolean;fresh:boolean;changedFiles?:string[];record?:string;error?:string};
+export async function verificationRun(workspace:string,currentHash:string,id:string):Promise<{
+ summary:RunSummary;digest:string|null;inputs:RunMetadata['inputs'];artifacts:RunMetadata['artifacts'];
+ profileHash?:string;elaborationInputs?:string;tools?:{program:string;version:string}[];
+}>{
+ try{
+  if(!runIdPattern.test(id))throw new Error('运行标识不合法');
+  const record=`evidence/runs/${id}/run.json`,file=await inputFile(workspace,record);
+  const raw=JSON.parse(file.bytes.toString()),r=runSchema.parse(raw);if(r.id!==id)throw new Error('运行标识不匹配');
+  const changed:string[]=[];
+  for(const input of r.inputs){try{if((await inputFile(workspace,input.file)).sha256!==input.sha256)changed.push(input.file);}catch{changed.push(input.file);}}
+  for(const artifact of r.artifacts){try{if((await inputFile(await workspacePath(workspace,`evidence/runs/${id}`),artifact.file)).sha256!==artifact.sha256)changed.push(`报告:${artifact.file}`);}catch{changed.push(`报告:${artifact.file}`);}}
+  const summary={id,name:r.name,stage:r.stage,moduleIds:r.moduleIds,modelHash:r.modelHash,status:r.status,finishedAt:r.finishedAt,durationMs:r.durationMs,inputClosure:raw.profile?.inputClosure?.status??'unknown',toolVersionsKnown:Array.isArray(raw.steps)&&raw.steps.length>0&&raw.steps.every((s:{toolVersion?:string})=>s.toolVersion&&s.toolVersion!=='unknown'&&s.toolVersion!=='version probe failed'),fresh:r.modelHash===currentHash&&!changed.length,changedFiles:changed,record};
+  const profile=verificationProfileSchema.safeParse(raw.profile);
+  const elaborationInputs=profile.success&&hashValue(profile.data)===raw.profileHash?profile.data.elaborationInputs:undefined;
+  const tools=Array.isArray(raw.steps)?raw.steps.map((s:{program:string;toolVersion:string})=>({program:s.program,version:s.toolVersion})):undefined;
+  return {summary,digest:file.sha256,inputs:r.inputs,artifacts:r.artifacts,profileHash:raw.profileHash,elaborationInputs,tools};
+ }catch(e){
+  return {summary:{id,name:id,status:'unreadable',fresh:false,error:String(e)},digest:null,inputs:[],artifacts:[]};
+ }
+}
 export async function verificationRuns(workspace:string,currentHash:string){
  const names=await readdir(join(workspace,'evidence/runs')).catch(e=>{if(e.code==='ENOENT')return [] as string[];throw e;});
  const summaries=[];
- for(const id of names.filter(n=>/^run_\d+_[a-f0-9]{32}$/.test(n)).sort().reverse().slice(0,100)){
-  try{
-   const raw=JSON.parse((await inputFile(workspace,`evidence/runs/${id}/run.json`)).bytes.toString()),r=runSchema.parse(raw);if(r.id!==id)throw new Error('运行标识不匹配');
-   const changed:string[]=[];
-   for(const input of r.inputs){try{if((await inputFile(workspace,input.file)).sha256!==input.sha256)changed.push(input.file);}catch{changed.push(input.file);}}
-   for(const artifact of r.artifacts){try{if((await inputFile(await workspacePath(workspace,`evidence/runs/${id}`),artifact.file)).sha256!==artifact.sha256)changed.push(`报告:${artifact.file}`);}catch{changed.push(`报告:${artifact.file}`);}}
-   summaries.push({id,name:r.name,stage:r.stage,moduleIds:r.moduleIds,modelHash:r.modelHash,status:r.status,finishedAt:r.finishedAt,durationMs:r.durationMs,inputClosure:raw.profile?.inputClosure?.status??'unknown',toolVersionsKnown:Array.isArray(raw.steps)&&raw.steps.length>0&&raw.steps.every((s:{toolVersion?:string})=>s.toolVersion&&s.toolVersion!=='unknown'&&s.toolVersion!=='version probe failed'),fresh:r.modelHash===currentHash&&!changed.length,changedFiles:changed,record:`evidence/runs/${id}/run.json`});
-  }catch(e){summaries.push({id,name:id,status:'unreadable',fresh:false,error:String(e)});}
+ for(const id of names.filter(n=>runIdPattern.test(n)).sort().reverse().slice(0,100)){
+  summaries.push((await verificationRun(workspace,currentHash,id)).summary);
  }
  return summaries;
 }

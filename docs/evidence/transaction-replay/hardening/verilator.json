@@ -1,0 +1,116 @@
+{
+  "good": {
+    "runId": "run_1794981686921_6570971aefdb49988be387dc78274de1",
+    "checkerVersion": 2,
+    "verify": "passed",
+    "assurance": "OBSERVED",
+    "environment": "CHECKED",
+    "coverage": {
+      "checkedEdges": 56,
+      "resetEdges": 2,
+      "accepted": 17,
+      "consumed": 16,
+      "cancelled": 1,
+      "inputBlockedEdges": 26,
+      "inputRecovered": 17,
+      "blocked": 2,
+      "recovered": 2
+    },
+    "observations": {
+      "valid": {
+        "matched": 220,
+        "mismatched": 0
+      },
+      "data": {
+        "matched": 101,
+        "mismatched": 0
+      }
+    },
+    "inFlight": 0,
+    "firstIssue": null
+  },
+  "valid_phase": {
+    "runId": "run_1794981702349_4a7cedd1a7fc486bb6c84cbdc6c3f0fa",
+    "checkerVersion": 2,
+    "verify": "passed",
+    "assurance": "FAILED",
+    "environment": "CHECKED",
+    "coverage": {
+      "checkedEdges": 56,
+      "resetEdges": 2,
+      "accepted": 21,
+      "consumed": 14,
+      "cancelled": 2,
+      "inputBlockedEdges": 22,
+      "inputRecovered": 21,
+      "blocked": 5,
+      "recovered": 0
+    },
+    "observations": {
+      "valid": {
+        "matched": 138,
+        "mismatched": 82
+      },
+      "data": {
+        "matched": 80,
+        "mismatched": 0
+      }
+    },
+    "inFlight": 0,
+    "firstIssue": {
+      "code": "VALID_PHASE",
+      "edge": 2,
+      "phase": "post",
+      "stage": 0,
+      "transaction": "T0",
+      "state": {
+        "moduleId": "stage0",
+        "localSignalId": "stage0_valid_q"
+      },
+      "expected": "true",
+      "actual": "false"
+    }
+  },
+  "blocked_overwrite": {
+    "runId": "run_1794981714875_fc4026b6d2e9465f8697186e069002f6",
+    "checkerVersion": 2,
+    "verify": "passed",
+    "assurance": "FAILED",
+    "environment": "CHECKED",
+    "coverage": {
+      "checkedEdges": 56,
+      "resetEdges": 2,
+      "accepted": 17,
+      "consumed": 16,
+      "cancelled": 1,
+      "inputBlockedEdges": 26,
+      "inputRecovered": 17,
+      "blocked": 2,
+      "recovered": 0
+    },
+    "observations": {
+      "valid": {
+        "matched": 220,
+        "mismatched": 0
+      },
+      "data": {
+        "matched": 63,
+        "mismatched": 38
+      }
+    },
+    "inFlight": 0,
+    "firstIssue": {
+      "code": "BLOCKED_PAYLOAD_OVERWRITE",
+      "edge": 10,
+      "phase": "post",
+      "stage": 1,
+      "transaction": "T3",
+      "state": {
+        "moduleId": "stage1",
+        "localSignalId": "stage1_data_q"
+      },
+      "expected": "19",
+      "actual": "20"
+    }
+  }
+}

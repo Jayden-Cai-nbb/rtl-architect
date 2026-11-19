@@ -1,0 +1,39 @@
+{
+  "chromium": "141.0.7390.37",
+  "playwright": "1.56.1",
+  "cases": [
+    {
+      "workspace": "/tmp/rtlarch-2.1.0-sY36ET/fifo/final/16-1",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "buildId": "4a8ade9bbcd98265fd710104f2673958a378f1a793a02001cc8ad80f6aac643c",
+      "modelHash": "088058c9cc622beaa96f2cfcbb97066a25b581f139edd014992f092f6c3277bc",
+      "errors": [],
+      "selected": "top · wr_ptr_commit_reg",
+      "ram": "RAM 读入 · 表达缺口。源码 mem[1024×36] 是真实地址化 RAM。当前模型不表达 RAM 字与按地址读写。管线首级的负载来源保留在源码证据。\nread_logic ↗\naddress_logic ↗\nwrite_logic ↗",
+      "supported": "NOT_DECLARED · 当前范围尚未声明对应的事务路径。确认使用受支持的语义后，再通过提案添加路径。",
+      "unsupported": "UNSUPPORTED · 当前事务回放不支持地址化 RAM 帧 FIFO。可用独立仿真检查并保留 verify 证据。write_logic ↗read_logic ↗",
+      "run": "directed · passed · 模型与输入仍匹配 evidence/runs/run_1795078118997_07a36d2e49fa449b8e6ade773cd9b9d9/run.json",
+      "passed": true
+    },
+    {
+      "workspace": "/tmp/rtlarch-2.1.0-sY36ET/fifo/final/fault-16-frame",
+      "viewport": {
+        "width": 1100,
+        "height": 800
+      },
+      "buildId": "4a8ade9bbcd98265fd710104f2673958a378f1a793a02001cc8ad80f6aac643c",
+      "modelHash": "088058c9cc622beaa96f2cfcbb97066a25b581f139edd014992f092f6c3277bc",
+      "errors": [],
+      "selected": "top · wr_ptr_commit_reg",
+      "ram": "RAM 读入 · 表达缺口。源码 mem[1024×36] 是真实地址化 RAM。当前模型不表达 RAM 字与按地址读写。管线首级的负载来源保留在源码证据。\nread_logic ↗\naddress_logic ↗\nwrite_logic ↗",
+      "supported": "NOT_DECLARED · 当前范围尚未声明对应的事务路径。确认使用受支持的语义后，再通过提案添加路径。",
+      "unsupported": "UNSUPPORTED · 当前事务回放不支持地址化 RAM 帧 FIFO。可用独立仿真检查并保留 verify 证据。write_logic ↗read_logic ↗",
+      "run": "directed · check_failed · 模型与输入仍匹配 evidence/runs/run_1795078159605_c5901d5a4c1c4b0b9938eeacbbb5c938/run.json",
+      "passed": true
+    }
+  ],
+  "finishedAt": "2026-11-19T08:49:32.559Z"
+}

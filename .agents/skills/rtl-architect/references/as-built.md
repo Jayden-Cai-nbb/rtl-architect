@@ -10,24 +10,26 @@
 
 ### 输入摘要工具
 
-准备 `proposals/inputs.json`，文件与目录条目相对目标 workspace；manifest 文件路径本身相对 shell cwd：
+按项目实际配置填写 manifest，文件与目录条目相对目标 workspace；manifest 路径本身相对 shell cwd。保留文件顺序，把实际 filelist、include、生成文件和验证资产纳入输入，区分 compile 与 simulation。工具仓库根目录有可直接运行的只读例子。
 
-```json
+```bash
+source ./env.sh
+workspace=$(mktemp -d -t rtlarch-inventory-XXXXXX)
+cp -R examples/rtl-intake/. "$workspace/"
+cat > "$workspace/inventory.json" <<'JSON'
 {
-  "top": "decoder_top",
-  "configuration": "源码默认参数，未设置宏",
+  "top": "stream_top",
+  "configuration": "先 BIAS=1 后 BIAS=2，8 位数据",
   "parameters": {},
   "defines": [],
   "includeDirs": ["rtl"],
-  "files": ["rtl/decoder_top.sv", "rtl/memory.sv", "tb/tb_decoder.sv", "filelist.f"],
-  "assets": [{"path":"data/rom.hex","stages":["simulation"]}, {"path":"data/golden.hex","stages":["simulation"]}]
+  "files": ["rtl/stage.sv", "rtl/stream_top.sv", {"path": "tb/tb_stream.sv", "stages": ["simulation"]}],
+  "assets": []
 }
-```
-
-列表按实际项目填写，不要求这些示例文件存在。保留编译文件顺序。将 filelist、被引用的 include 文件、宏配置和实际参与构建的生成文件纳入 files；未使用配置文件不要当成有效宏来源。assets 记录当前验证所需 ROM/向量；没有需要时为空数组。files/assets 可以使用字符串（保守计入两个阶段），或 `{path,stages:["compile","simulation"]}`。准确区分仿真时读取数据与编译/展开期必须存在的文件，不能假定所有 ROM 仅用于仿真。
-
-```bash
-rtlarch inventory proposals/inputs.json --workspace <项目> --json
+JSON
+rtlarch help inventory --json
+rtlarch schema inputs --json
+rtlarch inventory "$workspace/inventory.json" --workspace "$workspace" --json
 ```
 
 输出每个显式文件的 SHA-256 和 sourceDigest，不要求已有模型，不创建目录，不启动服务。保存输出到 proposals/evidence 下作为附件。缺失输入时退出非零，仍输出缺失条目与摘要；存在全部文件也不意味着编译或仿真通过。compileInputsAvailable / simulationInputsAvailable 仅说明对应清单依赖齐全，不是 compileReady/simulationReady 或运行通过。它不会自动展开 filelist、发现 include/$readmemh、验证 HDL 表达式或执行测试。
@@ -38,7 +40,17 @@ sourceDigest 纳入配置、文件顺序、文件内容和缺失状态。生成�
 
 工程可以生成 Yosys `write_json` 时，保留层级、实际顶层和配置，使用 `import-yosys <manifest.json> <新目录>`；适配器不执行展开命令。manifest 含 schemaVersion=1、top、netlist、files 和 configuration，文件相对 workspace，完整例子见 [原始 RTL 样例](../../../../examples/rtl-intake/README.md)。将宏/include/参数配置等依赖也纳入 files。先核对工程语法、库和展开支持，不能为了适配器改变原 RTL。
 
+只读还原可从无已保存模型的显式工作区导入；候选文件可直接传给 `diagram-quality --model` 和 `bundle --model`。需要执行由当前模型绑定的 verify 才准备工作区模型，仍按提案规定处理批准。
+
 输出 model.json 与 import.json：实例 ID 按路径稳定生成，来源 src 属性映射到实例，单向端口与可确定的位级连线/常量进入 IR。原位序 offset/upto/signed 和 RTL 名留在映射。双向、未知/多驱动、内部运算、存储行为及周期仍列缺口；参数二进制保留字符串，不猜 signed。最多 4096 个层级实例，整个输出仍为 as_built / partial，未核对展开输入与源码对应关系前不能消除该未知。
+
+### 复用已经登记的展开
+
+在 `verify` 的 elaboration 清单用 `elaborationInputs` 引用一份 `schema inputs` 兼容的配置文件。`inputs` 同时列出该配置和所有实际编译输入。作者声明命令只使用源码配置，且清单不含 `architecture/`、`generated/` 或运行状态。保留完整 argv、工具版本和成功网表产物。[可运行的完整例子](../../../../docs/UPGRADE-2.1.md#复用一次展开)
+
+导入清单 v2 使用 `{schemaVersion:2,runId,netlist}`。`netlist` 相对当次 `verify` 目录。工具读取同一份配置、查看顶层与已声明非负整数参数，并输出 `model.json`、`import.json`、`conformance.json` 和 `state-discovery.json`。端口、实例路径和生产运行 ID 直接复用。时钟、复位和状态按实际来源补充。发现存储的展开可产生地址访问阅读缺口及源码入口。
+
+保存经审阅的当前草稿后，用生成的引用执行 `conform` 或 `observe-state`。`reuseElaboration: true` 要求当前输入与当初产物一致。旧运行仍以原模型 hash 展示，新比较另带当前模型 hash。输入改变或产物不符要重新展开；来源独立展开不升级旧仿真或批准。
 
 更新源码先 `import-impact <import.json>`：显示直接映射到的重核范围，缺映射、展开 JSON 或未映射配置变化则保守扩大。重新展开到新 JSON、导入新目录、compare/draft 新旧候选；影响报告不是语义等价证明。不要自动把旧职责、组、合同覆盖到新端口上；按稳定 ID 对齐后复核受影响部分。没有展开器时继续受限静态还原，明确未核对范围。
 

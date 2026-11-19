@@ -1,6 +1,26 @@
 # 有限 ready/valid 事务回放
 
-复用 `external-axis` 的固定 MIT 上游双寄存级，不改原模型或 vendor 文件。首版只支持一个显式时钟域、同步复位、有序且 payload 不变的路径，每级一个保存槽（最多 8 级、256 位、4096 个连续沿，输入/结果各限 8 MiB）。不支持旁路、skid/FIFO 多槽、仲裁、数据变换、flush、异步复位和跨域；不能用于任意 RTL 自动计拍或完整时序证明。
+原生回放支持显式 ready/valid 路径的组合旁路、简单单槽、双槽 skid 和已有的级联单槽。采样最多 4096 个连续沿，输入和结果各限 8 MiB。FIFO、仲裁、负载变换、额外 flush、异步复位和跨域保留为能力边界。
+
+## v2 单作用域路径
+
+在 `contract.transactionPaths` 中声明 `schemaVersion: 2`。`semantics` 选 `combinational_bypass`、`registered_single_slot` 或 `registered_skid`。显式给出接口方向对应的 `ingress`、`egress`、字段宽度与来源连接。`fields` 最多六个，含 `data`，每字段 1 到 256 位。启用字段保留完整事务关联。禁用字段声明 `constant`，采样时核对其固定输出。位宽由同一模型解析器核对。
+
+| 路径 | 事务和复位语义 |
+| --- | --- |
+| 组合旁路 | valid 与负载正向、ready 反向。在同一个 E− 接受并消费，零存储。`resetPolicy: transparent` 时仍核对复位有效期间的传输，采样时钟是观察锚点 |
+| 简单单槽 | `ready` 寄存。输出槽在阻塞时保留。空载接收后在 E+ 可见，最早下一沿消费。`resetPolicy: cancel_all` 撤销输出槽在途事务 |
+| 双槽 skid | 入口拿到 ready 后，若旧输出受阻，新事务可进入临时槽。恢复时可以消费旧输出，同时在 E+ 将旧临时槽移入输出槽。稳态也可同沿消费旧输出及接受新输入。复位撤销两个有效槽位 |
+
+寄存路径显式引用 `readyState`、槽位的 `validState`、每个启用字段对应的状态和装载分支。每次接受分配新的 `T` 编号。相同整个负载也保留各自编号。`store` 表示进入临时槽，`transfer` 保留编号和全部启用字段。输出阻塞与入口等待分别计数，从复位时丢弃未接受的 offer 也不会产生取消事件。
+
+`schema replay --json` 可查看 v2 映射的 `ports` 和 `states`。键是模型端口或局部状态 ID，值是对应取样列。每个观察角色需有明确的列，包括内部槽位。映射、路径和 `rtlarch-rv-samples-v2` 必须同代。v2 继续使用连续 E−/E+ 字典。寄存路径由 E− 复位决定该沿的更新，E+ 已改变的复位作为观察值保留。入口仍等待时，每个启用字段都要保持。零接受、必需值未知和入口违规分别报告 `COVERAGE_INCOMPLETE`、`UNKNOWN` 和 `ENVIRONMENT_VIOLATION`。
+
+运行 [固定上游九配置入口](../external-axis/benchmark/README.md#运行) 后，各配置的 `*.replay.json`、`evidence/replays` 和 `summary.json` 提供可复跑映射与实际结果。`rtlarch replay --workspace` 可读记录，`rtlarch open --workspace` 后从页面“事务回放”选择场景并定位端口或槽位。
+
+## v1 双单槽样例
+
+下述样例复用 `external-axis` 的固定 MIT 上游双寄存级，采用原有 v1 路径、映射和采样格式。上限为 8 级、256 位数据。它继续维护 REG_TYPE=1 的原行为。
 
 `path.json` 是待加入顶层 `contract.transactionPaths` 的规范性声明。通过现有 `update_contract` 的 preview/commit 添加，不能直接改正在运行项目的模型。旧文件不补该字段，原 hash 不变。声明包含状态对象、装载分支和源码依据，但不带某次仿真记录。`connectionIds` 是结构追溯，不单独证明仿真映射正确。
 
@@ -18,7 +38,7 @@ bin/rtlarch replay --workspace "$work" --json
 bin/rtlarch open --workspace "$work" --json
 ```
 
-维护入口 `npm run check:transaction-replay` 在临时副本完成声明、preview/commit、真实 Verilator 采集、导入和两种实际 RTL 故障注入。原始模型/布局/vendor 不动，不批准项目。要直接打开包含正反例的可运行演示，可保留一个新临时副本：
+维护入口 `npm run check:transaction-replay` 在临时副本完成声明、preview/commit、真实 Verilator 采集、导入和两种实际 RTL 故障注入，另检查参数位宽、入口保持、有限轨迹和历史版本。可保留一个新临时副本以在页面查看正反例。
 
 ```bash
 source ./env.sh
@@ -33,21 +53,29 @@ bin/rtlarch stop --workspace /tmp/rtlarch-replay-demo --json
 
 ## 格式与事件
 
-仿真产物只接受 `rtlarch-rv-samples-v1` JSON：`clock: {id, edge}` 必须匹配模型时钟及 rising/falling 有效沿；`sampling` 必须是 `pre_edge_handshake_post_edge_settled`，`rows` 每项为 `{edge,pre,post}`；edge 从 0 连续编号。pre/post 为显式列名到十进制或 `0x` 字符串的映射。X/Z/null、缺失列和超宽值产生 UNKNOWN，后续不推测；缺沿或不合法格式拒绝导入。观察点映射还需写 model.moduleId/data/valid/ready，检查真实接口、方向和位宽。时钟 ID 和有效边沿同时核对声明与产物，采集者负责在这个沿前采样、NBA 与组合稳定后记录 post，工具不分析模拟器调度。
+这个样例使用 `rtlarch-rv-samples-v1`。两代采样都要求 `clock: {id, edge}` 匹配声明的有效沿，`sampling` 为 `pre_edge_handshake_post_edge_settled`，`rows` 每项为 `{edge,pre,post}`，从 E0 连续编号。pre/post 为显式列名到十进制或 `0x` 字符串的映射。所需值为 X/Z/null、缺失或超宽时返回 UNKNOWN。缺沿或不合法格式拒绝导入。采集者负责沿前采样与 NBA、组合稳定后的沿后记录。
 
 - **accept**：复位无效时入口 E− 的 valid && ready，为每次接受分配独立 T 编号；重复 payload 也不合并身份。
-- **visible**：声明所期望的级内新事务在 E+ 可见，逐项与实际 post 的 valid/payload 核对；不符标记 matched=false 并保留诊断。它不等于下游已经消费。
+- **visible** 在 E+ 核对本沿进入该级的事务。分别记录 valid 和数据的观察结果。
 - **consume**：最后观察点在 E− 的 valid && ready，消费的是该沿前保存的身份，不是同沿新输入。
 - **cancel**：复位沿按 cancel_all 撤销在途身份。必须从观察到的复位起步，不能猜初始事务；无效状态的数据不被当作事务。
 
-阻塞时核对已接受事务的 payload 和 valid，保留具体事务、E−/E+ 和 data/valid 状态对象。位置表是按声明及握手跟踪的期望身份；不是从 RTL 自动提取的硬件标签。消费不推断更新分支；其余事件的分支是显式声明关联，点击可核对同源 register.update 表，不声称 RTL 自动分支覆盖。
+状态位宽通过所属模块的参数绑定求值。装载分支若是字面常量 0，或被前面的字面常量 1 分支屏蔽，事务路径校验给出 `TRANSACTION_PATH`。状态覆盖分析负责这两类判定。
+
+`event.observation` 记录比较发生的沿前或沿后、valid 的匹配结果，以及有效数据的匹配结果。没有可比较的有效数据时，`data=null`。visible 关联声明中的装载分支，cancel 关联有效状态的同步复位声明。accept 和 consume 按握手记事件。分支关联用于打开模型规则，实际 RTL 选择了哪个分支仍未核验。位置表按声明和握手跟踪事务身份。
+
+入口在 E− 有 valid 且 ready 为 0 时，发送方必须保持 valid 和 payload。回放检查这一沿的 E+，以及随后各沿的 E−，直到入口实际握手或观察到复位。违规返回 `ENVIRONMENT_VIOLATION`，在 `environment.violation` 中记录端口、等待起点、违规沿和取值。该沿起停止路径归因，先前已检查的状态差异继续保留。未知采样单独给出 `sampleIssue`。
+
+`coverage` 统计已检查的前缀。接受按入口握手计数，消费按具有跟踪身份的出口握手计数，取消要求观察到沿后 valid 清零。级内阻塞和恢复按已跟踪且沿前观测匹配的事务去重。入口等待沿数和等待后的恢复握手另外记录。至少接受一笔且核对无差异才可得到 `OBSERVED`，只复位或只等待返回 `COVERAGE_INCOMPLETE`。允许有限轨迹结束时还有在途事务。
 
 ## 证据与页面
 
-`replay` 只读取 verify 已登记并核对摘要的 simulation 产物；configuration 必须是本次 verify 的输入文件。独立保存 `evidence/replays/<id>/record.json` 与派生 `result.json`，绑定 modelHash、runId、产物摘要、run.json 摘要、mapping/configuration；sourceDigest 是 **verify 声明输入闭包的摘要**，与模型 provenance 中的源码摘要含义区分。新鲜度复用 verify，输入、产物或模型变化后显示 STALE。结果文件损坏显示 UNKNOWN，旧 FAILED 不因最新成功消失。
+`replay` 读取 verify 已登记并核对摘要的 simulation 产物，configuration 必须是本次 verify 的输入文件。每次保存独立的 `evidence/replays/<id>/record.json` 和 `result.json`，绑定检查器版本、模型、runId、运行记录、输入闭包和产物摘要。页面和 CLI 按 `createdAt` 选择最近 100 份回放，按关联 runId 核对确切的 verify 记录。
 
-人工推演也可经显式 verify 清单登记一个手写 JSON 产物，但 mapping.origin 必须标 `manual`，界面始终显示 MANUAL；包装/复制文件的 verify 命令成功不代表仿真。仿真采集器及映射由作者声明，工具不会从命令名字认证来源。`OBSERVED` 仅表示该轨迹未发现违反此有限合同，不升级 assurance、批准或原模型验证声明。采集命令通过与事务核对 FAILED 可以同时存在。
+当前检查器为版本 3。旧记录没有版本或与当前检查器版本不同，显示 `STALE` 并保留原结果。已有 v1 合同与模型 hash 保持原值，原 verify 产物仍新鲜时可重新导入，只给出 v1 范围的结果。迁移到 v2 需通过提案新增或替换路径声明，再为当前模型登记包含完整端口及实际槽位观测的 v2 采样和映射。模型、来源或产物变化也会使历史记录过期。结果损坏显示 `UNKNOWN`。
 
-页面“事务回放”展示逐拍事件、阻塞和跟踪位置；点击沿把在途身份叠加到当前结构图，点击事件高亮模块。普通回放不布局、不编辑硬件。事件可打开关联分支、已有源码证据和同模块讨论；过期或候选记录禁用当前结构定位。讨论按模块和模型版本关联，不假装已有逐事务讨论 ID。没有自动播放时钟或通用波形解析器。
+人工推演也可经显式 verify 清单登记手写 JSON，mapping.origin 须标为 `manual`，界面显示 `MANUAL`。仿真采集器及映射由作者声明。`OBSERVED` 表示所采样的有限轨迹通过此次回放核对，形式证明和架构批准各有独立依据。采集成功与回放 `FAILED` 可以同时出现。
 
-本例场景：持续提供输入、下游阻塞后恢复、在途复位、最后排空。REG_TYPE=1 本身插入空拍，“连续输入”是持续 valid，不声称每拍接受。负例仅在临时 vendor 副本中增加一级 valid 延迟，或无视装载条件覆盖 payload；均要求诊断包含事务身份、沿和状态。
+页面分别展示状态观测、入口前提、场景覆盖和声明分支。点击沿可将跟踪身份叠加到当前结构图。当前记录可定位声明分支、源码和相关讨论，过期记录保留为只读历史。
+
+本例包含持续 valid 输入、下游阻塞后恢复、在途复位和最后排空。REG_TYPE=1 的实际输入握手之间有空拍。负例仅在临时 vendor 副本中增加一级 valid 延迟，或无视装载条件覆盖 payload。诊断给出事务身份、沿和对应状态。[六项缺陷的修复前后输出](../../docs/evidence/transaction-replay/hardening/README.md)

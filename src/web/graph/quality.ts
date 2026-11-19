@@ -70,7 +70,7 @@ export function diagramQuality(graph: ReturnType<typeof scopeDiagram>) {
   const structuralFidelity={status:missing.length||extra.length||duplicates.length||wrongEndpoints.length?'failed':'passed',missing,extra,duplicates,wrongEndpoints,omissions:graph.omissions,note:'仅检查当前视图及聚合清单对应模型连接；折叠有明确原因，不证明 RTL 覆盖。'};
   const semanticClarity={status:graph.semantics.issues.length?'needs_review':'no_detected_issue',issues:graph.semantics.issues,humanReview:'not_run'};
   const geometricReadability={status:overlaps.length||nodeHits.length||unrouted.length?'blocked':labelStatus!=='named'||crossings>0||sharedLength>0?'needs_review':'clear',note:'交叉、共线和隐藏线名与基本几何完整性分开；仍需沿真实事务人工阅读。'};
-  return {readingConstraints:readingAudit(graph),structuralFidelity,semanticClarity,geometricReadability, sharedLabels, labelStatus, status: overlaps.length || nodeHits.length || unrouted.length ? 'failed' : 'passed', overlaps, nodeHits, unrouted,
+  return {readingConstraints:readingAudit(graph),taskEvidence:graph.taskEvidence,structuralFidelity,semanticClarity,geometricReadability, sharedLabels, labelStatus, status: overlaps.length || nodeHits.length || unrouted.length ? 'failed' : 'passed', overlaps, nodeHits, unrouted,
     crossings, unrelatedSharedLength: sharedLength, bends,wireLength,maxRouteLength,routeReview,
     hiddenLabels: graph.edges.filter(e => e.label && e.data?.labelHidden).map(e => e.id),
     folded: { auxiliary: graph.auxiliaryCount, local: graph.foldedLocalCount },

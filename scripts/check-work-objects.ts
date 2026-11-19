@@ -2,7 +2,9 @@ import assert from 'node:assert/strict';
 import {mkdtemp,cp,readFile,rm,mkdir,writeFile} from 'node:fs/promises';
 import {join} from 'node:path';import {tmpdir} from 'node:os';
 import {Repository} from '../src/workspace/repository';
-import {makeWorkObject,sameWorkObject,workbenchSchema,emptyWorkbench,type WorkTarget} from '../src/core/workbench';
+import {makeWorkObject,makeWorkTarget,sameWorkObject,workSelection,workbenchSchema,emptyWorkbench,type WorkTarget} from '../src/core/workbench';
+import {makeSelection} from '../src/core/selection';
+import {driverReads} from '../src/core/signals';
 import {hashValue} from '../src/core/export';
 const root=await mkdtemp(join(tmpdir(),'rtlarch-work-objects-'));let count=0;
 const check=async(name:string,f:()=>unknown)=>{await f();console.log(`PASS ${++count}: ${name}`)};
@@ -27,6 +29,22 @@ try{
   const w=await repo.getWorkbench();await repo.updateWorkbench({baseHash:w.workbenchHash,action:{kind:'checkpoint',target:branch,intent:'检查装载',nextStep:'核对优先级'}});
   const restored=await new Repository(root).getResume();assert.deepEqual(restored.workbench.checkpoint!.target,branch);assert(restored.checkpointState?.canLocate);assert(restored.threadStates.every(t=>t.canLocate));
  });
+ await check('shared selection stores every original relation member and rejects unrelated aliases',async()=>{
+  const members=[{kind:'connection' as const,id:'middle_tvalid'},{kind:'connection' as const,id:'middle_tdata'}];
+  const ref=makeSelection(model,saved.modelHash,'top',{kind:'relationship',members});
+  const target=makeWorkTarget(model,ref);
+  assert.deepEqual(target.connectionIds,['middle_tdata','middle_tvalid']);
+  assert.deepEqual(workSelection(model,target),ref);
+  const record=await ask(target,'聚合关系成员');
+  assert.deepEqual(record.workbench.threads.at(-1)!.target.selection,ref);
+  await assert.rejects(ask({...target,connectionIds:['middle_tready']}));
+  await assert.rejects(ask(makeWorkTarget(model,makeSelection(model,saved.modelHash,'stage0',{kind:'relationship',members}))));
+  const local=model.localSignals!.find(n=>n.id==='stage0_data_q')!;
+  const [endpoint]=driverReads(local);
+  const dependency=makeSelection(model,saved.modelHash,'stage0',{kind:'relationship',members:[{kind:'dependency',localId:local.id,endpoint}]});
+  assert.deepEqual((await ask(makeWorkTarget(model,dependency))).workbench.threads.at(-1)!.target.selection,dependency);
+  assert.deepEqual(workSelection(model,branch),makeSelection(model,saved.modelHash,'stage0',{kind:'local',id:'stage0_data_q',branch:'load'}));
+ });
  await check('changed/deleted branch and same display name never rebind old questions',async()=>{
   const locals=structuredClone(model.localSignals!);const local=locals.find(l=>l.id==='stage0_data_q')!;assert(local.driver.kind==='register');local.driver.update!.branches[0].id='replacement';
   const change={baseHash:saved.modelHash,reason:'临时分支替换',commands:[{op:'update_local_signals',localSignals:locals}]},preview=await repo.preview(change);await repo.commit({proposal:change,candidateHash:preview.candidateHash});
@@ -39,6 +57,13 @@ try{
   const files=['model.json','review.json','module-reviews.json'],before=await Promise.all(files.map(f=>readFile(join(dir,'architecture',f))));
   await r.updateWorkbench({baseHash:(await r.getWorkbench()).workbenchHash,action:{kind:'ask',target:{modelHash:s.modelHash,moduleId:s.model.design.top,connectionIds:[]},title:'普通讨论',text:'不改变批准'}});
   for(const [i,f] of files.entries())assert.deepEqual(await readFile(join(dir,'architecture',f)),before[i]);assert.equal((await r.getModel()).reviewStatus,'APPROVED');
+  const work=await r.getWorkbench();
+  assert.deepEqual(await r.getWorkDock(),{height:null});
+  await r.putWorkDock({height:286});
+  assert.deepEqual(await new Repository(dir).getWorkDock(),{height:286});
+  await assert.rejects(r.putWorkDock({height:1000}));
+  assert.equal((await r.getWorkbench()).workbenchHash,work.workbenchHash);
+  for(const [i,f] of files.entries())assert.deepEqual(await readFile(join(dir,'architecture',f)),before[i]);
  });
  console.log(`完成第一步 ${count} 组对象协作检查；所有提交与批准仅在临时 fixture。`);
 }finally{await rm(root,{recursive:true,force:true});}

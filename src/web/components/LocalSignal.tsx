@@ -1,10 +1,46 @@
 import {AskObject} from './WorkObject';
 import {ModelStateCone} from './StateCone';
 import {stateDescription} from '../../core/stateUpdates';
-import {signalText,endpointLabel} from '../../core/signals';
-import type { Model,Endpoint } from '../../core/schema';
-import { EvidenceLinks } from './Evidence';
-export function LocalSignalDialog({model,modelHash,id,scope,close,trace,endpoints,selectedBranch}:{model:Model;modelHash:string;selectedBranch?:string;id:string;scope?:string;endpoints?:Endpoint[];close:()=>void;trace:(purpose?:'data'|'control')=>void}) {
- const item=model.localSignals?.find(n=>n.id===id&&(!scope||n.scope===scope));if(!item)return null;const state=stateDescription(item);
- return <div className="modal-backdrop"><section className="modal wide local-signal-modal" role="dialog" aria-label="局部信号"><div className="section-title"><h2>{item.name} · 局部{item.driver.kind==='register'?'寄存':'组合'}驱动</h2><button onClick={close}>关闭</button></div><p>{item.description}</p>{item.driver.kind==='register'&&<AskObject object={{kind:'local_state',scope:item.scope,id:item.id}}/>}{endpoints&&<div className="dependency-detail"><strong>这条关系束包含 {endpoints.length} 项输入依赖</strong><p className="hint">逐项来自模型记录；关系束不表示一根物理总线，寄存输入集合不证明字段级对应。</p><ul>{endpoints.map(e=><li key={endpointLabel(e)}><code>{endpointLabel(e)}</code></li>)}</ul></div>}<p className="hint">scope: {item.scope} · 位宽 {JSON.stringify(item.width)} · 这是作用域内部信号，不是额外 RTL 模块。</p>{state&&<section className="state-update" data-testid="state-update"><h3>{state.pattern}</h3><p>{state.note}</p><table><thead><tr><th>优先级</th><th>条件（沿前）</th><th>写入值（沿后）</th><th>讨论</th></tr></thead><tbody>{state.rows.map((r,i)=><tr key={r.id} data-branch={r.id} style={r.id===selectedBranch?{background:"#fff3c4"}:undefined}><td>{i+1} · {r.role}</td><td><code>{r.condition}</code></td><td><code>{r.action}</code></td><td><AskObject object={{kind:'update_branch',scope:item.scope,stateId:item.id,id:r.id}}/></td></tr>)}</tbody></table><div className="actions"><button onClick={()=>trace('data')}>数据从哪里来</button><button onClick={()=>trace('control')}>什么时候更新</button></div></section>}{item.driver.kind==='register'&&<ModelStateCone key={modelHash+item.scope+item.id} model={model} scope={item.scope} id={item.id} modelHash={modelHash}/>}<pre className="command-preview">{item.driver.kind==='comb'?signalText(item.driver.value):item.driver.sourceText}</pre><button onClick={()=>trace()}>查看输入依赖</button><EvidenceLinks ids={item.evidenceIds}/></section></div>;
+import {signalText} from '../../core/signals';
+import type {Model} from '../../core/schema';
+import type {Inspection} from '../../core/inspection';
+import {EvidenceDetails,EvidenceLinks} from './Evidence';
+import {TraceControls} from './SignalInspection';
+
+export function LocalSignalDetails({model,modelHash,scope,id,branch,tracking,trace}:{
+ model:Model;modelHash:string;scope:string;id:string;branch?:string;tracking?:Inspection;trace:(inspection?:Inspection)=>void;
+}){
+ const item=model.localSignals?.find(n=>n.scope===scope&&n.id===id);
+ if(!item)return null;
+ const state=stateDescription(item),active=state?.rows.find(r=>r.id===branch);
+ const seed={kind:'local' as const,id};
+ const writeRules=state?.rows??[];
+ const renderRule=(r:typeof writeRules[number],i:number)=>(
+  <article key={r.id} className="state-rule" data-branch={r.id} aria-current={r.id===branch?'true':undefined}>
+   <div className="state-rule-title"><strong>{i+1} · {r.role} · {r.id}</strong><AskObject object={{kind:'update_branch',scope,stateId:id,id:r.id}}/></div>
+   <dl><dt>沿前</dt><dd><code>{r.condition}</code></dd><dt>沿后</dt><dd><code>{r.action}</code></dd></dl>
+  </article>
+ );
+ return <section aria-label="局部信号" data-testid="local-signal-detail">
+  {active&&renderRule(active,writeRules.indexOf(active))}
+  <p className="prose">{item.description}</p>
+  <p className="hint">{scope}/{id} · 位宽 {JSON.stringify(item.width)}</p>
+  {state&&<section data-testid="state-update">
+   <details open={!active}><summary>{state.pattern} · 更新优先级</summary>
+    <p className="hint">{state.note}</p>
+    {writeRules.map((row,i)=>row===active?null:renderRule(row,i))}
+   </details>
+   <div className="actions">
+    <button onClick={()=>trace({...seed,purpose:'data',depth:2})}>数据从哪里来</button>
+    <button onClick={()=>trace({...seed,purpose:'control',depth:2})}>什么时候更新</button>
+   </div>
+  </section>}
+  <TraceControls model={model} scope={scope} seed={seed} tracking={tracking} trace={trace}/>
+  {item.driver.kind==='register'&&<EvidenceDetails summary="模型下一状态逻辑">
+   {()=><ModelStateCone key={modelHash+scope+id} model={model} scope={scope} id={id} modelHash={modelHash}/>}
+  </EvidenceDetails>}
+  <EvidenceDetails summary="驱动声明与来源">{()=>
+   <><pre className="command-preview">{item.driver.kind==='comb'?signalText(item.driver.value):item.driver.sourceText}</pre><EvidenceLinks ids={item.evidenceIds}/></>
+  }</EvidenceDetails>
+ </section>;
 }

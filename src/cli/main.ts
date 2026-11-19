@@ -1,4 +1,8 @@
-import {importReplay,replayRecords} from '../workspace/transactionReplay';
+import {importReplay,replayPreflight,replayRecords} from '../workspace/transactionReplay';
+import {replayCapabilities} from '../core/replayCapability';
+import {replayMappingSchema,replaySamplesSchema} from '../core/transactionReplay';
+import {decisionInputSchema} from '../core/decisions';
+import {selectionRefSchema} from '../core/selection';
 import {prepareDiagram} from '../web/graph/prepareDiagram';
 import {diagramQuality} from '../web/graph/quality';
 import {verificationImpact} from '../core/verificationImpact';
@@ -21,7 +25,7 @@ import { basename, dirname, join, relative, resolve } from 'node:path';
 import { homedir } from 'node:os';
 import { randomUUID } from 'node:crypto';
 import { z, ZodError } from 'zod';
-import { layoutSchema, modelSchema, proposalSchema, type Model } from '../core/schema';
+import { layoutSchema, modelSchema, proposalSchema, transactionPathSchema, type Model } from '../core/schema';
 import type { Snapshot, Preview } from '../core/api';
 import { createTemplate } from '../core/templates';
 import { modelHash } from '../core/export';
@@ -35,7 +39,7 @@ import { inputManifestSchema, sourceInventory } from '../workspace/inventory';
 import { evidenceFreshness } from '../workspace/freshness';
 import { exportBundle } from '../workspace/bundle';
 
-type Options = { task?:'overview'|'state'|'full'; state?:string; mode?:'architecture'|'microarchitecture'|'signals'; purpose?:string; maxBytes?:number; offset?:number; limit?:number; model?: string; layout?: string; index?:number; workspace?: string; module?: string; apiPort?: number; port?: number; name?: string; json: boolean; open: boolean; user: boolean; offline: boolean; restart:boolean; init:boolean };
+type Options = { task?:'overview'|'state'|'full'; state?:string; mode?:'architecture'|'microarchitecture'|'signals'; readingTask?:string; semantics?:string; purpose?:string; maxBytes?:number; offset?:number; limit?:number; model?: string; layout?: string; index?:number; workspace?: string; module?: string; apiPort?: number; port?: number; name?: string; json: boolean; open: boolean; user: boolean; offline: boolean; restart:boolean; init:boolean };
 function parseArgs() {
   const options: Options = { json: false, open: false, user: false, offline: false, restart:false, init:false }, positionals: string[] = [];
   const args = process.argv.slice(2);
@@ -43,18 +47,19 @@ function parseArgs() {
     const arg = args[i];
     if (arg === '--') { positionals.push(...args.slice(i + 1)); break; }
     if (['--json', '--open', '--user', '--offline', '--restart', '--init'].includes(arg)) { options[arg.slice(2) as 'json' | 'open' | 'user' | 'offline' | 'restart' | 'init'] = true; continue; }
-    if (['--workspace', '--module', '--api-port', '--port', '--name', '--index', '--model', '--layout', '--purpose', '--max-bytes', '--offset', '--limit', '--task', '--state', '--mode'].includes(arg)) {
+    if (['--workspace', '--module', '--api-port', '--port', '--name', '--index', '--model', '--layout', '--purpose', '--max-bytes', '--offset', '--limit', '--task', '--state', '--mode', '--semantics','--reading-task'].includes(arg)) {
       const value = args[++i]; if (!value || value.startsWith('--')) throw new ToolError('USAGE', `${arg} 缺少参数`);
       if(arg==='--task'){options.task=z.enum(['overview','state','full']).parse(value);continue;}
       if(arg==='--mode'){options.mode=z.enum(['architecture','microarchitecture','signals']).parse(value);continue;}
       if(arg==='--state'){options.state=value;continue;}
+      if(arg==='--reading-task'){options.readingTask=value;continue;}
       if(arg==='--purpose'){options.purpose=value;continue;}
       if(['--max-bytes','--offset','--limit'].includes(arg)){const key=arg==='--max-bytes'?'maxBytes':arg.slice(2) as 'offset'|'limit';options[key]=Number(value);continue;}
       if(arg==='--index'){options.index=Number(value);if(!Number.isSafeInteger(options.index)||options.index<0)throw new ToolError('USAGE','index 必须为非负整数');continue;}
       if (arg === '--api-port' || arg === '--port') {
         const port = Number(value); if (!Number.isInteger(port) || port < (arg === '--port' ? 0 : 1) || port > 65535) throw new ToolError('USAGE', '端口超出有效范围');
         if (arg === '--api-port') options.apiPort = port; else options.port = port;
-      } else options[arg.slice(2) as 'workspace' | 'module' | 'name' | 'model' | 'layout'] = value;
+      } else options[arg.slice(2) as 'workspace' | 'module' | 'name' | 'model' | 'layout' | 'semantics'] = value;
       continue;
     }
     if (arg.startsWith('-')) { if (arg === '--help' || arg === '-h') positionals.unshift('help'); else throw new ToolError('USAGE', `未知选项 ${arg}`); }
@@ -68,26 +73,59 @@ function parseArgs() {
   return { options, positionals };
 }
 const output = (value: unknown) => console.log(JSON.stringify(value, null, 2));
+const schemas:Record<string,z.ZodType>={
+  model:modelSchema, proposal:proposalSchema, inputs:inputManifestSchema, layout:layoutSchema,
+  context:contextViewSchema, verification:verificationProfileSchema, yosys:yosysManifestSchema,
+  checks:checkBindingsSchema, conformance:conformanceSchema, stateObservation:stateObservationSchema,
+  transactionPath:transactionPathSchema, replay:replayMappingSchema, replaySamples:replaySamplesSchema,
+  workbench:workbenchSchema, workAction:workActionSchema, selection:selectionRefSchema, decision:decisionInputSchema, study:studySchema,
+};
+const schemaNames=Object.keys(schemas);
+const commands:Record<string,string>={
+  help:'help [命令] --json',
+  'observe-state':'observe-state <mapping.json> --workspace . --json',
+  checks:'checks <bindings.json> <新目录> --workspace . --json', conform:'conform <mapping.json> --workspace . --json',
+  assurance:'assurance [--module ID] --workspace . --json',
+  'context-index':'context-index [--module ID] [--purpose design|review|implementation|debug] [--offset N] [--limit N] [--max-bytes N] [--offline] --workspace . --json',
+  open:'open --workspace . [--init] [--restart] [--json]',
+  resume:'resume --workspace . [--offline] --json', workbench:'workbench [action.json] --workspace . [--offline] --json（离线只读）',
+  study:'study <budget.json> --json（只读计算，保存使用 workbench）',
+  verify:'verify <profile.json> --workspace . --json（显式运行）', runs:'runs --workspace . --json',
+  'import-yosys':'import-yosys <manifest.json> <新目录> --workspace . --json（v1 独立网表，v2 引用 verify 的源文件展开）', 'import-impact':'import-impact <import.json> --workspace . --json',
+  replay:'replay [mapping.json] [--semantics ID] [--module ID] --workspace . --json（无映射时列出回放或预检指定语义）',
+  'diagram-quality':'diagram-quality [--module ID] [--model candidate.json] [--layout layout.json] [--task full|overview|state] [--state ID] [--reading-task ID] [--mode architecture|microarchitecture|signals] --workspace . --json（state 需要 --state，--mode 仅用于 full）',
+  evidence:'evidence [--model candidate.json] --workspace . --json（只读，不启动服务）',
+  bundle:'bundle <新目录> [--model candidate.json] [--layout layout.json] --workspace . --json',
+  doctor:'doctor --workspace . --json', init:'init --workspace . [--name 名称] --json',
+  start:'start --workspace . --json', stop:'stop --workspace . --json', serve:'serve --workspace . [--port 0] [--api-port 4317]',
+  context:'context [moduleId] [--module moduleId] [--index N] [--purpose design|review|implementation|debug] [--max-bytes N] [--offline] --workspace . --json',
+  compare:'compare <before-model.json> <after-model.json> --json（只读，不启动服务）',
+  schema:`schema [${schemaNames.join('|')}] --json`,
+  inventory:'inventory <inputs.json> --workspace . --json',
+  draft:'draft <model.json> [proposal.json] --workspace . [--open] --json',
+  preview:'preview <proposal.json> --workspace . --json', propose:'propose <proposal.json> --workspace . [--open] --json',
+  proposals:'proposals --workspace . --json', handoff:'handoff <moduleId> --workspace . --json', status:'status --workspace . --json',
+  validate:'validate --workspace . --json', spec:'spec [moduleId] --workspace . [--json]', export:'export spec|contract --workspace . --json',
+  install:'install --workspace <目标项目> 或 install --user',
+};
+const commandSchemas:Record<string,string[]>={
+  schema:schemaNames, context:['context'], 'context-index':['context'], inventory:['inputs'],
+  draft:['model','proposal'], preview:['proposal'], propose:['proposal'], bundle:['model','layout'], 'diagram-quality':['model','layout'],
+  'import-yosys':['yosys','verification','inputs'], verify:['verification','inputs'], 'observe-state':['stateObservation','verification'],
+  checks:['checks'], conform:['conformance'], replay:['transactionPath','replay','replaySamples','verification'],
+  workbench:['workbench','workAction','selection','decision','study'], resume:['workbench'], study:['study'],
+};
 async function main() {
   const { options, positionals } = parseArgs(), [command = 'help', argument, destination] = positionals;
-  if (command === 'help') return { ok: true, toolVersion, commands: {
-    'observe-state':'observe-state <mapping.json> --workspace . --json（提取 RTL 状态；可选比较更新规则）',checks:'checks <bindings.json> <新目录> --workspace . --json',conform:'conform <mapping.json> --workspace . --json',assurance:'assurance [--module ID] --workspace . --json', 'context-index':'context-index [--module ID] [--offset N] [--limit N] [--max-bytes N] --offline --json',
-    open:'open --workspace . [--init] [--restart] [--json]（构建、续接并打开当前页面）', resume:'resume --workspace . --json（继续工作、问题、候选与验证）',workbench:'workbench [action.json] --workspace . --json',study:'study <budget.json> --json（只读计算，保存使用 workbench）',verify:'verify <profile.json> --workspace . --json（显式运行）',runs:'runs --workspace . --json',
-    'import-yosys':'import-yosys <manifest.json> <新目录> --workspace . --json', 'import-impact':'import-impact <import.json> --workspace . --json',
-    'replay':'replay [mapping.json] --workspace . --json（导入 verify 事务产物或只读列出）',
-    'diagram-quality':'diagram-quality [--module ID] [--model candidate.json] [--layout layout.json] [--task full|overview|state] [--state ID] [--mode architecture|microarchitecture|signals] --workspace . --json（只读检查，不启动服务）',
-    evidence: 'evidence [--model candidate.json] --workspace . --json（只读，不启动服务）', bundle: 'bundle <新目录> [--model candidate.json] [--layout layout.json] --workspace . --json',
-    doctor: 'doctor --workspace . --json', init: 'init --workspace . [--name 名称]', start: 'start --workspace .', stop: 'stop --workspace .',
-    serve: 'serve --workspace . [--port 0] [--api-port 4317]', context: 'context [moduleId] [--module moduleId] [--index N] [--purpose design|review|implementation|debug] [--max-bytes N] [--offline] --workspace . --json',
-    compare: 'compare <before-model.json> <after-model.json> --json（只读，不启动服务）', schema: 'schema [model|proposal|inputs|layout]', inventory: 'inventory <inputs.json> --workspace . --json', draft: 'draft <model.json> [proposal.json] --workspace . [--open] --json',
-    preview: 'preview <proposal.json> --workspace . --json', propose: 'propose <proposal.json> --workspace . [--open] --json',
-    proposals: 'proposals --workspace . --json', handoff: 'handoff <moduleId> --workspace . --json', status: 'status --workspace . --json',
-    validate: 'validate --workspace . --json', spec: 'spec [moduleId] --workspace . [--json]', export: 'export spec|contract --workspace .',
-    install: 'install --workspace <目标项目> 或 install --user',
-  }, note: '--open 返回可直接打开的审阅链接；不自动提交或批准。不弹出浏览器，适用于终端和 WSL。' };
-  const supported = ['replay','diagram-quality','observe-state','checks','conform','assurance','context-index','open','resume','workbench','study','verify','runs','import-yosys','import-impact','evidence', 'bundle', 'compare','doctor', 'init', 'start', 'stop', 'serve', 'context', 'schema', 'inventory', 'draft', 'preview', 'propose', 'proposals', 'handoff', 'status', 'validate', 'spec', 'export', 'install'];
-  if (!supported.includes(command)) throw new ToolError('USAGE', `未知命令 ${command}，运行 rtlarch help 查看用法。`);
-  if((options.task||options.state||options.mode)&&command!=='diagram-quality')throw new ToolError('USAGE','--task/--state/--mode 仅用于 diagram-quality');
+  if (command === 'help') {
+    if (destination || argument && !Object.hasOwn(commands,argument)) throw new ToolError('USAGE','help 接受一个已知命令，运行 rtlarch help 查看清单。');
+    return {ok:true,toolVersion,commands:argument?{[argument]:commands[argument]}:commands,
+      schemas:argument?(commandSchemas[argument]??[]):schemaNames,...(argument==='replay'?{capabilities:replayCapabilities}:{}),
+      note:'draft/propose --open 返回审阅链接；提交和批准由用户执行。open --json 返回链接。schema 无参数时输出 model 和 proposal。'};
+  }
+  if (!Object.hasOwn(commands,command)) throw new ToolError('USAGE', `未知命令 ${command}，运行 rtlarch help 查看用法。`);
+  if(options.semantics&&command!=='replay'||command==='replay'&&options.module&&(argument||!options.semantics))throw new ToolError('USAGE','--semantics 仅用于 replay；--module 用于没有映射文件的回放预检');
+  if((options.task||options.state||options.mode||options.readingTask)&&command!=='diagram-quality')throw new ToolError('USAGE','--task/--state/--mode/--reading-task 仅用于 diagram-quality');
   if((options.task==='state')!==!!options.state)throw new ToolError('USAGE','--task state 必须与 --state ID 同时使用');
   if(options.mode&&options.task&&options.task!=='full')throw new ToolError('USAGE','--mode 仅用于完整硬件视图；请使用 --task full');
   const maxArgs = ['checks','draft','compare','import-yosys'].includes(command) ? 3 : ['replay','observe-state','conform','workbench','study','verify','import-impact','bundle', 'context', 'schema', 'inventory', 'preview', 'propose', 'handoff', 'spec', 'export'].includes(command) ? 2 : 1;
@@ -100,10 +138,10 @@ async function main() {
   if (options.model && !['diagram-quality','evidence','bundle'].includes(command) || options.layout && !['diagram-quality','bundle'].includes(command)) throw new ToolError('USAGE', '--model 仅用于 evidence/bundle/diagram-quality；--layout 仅用于 bundle/diagram-quality');
   if (options.port !== undefined && command !== 'serve') throw new ToolError('USAGE', '--port 仅用于 serve；后台服务自动分配端口。');
   if (options.open && !['draft', 'propose'].includes(command)) throw new ToolError('USAGE', '--open 仅用于 draft/propose。');
-  if (options.module && !['diagram-quality','context-index','assurance','context', 'handoff', 'spec'].includes(command)) throw new ToolError('USAGE', '--module 不适用于此命令。');
+  if (options.module && !['diagram-quality','context-index','assurance','context', 'handoff', 'spec','replay'].includes(command)) throw new ToolError('USAGE', '--module 不适用于此命令。');
   if(options.index!==undefined&&(command!=='context'||!(options.module??argument)))throw new ToolError('USAGE','--index 需配合 context 的模块 ID');
   if (options.user && command !== 'install') throw new ToolError('USAGE', '--user 仅用于 install。');
-  if (options.offline && !['context-index','context','resume','workbench'].includes(command)) throw new ToolError('USAGE', '--offline 仅用于只读 context。');
+  if (options.offline && !['context-index','context','resume','workbench'].includes(command)) throw new ToolError('USAGE', '--offline 仅用于只读 context-index/context/resume/workbench。');
   if (options.offline && options.apiPort !== undefined) throw new ToolError('USAGE', '--offline 不连接 API，请移除 --api-port / RTLARCH_API_PORT。');
   if (options.name && command !== 'init') throw new ToolError('USAGE', '--name 仅用于 init。');
   if (['bundle', 'draft', 'preview', 'propose', 'export', 'inventory'].includes(command) && !argument || command === 'handoff' && !(options.module ?? argument)) throw new ToolError('USAGE', '命令缺少必要参数，请运行 rtlarch help。');
@@ -115,12 +153,8 @@ async function main() {
   }
   if(command==='study'){if(!argument)throw new ToolError('USAGE','study 需要预算文件');return {ok:true,toolVersion,...evaluateStudy(JSON.parse(await readFile(resolve(argument),'utf8')))};}
   if (command === 'schema') {
-    const extra={stateObservation:stateObservationSchema,checks:checkBindingsSchema,conformance:conformanceSchema,context:contextViewSchema,workbench:workbenchSchema,workAction:workActionSchema,study:studySchema,verification:verificationProfileSchema,yosys:yosysManifestSchema};
-    if(argument in extra)return {ok:true,toolVersion,[argument]:z.toJSONSchema(extra[argument as keyof typeof extra])};
-    if (argument === 'layout') return { ok: true, toolVersion, layout: z.toJSONSchema(layoutSchema) };
-    if (argument === 'inputs') return { ok: true, toolVersion, inputs: z.toJSONSchema(inputManifestSchema) };
-    if (argument && !['model', 'proposal'].includes(argument)) throw new ToolError('USAGE', 'schema 支持 model/proposal/inputs/layout/workbench/workAction/study/verification/yosys');
-    return { ok: true, toolVersion, ...(argument === 'model' ? { model: z.toJSONSchema(modelSchema) } : argument === 'proposal' ? { proposal: z.toJSONSchema(proposalSchema) } : { model: z.toJSONSchema(modelSchema), proposal: z.toJSONSchema(proposalSchema) }) };
+    if(argument&&!Object.hasOwn(schemas,argument))throw new ToolError('USAGE',`schema 支持 ${schemaNames.join('/')}`);
+    return {ok:true,toolVersion,...Object.fromEntries((argument?[argument]:['model','proposal']).map(name=>[name,z.toJSONSchema(schemas[name])]))};
   }
   if (command === 'install' && options.user) return { ok: true, toolVersion, links: [
     await installLink(join(toolRoot, 'bin/rtlarch'), join(homedir(), '.local/bin/rtlarch')),
@@ -135,7 +169,10 @@ async function main() {
   if(command==='verify'){if(!argument)throw new ToolError('USAGE','verify 需要显式验证清单');const run=await runVerification(workspace,JSON.parse(await readFile(resolve(argument),'utf8')));if(run.status!=='passed')process.exitCode=1;return envelope({...run,ok:run.status==='passed',...(run.status!=='passed'?{error:{code:'VERIFICATION_FAILED',message:`验证未通过：${run.status}`}}:{})});}
   if(command==='checks'){if(!argument||!destination)throw new ToolError('USAGE','checks 需要映射与新目录');return envelope(await generateChecks(workspace,JSON.parse(await readFile(resolve(argument),'utf8')),resolve(destination)));}
   if(command==='conform'){if(!argument)throw new ToolError('USAGE','conform 需要显式映射');const report=await runConformance(workspace,JSON.parse(await readFile(resolve(argument),'utf8')));if(report.status!=='MATCH')process.exitCode=1;return envelope({...report,ok:report.status==='MATCH'});}
-  if(command==='replay')return envelope(argument?await importReplay(workspace,JSON.parse(await readFile(resolve(argument),'utf8'))):await replayRecords(workspace));
+  if(command==='replay'){
+    if(argument)return envelope(await importReplay(workspace,JSON.parse(await readFile(resolve(argument),'utf8')),options.semantics));
+    return envelope(options.semantics?await replayPreflight(workspace,options.module,options.semantics):await replayRecords(workspace));
+  }
   if(command==='assurance')return envelope(await assurance(workspace,await new Repository(workspace).getModel(),options.module));
   if(command==='runs'){const current=await new Repository(workspace).getModel();return envelope({runs:await verificationRuns(workspace,current.modelHash)});}
   if(options.offline&&command==='resume')return envelope({...await new Repository(workspace).getResume(),readMode:'disk'});
@@ -161,9 +198,14 @@ async function main() {
       const started=performance.now();
       const {graph,positions,layoutSource,readingSource}=await prepareDiagram(model,scope,hash,layout?.scopes[scope],{task,mode:options.mode});
       const generatedMs=performance.now()-started;
-      const quality=diagramQuality(graph),ok=quality.status==='passed'&&quality.structuralFidelity.status==='passed'&&quality.readingConstraints.status!=='needs_attention';
+      const quality=diagramQuality(graph);
+      const requested=options.readingTask?quality.taskEvidence.tasks.find(t=>t.id===options.readingTask):undefined;
+      const readingError=!options.readingTask?undefined:!requested?{code:'READING_TASK_NOT_FOUND',message:'当前层级没有这个阅读任务。'}:
+        requested.status==='blocked'?{code:'READING_TASK_INCOMPLETE',message:'当前视图无法跟读所需步骤。详见 quality.taskEvidence。'}:undefined;
+      const ok=!readingError&&quality.status==='passed'&&quality.structuralFidelity.status==='passed'&&quality.readingConstraints.status!=='needs_attention';
       if(!ok)process.exitCode=1;
-      return envelope({ok,readOnly:true,modelHash:hash,scope,view:{task:task??{kind:'full'},mode:graph.mode,layoutSource,readingSource,modelSource:options.model?'candidate_file':'saved_model'},generatedMs,quality,positions,...(!ok?{error:{code:'DIAGRAM_QUALITY_FAILED',message:'图形或阅读约束需修正；详见 quality。'}}:{})});
+      return envelope({ok,readOnly:true,modelHash:hash,scope,view:{task:task??{kind:'full'},mode:graph.mode,layoutSource,readingSource,modelSource:options.model?'candidate_file':'saved_model'},generatedMs,quality,positions,
+        ...(options.readingTask?{requestedReadingTask:options.readingTask}:{}),...(!ok?{error:readingError??{code:'DIAGRAM_QUALITY_FAILED',message:'图形或阅读约束需修正；详见 quality。'}}:{})});
     }
     const result = await exportBundle(workspace, argument, model, snapshot, layout);
     if (!result.geometryPassed) process.exitCode = 1;

@@ -16,6 +16,7 @@ import {excerpt} from '../reading';
 import {annotateWireNets} from './wireNets';
 import {orientPorts} from './ports';
 import {routeEdges} from './orthogonal';
+import {readingTaskEvidence} from './readingTaskEvidence';
 export type Positions=Record<string,{x:number;y:number}>;
 export type DiagramOptions={task?:ReadingTask;mode?:ViewMode;positions?:Positions;inspection?:Inspection;showAuxiliary?:boolean;showLocals?:boolean;showState?:boolean;reading?:ScopeLayout['reading'];detail?:'architecture'|'signals';measureOnly?:boolean;showPortNames?:boolean};
 export const diagramColors:Record<string,string>={data:'#326ea1',request:'#7c61ab',response:'#267e80',writeback:'#b07435',configuration:'#82919c',clock_reset:'#82919c',control:'#64758b',other:'#64758b'};
@@ -23,12 +24,13 @@ const width=240,baseHeight=120;
 export function scopeDiagram(model:Model,scope:string,options:DiagramOptions={},inspection=inspectScope(model,scope,options.inspection)){
  const requested=options;
  validateReadingRefs(model,scope,options.reading);
+ // Construct the complete relationship ledger first. Project the original constraints
+ // only once the task's visible nodes and edge members are known.
  if(options.task)options={...options,showLocals:true,showState:true,showAuxiliary:true,reading:undefined,inspection:undefined,positions:undefined};
  const mode=options.mode??(options.detail==='signals'?'signals':'architecture');
  options={...options,...(mode==='microarchitecture'?{showLocals:true,showState:true}:mode==='signals'?{showLocals:true,showState:true,showAuxiliary:true}:{}),detail:mode==='signals'?'signals':options.detail};
  if(options.inspection?.kind==='local'&&options.inspection.purpose==='control')options={...options,showAuxiliary:true};
  const semantics=hardwareView(model,scope),relationshipById=new Map(semantics.relationships.map(r=>[r.id,r]));
- validateReadingRefs(model,scope,options.reading);
  const owner=model.modules.find(m=>m.id===scope)!;
  const children=childrenOf(model,scope),focused=new Set(inspection.moduleIds),focus=!!options.inspection;
  const localSignals=model.localSignals?.filter(n=>n.scope===scope)??[];
@@ -178,18 +180,20 @@ export function scopeDiagram(model:Model,scope:string,options:DiagramOptions={},
  const outputRack=nodes.find(n=>n.id===`rack:${scope}:producer`);if(outputRack)outputRack.position.x=contentRight+boundaryGap;
  frame.width=contentRight-allMinX+frameMargin*2;nodes[0].width=frame.width;nodes[0].data.geometry.width=frame.width;
  const graph={projection:undefined as ReadingDiagramProjection|undefined,reading:options.reading,omissions,mode,modeLabel:viewNames[mode],semantics,nodes,edges,inspection,frame,auxiliaryCount,foldedLocalCount,foldedDependencyCount,localCount:localSignals.length,stateCount:localSignals.filter(n=>n.driver.kind==='register').length};
- for(const stage of options.reading?.stages??[]){
-  const members=nodes.filter(n=>stage.nodes.includes(n.id));if(!members.length)continue;
+ const visible=requested.task?projectReadingDiagram(model,scope,requested,graph):graph;
+ for(const stage of visible.reading?.stages??[]){
+  const members=visible.nodes.filter(n=>stage.nodes.includes(n.id));if(!members.length)continue;
+  if(members.length===1&&members[0].id===`aggregate:${scope}:stage:${stage.id}`)continue;
   const left=Math.min(...members.map(n=>n.position.x))-24,top=Math.min(...members.map(n=>n.position.y))-60;
   const right=Math.max(...members.map(n=>n.position.x+n.data.geometry.width))+24,bottom=Math.max(...members.map(n=>n.position.y+n.data.geometry.height))+24;
-  nodes.splice(1,0,{id:`stage:${scope}:${stage.id}`,type:'rtlModule',position:{x:left,y:top},width:right-left,height:bottom-top,draggable:false,selectable:false,zIndex:-1,data:{label:stage.label,moduleId:scope,kind:'region',boundary:true,summary:stage.note??'阅读分区 · 非 RTL 实例',geometry:{width:right-left,height:bottom-top,ports:[]},ports:[]}});
+  visible.nodes.splice(1,0,{id:`stage:${scope}:${stage.id}`,type:'rtlModule',position:{x:left,y:top},width:right-left,height:bottom-top,draggable:false,selectable:false,zIndex:-1,data:{label:stage.label,moduleId:scope,kind:'region',boundary:true,summary:stage.note??'阅读分区 · 非 RTL 实例',geometry:{width:right-left,height:bottom-top,ports:[]},ports:[]}});
  }
  // Port reorientation may grow a node, including in measurement-only layout passes.
- const contentBottom=Math.max(frame.position.y+frame.height,...nodes.slice(1).map(n=>n.position.y+n.data.geometry.height+34));
- frame.height=contentBottom-frame.position.y;nodes[0].height=frame.height;nodes[0].data.geometry.height=frame.height;
- const visible=requested.task?projectReadingDiagram(model,scope,requested,graph):graph;
- if(!options.measureOnly)return routeDiagram(visible);
- return visible;
+ const contentBottom=Math.max(visible.frame.position.y+visible.frame.height,...visible.nodes.slice(1).map(n=>n.position.y+n.data.geometry.height+34));
+ visible.frame.height=contentBottom-visible.frame.position.y;visible.nodes[0].height=visible.frame.height;visible.nodes[0].data.geometry.height=visible.frame.height;
+ const result={...visible,taskEvidence:readingTaskEvidence(model,scope,visible)};
+ if(!options.measureOnly)return routeDiagram(result);
+ return result;
 }
 export type ScopeDiagram=ReturnType<typeof scopeDiagram>;
 /** Shared by the Worker, CLI and SVG export; mutates only newly constructed geometry. */

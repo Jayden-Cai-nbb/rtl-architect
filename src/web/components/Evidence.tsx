@@ -1,7 +1,11 @@
-import { createContext, useContext, useEffect, useState } from 'react';
+import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
 import type { Model, Proposal } from '../../core/schema';
 import { api } from '../api';
 export const EvidenceContext = createContext<(id: string) => void>(() => {});
+export function EvidenceDetails({summary,children}:{summary:string;children:()=>ReactNode}){
+  const [open,setOpen]=useState(false);
+  return <details onToggle={e=>setOpen(e.currentTarget.open)}><summary>{summary}</summary>{open&&children()}</details>;
+}
 export function EvidenceLinks({ ids }: { ids: string[] }) {
   const open = useContext(EvidenceContext);
   return <span className="evidence-links">{ids.map(id => <button className="text-button" key={id} onClick={()=>open(id)}>{id} ↗</button>)}</span>;

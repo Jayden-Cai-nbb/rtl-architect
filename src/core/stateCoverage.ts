@@ -2,7 +2,7 @@ import type {StateUpdate,Obligation} from './schema';
 
 export type StateCoverageGoal={key:string;label:string;required:boolean;reachability:'unreachable'|'unknown';reason:string};
 /** Deliberately small proof: only literal conditions, never inferred input constraints or RTL text. */
-export function stateCoverage(update:StateUpdate,obligation:Extract<Obligation,{kind:'state_transition'}>){
+export function stateCoverage(update:StateUpdate,obligation?:Pick<Extract<Obligation,{kind:'state_transition'}>,'priorityPairs'>){
  const goals:StateCoverageGoal[]=[];
  const add=(key:string,label:string,proof?:string)=>goals.push({key,label,required:!proof,reachability:proof?'unreachable':'unknown',reason:proof??'未证明不可达；需在本次场景命中'});
  const literal=(i:number)=>{const c=update.branches[i].condition;return c.kind==='constant'?BigInt(c.value)!==0n:undefined;};
@@ -11,7 +11,7 @@ export function stateCoverage(update:StateUpdate,obligation:Extract<Obligation,{
  if(update.reset)add('reset','同步复位');
  update.branches.forEach((b,i)=>add('branch'+i,'分支 '+b.id,literal(i)===false?'条件是常量 0':preceding(i)>=0?'前面的常量 1 分支必定先匹配':undefined));
  add('hold','默认保持',preceding(update.branches.length)>=0?'常量 1 分支保证非复位时一定更新':undefined);
- for(const [i,p] of (obligation.priorityPairs??[]).entries()){
+ for(const [i,p] of (obligation?.priorityPairs??[]).entries()){
   const hi=update.branches.findIndex(b=>b.id===p.higher),lo=update.branches.findIndex(b=>b.id===p.lower);
   add('priority'+i,`${p.higher} 优先于 ${p.lower}（同时成立且写入值不同）`,literal(hi)===false||literal(lo)===false?'参与竞争的条件是常量 0':preceding(hi)>=0?'更早的常量 1 分支屏蔽此竞争':undefined);
  }

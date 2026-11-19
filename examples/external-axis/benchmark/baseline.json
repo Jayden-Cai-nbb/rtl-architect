@@ -1,0 +1,68 @@
+{
+  "schemaVersion": 1,
+  "repository": "https://github.com/alexforencich/verilog-axis",
+  "commit": "48ff7a7e2ef782cf778d47910cf85835c64b1bce",
+  "files": {
+    "rtl/axis_register.v": "599fde2d6c2d806643bbffb7c444297e69a71871f962d4b741ec1914342e0d39",
+    "tb/axis_register/test_axis_register.py": "46fd1f60b14f9057694251aa2fc31ea155d54a970adb57197ecf179380e8d0cb",
+    "tb/axis_register/Makefile": "ed2e29db173d706d68d9bc822f4ce9993d574645eac00c9ef5ea3d90b6978965",
+    "tox.ini": "76c4dda4eb8c59d04b41b4a22ce062f16f5732818b45f0326c8c0d15b0bb5b86",
+    "COPYING": "8ea57f95365e9b16a5b516f422b71269183a1ae53bab5878ae6d69039e58fe77"
+  },
+  "top": "axis_register",
+  "python": "3.10",
+  "simulator": "icarus",
+  "seed": 1,
+  "waves": 1,
+  "pytestFile": "tb/axis_register/test_axis_register.py",
+  "cocotbTests": [
+    "run_test_001", "run_test_002", "run_test_003", "run_test_004",
+    "run_test_tuser_assert_001",
+    "run_stress_test_001", "run_stress_test_002", "run_stress_test_003", "run_stress_test_004"
+  ],
+  "configurations": [
+    {"id": "8-0",  "parameters": {"REG_TYPE": 0, "DATA_WIDTH": 8,  "KEEP_ENABLE": 0, "KEEP_WIDTH": 1, "LAST_ENABLE": 1, "ID_ENABLE": 1, "ID_WIDTH": 8, "DEST_ENABLE": 1, "DEST_WIDTH": 8, "USER_ENABLE": 1, "USER_WIDTH": 1}},
+    {"id": "8-1",  "parameters": {"REG_TYPE": 1, "DATA_WIDTH": 8,  "KEEP_ENABLE": 0, "KEEP_WIDTH": 1, "LAST_ENABLE": 1, "ID_ENABLE": 1, "ID_WIDTH": 8, "DEST_ENABLE": 1, "DEST_WIDTH": 8, "USER_ENABLE": 1, "USER_WIDTH": 1}},
+    {"id": "8-2",  "parameters": {"REG_TYPE": 2, "DATA_WIDTH": 8,  "KEEP_ENABLE": 0, "KEEP_WIDTH": 1, "LAST_ENABLE": 1, "ID_ENABLE": 1, "ID_WIDTH": 8, "DEST_ENABLE": 1, "DEST_WIDTH": 8, "USER_ENABLE": 1, "USER_WIDTH": 1}},
+    {"id": "16-0", "parameters": {"REG_TYPE": 0, "DATA_WIDTH": 16, "KEEP_ENABLE": 1, "KEEP_WIDTH": 2, "LAST_ENABLE": 1, "ID_ENABLE": 1, "ID_WIDTH": 8, "DEST_ENABLE": 1, "DEST_WIDTH": 8, "USER_ENABLE": 1, "USER_WIDTH": 1}},
+    {"id": "16-1", "parameters": {"REG_TYPE": 1, "DATA_WIDTH": 16, "KEEP_ENABLE": 1, "KEEP_WIDTH": 2, "LAST_ENABLE": 1, "ID_ENABLE": 1, "ID_WIDTH": 8, "DEST_ENABLE": 1, "DEST_WIDTH": 8, "USER_ENABLE": 1, "USER_WIDTH": 1}},
+    {"id": "16-2", "parameters": {"REG_TYPE": 2, "DATA_WIDTH": 16, "KEEP_ENABLE": 1, "KEEP_WIDTH": 2, "LAST_ENABLE": 1, "ID_ENABLE": 1, "ID_WIDTH": 8, "DEST_ENABLE": 1, "DEST_WIDTH": 8, "USER_ENABLE": 1, "USER_WIDTH": 1}},
+    {"id": "32-0", "parameters": {"REG_TYPE": 0, "DATA_WIDTH": 32, "KEEP_ENABLE": 1, "KEEP_WIDTH": 4, "LAST_ENABLE": 1, "ID_ENABLE": 1, "ID_WIDTH": 8, "DEST_ENABLE": 1, "DEST_WIDTH": 8, "USER_ENABLE": 1, "USER_WIDTH": 1}},
+    {"id": "32-1", "parameters": {"REG_TYPE": 1, "DATA_WIDTH": 32, "KEEP_ENABLE": 1, "KEEP_WIDTH": 4, "LAST_ENABLE": 1, "ID_ENABLE": 1, "ID_WIDTH": 8, "DEST_ENABLE": 1, "DEST_WIDTH": 8, "USER_ENABLE": 1, "USER_WIDTH": 1}},
+    {"id": "32-2", "parameters": {"REG_TYPE": 2, "DATA_WIDTH": 32, "KEEP_ENABLE": 1, "KEEP_WIDTH": 4, "LAST_ENABLE": 1, "ID_ENABLE": 1, "ID_WIDTH": 8, "DEST_ENABLE": 1, "DEST_WIDTH": 8, "USER_ENABLE": 1, "USER_WIDTH": 1}}
+  ],
+  "acceptance": {
+    "denominator": 9,
+    "ports": 18,
+    "registerVectors": [0, 8, 15],
+    "transaction": {
+      "unpaused": "run_test_001",
+      "backpressure": "run_test_002",
+      "acceptToConsumeCycles": [0, 1, 1],
+      "requireOutputHoldUntilConsumed": true,
+      "requireSkidTempOccupied": true
+    },
+    "readingTasks": [
+      "沿一条数据和 sideband 通路找到入口与出口，指出 tready 的返回方向。",
+      "定位实际保存的位置并解释阻塞时谁保持有效数据。旁路需指出没有保存槽。",
+      "定位 clk、rst 及其控制的有效状态，指出 8 位配置中 tkeep 的常量来源。"
+    ],
+    "requirements": {
+      "frame_integrity": "上游在无暂停、源暂停、下游背压及组合场景下核对接收帧数据、ID 和目的地，并检查 tuser 的两种取值。"
+    }
+  },
+  "fault": {
+    "case": "8-1",
+    "file": "rtl/axis_register.v",
+    "line": 247,
+    "before": "            m_axis_tdata_reg <= s_axis_tdata;",
+    "after": "            m_axis_tdata_reg <= s_axis_tdata ^ {{(DATA_WIDTH-1){1'b0}}, 1'b1};",
+    "assertion": "assert rx_frame.tdata == test_frame.tdata",
+    "test": "run_test_001",
+    "requirement": "frame_integrity",
+    "moduleId": "top",
+    "state": "m_axis_tdata_reg",
+    "interface": "m_axis_tdata",
+    "bit": 0
+  }
+}

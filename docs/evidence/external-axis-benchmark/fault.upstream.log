@@ -1,0 +1,608 @@
+============================= test session starts ==============================
+platform linux -- Python 3.10.12, pytest-7.2.1, pluggy-1.7.0 -- /tmp/rtlarch-axis-venv/bin/python
+cachedir: .pytest_cache
+rootdir: /tmp/rtlarch-axis-benchmark-OM9PZ0/fault-as-built, configfile: tox.ini
+plugins: split-0.8.0, cocotb-test-0.2.4, xdist-3.1.0
+collecting ... collected 1 item
+
+tb/axis_register/test_axis_register.py::test_axis_register[8-1] 
+-------------------------------- live log call ---------------------------------
+INFO     cocotb:simulator.py:330 Running command: iverilog -o /tmp/rtlarch-axis-benchmark-OM9PZ0/fault-as-built/tb/axis_register/sim_build/test_axis_register-8-1/axis_register.vvp -D COCOTB_SIM=1 -g2012 -s axis_register -Paxis_register.DATA_WIDTH=8 -Paxis_register.KEEP_ENABLE=0 -Paxis_register.KEEP_WIDTH=1 -Paxis_register.LAST_ENABLE=1 -Paxis_register.ID_ENABLE=1 -Paxis_register.ID_WIDTH=8 -Paxis_register.DEST_ENABLE=1 -Paxis_register.DEST_WIDTH=8 -Paxis_register.USER_ENABLE=1 -Paxis_register.USER_WIDTH=1 -Paxis_register.REG_TYPE=1 -s iverilog_dump /tmp/rtlarch-axis-benchmark-OM9PZ0/fault-as-built/rtl/axis_register.v /tmp/rtlarch-axis-benchmark-OM9PZ0/fault-as-built/tb/axis_register/sim_build/test_axis_register-8-1/iverilog_dump.v
+INFO     cocotb:simulator.py:330 Running command: vvp -M /tmp/rtlarch-axis-venv/lib/python3.10/site-packages/cocotb/libs -m libcocotbvpi_icarus /tmp/rtlarch-axis-benchmark-OM9PZ0/fault-as-built/tb/axis_register/sim_build/test_axis_register-8-1/axis_register.vvp -fst
+INFO     cocotb:simulator.py:302      -.--ns INFO     gpi                                ..mbed/gpi_embed.cpp:76   in set_program_name_in_venv        Did not detect Python virtual environment. Using system-wide Python interpreter
+INFO     cocotb:simulator.py:302      -.--ns INFO     gpi                                ../gpi/GpiCommon.cpp:101  in gpi_print_registered_impl       VPI registered
+INFO     cocotb:simulator.py:302      0.00ns INFO     cocotb                             Running on Icarus Verilog version 11.0 (stable)
+INFO     cocotb:simulator.py:302      0.00ns INFO     cocotb                             Running tests with cocotb v1.7.2 from /tmp/rtlarch-axis-venv/lib/python3.10/site-packages/cocotb
+INFO     cocotb:simulator.py:302      0.00ns INFO     cocotb                             Seeding Python random module with supplied seed 1
+ERROR    cocotb:simulator.py:302 /tmp/rtlarch-axis-venv/lib/python3.10/site-packages/pytest_split/plugin.py:79: PytestDeprecationWarning: The hookimpl pytest_cmdline_main uses old-style configuration options (marks or attributes).
+ERROR    cocotb:simulator.py:302 Please use the pytest.hookimpl(tryfirst=True) decorator instead
+ERROR    cocotb:simulator.py:302  to configure the hooks.
+ERROR    cocotb:simulator.py:302  See https://docs.pytest.org/en/latest/deprecations.html#configuring-hook-specs-impls-using-markers
+ERROR    cocotb:simulator.py:302   @pytest.mark.tryfirst
+INFO     cocotb:simulator.py:302      0.00ns INFO     cocotb.regression                  Found test test_axis_register.run_test_001
+INFO     cocotb:simulator.py:302      0.00ns INFO     cocotb.regression                  Found test test_axis_register.run_test_002
+INFO     cocotb:simulator.py:302      0.00ns INFO     cocotb.regression                  Found test test_axis_register.run_test_003
+INFO     cocotb:simulator.py:302      0.00ns INFO     cocotb.regression                  Found test test_axis_register.run_test_004
+INFO     cocotb:simulator.py:302      0.00ns INFO     cocotb.regression                  Found test test_axis_register.run_test_tuser_assert_001
+INFO     cocotb:simulator.py:302      0.00ns INFO     cocotb.regression                  Found test test_axis_register.run_stress_test_001
+INFO     cocotb:simulator.py:302      0.00ns INFO     cocotb.regression                  Found test test_axis_register.run_stress_test_002
+INFO     cocotb:simulator.py:302      0.00ns INFO     cocotb.regression                  Found test test_axis_register.run_stress_test_003
+INFO     cocotb:simulator.py:302      0.00ns INFO     cocotb.regression                  Found test test_axis_register.run_stress_test_004
+INFO     cocotb:simulator.py:302      0.00ns INFO     cocotb.regression                  running run_test_001 (1/9)
+INFO     cocotb:simulator.py:302                                                           Automatically generated test
+INFO     cocotb:simulator.py:302 
+INFO     cocotb:simulator.py:302                                                           payload_lengths: size_list (No docstring supplied)
+INFO     cocotb:simulator.py:302                                                           payload_data: incrementing_payload (No docstring supplied)
+INFO     cocotb:simulator.py:302                                                           idle_inserter: None
+INFO     cocotb:simulator.py:302                                                           backpressure_inserter: None
+INFO     cocotb:simulator.py:302      0.00ns INFO     cocotb.axis_register.s_axis        AXI stream source
+INFO     cocotb:simulator.py:302      0.00ns INFO     cocotb.axis_register.s_axis        cocotbext-axi version 0.1.20
+INFO     cocotb:simulator.py:302      0.00ns INFO     cocotb.axis_register.s_axis        Copyright (c) 2020 Alex Forencich
+INFO     cocotb:simulator.py:302      0.00ns INFO     cocotb.axis_register.s_axis        https://github.com/alexforencich/cocotbext-axi
+INFO     cocotb:simulator.py:302      0.00ns INFO     cocotb.axis_register.s_axis        AXI stream source configuration:
+INFO     cocotb:simulator.py:302      0.00ns INFO     cocotb.axis_register.s_axis          Byte size: 8 bits
+INFO     cocotb:simulator.py:302      0.00ns INFO     cocotb.axis_register.s_axis          Data width: 8 bits (1 bytes)
+INFO     cocotb:simulator.py:302      0.00ns INFO     cocotb.axis_register.s_axis        AXI stream source signals:
+INFO     cocotb:simulator.py:302      0.00ns INFO     cocotb.axis_register.s_axis          tdata width: 8 bits
+INFO     cocotb:simulator.py:302      0.00ns INFO     cocotb.axis_register.s_axis          tdest width: 8 bits
+INFO     cocotb:simulator.py:302      0.00ns INFO     cocotb.axis_register.s_axis          tid width: 8 bits
+INFO     cocotb:simulator.py:302      0.00ns INFO     cocotb.axis_register.s_axis          tkeep width: 1 bits
+INFO     cocotb:simulator.py:302      0.00ns INFO     cocotb.axis_register.s_axis          tlast width: 1 bits
+INFO     cocotb:simulator.py:302      0.00ns INFO     cocotb.axis_register.s_axis          tready width: 1 bits
+INFO     cocotb:simulator.py:302      0.00ns INFO     cocotb.axis_register.s_axis          tuser width: 1 bits
+INFO     cocotb:simulator.py:302      0.00ns INFO     cocotb.axis_register.s_axis          tvalid width: 1 bits
+INFO     cocotb:simulator.py:302      0.00ns INFO     cocotb.axis_register.s_axis        Reset de-asserted
+INFO     cocotb:simulator.py:302      0.00ns INFO     cocotb.axis_register.m_axis        AXI stream sink
+INFO     cocotb:simulator.py:302      0.00ns INFO     cocotb.axis_register.m_axis        cocotbext-axi version 0.1.20
+INFO     cocotb:simulator.py:302      0.00ns INFO     cocotb.axis_register.m_axis        Copyright (c) 2020 Alex Forencich
+INFO     cocotb:simulator.py:302      0.00ns INFO     cocotb.axis_register.m_axis        https://github.com/alexforencich/cocotbext-axi
+INFO     cocotb:simulator.py:302      0.00ns INFO     cocotb.axis_register.m_axis        AXI stream sink configuration:
+INFO     cocotb:simulator.py:302      0.00ns INFO     cocotb.axis_register.m_axis          Byte size: 8 bits
+INFO     cocotb:simulator.py:302      0.00ns INFO     cocotb.axis_register.m_axis          Data width: 8 bits (1 bytes)
+INFO     cocotb:simulator.py:302      0.00ns INFO     cocotb.axis_register.m_axis        AXI stream sink signals:
+INFO     cocotb:simulator.py:302      0.00ns INFO     cocotb.axis_register.m_axis          tdata width: 8 bits
+INFO     cocotb:simulator.py:302      0.00ns INFO     cocotb.axis_register.m_axis          tdest width: 8 bits
+INFO     cocotb:simulator.py:302      0.00ns INFO     cocotb.axis_register.m_axis          tid width: 8 bits
+INFO     cocotb:simulator.py:302      0.00ns INFO     cocotb.axis_register.m_axis          tkeep width: 1 bits
+INFO     cocotb:simulator.py:302      0.00ns INFO     cocotb.axis_register.m_axis          tlast width: 1 bits
+INFO     cocotb:simulator.py:302      0.00ns INFO     cocotb.axis_register.m_axis          tready width: 1 bits
+INFO     cocotb:simulator.py:302      0.00ns INFO     cocotb.axis_register.m_axis          tuser width: 1 bits
+INFO     cocotb:simulator.py:302      0.00ns INFO     cocotb.axis_register.m_axis          tvalid width: 1 bits
+INFO     cocotb:simulator.py:302      0.00ns INFO     cocotb.axis_register.m_axis        Reset de-asserted
+INFO     cocotb:simulator.py:302     10.00ns INFO     cocotb.axis_register.s_axis        Reset asserted
+INFO     cocotb:simulator.py:302     10.00ns INFO     cocotb.axis_register.m_axis        Reset asserted
+INFO     cocotb:simulator.py:302     30.00ns INFO     cocotb.axis_register.s_axis        Reset de-asserted
+INFO     cocotb:simulator.py:302     30.00ns INFO     cocotb.axis_register.m_axis        Reset de-asserted
+INFO     cocotb:simulator.py:302     60.00ns INFO     cocotb.axis_register.s_axis        TX frame: AxiStreamFrame(tdata=bytearray(b'\x00'), tkeep=None, tid=1, tdest=1, tuser=None, sim_time_start=60000, sim_time_end=None)
+INFO     cocotb:simulator.py:302     70.00ns INFO     cocotb.axis_register.s_axis        TX frame: AxiStreamFrame(tdata=bytearray(b'\x00\x01'), tkeep=None, tid=2, tdest=2, tuser=None, sim_time_start=70000, sim_time_end=None)
+INFO     cocotb:simulator.py:302     80.00ns INFO     cocotb.axis_register.m_axis        RX frame: AxiStreamFrame(tdata=bytearray(b'\x01'), tkeep=[1], tid=[1], tdest=[1], tuser=[0], sim_time_start=80000, sim_time_end=80000)
+INFO     cocotb:simulator.py:302     80.00ns INFO     cocotb.regression                  run_test_001 failed
+INFO     cocotb:simulator.py:302                                                         Traceback (most recent call last):
+INFO     cocotb:simulator.py:302                                                           File "/tmp/rtlarch-axis-venv/lib/python3.10/site-packages/cocotb/regression.py", line 714, in _my_test
+INFO     cocotb:simulator.py:302                                                             await function(dut, *args, **kwargs)
+INFO     cocotb:simulator.py:302                                                           File "/tmp/rtlarch-axis-benchmark-OM9PZ0/fault-as-built/tb/axis_register/test_axis_register.py", line 102, in run_test
+INFO     cocotb:simulator.py:302                                                             assert rx_frame.tdata == test_frame.tdata
+INFO     cocotb:simulator.py:302                                                         AssertionError: assert bytearray(b'\x01') == bytearray(b'\x00')
+INFO     cocotb:simulator.py:302                                                          +  where bytearray(b'\x01') = AxiStreamFrame(tdata=bytearray(b'\x01'), tkeep=None, tid=1, tdest=1, tuser=0, sim_time_start=80000, sim_time_end=80000).tdata
+INFO     cocotb:simulator.py:302                                                          +  and   bytearray(b'\x00') = AxiStreamFrame(tdata=bytearray(b'\x00'), tkeep=None, tid=1, tdest=1, tuser=None, sim_time_start=None, sim_time_end=None).tdata
+INFO     cocotb:simulator.py:302     80.00ns INFO     cocotb.regression                  running run_test_002 (2/9)
+INFO     cocotb:simulator.py:302                                                           Automatically generated test
+INFO     cocotb:simulator.py:302 
+INFO     cocotb:simulator.py:302                                                           payload_lengths: size_list (No docstring supplied)
+INFO     cocotb:simulator.py:302                                                           payload_data: incrementing_payload (No docstring supplied)
+INFO     cocotb:simulator.py:302                                                           idle_inserter: None
+INFO     cocotb:simulator.py:302                                                           backpressure_inserter: cycle_pause (No docstring supplied)
+INFO     cocotb:simulator.py:302     80.00ns INFO     cocotb.axis_register.s_axis        AXI stream source
+INFO     cocotb:simulator.py:302     80.00ns INFO     cocotb.axis_register.s_axis        cocotbext-axi version 0.1.20
+INFO     cocotb:simulator.py:302     80.00ns INFO     cocotb.axis_register.s_axis        Copyright (c) 2020 Alex Forencich
+INFO     cocotb:simulator.py:302     80.00ns INFO     cocotb.axis_register.s_axis        https://github.com/alexforencich/cocotbext-axi
+INFO     cocotb:simulator.py:302     80.00ns INFO     cocotb.axis_register.s_axis        AXI stream source configuration:
+INFO     cocotb:simulator.py:302     80.00ns INFO     cocotb.axis_register.s_axis          Byte size: 8 bits
+INFO     cocotb:simulator.py:302     80.00ns INFO     cocotb.axis_register.s_axis          Data width: 8 bits (1 bytes)
+INFO     cocotb:simulator.py:302     80.00ns INFO     cocotb.axis_register.s_axis        AXI stream source signals:
+INFO     cocotb:simulator.py:302     80.00ns INFO     cocotb.axis_register.s_axis          tdata width: 8 bits
+INFO     cocotb:simulator.py:302     80.00ns INFO     cocotb.axis_register.s_axis          tdest width: 8 bits
+INFO     cocotb:simulator.py:302     80.00ns INFO     cocotb.axis_register.s_axis          tid width: 8 bits
+INFO     cocotb:simulator.py:302     80.00ns INFO     cocotb.axis_register.s_axis          tkeep width: 1 bits
+INFO     cocotb:simulator.py:302     80.00ns INFO     cocotb.axis_register.s_axis          tlast width: 1 bits
+INFO     cocotb:simulator.py:302     80.00ns INFO     cocotb.axis_register.s_axis          tready width: 1 bits
+INFO     cocotb:simulator.py:302     80.00ns INFO     cocotb.axis_register.s_axis          tuser width: 1 bits
+INFO     cocotb:simulator.py:302     80.00ns INFO     cocotb.axis_register.s_axis          tvalid width: 1 bits
+INFO     cocotb:simulator.py:302     80.00ns INFO     cocotb.axis_register.s_axis        Reset de-asserted
+INFO     cocotb:simulator.py:302     80.00ns INFO     cocotb.axis_register.m_axis        AXI stream sink
+INFO     cocotb:simulator.py:302     80.00ns INFO     cocotb.axis_register.m_axis        cocotbext-axi version 0.1.20
+INFO     cocotb:simulator.py:302     80.00ns INFO     cocotb.axis_register.m_axis        Copyright (c) 2020 Alex Forencich
+INFO     cocotb:simulator.py:302     80.00ns INFO     cocotb.axis_register.m_axis        https://github.com/alexforencich/cocotbext-axi
+INFO     cocotb:simulator.py:302     80.00ns INFO     cocotb.axis_register.m_axis        AXI stream sink configuration:
+INFO     cocotb:simulator.py:302     80.00ns INFO     cocotb.axis_register.m_axis          Byte size: 8 bits
+INFO     cocotb:simulator.py:302     80.00ns INFO     cocotb.axis_register.m_axis          Data width: 8 bits (1 bytes)
+INFO     cocotb:simulator.py:302     80.00ns INFO     cocotb.axis_register.m_axis        AXI stream sink signals:
+INFO     cocotb:simulator.py:302     80.00ns INFO     cocotb.axis_register.m_axis          tdata width: 8 bits
+INFO     cocotb:simulator.py:302     80.00ns INFO     cocotb.axis_register.m_axis          tdest width: 8 bits
+INFO     cocotb:simulator.py:302     80.00ns INFO     cocotb.axis_register.m_axis          tid width: 8 bits
+INFO     cocotb:simulator.py:302     80.00ns INFO     cocotb.axis_register.m_axis          tkeep width: 1 bits
+INFO     cocotb:simulator.py:302     80.00ns INFO     cocotb.axis_register.m_axis          tlast width: 1 bits
+INFO     cocotb:simulator.py:302     80.00ns INFO     cocotb.axis_register.m_axis          tready width: 1 bits
+INFO     cocotb:simulator.py:302     80.00ns INFO     cocotb.axis_register.m_axis          tuser width: 1 bits
+INFO     cocotb:simulator.py:302     80.00ns INFO     cocotb.axis_register.m_axis          tvalid width: 1 bits
+INFO     cocotb:simulator.py:302     80.00ns INFO     cocotb.axis_register.m_axis        Reset de-asserted
+INFO     cocotb:simulator.py:302    100.00ns INFO     cocotb.axis_register.s_axis        Reset asserted
+INFO     cocotb:simulator.py:302    100.00ns INFO     cocotb.axis_register.m_axis        Reset asserted
+INFO     cocotb:simulator.py:302    120.00ns INFO     cocotb.axis_register.s_axis        Reset de-asserted
+INFO     cocotb:simulator.py:302    120.00ns INFO     cocotb.axis_register.m_axis        Reset de-asserted
+INFO     cocotb:simulator.py:302    150.00ns INFO     cocotb.axis_register.s_axis        TX frame: AxiStreamFrame(tdata=bytearray(b'\x00'), tkeep=None, tid=1, tdest=1, tuser=None, sim_time_start=150001, sim_time_end=None)
+INFO     cocotb:simulator.py:302    160.00ns INFO     cocotb.axis_register.s_axis        TX frame: AxiStreamFrame(tdata=bytearray(b'\x00\x01'), tkeep=None, tid=2, tdest=2, tuser=None, sim_time_start=160001, sim_time_end=None)
+INFO     cocotb:simulator.py:302    190.00ns INFO     cocotb.axis_register.m_axis        RX frame: AxiStreamFrame(tdata=bytearray(b'\x01'), tkeep=[1], tid=[1], tdest=[1], tuser=[0], sim_time_start=190001, sim_time_end=190001)
+INFO     cocotb:simulator.py:302    190.00ns INFO     cocotb.regression                  run_test_002 failed
+INFO     cocotb:simulator.py:302                                                         Traceback (most recent call last):
+INFO     cocotb:simulator.py:302                                                           File "/tmp/rtlarch-axis-venv/lib/python3.10/site-packages/cocotb/regression.py", line 714, in _my_test
+INFO     cocotb:simulator.py:302                                                             await function(dut, *args, **kwargs)
+INFO     cocotb:simulator.py:302                                                           File "/tmp/rtlarch-axis-benchmark-OM9PZ0/fault-as-built/tb/axis_register/test_axis_register.py", line 102, in run_test
+INFO     cocotb:simulator.py:302                                                             assert rx_frame.tdata == test_frame.tdata
+INFO     cocotb:simulator.py:302                                                         AssertionError: assert bytearray(b'\x01') == bytearray(b'\x00')
+INFO     cocotb:simulator.py:302                                                          +  where bytearray(b'\x01') = AxiStreamFrame(tdata=bytearray(b'\x01'), tkeep=None, tid=1, tdest=1, tuser=0, sim_time_start=190001, sim_time_end=190001).tdata
+INFO     cocotb:simulator.py:302                                                          +  and   bytearray(b'\x00') = AxiStreamFrame(tdata=bytearray(b'\x00'), tkeep=None, tid=1, tdest=1, tuser=None, sim_time_start=None, sim_time_end=None).tdata
+INFO     cocotb:simulator.py:302    190.00ns INFO     cocotb.regression                  running run_test_003 (3/9)
+INFO     cocotb:simulator.py:302                                                           Automatically generated test
+INFO     cocotb:simulator.py:302 
+INFO     cocotb:simulator.py:302                                                           payload_lengths: size_list (No docstring supplied)
+INFO     cocotb:simulator.py:302                                                           payload_data: incrementing_payload (No docstring supplied)
+INFO     cocotb:simulator.py:302                                                           idle_inserter: cycle_pause (No docstring supplied)
+INFO     cocotb:simulator.py:302                                                           backpressure_inserter: None
+INFO     cocotb:simulator.py:302    190.00ns INFO     cocotb.axis_register.s_axis        AXI stream source
+INFO     cocotb:simulator.py:302    190.00ns INFO     cocotb.axis_register.s_axis        cocotbext-axi version 0.1.20
+INFO     cocotb:simulator.py:302    190.00ns INFO     cocotb.axis_register.s_axis        Copyright (c) 2020 Alex Forencich
+INFO     cocotb:simulator.py:302    190.00ns INFO     cocotb.axis_register.s_axis        https://github.com/alexforencich/cocotbext-axi
+INFO     cocotb:simulator.py:302    190.00ns INFO     cocotb.axis_register.s_axis        AXI stream source configuration:
+INFO     cocotb:simulator.py:302    190.00ns INFO     cocotb.axis_register.s_axis          Byte size: 8 bits
+INFO     cocotb:simulator.py:302    190.00ns INFO     cocotb.axis_register.s_axis          Data width: 8 bits (1 bytes)
+INFO     cocotb:simulator.py:302    190.00ns INFO     cocotb.axis_register.s_axis        AXI stream source signals:
+INFO     cocotb:simulator.py:302    190.00ns INFO     cocotb.axis_register.s_axis          tdata width: 8 bits
+INFO     cocotb:simulator.py:302    190.00ns INFO     cocotb.axis_register.s_axis          tdest width: 8 bits
+INFO     cocotb:simulator.py:302    190.00ns INFO     cocotb.axis_register.s_axis          tid width: 8 bits
+INFO     cocotb:simulator.py:302    190.00ns INFO     cocotb.axis_register.s_axis          tkeep width: 1 bits
+INFO     cocotb:simulator.py:302    190.00ns INFO     cocotb.axis_register.s_axis          tlast width: 1 bits
+INFO     cocotb:simulator.py:302    190.00ns INFO     cocotb.axis_register.s_axis          tready width: 1 bits
+INFO     cocotb:simulator.py:302    190.00ns INFO     cocotb.axis_register.s_axis          tuser width: 1 bits
+INFO     cocotb:simulator.py:302    190.00ns INFO     cocotb.axis_register.s_axis          tvalid width: 1 bits
+INFO     cocotb:simulator.py:302    190.00ns INFO     cocotb.axis_register.s_axis        Reset de-asserted
+INFO     cocotb:simulator.py:302    190.00ns INFO     cocotb.axis_register.m_axis        AXI stream sink
+INFO     cocotb:simulator.py:302    190.00ns INFO     cocotb.axis_register.m_axis        cocotbext-axi version 0.1.20
+INFO     cocotb:simulator.py:302    190.00ns INFO     cocotb.axis_register.m_axis        Copyright (c) 2020 Alex Forencich
+INFO     cocotb:simulator.py:302    190.00ns INFO     cocotb.axis_register.m_axis        https://github.com/alexforencich/cocotbext-axi
+INFO     cocotb:simulator.py:302    190.00ns INFO     cocotb.axis_register.m_axis        AXI stream sink configuration:
+INFO     cocotb:simulator.py:302    190.00ns INFO     cocotb.axis_register.m_axis          Byte size: 8 bits
+INFO     cocotb:simulator.py:302    190.00ns INFO     cocotb.axis_register.m_axis          Data width: 8 bits (1 bytes)
+INFO     cocotb:simulator.py:302    190.00ns INFO     cocotb.axis_register.m_axis        AXI stream sink signals:
+INFO     cocotb:simulator.py:302    190.00ns INFO     cocotb.axis_register.m_axis          tdata width: 8 bits
+INFO     cocotb:simulator.py:302    190.00ns INFO     cocotb.axis_register.m_axis          tdest width: 8 bits
+INFO     cocotb:simulator.py:302    190.00ns INFO     cocotb.axis_register.m_axis          tid width: 8 bits
+INFO     cocotb:simulator.py:302    190.00ns INFO     cocotb.axis_register.m_axis          tkeep width: 1 bits
+INFO     cocotb:simulator.py:302    190.00ns INFO     cocotb.axis_register.m_axis          tlast width: 1 bits
+INFO     cocotb:simulator.py:302    190.00ns INFO     cocotb.axis_register.m_axis          tready width: 1 bits
+INFO     cocotb:simulator.py:302    190.00ns INFO     cocotb.axis_register.m_axis          tuser width: 1 bits
+INFO     cocotb:simulator.py:302    190.00ns INFO     cocotb.axis_register.m_axis          tvalid width: 1 bits
+INFO     cocotb:simulator.py:302    190.00ns INFO     cocotb.axis_register.m_axis        Reset de-asserted
+INFO     cocotb:simulator.py:302    210.00ns INFO     cocotb.axis_register.s_axis        Reset asserted
+INFO     cocotb:simulator.py:302    210.00ns INFO     cocotb.axis_register.m_axis        Reset asserted
+INFO     cocotb:simulator.py:302    230.00ns INFO     cocotb.axis_register.s_axis        Reset de-asserted
+INFO     cocotb:simulator.py:302    230.00ns INFO     cocotb.axis_register.m_axis        Reset de-asserted
+INFO     cocotb:simulator.py:302    260.00ns INFO     cocotb.axis_register.s_axis        TX frame: AxiStreamFrame(tdata=bytearray(b'\x00'), tkeep=None, tid=1, tdest=1, tuser=None, sim_time_start=260002, sim_time_end=None)
+INFO     cocotb:simulator.py:302    290.00ns INFO     cocotb.axis_register.s_axis        TX frame: AxiStreamFrame(tdata=bytearray(b'\x00\x01'), tkeep=None, tid=2, tdest=2, tuser=None, sim_time_start=290002, sim_time_end=None)
+INFO     cocotb:simulator.py:302    300.00ns INFO     cocotb.axis_register.m_axis        RX frame: AxiStreamFrame(tdata=bytearray(b'\x01'), tkeep=[1], tid=[1], tdest=[1], tuser=[0], sim_time_start=300002, sim_time_end=300002)
+INFO     cocotb:simulator.py:302    300.00ns INFO     cocotb.regression                  run_test_003 failed
+INFO     cocotb:simulator.py:302                                                         Traceback (most recent call last):
+INFO     cocotb:simulator.py:302                                                           File "/tmp/rtlarch-axis-venv/lib/python3.10/site-packages/cocotb/regression.py", line 714, in _my_test
+INFO     cocotb:simulator.py:302                                                             await function(dut, *args, **kwargs)
+INFO     cocotb:simulator.py:302                                                           File "/tmp/rtlarch-axis-benchmark-OM9PZ0/fault-as-built/tb/axis_register/test_axis_register.py", line 102, in run_test
+INFO     cocotb:simulator.py:302                                                             assert rx_frame.tdata == test_frame.tdata
+INFO     cocotb:simulator.py:302                                                         AssertionError: assert bytearray(b'\x01') == bytearray(b'\x00')
+INFO     cocotb:simulator.py:302                                                          +  where bytearray(b'\x01') = AxiStreamFrame(tdata=bytearray(b'\x01'), tkeep=None, tid=1, tdest=1, tuser=0, sim_time_start=300002, sim_time_end=300002).tdata
+INFO     cocotb:simulator.py:302                                                          +  and   bytearray(b'\x00') = AxiStreamFrame(tdata=bytearray(b'\x00'), tkeep=None, tid=1, tdest=1, tuser=None, sim_time_start=None, sim_time_end=None).tdata
+INFO     cocotb:simulator.py:302    300.00ns INFO     cocotb.regression                  running run_test_004 (4/9)
+INFO     cocotb:simulator.py:302                                                           Automatically generated test
+INFO     cocotb:simulator.py:302 
+INFO     cocotb:simulator.py:302                                                           payload_lengths: size_list (No docstring supplied)
+INFO     cocotb:simulator.py:302                                                           payload_data: incrementing_payload (No docstring supplied)
+INFO     cocotb:simulator.py:302                                                           idle_inserter: cycle_pause (No docstring supplied)
+INFO     cocotb:simulator.py:302                                                           backpressure_inserter: cycle_pause (No docstring supplied)
+INFO     cocotb:simulator.py:302    300.00ns INFO     cocotb.axis_register.s_axis        AXI stream source
+INFO     cocotb:simulator.py:302    300.00ns INFO     cocotb.axis_register.s_axis        cocotbext-axi version 0.1.20
+INFO     cocotb:simulator.py:302    300.00ns INFO     cocotb.axis_register.s_axis        Copyright (c) 2020 Alex Forencich
+INFO     cocotb:simulator.py:302    300.00ns INFO     cocotb.axis_register.s_axis        https://github.com/alexforencich/cocotbext-axi
+INFO     cocotb:simulator.py:302    300.00ns INFO     cocotb.axis_register.s_axis        AXI stream source configuration:
+INFO     cocotb:simulator.py:302    300.00ns INFO     cocotb.axis_register.s_axis          Byte size: 8 bits
+INFO     cocotb:simulator.py:302    300.00ns INFO     cocotb.axis_register.s_axis          Data width: 8 bits (1 bytes)
+INFO     cocotb:simulator.py:302    300.00ns INFO     cocotb.axis_register.s_axis        AXI stream source signals:
+INFO     cocotb:simulator.py:302    300.00ns INFO     cocotb.axis_register.s_axis          tdata width: 8 bits
+INFO     cocotb:simulator.py:302    300.00ns INFO     cocotb.axis_register.s_axis          tdest width: 8 bits
+INFO     cocotb:simulator.py:302    300.00ns INFO     cocotb.axis_register.s_axis          tid width: 8 bits
+INFO     cocotb:simulator.py:302    300.00ns INFO     cocotb.axis_register.s_axis          tkeep width: 1 bits
+INFO     cocotb:simulator.py:302    300.00ns INFO     cocotb.axis_register.s_axis          tlast width: 1 bits
+INFO     cocotb:simulator.py:302    300.00ns INFO     cocotb.axis_register.s_axis          tready width: 1 bits
+INFO     cocotb:simulator.py:302    300.00ns INFO     cocotb.axis_register.s_axis          tuser width: 1 bits
+INFO     cocotb:simulator.py:302    300.00ns INFO     cocotb.axis_register.s_axis          tvalid width: 1 bits
+INFO     cocotb:simulator.py:302    300.00ns INFO     cocotb.axis_register.s_axis        Reset de-asserted
+INFO     cocotb:simulator.py:302    300.00ns INFO     cocotb.axis_register.m_axis        AXI stream sink
+INFO     cocotb:simulator.py:302    300.00ns INFO     cocotb.axis_register.m_axis        cocotbext-axi version 0.1.20
+INFO     cocotb:simulator.py:302    300.00ns INFO     cocotb.axis_register.m_axis        Copyright (c) 2020 Alex Forencich
+INFO     cocotb:simulator.py:302    300.00ns INFO     cocotb.axis_register.m_axis        https://github.com/alexforencich/cocotbext-axi
+INFO     cocotb:simulator.py:302    300.00ns INFO     cocotb.axis_register.m_axis        AXI stream sink configuration:
+INFO     cocotb:simulator.py:302    300.00ns INFO     cocotb.axis_register.m_axis          Byte size: 8 bits
+INFO     cocotb:simulator.py:302    300.00ns INFO     cocotb.axis_register.m_axis          Data width: 8 bits (1 bytes)
+INFO     cocotb:simulator.py:302    300.00ns INFO     cocotb.axis_register.m_axis        AXI stream sink signals:
+INFO     cocotb:simulator.py:302    300.00ns INFO     cocotb.axis_register.m_axis          tdata width: 8 bits
+INFO     cocotb:simulator.py:302    300.00ns INFO     cocotb.axis_register.m_axis          tdest width: 8 bits
+INFO     cocotb:simulator.py:302    300.00ns INFO     cocotb.axis_register.m_axis          tid width: 8 bits
+INFO     cocotb:simulator.py:302    300.00ns INFO     cocotb.axis_register.m_axis          tkeep width: 1 bits
+INFO     cocotb:simulator.py:302    300.00ns INFO     cocotb.axis_register.m_axis          tlast width: 1 bits
+INFO     cocotb:simulator.py:302    300.00ns INFO     cocotb.axis_register.m_axis          tready width: 1 bits
+INFO     cocotb:simulator.py:302    300.00ns INFO     cocotb.axis_register.m_axis          tuser width: 1 bits
+INFO     cocotb:simulator.py:302    300.00ns INFO     cocotb.axis_register.m_axis          tvalid width: 1 bits
+INFO     cocotb:simulator.py:302    300.00ns INFO     cocotb.axis_register.m_axis        Reset de-asserted
+INFO     cocotb:simulator.py:302    320.00ns INFO     cocotb.axis_register.s_axis        Reset asserted
+INFO     cocotb:simulator.py:302    320.00ns INFO     cocotb.axis_register.m_axis        Reset asserted
+INFO     cocotb:simulator.py:302    340.00ns INFO     cocotb.axis_register.s_axis        Reset de-asserted
+INFO     cocotb:simulator.py:302    340.00ns INFO     cocotb.axis_register.m_axis        Reset de-asserted
+INFO     cocotb:simulator.py:302    370.00ns INFO     cocotb.axis_register.s_axis        TX frame: AxiStreamFrame(tdata=bytearray(b'\x00'), tkeep=None, tid=1, tdest=1, tuser=None, sim_time_start=370003, sim_time_end=None)
+INFO     cocotb:simulator.py:302    400.00ns INFO     cocotb.axis_register.s_axis        TX frame: AxiStreamFrame(tdata=bytearray(b'\x00\x01'), tkeep=None, tid=2, tdest=2, tuser=None, sim_time_start=400003, sim_time_end=None)
+INFO     cocotb:simulator.py:302    410.00ns INFO     cocotb.axis_register.m_axis        RX frame: AxiStreamFrame(tdata=bytearray(b'\x01'), tkeep=[1], tid=[1], tdest=[1], tuser=[0], sim_time_start=410003, sim_time_end=410003)
+INFO     cocotb:simulator.py:302    410.00ns INFO     cocotb.regression                  run_test_004 failed
+INFO     cocotb:simulator.py:302                                                         Traceback (most recent call last):
+INFO     cocotb:simulator.py:302                                                           File "/tmp/rtlarch-axis-venv/lib/python3.10/site-packages/cocotb/regression.py", line 714, in _my_test
+INFO     cocotb:simulator.py:302                                                             await function(dut, *args, **kwargs)
+INFO     cocotb:simulator.py:302                                                           File "/tmp/rtlarch-axis-benchmark-OM9PZ0/fault-as-built/tb/axis_register/test_axis_register.py", line 102, in run_test
+INFO     cocotb:simulator.py:302                                                             assert rx_frame.tdata == test_frame.tdata
+INFO     cocotb:simulator.py:302                                                         AssertionError: assert bytearray(b'\x01') == bytearray(b'\x00')
+INFO     cocotb:simulator.py:302                                                          +  where bytearray(b'\x01') = AxiStreamFrame(tdata=bytearray(b'\x01'), tkeep=None, tid=1, tdest=1, tuser=0, sim_time_start=410003, sim_time_end=410003).tdata
+INFO     cocotb:simulator.py:302                                                          +  and   bytearray(b'\x00') = AxiStreamFrame(tdata=bytearray(b'\x00'), tkeep=None, tid=1, tdest=1, tuser=None, sim_time_start=None, sim_time_end=None).tdata
+INFO     cocotb:simulator.py:302    410.00ns INFO     cocotb.regression                  running run_test_tuser_assert_001 (5/9)
+INFO     cocotb:simulator.py:302                                                           Automatically generated test
+INFO     cocotb:simulator.py:302    410.00ns INFO     cocotb.axis_register.s_axis        AXI stream source
+INFO     cocotb:simulator.py:302    410.00ns INFO     cocotb.axis_register.s_axis        cocotbext-axi version 0.1.20
+INFO     cocotb:simulator.py:302    410.00ns INFO     cocotb.axis_register.s_axis        Copyright (c) 2020 Alex Forencich
+INFO     cocotb:simulator.py:302    410.00ns INFO     cocotb.axis_register.s_axis        https://github.com/alexforencich/cocotbext-axi
+INFO     cocotb:simulator.py:302    410.00ns INFO     cocotb.axis_register.s_axis        AXI stream source configuration:
+INFO     cocotb:simulator.py:302    410.00ns INFO     cocotb.axis_register.s_axis          Byte size: 8 bits
+INFO     cocotb:simulator.py:302    410.00ns INFO     cocotb.axis_register.s_axis          Data width: 8 bits (1 bytes)
+INFO     cocotb:simulator.py:302    410.00ns INFO     cocotb.axis_register.s_axis        AXI stream source signals:
+INFO     cocotb:simulator.py:302    410.00ns INFO     cocotb.axis_register.s_axis          tdata width: 8 bits
+INFO     cocotb:simulator.py:302    410.00ns INFO     cocotb.axis_register.s_axis          tdest width: 8 bits
+INFO     cocotb:simulator.py:302    410.00ns INFO     cocotb.axis_register.s_axis          tid width: 8 bits
+INFO     cocotb:simulator.py:302    410.00ns INFO     cocotb.axis_register.s_axis          tkeep width: 1 bits
+INFO     cocotb:simulator.py:302    410.00ns INFO     cocotb.axis_register.s_axis          tlast width: 1 bits
+INFO     cocotb:simulator.py:302    410.00ns INFO     cocotb.axis_register.s_axis          tready width: 1 bits
+INFO     cocotb:simulator.py:302    410.00ns INFO     cocotb.axis_register.s_axis          tuser width: 1 bits
+INFO     cocotb:simulator.py:302    410.00ns INFO     cocotb.axis_register.s_axis          tvalid width: 1 bits
+INFO     cocotb:simulator.py:302    410.00ns INFO     cocotb.axis_register.s_axis        Reset de-asserted
+INFO     cocotb:simulator.py:302    410.00ns INFO     cocotb.axis_register.m_axis        AXI stream sink
+INFO     cocotb:simulator.py:302    410.00ns INFO     cocotb.axis_register.m_axis        cocotbext-axi version 0.1.20
+INFO     cocotb:simulator.py:302    410.00ns INFO     cocotb.axis_register.m_axis        Copyright (c) 2020 Alex Forencich
+INFO     cocotb:simulator.py:302    410.00ns INFO     cocotb.axis_register.m_axis        https://github.com/alexforencich/cocotbext-axi
+INFO     cocotb:simulator.py:302    410.00ns INFO     cocotb.axis_register.m_axis        AXI stream sink configuration:
+INFO     cocotb:simulator.py:302    410.00ns INFO     cocotb.axis_register.m_axis          Byte size: 8 bits
+INFO     cocotb:simulator.py:302    410.00ns INFO     cocotb.axis_register.m_axis          Data width: 8 bits (1 bytes)
+INFO     cocotb:simulator.py:302    410.00ns INFO     cocotb.axis_register.m_axis        AXI stream sink signals:
+INFO     cocotb:simulator.py:302    410.00ns INFO     cocotb.axis_register.m_axis          tdata width: 8 bits
+INFO     cocotb:simulator.py:302    410.00ns INFO     cocotb.axis_register.m_axis          tdest width: 8 bits
+INFO     cocotb:simulator.py:302    410.00ns INFO     cocotb.axis_register.m_axis          tid width: 8 bits
+INFO     cocotb:simulator.py:302    410.00ns INFO     cocotb.axis_register.m_axis          tkeep width: 1 bits
+INFO     cocotb:simulator.py:302    410.00ns INFO     cocotb.axis_register.m_axis          tlast width: 1 bits
+INFO     cocotb:simulator.py:302    410.00ns INFO     cocotb.axis_register.m_axis          tready width: 1 bits
+INFO     cocotb:simulator.py:302    410.00ns INFO     cocotb.axis_register.m_axis          tuser width: 1 bits
+INFO     cocotb:simulator.py:302    410.00ns INFO     cocotb.axis_register.m_axis          tvalid width: 1 bits
+INFO     cocotb:simulator.py:302    410.00ns INFO     cocotb.axis_register.m_axis        Reset de-asserted
+INFO     cocotb:simulator.py:302    430.00ns INFO     cocotb.axis_register.s_axis        Reset asserted
+INFO     cocotb:simulator.py:302    430.00ns INFO     cocotb.axis_register.m_axis        Reset asserted
+INFO     cocotb:simulator.py:302    450.00ns INFO     cocotb.axis_register.s_axis        Reset de-asserted
+INFO     cocotb:simulator.py:302    450.00ns INFO     cocotb.axis_register.m_axis        Reset de-asserted
+INFO     cocotb:simulator.py:302    480.00ns INFO     cocotb.axis_register.s_axis        TX frame: AxiStreamFrame(tdata=bytearray(b'\x00\x01\x02\x03\x04\x05\x06\x07\x08\t\n\x0b\x0c\r\x0e\x0f\x10\x11\x12\x13\x14\x15\x16\x17\x18\x19\x1a\x1b\x1c\x1d\x1e\x1f'), tkeep=None, tid=None, tdest=None, tuser=1, sim_time_start=480004, sim_time_end=None)
+INFO     cocotb:simulator.py:302   1120.00ns INFO     cocotb.axis_register.m_axis        RX frame: AxiStreamFrame(tdata=bytearray(b'\x01\x00\x03\x02\x05\x04\x07\x06\t\x08\x0b\n\r\x0c\x0f\x0e\x11\x10\x13\x12\x15\x14\x17\x16\x19\x18\x1b\x1a\x1d\x1c\x1f\x1e'), tkeep=[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1], tid=[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], tdest=[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], tuser=[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1], sim_time_start=500004, sim_time_end=1120004)
+INFO     cocotb:simulator.py:302   1120.01ns INFO     cocotb.regression                  run_test_tuser_assert_001 failed
+INFO     cocotb:simulator.py:302                                                         Traceback (most recent call last):
+INFO     cocotb:simulator.py:302                                                           File "/tmp/rtlarch-axis-venv/lib/python3.10/site-packages/cocotb/regression.py", line 714, in _my_test
+INFO     cocotb:simulator.py:302                                                             await function(dut, *args, **kwargs)
+INFO     cocotb:simulator.py:302                                                           File "/tmp/rtlarch-axis-benchmark-OM9PZ0/fault-as-built/tb/axis_register/test_axis_register.py", line 125, in run_test_tuser_assert
+INFO     cocotb:simulator.py:302                                                             assert rx_frame.tdata == test_data
+INFO     cocotb:simulator.py:302                                                         AssertionError: assert bytearray(b'\x01\x00\x03\x02\x05\x04\x07\x06\t\x08\x0b\n\r\x0c\x0f\x0e\x11\x10\x13\x12\x15\x14\x17\x16\x19\x18\x1b\x1a\x1d\x1c\x1f\x1e') == bytearray(b'\x00\x01\x02\x03\x04\x05\x06\x07\x08\t\n\x0b\x0c\r\x0e\x0f\x10\x11\x12\x13\x14\x15\x16\x17\x18\x19\x1a\x1b\x1c\x1d\x1e\x1f')
+INFO     cocotb:simulator.py:302                                                          +  where bytearray(b'\x01\x00\x03\x02\x05\x04\x07\x06\t\x08\x0b\n\r\x0c\x0f\x0e\x11\x10\x13\x12\x15\x14\x17\x16\x19\x18\x1b\x1a\x1d\x1c\x1f\x1e') = AxiStreamFrame(tdata=bytearray(b'\x01\x00\x03\x02\x05\x04\x07\x06\t\x08\x0b\n\r\x0c\x0f\x0e\x11\x10\x13\x12\x15\x14\x17\x16\x19\x18\x1b\x1a\x1d\x1c\x1f\x1e'), tkeep=None, tid=0, tdest=0, tuser=1, sim_time_start=500004, sim_time_end=1120004).tdata
+INFO     cocotb:simulator.py:302   1120.01ns INFO     cocotb.regression                  running run_stress_test_001 (6/9)
+INFO     cocotb:simulator.py:302                                                           Automatically generated test
+INFO     cocotb:simulator.py:302 
+INFO     cocotb:simulator.py:302                                                           idle_inserter: None
+INFO     cocotb:simulator.py:302                                                           backpressure_inserter: None
+INFO     cocotb:simulator.py:302   1120.01ns INFO     cocotb.axis_register.s_axis        AXI stream source
+INFO     cocotb:simulator.py:302   1120.01ns INFO     cocotb.axis_register.s_axis        cocotbext-axi version 0.1.20
+INFO     cocotb:simulator.py:302   1120.01ns INFO     cocotb.axis_register.s_axis        Copyright (c) 2020 Alex Forencich
+INFO     cocotb:simulator.py:302   1120.01ns INFO     cocotb.axis_register.s_axis        https://github.com/alexforencich/cocotbext-axi
+INFO     cocotb:simulator.py:302   1120.01ns INFO     cocotb.axis_register.s_axis        AXI stream source configuration:
+INFO     cocotb:simulator.py:302   1120.01ns INFO     cocotb.axis_register.s_axis          Byte size: 8 bits
+INFO     cocotb:simulator.py:302   1120.01ns INFO     cocotb.axis_register.s_axis          Data width: 8 bits (1 bytes)
+INFO     cocotb:simulator.py:302   1120.01ns INFO     cocotb.axis_register.s_axis        AXI stream source signals:
+INFO     cocotb:simulator.py:302   1120.01ns INFO     cocotb.axis_register.s_axis          tdata width: 8 bits
+INFO     cocotb:simulator.py:302   1120.01ns INFO     cocotb.axis_register.s_axis          tdest width: 8 bits
+INFO     cocotb:simulator.py:302   1120.01ns INFO     cocotb.axis_register.s_axis          tid width: 8 bits
+INFO     cocotb:simulator.py:302   1120.01ns INFO     cocotb.axis_register.s_axis          tkeep width: 1 bits
+INFO     cocotb:simulator.py:302   1120.01ns INFO     cocotb.axis_register.s_axis          tlast width: 1 bits
+INFO     cocotb:simulator.py:302   1120.01ns INFO     cocotb.axis_register.s_axis          tready width: 1 bits
+INFO     cocotb:simulator.py:302   1120.01ns INFO     cocotb.axis_register.s_axis          tuser width: 1 bits
+INFO     cocotb:simulator.py:302   1120.01ns INFO     cocotb.axis_register.s_axis          tvalid width: 1 bits
+INFO     cocotb:simulator.py:302   1120.01ns INFO     cocotb.axis_register.s_axis        Reset de-asserted
+INFO     cocotb:simulator.py:302   1120.01ns INFO     cocotb.axis_register.m_axis        AXI stream sink
+INFO     cocotb:simulator.py:302   1120.01ns INFO     cocotb.axis_register.m_axis        cocotbext-axi version 0.1.20
+INFO     cocotb:simulator.py:302   1120.01ns INFO     cocotb.axis_register.m_axis        Copyright (c) 2020 Alex Forencich
+INFO     cocotb:simulator.py:302   1120.01ns INFO     cocotb.axis_register.m_axis        https://github.com/alexforencich/cocotbext-axi
+INFO     cocotb:simulator.py:302   1120.01ns INFO     cocotb.axis_register.m_axis        AXI stream sink configuration:
+INFO     cocotb:simulator.py:302   1120.01ns INFO     cocotb.axis_register.m_axis          Byte size: 8 bits
+INFO     cocotb:simulator.py:302   1120.01ns INFO     cocotb.axis_register.m_axis          Data width: 8 bits (1 bytes)
+INFO     cocotb:simulator.py:302   1120.01ns INFO     cocotb.axis_register.m_axis        AXI stream sink signals:
+INFO     cocotb:simulator.py:302   1120.01ns INFO     cocotb.axis_register.m_axis          tdata width: 8 bits
+INFO     cocotb:simulator.py:302   1120.01ns INFO     cocotb.axis_register.m_axis          tdest width: 8 bits
+INFO     cocotb:simulator.py:302   1120.01ns INFO     cocotb.axis_register.m_axis          tid width: 8 bits
+INFO     cocotb:simulator.py:302   1120.01ns INFO     cocotb.axis_register.m_axis          tkeep width: 1 bits
+INFO     cocotb:simulator.py:302   1120.01ns INFO     cocotb.axis_register.m_axis          tlast width: 1 bits
+INFO     cocotb:simulator.py:302   1120.01ns INFO     cocotb.axis_register.m_axis          tready width: 1 bits
+INFO     cocotb:simulator.py:302   1120.01ns INFO     cocotb.axis_register.m_axis          tuser width: 1 bits
+INFO     cocotb:simulator.py:302   1120.01ns INFO     cocotb.axis_register.m_axis          tvalid width: 1 bits
+INFO     cocotb:simulator.py:302   1120.01ns INFO     cocotb.axis_register.m_axis        Reset de-asserted
+INFO     cocotb:simulator.py:302   1140.01ns INFO     cocotb.axis_register.s_axis        Reset asserted
+INFO     cocotb:simulator.py:302   1140.01ns INFO     cocotb.axis_register.m_axis        Reset asserted
+INFO     cocotb:simulator.py:302   1160.01ns INFO     cocotb.axis_register.s_axis        Reset de-asserted
+INFO     cocotb:simulator.py:302   1160.01ns INFO     cocotb.axis_register.m_axis        Reset de-asserted
+INFO     cocotb:simulator.py:302   1190.01ns INFO     cocotb.axis_register.s_axis        TX frame: AxiStreamFrame(tdata=bytearray(b'\x00\x01\x02\x03\x04\x05\x06\x07\x08\t\n'), tkeep=None, tid=1, tdest=1, tuser=None, sim_time_start=1190005, sim_time_end=None)
+INFO     cocotb:simulator.py:302   1400.01ns INFO     cocotb.axis_register.s_axis        TX frame: AxiStreamFrame(tdata=bytearray(b'\x00\x01\x02\x03\x04\x05\x06\x07\x08\t\n\x0b\x0c\r\x0e'), tkeep=None, tid=2, tdest=2, tuser=None, sim_time_start=1400005, sim_time_end=None)
+INFO     cocotb:simulator.py:302   1410.01ns INFO     cocotb.axis_register.m_axis        RX frame: AxiStreamFrame(tdata=bytearray(b'\x01\x00\x03\x02\x05\x04\x07\x06\t\x08\x0b'), tkeep=[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1], tid=[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1], tdest=[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1], tuser=[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], sim_time_start=1210005, sim_time_end=1410005)
+INFO     cocotb:simulator.py:302   1410.01ns INFO     cocotb.regression                  run_stress_test_001 failed
+INFO     cocotb:simulator.py:302                                                         Traceback (most recent call last):
+INFO     cocotb:simulator.py:302                                                           File "/tmp/rtlarch-axis-venv/lib/python3.10/site-packages/cocotb/regression.py", line 714, in _my_test
+INFO     cocotb:simulator.py:302                                                             await function(dut, *args, **kwargs)
+INFO     cocotb:simulator.py:302                                                           File "/tmp/rtlarch-axis-benchmark-OM9PZ0/fault-as-built/tb/axis_register/test_axis_register.py", line 165, in run_stress_test
+INFO     cocotb:simulator.py:302                                                             assert rx_frame.tdata == test_frame.tdata
+INFO     cocotb:simulator.py:302                                                         AssertionError: assert bytearray(b'\x01\x00\x03\x02\x05\x04\x07\x06\t\x08\x0b') == bytearray(b'\x00\x01\x02\x03\x04\x05\x06\x07\x08\t\n')
+INFO     cocotb:simulator.py:302                                                          +  where bytearray(b'\x01\x00\x03\x02\x05\x04\x07\x06\t\x08\x0b') = AxiStreamFrame(tdata=bytearray(b'\x01\x00\x03\x02\x05\x04\x07\x06\t\x08\x0b'), tkeep=None, tid=1, tdest=1, tuser=0, sim_time_start=1210005, sim_time_end=1410005).tdata
+INFO     cocotb:simulator.py:302                                                          +  and   bytearray(b'\x00\x01\x02\x03\x04\x05\x06\x07\x08\t\n') = AxiStreamFrame(tdata=bytearray(b'\x00\x01\x02\x03\x04\x05\x06\x07\x08\t\n'), tkeep=None, tid=1, tdest=1, tuser=None, sim_time_start=None, sim_time_end=None).tdata
+INFO     cocotb:simulator.py:302   1410.01ns INFO     cocotb.regression                  running run_stress_test_002 (7/9)
+INFO     cocotb:simulator.py:302                                                           Automatically generated test
+INFO     cocotb:simulator.py:302 
+INFO     cocotb:simulator.py:302                                                           idle_inserter: None
+INFO     cocotb:simulator.py:302                                                           backpressure_inserter: cycle_pause (No docstring supplied)
+INFO     cocotb:simulator.py:302   1410.01ns INFO     cocotb.axis_register.s_axis        AXI stream source
+INFO     cocotb:simulator.py:302   1410.01ns INFO     cocotb.axis_register.s_axis        cocotbext-axi version 0.1.20
+INFO     cocotb:simulator.py:302   1410.01ns INFO     cocotb.axis_register.s_axis        Copyright (c) 2020 Alex Forencich
+INFO     cocotb:simulator.py:302   1410.01ns INFO     cocotb.axis_register.s_axis        https://github.com/alexforencich/cocotbext-axi
+INFO     cocotb:simulator.py:302   1410.01ns INFO     cocotb.axis_register.s_axis        AXI stream source configuration:
+INFO     cocotb:simulator.py:302   1410.01ns INFO     cocotb.axis_register.s_axis          Byte size: 8 bits
+INFO     cocotb:simulator.py:302   1410.01ns INFO     cocotb.axis_register.s_axis          Data width: 8 bits (1 bytes)
+INFO     cocotb:simulator.py:302   1410.01ns INFO     cocotb.axis_register.s_axis        AXI stream source signals:
+INFO     cocotb:simulator.py:302   1410.01ns INFO     cocotb.axis_register.s_axis          tdata width: 8 bits
+INFO     cocotb:simulator.py:302   1410.01ns INFO     cocotb.axis_register.s_axis          tdest width: 8 bits
+INFO     cocotb:simulator.py:302   1410.01ns INFO     cocotb.axis_register.s_axis          tid width: 8 bits
+INFO     cocotb:simulator.py:302   1410.01ns INFO     cocotb.axis_register.s_axis          tkeep width: 1 bits
+INFO     cocotb:simulator.py:302   1410.01ns INFO     cocotb.axis_register.s_axis          tlast width: 1 bits
+INFO     cocotb:simulator.py:302   1410.01ns INFO     cocotb.axis_register.s_axis          tready width: 1 bits
+INFO     cocotb:simulator.py:302   1410.01ns INFO     cocotb.axis_register.s_axis          tuser width: 1 bits
+INFO     cocotb:simulator.py:302   1410.01ns INFO     cocotb.axis_register.s_axis          tvalid width: 1 bits
+INFO     cocotb:simulator.py:302   1410.01ns INFO     cocotb.axis_register.s_axis        Reset de-asserted
+INFO     cocotb:simulator.py:302   1410.01ns INFO     cocotb.axis_register.m_axis        AXI stream sink
+INFO     cocotb:simulator.py:302   1410.01ns INFO     cocotb.axis_register.m_axis        cocotbext-axi version 0.1.20
+INFO     cocotb:simulator.py:302   1410.01ns INFO     cocotb.axis_register.m_axis        Copyright (c) 2020 Alex Forencich
+INFO     cocotb:simulator.py:302   1410.01ns INFO     cocotb.axis_register.m_axis        https://github.com/alexforencich/cocotbext-axi
+INFO     cocotb:simulator.py:302   1410.01ns INFO     cocotb.axis_register.m_axis        AXI stream sink configuration:
+INFO     cocotb:simulator.py:302   1410.01ns INFO     cocotb.axis_register.m_axis          Byte size: 8 bits
+INFO     cocotb:simulator.py:302   1410.01ns INFO     cocotb.axis_register.m_axis          Data width: 8 bits (1 bytes)
+INFO     cocotb:simulator.py:302   1410.01ns INFO     cocotb.axis_register.m_axis        AXI stream sink signals:
+INFO     cocotb:simulator.py:302   1410.01ns INFO     cocotb.axis_register.m_axis          tdata width: 8 bits
+INFO     cocotb:simulator.py:302   1410.01ns INFO     cocotb.axis_register.m_axis          tdest width: 8 bits
+INFO     cocotb:simulator.py:302   1410.01ns INFO     cocotb.axis_register.m_axis          tid width: 8 bits
+INFO     cocotb:simulator.py:302   1410.01ns INFO     cocotb.axis_register.m_axis          tkeep width: 1 bits
+INFO     cocotb:simulator.py:302   1410.01ns INFO     cocotb.axis_register.m_axis          tlast width: 1 bits
+INFO     cocotb:simulator.py:302   1410.01ns INFO     cocotb.axis_register.m_axis          tready width: 1 bits
+INFO     cocotb:simulator.py:302   1410.01ns INFO     cocotb.axis_register.m_axis          tuser width: 1 bits
+INFO     cocotb:simulator.py:302   1410.01ns INFO     cocotb.axis_register.m_axis          tvalid width: 1 bits
+INFO     cocotb:simulator.py:302   1410.01ns INFO     cocotb.axis_register.m_axis        Reset de-asserted
+INFO     cocotb:simulator.py:302   1430.01ns INFO     cocotb.axis_register.s_axis        Reset asserted
+INFO     cocotb:simulator.py:302   1430.01ns INFO     cocotb.axis_register.m_axis        Reset asserted
+INFO     cocotb:simulator.py:302   1450.01ns INFO     cocotb.axis_register.s_axis        Reset de-asserted
+INFO     cocotb:simulator.py:302   1450.01ns INFO     cocotb.axis_register.m_axis        Reset de-asserted
+INFO     cocotb:simulator.py:302   1480.01ns INFO     cocotb.axis_register.s_axis        TX frame: AxiStreamFrame(tdata=bytearray(b'\x00\x01\x02\x03\x04\x05\x06\x07\x08\t\n\x0b\x0c'), tkeep=None, tid=1, tdest=1, tuser=None, sim_time_start=1480006, sim_time_end=None)
+INFO     cocotb:simulator.py:302   1970.01ns INFO     cocotb.axis_register.s_axis        TX frame: AxiStreamFrame(tdata=bytearray(b'\x00\x01\x02\x03\x04\x05\x06\x07'), tkeep=None, tid=2, tdest=2, tuser=None, sim_time_start=1970006, sim_time_end=None)
+INFO     cocotb:simulator.py:302   2000.01ns INFO     cocotb.axis_register.m_axis        RX frame: AxiStreamFrame(tdata=bytearray(b'\x01\x00\x03\x02\x05\x04\x07\x06\t\x08\x0b\n\r'), tkeep=[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1], tid=[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1], tdest=[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1], tuser=[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], sim_time_start=1520006, sim_time_end=2000006)
+INFO     cocotb:simulator.py:302   2000.01ns INFO     cocotb.regression                  run_stress_test_002 failed
+INFO     cocotb:simulator.py:302                                                         Traceback (most recent call last):
+INFO     cocotb:simulator.py:302                                                           File "/tmp/rtlarch-axis-venv/lib/python3.10/site-packages/cocotb/regression.py", line 714, in _my_test
+INFO     cocotb:simulator.py:302                                                             await function(dut, *args, **kwargs)
+INFO     cocotb:simulator.py:302                                                           File "/tmp/rtlarch-axis-benchmark-OM9PZ0/fault-as-built/tb/axis_register/test_axis_register.py", line 165, in run_stress_test
+INFO     cocotb:simulator.py:302                                                             assert rx_frame.tdata == test_frame.tdata
+INFO     cocotb:simulator.py:302                                                         AssertionError: assert bytearray(b'\x01\x00\x03\x02\x05\x04\x07\x06\t\x08\x0b\n\r') == bytearray(b'\x00\x01\x02\x03\x04\x05\x06\x07\x08\t\n\x0b\x0c')
+INFO     cocotb:simulator.py:302                                                          +  where bytearray(b'\x01\x00\x03\x02\x05\x04\x07\x06\t\x08\x0b\n\r') = AxiStreamFrame(tdata=bytearray(b'\x01\x00\x03\x02\x05\x04\x07\x06\t\x08\x0b\n\r'), tkeep=None, tid=1, tdest=1, tuser=0, sim_time_start=1520006, sim_time_end=2000006).tdata
+INFO     cocotb:simulator.py:302                                                          +  and   bytearray(b'\x00\x01\x02\x03\x04\x05\x06\x07\x08\t\n\x0b\x0c') = AxiStreamFrame(tdata=bytearray(b'\x00\x01\x02\x03\x04\x05\x06\x07\x08\t\n\x0b\x0c'), tkeep=None, tid=1, tdest=1, tuser=None, sim_time_start=None, sim_time_end=None).tdata
+INFO     cocotb:simulator.py:302   2000.01ns INFO     cocotb.regression                  running run_stress_test_003 (8/9)
+INFO     cocotb:simulator.py:302                                                           Automatically generated test
+INFO     cocotb:simulator.py:302 
+INFO     cocotb:simulator.py:302                                                           idle_inserter: cycle_pause (No docstring supplied)
+INFO     cocotb:simulator.py:302                                                           backpressure_inserter: None
+INFO     cocotb:simulator.py:302   2000.01ns INFO     cocotb.axis_register.s_axis        AXI stream source
+INFO     cocotb:simulator.py:302   2000.01ns INFO     cocotb.axis_register.s_axis        cocotbext-axi version 0.1.20
+INFO     cocotb:simulator.py:302   2000.01ns INFO     cocotb.axis_register.s_axis        Copyright (c) 2020 Alex Forencich
+INFO     cocotb:simulator.py:302   2000.01ns INFO     cocotb.axis_register.s_axis        https://github.com/alexforencich/cocotbext-axi
+INFO     cocotb:simulator.py:302   2000.01ns INFO     cocotb.axis_register.s_axis        AXI stream source configuration:
+INFO     cocotb:simulator.py:302   2000.01ns INFO     cocotb.axis_register.s_axis          Byte size: 8 bits
+INFO     cocotb:simulator.py:302   2000.01ns INFO     cocotb.axis_register.s_axis          Data width: 8 bits (1 bytes)
+INFO     cocotb:simulator.py:302   2000.01ns INFO     cocotb.axis_register.s_axis        AXI stream source signals:
+INFO     cocotb:simulator.py:302   2000.01ns INFO     cocotb.axis_register.s_axis          tdata width: 8 bits
+INFO     cocotb:simulator.py:302   2000.01ns INFO     cocotb.axis_register.s_axis          tdest width: 8 bits
+INFO     cocotb:simulator.py:302   2000.01ns INFO     cocotb.axis_register.s_axis          tid width: 8 bits
+INFO     cocotb:simulator.py:302   2000.01ns INFO     cocotb.axis_register.s_axis          tkeep width: 1 bits
+INFO     cocotb:simulator.py:302   2000.01ns INFO     cocotb.axis_register.s_axis          tlast width: 1 bits
+INFO     cocotb:simulator.py:302   2000.01ns INFO     cocotb.axis_register.s_axis          tready width: 1 bits
+INFO     cocotb:simulator.py:302   2000.01ns INFO     cocotb.axis_register.s_axis          tuser width: 1 bits
+INFO     cocotb:simulator.py:302   2000.01ns INFO     cocotb.axis_register.s_axis          tvalid width: 1 bits
+INFO     cocotb:simulator.py:302   2000.01ns INFO     cocotb.axis_register.s_axis        Reset de-asserted
+INFO     cocotb:simulator.py:302   2000.01ns INFO     cocotb.axis_register.m_axis        AXI stream sink
+INFO     cocotb:simulator.py:302   2000.01ns INFO     cocotb.axis_register.m_axis        cocotbext-axi version 0.1.20
+INFO     cocotb:simulator.py:302   2000.01ns INFO     cocotb.axis_register.m_axis        Copyright (c) 2020 Alex Forencich
+INFO     cocotb:simulator.py:302   2000.01ns INFO     cocotb.axis_register.m_axis        https://github.com/alexforencich/cocotbext-axi
+INFO     cocotb:simulator.py:302   2000.01ns INFO     cocotb.axis_register.m_axis        AXI stream sink configuration:
+INFO     cocotb:simulator.py:302   2000.01ns INFO     cocotb.axis_register.m_axis          Byte size: 8 bits
+INFO     cocotb:simulator.py:302   2000.01ns INFO     cocotb.axis_register.m_axis          Data width: 8 bits (1 bytes)
+INFO     cocotb:simulator.py:302   2000.01ns INFO     cocotb.axis_register.m_axis        AXI stream sink signals:
+INFO     cocotb:simulator.py:302   2000.01ns INFO     cocotb.axis_register.m_axis          tdata width: 8 bits
+INFO     cocotb:simulator.py:302   2000.01ns INFO     cocotb.axis_register.m_axis          tdest width: 8 bits
+INFO     cocotb:simulator.py:302   2000.01ns INFO     cocotb.axis_register.m_axis          tid width: 8 bits
+INFO     cocotb:simulator.py:302   2000.01ns INFO     cocotb.axis_register.m_axis          tkeep width: 1 bits
+INFO     cocotb:simulator.py:302   2000.01ns INFO     cocotb.axis_register.m_axis          tlast width: 1 bits
+INFO     cocotb:simulator.py:302   2000.01ns INFO     cocotb.axis_register.m_axis          tready width: 1 bits
+INFO     cocotb:simulator.py:302   2000.01ns INFO     cocotb.axis_register.m_axis          tuser width: 1 bits
+INFO     cocotb:simulator.py:302   2000.01ns INFO     cocotb.axis_register.m_axis          tvalid width: 1 bits
+INFO     cocotb:simulator.py:302   2000.01ns INFO     cocotb.axis_register.m_axis        Reset de-asserted
+INFO     cocotb:simulator.py:302   2020.01ns INFO     cocotb.axis_register.s_axis        Reset asserted
+INFO     cocotb:simulator.py:302   2020.01ns INFO     cocotb.axis_register.m_axis        Reset asserted
+INFO     cocotb:simulator.py:302   2040.01ns INFO     cocotb.axis_register.s_axis        Reset de-asserted
+INFO     cocotb:simulator.py:302   2040.01ns INFO     cocotb.axis_register.m_axis        Reset de-asserted
+INFO     cocotb:simulator.py:302   2070.01ns INFO     cocotb.axis_register.s_axis        TX frame: AxiStreamFrame(tdata=bytearray(b'\x00'), tkeep=None, tid=1, tdest=1, tuser=None, sim_time_start=2070007, sim_time_end=None)
+INFO     cocotb:simulator.py:302   2100.01ns INFO     cocotb.axis_register.s_axis        TX frame: AxiStreamFrame(tdata=bytearray(b'\x00\x01\x02\x03\x04\x05\x06\x07\x08\t\n\x0b\x0c\r\x0e'), tkeep=None, tid=2, tdest=2, tuser=None, sim_time_start=2100007, sim_time_end=None)
+INFO     cocotb:simulator.py:302   2110.01ns INFO     cocotb.axis_register.m_axis        RX frame: AxiStreamFrame(tdata=bytearray(b'\x01'), tkeep=[1], tid=[1], tdest=[1], tuser=[0], sim_time_start=2110007, sim_time_end=2110007)
+INFO     cocotb:simulator.py:302   2110.01ns INFO     cocotb.regression                  run_stress_test_003 failed
+INFO     cocotb:simulator.py:302                                                         Traceback (most recent call last):
+INFO     cocotb:simulator.py:302                                                           File "/tmp/rtlarch-axis-venv/lib/python3.10/site-packages/cocotb/regression.py", line 714, in _my_test
+INFO     cocotb:simulator.py:302                                                             await function(dut, *args, **kwargs)
+INFO     cocotb:simulator.py:302                                                           File "/tmp/rtlarch-axis-benchmark-OM9PZ0/fault-as-built/tb/axis_register/test_axis_register.py", line 165, in run_stress_test
+INFO     cocotb:simulator.py:302                                                             assert rx_frame.tdata == test_frame.tdata
+INFO     cocotb:simulator.py:302                                                         AssertionError: assert bytearray(b'\x01') == bytearray(b'\x00')
+INFO     cocotb:simulator.py:302                                                          +  where bytearray(b'\x01') = AxiStreamFrame(tdata=bytearray(b'\x01'), tkeep=None, tid=1, tdest=1, tuser=0, sim_time_start=2110007, sim_time_end=2110007).tdata
+INFO     cocotb:simulator.py:302                                                          +  and   bytearray(b'\x00') = AxiStreamFrame(tdata=bytearray(b'\x00'), tkeep=None, tid=1, tdest=1, tuser=None, sim_time_start=None, sim_time_end=None).tdata
+INFO     cocotb:simulator.py:302   2110.01ns INFO     cocotb.regression                  running run_stress_test_004 (9/9)
+INFO     cocotb:simulator.py:302                                                           Automatically generated test
+INFO     cocotb:simulator.py:302 
+INFO     cocotb:simulator.py:302                                                           idle_inserter: cycle_pause (No docstring supplied)
+INFO     cocotb:simulator.py:302                                                           backpressure_inserter: cycle_pause (No docstring supplied)
+INFO     cocotb:simulator.py:302   2110.01ns INFO     cocotb.axis_register.s_axis        AXI stream source
+INFO     cocotb:simulator.py:302   2110.01ns INFO     cocotb.axis_register.s_axis        cocotbext-axi version 0.1.20
+INFO     cocotb:simulator.py:302   2110.01ns INFO     cocotb.axis_register.s_axis        Copyright (c) 2020 Alex Forencich
+INFO     cocotb:simulator.py:302   2110.01ns INFO     cocotb.axis_register.s_axis        https://github.com/alexforencich/cocotbext-axi
+INFO     cocotb:simulator.py:302   2110.01ns INFO     cocotb.axis_register.s_axis        AXI stream source configuration:
+INFO     cocotb:simulator.py:302   2110.01ns INFO     cocotb.axis_register.s_axis          Byte size: 8 bits
+INFO     cocotb:simulator.py:302   2110.01ns INFO     cocotb.axis_register.s_axis          Data width: 8 bits (1 bytes)
+INFO     cocotb:simulator.py:302   2110.01ns INFO     cocotb.axis_register.s_axis        AXI stream source signals:
+INFO     cocotb:simulator.py:302   2110.01ns INFO     cocotb.axis_register.s_axis          tdata width: 8 bits
+INFO     cocotb:simulator.py:302   2110.01ns INFO     cocotb.axis_register.s_axis          tdest width: 8 bits
+INFO     cocotb:simulator.py:302   2110.01ns INFO     cocotb.axis_register.s_axis          tid width: 8 bits
+INFO     cocotb:simulator.py:302   2110.01ns INFO     cocotb.axis_register.s_axis          tkeep width: 1 bits
+INFO     cocotb:simulator.py:302   2110.01ns INFO     cocotb.axis_register.s_axis          tlast width: 1 bits
+INFO     cocotb:simulator.py:302   2110.01ns INFO     cocotb.axis_register.s_axis          tready width: 1 bits
+INFO     cocotb:simulator.py:302   2110.01ns INFO     cocotb.axis_register.s_axis          tuser width: 1 bits
+INFO     cocotb:simulator.py:302   2110.01ns INFO     cocotb.axis_register.s_axis          tvalid width: 1 bits
+INFO     cocotb:simulator.py:302   2110.01ns INFO     cocotb.axis_register.s_axis        Reset de-asserted
+INFO     cocotb:simulator.py:302   2110.01ns INFO     cocotb.axis_register.m_axis        AXI stream sink
+INFO     cocotb:simulator.py:302   2110.01ns INFO     cocotb.axis_register.m_axis        cocotbext-axi version 0.1.20
+INFO     cocotb:simulator.py:302   2110.01ns INFO     cocotb.axis_register.m_axis        Copyright (c) 2020 Alex Forencich
+INFO     cocotb:simulator.py:302   2110.01ns INFO     cocotb.axis_register.m_axis        https://github.com/alexforencich/cocotbext-axi
+INFO     cocotb:simulator.py:302   2110.01ns INFO     cocotb.axis_register.m_axis        AXI stream sink configuration:
+INFO     cocotb:simulator.py:302   2110.01ns INFO     cocotb.axis_register.m_axis          Byte size: 8 bits
+INFO     cocotb:simulator.py:302   2110.01ns INFO     cocotb.axis_register.m_axis          Data width: 8 bits (1 bytes)
+INFO     cocotb:simulator.py:302   2110.01ns INFO     cocotb.axis_register.m_axis        AXI stream sink signals:
+INFO     cocotb:simulator.py:302   2110.01ns INFO     cocotb.axis_register.m_axis          tdata width: 8 bits
+INFO     cocotb:simulator.py:302   2110.01ns INFO     cocotb.axis_register.m_axis          tdest width: 8 bits
+INFO     cocotb:simulator.py:302   2110.01ns INFO     cocotb.axis_register.m_axis          tid width: 8 bits
+INFO     cocotb:simulator.py:302   2110.01ns INFO     cocotb.axis_register.m_axis          tkeep width: 1 bits
+INFO     cocotb:simulator.py:302   2110.01ns INFO     cocotb.axis_register.m_axis          tlast width: 1 bits
+INFO     cocotb:simulator.py:302   2110.01ns INFO     cocotb.axis_register.m_axis          tready width: 1 bits
+INFO     cocotb:simulator.py:302   2110.01ns INFO     cocotb.axis_register.m_axis          tuser width: 1 bits
+INFO     cocotb:simulator.py:302   2110.01ns INFO     cocotb.axis_register.m_axis          tvalid width: 1 bits
+INFO     cocotb:simulator.py:302   2110.01ns INFO     cocotb.axis_register.m_axis        Reset de-asserted
+INFO     cocotb:simulator.py:302   2130.01ns INFO     cocotb.axis_register.s_axis        Reset asserted
+INFO     cocotb:simulator.py:302   2130.01ns INFO     cocotb.axis_register.m_axis        Reset asserted
+INFO     cocotb:simulator.py:302   2150.01ns INFO     cocotb.axis_register.s_axis        Reset de-asserted
+INFO     cocotb:simulator.py:302   2150.01ns INFO     cocotb.axis_register.m_axis        Reset de-asserted
+INFO     cocotb:simulator.py:302   2180.01ns INFO     cocotb.axis_register.s_axis        TX frame: AxiStreamFrame(tdata=bytearray(b'\x00\x01\x02\x03\x04\x05\x06\x07'), tkeep=None, tid=1, tdest=1, tuser=None, sim_time_start=2180008, sim_time_end=None)
+INFO     cocotb:simulator.py:302   2490.01ns INFO     cocotb.axis_register.s_axis        TX frame: AxiStreamFrame(tdata=bytearray(b'\x00\x01\x02\x03\x04\x05\x06\x07'), tkeep=None, tid=2, tdest=2, tuser=None, sim_time_start=2490008, sim_time_end=None)
+INFO     cocotb:simulator.py:302   2500.01ns INFO     cocotb.axis_register.m_axis        RX frame: AxiStreamFrame(tdata=bytearray(b'\x01\x00\x03\x02\x05\x04\x07\x06'), tkeep=[1, 1, 1, 1, 1, 1, 1, 1], tid=[1, 1, 1, 1, 1, 1, 1, 1], tdest=[1, 1, 1, 1, 1, 1, 1, 1], tuser=[0, 0, 0, 0, 0, 0, 0, 0], sim_time_start=2220008, sim_time_end=2500008)
+INFO     cocotb:simulator.py:302   2500.01ns INFO     cocotb.regression                  run_stress_test_004 failed
+INFO     cocotb:simulator.py:302                                                         Traceback (most recent call last):
+INFO     cocotb:simulator.py:302                                                           File "/tmp/rtlarch-axis-venv/lib/python3.10/site-packages/cocotb/regression.py", line 714, in _my_test
+INFO     cocotb:simulator.py:302                                                             await function(dut, *args, **kwargs)
+INFO     cocotb:simulator.py:302                                                           File "/tmp/rtlarch-axis-benchmark-OM9PZ0/fault-as-built/tb/axis_register/test_axis_register.py", line 165, in run_stress_test
+INFO     cocotb:simulator.py:302                                                             assert rx_frame.tdata == test_frame.tdata
+INFO     cocotb:simulator.py:302                                                         AssertionError: assert bytearray(b'\x01\x00\x03\x02\x05\x04\x07\x06') == bytearray(b'\x00\x01\x02\x03\x04\x05\x06\x07')
+INFO     cocotb:simulator.py:302                                                          +  where bytearray(b'\x01\x00\x03\x02\x05\x04\x07\x06') = AxiStreamFrame(tdata=bytearray(b'\x01\x00\x03\x02\x05\x04\x07\x06'), tkeep=None, tid=1, tdest=1, tuser=0, sim_time_start=2220008, sim_time_end=2500008).tdata
+INFO     cocotb:simulator.py:302                                                          +  and   bytearray(b'\x00\x01\x02\x03\x04\x05\x06\x07') = AxiStreamFrame(tdata=bytearray(b'\x00\x01\x02\x03\x04\x05\x06\x07'), tkeep=None, tid=1, tdest=1, tuser=None, sim_time_start=None, sim_time_end=None).tdata
+INFO     cocotb:simulator.py:302   2500.01ns INFO     cocotb.regression                  ******************************************************************************************************
+INFO     cocotb:simulator.py:302                                                         ** TEST                                          STATUS  SIM TIME (ns)  REAL TIME (s)  RATIO (ns/s) **
+INFO     cocotb:simulator.py:302                                                         ******************************************************************************************************
+INFO     cocotb:simulator.py:302                                                         ** test_axis_register.run_test_001                FAIL          80.00           0.01      14468.91  **
+INFO     cocotb:simulator.py:302                                                         ** test_axis_register.run_test_002                FAIL         110.00           0.01      17520.23  **
+INFO     cocotb:simulator.py:302                                                         ** test_axis_register.run_test_003                FAIL         110.00           0.00      26045.93  **
+INFO     cocotb:simulator.py:302                                                         ** test_axis_register.run_test_004                FAIL         110.00           0.00      24358.67  **
+INFO     cocotb:simulator.py:302                                                         ** test_axis_register.run_test_tuser_assert_001   FAIL         710.00           0.02      46369.78  **
+INFO     cocotb:simulator.py:302                                                         ** test_axis_register.run_stress_test_001         FAIL         290.00           0.01      31436.79  **
+INFO     cocotb:simulator.py:302                                                         ** test_axis_register.run_stress_test_002         FAIL         590.00           0.01      46845.18  **
+INFO     cocotb:simulator.py:302                                                         ** test_axis_register.run_stress_test_003         FAIL         110.00           0.00      24164.75  **
+INFO     cocotb:simulator.py:302                                                         ** test_axis_register.run_stress_test_004         FAIL         390.00           0.01      41678.12  **
+INFO     cocotb:simulator.py:302                                                         ******************************************************************************************************
+INFO     cocotb:simulator.py:302                                                         ** TESTS=9 PASS=0 FAIL=9 SKIP=0                               2500.01           0.26       9800.20  **
+INFO     cocotb:simulator.py:302                                                         ******************************************************************************************************
+INFO     cocotb:simulator.py:302 
+INFO     cocotb:simulator.py:302 FST info: dumpfile axis_register.fst opened for output.
+ERROR    cocotb:simulator.py:256 Failed: test_axis_register::run_test_001
+ERROR    cocotb:simulator.py:256 Failed: test_axis_register::run_test_002
+ERROR    cocotb:simulator.py:256 Failed: test_axis_register::run_test_003
+ERROR    cocotb:simulator.py:256 Failed: test_axis_register::run_test_004
+ERROR    cocotb:simulator.py:256 Failed: test_axis_register::run_test_tuser_assert_001
+ERROR    cocotb:simulator.py:256 Failed: test_axis_register::run_stress_test_001
+ERROR    cocotb:simulator.py:256 Failed: test_axis_register::run_stress_test_002
+ERROR    cocotb:simulator.py:256 Failed: test_axis_register::run_stress_test_003
+ERROR    cocotb:simulator.py:256 Failed: test_axis_register::run_stress_test_004
+FAILED
+
+=================================== FAILURES ===================================
+___________________________ test_axis_register[8-1] ____________________________
+
+request = <FixtureRequest for <Function test_axis_register[8-1]>>
+data_width = 8, reg_type = 1
+
+    @pytest.mark.parametrize("reg_type", [0, 1, 2])
+    @pytest.mark.parametrize("data_width", [8, 16, 32])
+    def test_axis_register(request, data_width, reg_type):
+        dut = "axis_register"
+        module = os.path.splitext(os.path.basename(__file__))[0]
+        toplevel = dut
+    
+        verilog_sources = [
+            os.path.join(rtl_dir, f"{dut}.v"),
+        ]
+    
+        parameters = {}
+    
+        parameters['DATA_WIDTH'] = data_width
+        parameters['KEEP_ENABLE'] = int(parameters['DATA_WIDTH'] > 8)
+        parameters['KEEP_WIDTH'] = (parameters['DATA_WIDTH'] + 7) // 8
+        parameters['LAST_ENABLE'] = 1
+        parameters['ID_ENABLE'] = 1
+        parameters['ID_WIDTH'] = 8
+        parameters['DEST_ENABLE'] = 1
+        parameters['DEST_WIDTH'] = 8
+        parameters['USER_ENABLE'] = 1
+        parameters['USER_WIDTH'] = 1
+        parameters['REG_TYPE'] = reg_type
+    
+        extra_env = {f'PARAM_{k}': str(v) for k, v in parameters.items()}
+    
+        sim_build = os.path.join(tests_dir, "sim_build",
+            request.node.name.replace('[', '-').replace(']', ''))
+    
+>       cocotb_test.simulator.run(
+            python_search=[tests_dir],
+            verilog_sources=verilog_sources,
+            toplevel=toplevel,
+            module=module,
+            parameters=parameters,
+            sim_build=sim_build,
+            extra_env=extra_env,
+        )
+E       SystemExit: FAILED 9 tests.
+
+tb/axis_register/test_axis_register.py:245: SystemExit
+- generated xml file: /tmp/rtlarch-axis-benchmark-OM9PZ0/fault-as-built/evidence/runs/run_1794979786944_74f225708c30479cb3e32187de46d477/pytest.xml -
+=========================== short test summary info ============================
+FAILED tb/axis_register/test_axis_register.py::test_axis_register[8-1] - Syst...
+============================== 1 failed in 0.46s ===============================

@@ -1,0 +1,41 @@
+{
+  "chromium": "141.0.7390.37",
+  "playwright": "1.56.1",
+  "cases": [
+    {
+      "workspace": "/tmp/rtlarch-fifo-trial-o5c9sQ/cases-b/16-1",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "buildId": "70881737fec906e785d6f0459de9653bfa9fdcc24aee4ecb08a5b6f10452611d",
+      "modelHash": "38daaeeef2e9df354b299ae1355c54ac255dc402a41707aea56a2c5ab38577e3",
+      "errors": [],
+      "selected": "top · wr_ptr_commit_reg",
+      "branch": "2 · 更新 · publish",
+      "sourceStatus": "文件 SHA-256 与记录一致",
+      "verifyRun": "run_1795075485327_c408a65b90314959939e4b2d0ffb63e6 · passed · 输入仍匹配",
+      "replayText": "尚无可读回放。声明事务路径后，可用 CLI replay 导入 verify 的 JSON 产物。",
+      "approval": "草稿",
+      "passed": true
+    },
+    {
+      "workspace": "/tmp/rtlarch-fifo-trial-o5c9sQ/cases-b/fault-16-frame",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "buildId": "70881737fec906e785d6f0459de9653bfa9fdcc24aee4ecb08a5b6f10452611d",
+      "modelHash": "38daaeeef2e9df354b299ae1355c54ac255dc402a41707aea56a2c5ab38577e3",
+      "errors": [],
+      "selected": "top · wr_ptr_commit_reg",
+      "branch": "2 · 更新 · publish",
+      "sourceStatus": "文件已变化：以下是当前内容，不再是记录中的证据；需重新审阅",
+      "verifyRun": "run_1795075536839_2a94a0f0d5474ed4a04a9acc9a8dc9cb · check_failed · 输入仍匹配",
+      "replayText": "尚无可读回放。声明事务路径后，可用 CLI replay 导入 verify 的 JSON 产物。",
+      "approval": "草稿",
+      "passed": true
+    }
+  ],
+  "finishedAt": "2026-11-19T08:09:11.515Z"
+}

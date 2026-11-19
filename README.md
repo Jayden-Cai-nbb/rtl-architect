@@ -1,4 +1,4 @@
-# RTL Architect 2.0.0
+# RTL Architect 2.1.0
 
 帮助用户看懂、质疑并把控 Agent 写出的 RTL，也让 Agent 按明确的状态、时序和验收约定实现。框图、Spec、状态规则和实现合同共用一份模型，审阅批准与实际 RTL 验证分别记录。
 
@@ -16,11 +16,13 @@
 
 完整框图提供架构、微架构和原始连接三种视图；按缩放展示端口名称。阅读约束能表达并排分支、共享资源和外围反馈，普通选择不会重新摆图。密集交叉互连仍需分层和沿事务实际阅读。
 
-事务回放首版支持显式单时钟 ready/valid 路径：从 verify 的有限 JSON 产物区分 accept、visible、consume、cancel，并在逐拍表中定位状态与源码。规范放在可选合同字段，轨迹独立绑定版本；人工、过期与失败分别保留。[使用范围与示例](examples/transaction-replay/README.md)。
+事务回放支持单时钟 ready/valid 路径的组合旁路、简单单槽和双槽 skid，也支持已有的多级单槽声明。它按接受沿分配事务编号，核对启用的负载字段、握手和槽位，记录阻塞、恢复及复位取消。记录绑定模型、来源和检查器版本。[格式和迁移](examples/transaction-replay/README.md) · [九配置实测](docs/evidence/axis-register-replay/README.md) · [独立 axis_fifo 任务](docs/axis-fifo-task.md)
+
+2.1 可在填回放映射前查询能力。源文件展开可复用于当前模型的结构和状态比较，RAM 阅读步骤保留对象、源码与未表达的访问关系。多指针比较仍使用有限预算，地址化 FIFO 的场景检查通过独立 `verify` 记录交付。[升级说明与可运行入口](docs/UPGRADE-2.1.md)
 
 2.0 修复局部重测遮住旧失败的问题，支持显式多实例状态映射，并加入固定上游 RTL 的故障/修复对照。单步 MATCH 不是完整顺序等价；还原模型一致不是独立需求验收。真实用户阅读效率尚未测量。
 
-[2.0 改进与边界](docs/UPGRADE-2.0.md) · [独立上游双实例样例](examples/external-axis/README.md) · [六类架构样例](examples/architecture-patterns/README.md) · [数值类型样例](examples/typed-expressions/README.md) · [验证记录](VALIDATION.md) · [skill](.agents/skills/rtl-architect/SKILL.md)
+[2.0 改进与边界](docs/UPGRADE-2.0.md) · [上游九配置基准](examples/external-axis/benchmark/README.md) · [双实例维护样例](examples/external-axis/README.md) · [六类架构样例](examples/architecture-patterns/README.md) · [数值类型样例](examples/typed-expressions/README.md) · [验证记录](VALIDATION.md) · [skill](.agents/skills/rtl-architect/SKILL.md)
 
 ## 环境与安装
 
@@ -92,7 +94,7 @@ rtlarch draft proposals/design.json --workspace /path/to/my-rtl --open --json
 
 `draft` 登记候选并返回审阅链接；在页面核对差异后由用户提交草稿，再分别确认模块与批准整体架构。语义变化使受影响模块需复核，无变化的依赖保留局部确认；整体批准必须重新对应当前完整版本。讨论、预算、布局和缩放不改变架构版本。模型不完整或存在未表达结构时，不能将其当作可直接实施的完整合同。
 
-状态、更新分支、需求和验证义务可以直接“对此提问”，保存精确实例身份并恢复定位。候选 A/B 可各自绑定预算、假设、风险和实验，用户选择只写决策记录。详见 [对象协作示例](examples/object-collaboration/README.md)。
+连接、状态、更新分支、需求和验证义务可以直接“对此提问”，并恢复到记录的对象和实例。讨论面板支持拖动调整高度，分支详情与图同时显示。候选 A/B 可各自绑定预算、假设、风险和实验，用户选择只写决策记录。[对象协作示例](examples/object-collaboration/README.md) · [选择与讨论恢复验证](docs/evidence/selection-workbench/README.md)
 
 网页中的“讨论与继续”可保存问题、查看答复、记录下一步和比较预算。保存问题后回到 Codex 让它继续处理；页面不会自行运行 AI。再次运行 `rtlarch open --workspace /path/to/my-rtl` 打开当前成果；加 `--json` 仅返回链接，不弹浏览器。
 

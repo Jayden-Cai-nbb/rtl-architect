@@ -7,7 +7,7 @@ import { api, bindWorkspace, HttpError } from '../api';
 export function useArchitecture() {
   const [snapshot, setSnapshot] = useState<Snapshot>(), [layouts, setLayouts] = useState<LayoutSnapshot>();
   const [service, setService] = useState<ServiceInfo>(), [linkedProposal, setLinkedProposal] = useState<RegisteredProposal>();
-  const [scope, setScope] = useState('top'), [selected, setSelected] = useState<string>(), [selectedEdge, setSelectedEdge] = useState<string>();
+  const [scope, setScope] = useState('top');
   const [proposal, setProposal] = useState<Proposal>(), [preview, setPreview] = useState<Preview>(), [conflict, setConflict] = useState(false);
   const [message, setMessage] = useState(''), [extraIssues, setExtraIssues] = useState<Snapshot['issues']>([]), [busy, setBusy] = useState(false), [reviewer, setReviewer] = useState('');
   const [formVersion, setFormVersion] = useState(0), [reloadVersion, setReloadVersion] = useState(0), [needsFormPreview, setNeedsFormPreview] = useState(false);
@@ -19,7 +19,15 @@ export function useArchitecture() {
     let cancelled = false;
     void (async () => {
       const loaded=await load();
-      const focusTarget=(model:Snapshot['model'])=>{const params=new URLSearchParams(window.location.search),id=params.get('module'),m=model.modules.find(m=>m.id===id);if(m){setSelected(m.id);setScope(m.kind==='subsystem'?m.id:m.parent??model.design.top);}const edge=params.get('connection');if(edge&&model.connections.some(l=>l.id===edge))setSelectedEdge(edge);};
+      const focusTarget=(model:Snapshot['model'])=>{
+        const params=new URLSearchParams(window.location.search);
+        // The workbench validates saved object identities before applying a resume link.
+        if(params.has('checkpoint')||params.has('thread'))return;
+        const link=model.connections.find(l=>l.id===params.get('connection'));
+        const module=model.modules.find(m=>m.id===params.get('module'));
+        if(link)setScope(link.scope);
+        else if(module)setScope(module.kind==='subsystem'?module.id:module.parent??model.design.top);
+      };
       focusTarget(loaded.model);
       const id = new URLSearchParams(window.location.search).get('proposal');
       if (!id || cancelled) return;
@@ -34,8 +42,7 @@ export function useArchitecture() {
     return () => { cancelled = true; };
   }, []);
   function allowSwitch() { if (!dirty.current) return true; if (!window.confirm('表单有未提交修改。确定丢弃并切换？取消可保留当前表单。')) return false; dirty.current = false; setFormVersion(v => v + 1); return true; }
-  function select(id: string) { if (id !== selected && !allowSwitch()) return false; setSelected(id); setSelectedEdge(undefined); return true; }
-  function enter(id: string) { if (!allowSwitch()) return false; setScope(id); setSelected(id); setSelectedEdge(undefined); return true; }
+  function enter(id: string) { if (!allowSwitch()) return false; setScope(id); return true; }
   async function runPreview(p: Proposal) {
     const sequence = ++previewSequence.current; setBusy(true); setProposal(p); setPreview(undefined); setConflict(false); setExtraIssues([]); setNeedsFormPreview(false);
     try { const result = await api<Preview>('preview', p); if (sequence !== previewSequence.current) return; setPreview(result); setMessage('预览完成；尚未写入模型。'); }
@@ -56,7 +63,7 @@ export function useArchitecture() {
   }
   async function commit() {
     if (!proposal || !preview) return; setBusy(true);
-    try { const state = await api<Snapshot>('commit', { proposal, candidateHash: preview.candidateHash }); setSnapshot(state); setScope(s => state.model.modules.some(m => m.id === s && m.kind === 'subsystem') ? s : state.model.design.top); setSelected(id => state.model.modules.some(m => m.id === id) ? id : state.model.design.top); setProposal(undefined); setPreview(undefined); setExtraIssues([]); setConflict(false); dirty.current = false; setFormVersion(v => v + 1); setMessage('草稿已写入 architecture/model.json；提交不等于人工确认。'); setLinkedProposal(undefined); const url = new URL(window.location.href); url.searchParams.delete('proposal'); window.history.replaceState(null, '', url); }
+    try { const state = await api<Snapshot>('commit', { proposal, candidateHash: preview.candidateHash }); setSnapshot(state); setScope(s => state.model.modules.some(m => m.id === s && m.kind === 'subsystem') ? s : state.model.design.top); setProposal(undefined); setPreview(undefined); setExtraIssues([]); setConflict(false); dirty.current = false; setFormVersion(v => v + 1); setMessage('草稿已写入 architecture/model.json；提交不等于人工确认。'); setLinkedProposal(undefined); const url = new URL(window.location.href); url.searchParams.delete('proposal'); window.history.replaceState(null, '', url); }
     catch (e) { fail(e); } finally { setBusy(false); }
   }
   function saveLayout(scopeId: string, scopeLayout: ScopeLayout): Promise<void> {
@@ -83,7 +90,7 @@ export function useArchitecture() {
     if (value && (preview || proposal)) { ++previewSequence.current; setBusy(false); setPreview(undefined); setNeedsFormPreview(true); setMessage('表单已修改，请从属性面板重新预览。'); }
   }
   function discardProposal() { ++previewSequence.current; setProposal(undefined); setPreview(undefined); setConflict(false); setExtraIssues([]); setBusy(false); }
-  return { snapshot, layouts, service, linkedProposal, scope, selected, selectedEdge, proposal, preview, conflict, message, extraIssues, busy, reviewer, setReviewer,
-    formVersion, reloadVersion, needsFormPreview, select, enter, setSelectedEdge, runPreview, propose, connect, commit, saveLayout, reload, review,
+  return { snapshot, layouts, service, linkedProposal, scope, proposal, preview, conflict, message, extraIssues, busy, reviewer, setReviewer,
+    formVersion, reloadVersion, needsFormPreview, enter, runPreview, propose, connect, commit, saveLayout, reload, review,
     exportFile, imported, setMessage, markDirty, discardProposal, allowSwitch, dirty, fail };
 }

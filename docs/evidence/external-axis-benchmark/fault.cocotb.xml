@@ -1,0 +1,32 @@
+<testsuites name="results">
+  <testsuite name="all" package="all">
+    <property name="random_seed" value="1" />
+    <testcase name="run_test_001" classname="test_axis_register" file="/tmp/rtlarch-axis-venv/lib/python3.10/site-packages/cocotb/regression.py" lineno="713" time="0.005529165267944336" sim_time_ns="80.001" ratio_time="14468.910969945238">
+      <failure />
+    </testcase>
+    <testcase name="run_test_002" classname="test_axis_register" file="/tmp/rtlarch-axis-venv/lib/python3.10/site-packages/cocotb/regression.py" lineno="713" time="0.006278514862060547" sim_time_ns="110.001" ratio_time="17520.2261070859">
+      <failure />
+    </testcase>
+    <testcase name="run_test_003" classname="test_axis_register" file="/tmp/rtlarch-axis-venv/lib/python3.10/site-packages/cocotb/regression.py" lineno="713" time="0.004223346710205078" sim_time_ns="110.00099999999998" ratio_time="26045.931709608212">
+      <failure />
+    </testcase>
+    <testcase name="run_test_004" classname="test_axis_register" file="/tmp/rtlarch-axis-venv/lib/python3.10/site-packages/cocotb/regression.py" lineno="713" time="0.004515886306762695" sim_time_ns="110.00100000000003" ratio_time="24358.673475740463">
+      <failure />
+    </testcase>
+    <testcase name="run_test_tuser_assert_001" classname="test_axis_register" file="/tmp/rtlarch-axis-venv/lib/python3.10/site-packages/cocotb/regression.py" lineno="713" time="0.015311717987060547" sim_time_ns="710.0010000000001" ratio_time="46369.780360374956">
+      <failure />
+    </testcase>
+    <testcase name="run_stress_test_001" classname="test_axis_register" file="/tmp/rtlarch-axis-venv/lib/python3.10/site-packages/cocotb/regression.py" lineno="713" time="0.009224891662597656" sim_time_ns="290.001" ratio_time="31436.79195451256">
+      <failure />
+    </testcase>
+    <testcase name="run_stress_test_002" classname="test_axis_register" file="/tmp/rtlarch-axis-venv/lib/python3.10/site-packages/cocotb/regression.py" lineno="713" time="0.01259469985961914" sim_time_ns="590.001" ratio_time="46845.181431567784">
+      <failure />
+    </testcase>
+    <testcase name="run_stress_test_003" classname="test_axis_register" file="/tmp/rtlarch-axis-venv/lib/python3.10/site-packages/cocotb/regression.py" lineno="713" time="0.004552125930786133" sim_time_ns="110.00099999999975" ratio_time="24164.75327627921">
+      <failure />
+    </testcase>
+    <testcase name="run_stress_test_004" classname="test_axis_register" file="/tmp/rtlarch-axis-venv/lib/python3.10/site-packages/cocotb/regression.py" lineno="713" time="0.009357452392578125" sim_time_ns="390.0010000000002" ratio_time="41678.11746596007">
+      <failure />
+    </testcase>
+  </testsuite>
+</testsuites>

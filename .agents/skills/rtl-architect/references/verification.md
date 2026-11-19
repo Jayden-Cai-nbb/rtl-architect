@@ -28,6 +28,8 @@ IR 3 的 `contract.obligations` 可选，经过正常提案保存。`schema mode
 
 至少做一个针对义务的故障注入，确认错误会失败；正常结果不能单独证明检查器有效。通用可运行例子见工具 `examples/contract-checks`，维护验收为 `check:assurance`。
 
+`verify` 只通过显式 CLI 清单运行 argv；每次在独立 evidence/runs 目录保存日志、版本和产物摘要。{runDir} 绑定本次目录。exit_code、contains、junit 或 artifact 证据各自按清单检查。JUnit 成功须有实际用例，失败、错误、跳过均不能算通过。
+
 ## RTL 结构比较
 
 `verify` 以 stage=elaboration 显式运行 Yosys，使用 artifact 检查保存本次 write_json 产物。`schema conformance` → 显式映射 → `conform mapping.json`：runId 必须指这次展开；instancePath 是相对 top 的实例名称数组，顶层为 []。参数、逻辑接口到 RTL 引脚、clock/reset 均显式映射。

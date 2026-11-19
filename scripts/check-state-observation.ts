@@ -14,6 +14,7 @@ import {renderChecks} from '../src/workspace/contractChecks';
 import {Repository} from '../src/workspace/repository';
 import {runVerification} from '../src/workspace/verification';
 import {runStateObservation,evaluateStateObservation,latestStateObservation} from '../src/workspace/stateObservation';
+import {importYosys} from '../src/workspace/importYosys';
 const exec=promisify(execFile),root=await mkdtemp(join(tmpdir(),'rtlarch-state-observation-'));
 const json=(x:unknown)=>JSON.stringify(x,null,2)+'\n';
 const base=modelSchema.parse(JSON.parse(await readFile('examples/state-updates/architecture/model.json','utf8')));
@@ -44,6 +45,32 @@ try{
  await check('observation without mappings discovers states without claiming design conformance',async()=>{
   const report=await evaluateStateObservation(workspace,{...mapping,mappings:[]});assert.equal(report.status,'UNKNOWN');assert.equal(report.observations.length,2);assert.equal(report.results.length,0);
   const aliases=await evaluateStateObservation(workspace,{...mapping,mappings:[mapping.mappings[0],{...mapping.mappings[1],state:'m_data'}]});assert.equal(aliases.status,'UNKNOWN');assert(aliases.results.every(r=>r.reason.includes('重复映射')));
+ });
+ await check('explicit source elaboration survives a draft revision, while configuration and comparator changes invalidate evidence',async()=>{
+  const isolated=join(root,'reusable');await cp('examples/state-updates',isolated,{recursive:true});
+  const inventory='inputs.json',filename=join(isolated,inventory);
+  const inputs={top:'add_const',configuration:'locked standalone stage',parameters:{DATA_W:8,CONST:3},defines:[],includeDirs:[],files:['rtl/add_const.sv'],assets:[]};
+  await writeFile(filename,json(inputs));
+  const reusable={...profile,elaborationInputs:inventory,inputs:[...profile.inputs,inventory]};
+  await assert.rejects(runVerification(isolated,{...reusable,inputs:[...reusable.inputs,'architecture/model.json']}),{code:'ELABORATION_INPUTS'});
+  const produced=await runVerification(isolated,reusable);assert.equal(produced.status,'passed');
+  const source={schemaVersion:2 as const,runId:produced.id,netlist:'state.json'};
+  const imported=await importYosys(isolated,source,join(isolated,'imported'));
+  assert(imported.review);const discovery=JSON.parse(await readFile(imported.review.stateDiscovery,'utf8'));
+  const repo=new Repository(isolated),original=await repo.getModel(),updated=structuredClone(original.model);updated.design.name+=' revised';
+  const proposal={baseHash:original.modelHash,reason:'Verify reuse against a new draft hash',commands:[{op:'replace_architecture' as const,model:updated}]};
+  const preview=await repo.preview(proposal);await repo.commit({proposal,candidateHash:preview.candidateHash});
+  const refs={...discovery,scopes:[{instancePath:[],mappings:mapping.mappings}]};
+  assert.equal((await evaluateStateObservation(isolated,{...refs,reuseElaboration:false})).status,'UNKNOWN');
+  const report=await runStateObservation(isolated,refs);assert.equal(report.status,'MATCH');assert(report.reusedElaboration);
+  assert.equal(report.producerModelHash,original.modelHash);assert.equal(report.modelHash,preview.candidateHash);
+  const stored=join(isolated,report.record);const bytes=await readFile(stored,'utf8');
+  await writeFile(stored,json({...JSON.parse(bytes),engine:'yosys-proc-bdd-v2'}));
+  assert.equal((await latestStateObservation(isolated,preview.candidateHash)).status,'STALE');
+  await writeFile(stored,bytes);
+  await writeFile(filename,json({...inputs,configuration:'edited'}));
+  assert.equal((await latestStateObservation(isolated,preview.candidateHash)).status,'STALE');
+  await assert.rejects(importYosys(isolated,source,join(isolated,'stale')), {code:'ELABORATION_NOT_REUSABLE'});
  });
  await check('wrong arithmetic creates an explicit old-state/input witness, leaving authority unchanged',async()=>{
   const file=join(workspace,'rtl/add_const.sv'),original=await readFile(file,'utf8');await writeFile(file,original.replace("CONST = DATA_W'(3)","CONST = DATA_W'(5)"));
@@ -109,6 +136,13 @@ try{
  });
  await check('unknown state types stay visible in inventory; observing never auto-approves',async()=>{
   const d=await elaborate(rtl(good,'posedge clk or negedge rst_n')),state=stateInventory(d).find(s=>s.width===8)!;assert.equal(observeState(d,state.cell).status,'UNKNOWN');const count=stateInventory(d).length;d.cells.user_module={type:'custom_logic',parameters:{},attributes:{},connections:{Q:[999]},port_directions:{Q:'output'}};assert.equal(stateInventory(d).length,count);assert.equal(await readFile(join(workspace,'architecture/review.json'),'utf8').catch(()=>null),null);
+ });
+ await check('a reversed 64-bit equality still reports the fixed BDD budget as UNKNOWN',async()=>{
+  const d=await elaborate(`module add_const(input clk, input [63:0] x,y, output reg q);
+   wire [63:0] reversed; for (genvar i=0; i<64; i=i+1) assign reversed[i]=y[63-i];
+   always @(posedge clk) q <= x == reversed; endmodule`);
+  const observed=observeState(d,stateInventory(d).find(s=>s.aliases.includes('q'))!.cell);
+  assert.equal(observed.status,'UNKNOWN');assert.match(observed.reason,/布尔函数.*预算/);
  });
  await check('approval after comparison cannot upgrade a saved draft basis; a new comparison can bind it',async()=>{
   const intent=structuredClone(base);intent.provenance={origin:'design',fidelity:'exact',scope:'Independent temporary state-update intent',configuration:'DATA_W=8 CONST=3',sourceDigest:'0'.repeat(64),coverage:{elaboratedInstances:1,representedInstances:1},evidence:[],findings:[],unsupportedStructures:[],verification:[]};intent.localSignals!.forEach(l=>l.evidenceIds=[]);

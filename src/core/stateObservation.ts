@@ -21,6 +21,7 @@ class Network {
  readonly functions=new BitFunctions();
  private drivers=new Map<number,{name:string;port:string;index:number}[]>();
  private inputs=new Set<number>();private registers=new Map<number,string>();private memo=new Map<string,number[]>();private visiting=new Set<string>();
+ private variableOrder=new Map<number,number>();
  readonly used=new Set<string>();readonly leaves=new Set<number>();
  readonly state:Cell;
  constructor(readonly def:Definition,readonly name:string){
@@ -31,16 +32,29 @@ class Network {
   const q=this.state.connections.Q,d=this.state.connections.D,clk=this.state.connections.CLK;
   if(!q||!d||!clk||clk.length!==1||q.length!==d.length||q.length!==param(this.state,'WIDTH')||q.length<1||q.length>256||q.some(b=>typeof b!=='number')||new Set(q).size!==q.length)throw Error('状态必须是单个完整的 1..256 位同步 $dff');
   if(![0,1].includes(param(this.state,'CLK_POLARITY')))throw Error('时钟有效沿未知');
-  for(const p of Object.values(def.ports))if(p.direction==='input')for(const bit of p.bits){if(typeof bit!=='number'||this.inputs.has(bit))throw Error('输入位存在常量或别名；无法独立比较');this.inputs.add(bit);}
+  const vectors:Bit[][]=[];
+  for(const p of Object.values(def.ports))if(p.direction==='input'){
+   vectors.push(p.bits);
+   for(const bit of p.bits){if(typeof bit!=='number'||this.inputs.has(bit))throw Error('输入位存在常量或别名；无法独立比较');this.inputs.add(bit);}
+  }
   for(const [n,c] of Object.entries(def.cells)){
    if(!c.port_directions)throw Error('单元缺少端口方向：'+n);
    for(const [p,bits] of Object.entries(c.connections)){
     if(!c.port_directions[p]||c.port_directions[p]==='inout')throw Error('单元端口方向未知或双向：'+n+'.'+p);
     if(c.port_directions[p]==='output')bits.forEach((bit,index)=>{if(typeof bit==='number'){const list=this.drivers.get(bit)??[];list.push({name:n,port:p,index});this.drivers.set(bit,list);}});
    }
-   if(c.type==='$dff')for(const b of c.connections.Q??[])if(typeof b==='number')this.registers.set(b,n);
+   if(c.type==='$dff'&&c.connections.Q){
+    vectors.push(c.connections.Q);
+    for(const b of c.connections.Q)if(typeof b==='number')this.registers.set(b,n);
+   }
   }
   if(typeof clk[0]!=='number'||!this.inputs.has(clk[0])||this.drivers.has(clk[0]))throw Error('仅支持直接来自本作用域输入的单一时钟');
+  // Verilog bit IDs often place entire words consecutively. Interleave equal-significance
+  // bits so pointer comparators and carry chains can discharge each lane before the next.
+  const stride=vectors.length;
+  vectors.forEach((bits,word)=>bits.forEach((bit,lane)=>{
+   if(typeof bit==='number'&&!this.variableOrder.has(bit))this.variableOrder.set(bit,word+(bits.length===1?0:(lane+1)*stride));
+  }));
  }
  pin(name:string){const n=this.def.netnames[name]??this.def.ports[name];if(!n?.bits.length)throw Error('RTL 信号不存在：'+name);return n.bits;}
  private vector(bits:Bit[],depth=0):number[]{if(!bits.length||bits.length>256)throw Error('向量超出 1..256 位预算');return bits.map(b=>this.bit(b,depth));}
@@ -50,9 +64,9 @@ class Network {
   if(typeof bit==='string')return Number(bit);
   const drivers=this.drivers.get(bit)??[];
   if(drivers.length>1||this.inputs.has(bit)&&drivers.length)throw Error('信号有多个驱动：bit '+bit);
-  if(this.inputs.has(bit)){this.leaves.add(bit);return this.functions.variable(bit);}
+  if(this.inputs.has(bit)){this.leaves.add(bit);return this.functions.variable(this.variableOrder.get(bit)!);}
   const reg=this.registers.get(bit);
-  if(reg){const c=this.def.cells[reg];if(!same(c.connections.CLK,this.state.connections.CLK)||param(c,'CLK_POLARITY')!==param(this.state,'CLK_POLARITY'))throw Error('状态依赖跨越不同或未知时钟');this.leaves.add(bit);return this.functions.variable(bit);}
+  if(reg){const c=this.def.cells[reg];if(!same(c.connections.CLK,this.state.connections.CLK)||param(c,'CLK_POLARITY')!==param(this.state,'CLK_POLARITY'))throw Error('状态依赖跨越不同或未知时钟');this.leaves.add(bit);return this.functions.variable(this.variableOrder.get(bit)!);}
   const driver=drivers[0];if(!driver)throw Error('信号未驱动：bit '+bit);
   if(driver.port!=='Y')throw Error('不支持的驱动端口：'+driver.name+'.'+driver.port);
   return this.cell(driver.name,depth+1)[driver.index];
@@ -134,7 +148,7 @@ class Network {
  }
  witnessValues(values:Map<number,number>,stateName:string){
   const candidates=[...Object.entries(this.def.ports).filter(([,p])=>p.direction==='input').map(([name,p])=>({name,bits:p.bits,kind:'input' as const})),...stateInventory(this.def).filter(s=>s.type==='$dff').map(s=>({name:s.cell===this.name?stateName:s.aliases[0]??s.cell,bits:this.def.cells[s.cell].connections.Q,kind:'state' as const}))];
-  return candidates.filter(p=>p.bits.some(b=>typeof b==='number'&&this.leaves.has(b))).map(p=>({signal:p.name,kind:p.kind,width:p.bits.length,value:'0x'+p.bits.reduce<bigint>((v,b,i)=>v|(BigInt(typeof b==='number'?values.get(b)??0:Number(b))<<BigInt(i)),0n).toString(16)}));
+  return candidates.filter(p=>p.bits.some(b=>typeof b==='number'&&this.leaves.has(b))).map(p=>({signal:p.name,kind:p.kind,width:p.bits.length,value:'0x'+p.bits.reduce<bigint>((v,b,i)=>v|(BigInt(typeof b==='number'?values.get(this.variableOrder.get(b)!)??0:Number(b))<<BigInt(i)),0n).toString(16)}));
  }
 }
 export function observeState(def:Definition,cell:string){

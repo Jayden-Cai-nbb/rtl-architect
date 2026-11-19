@@ -1,0 +1,102 @@
+{
+  "chromium": "141.0.7390.37",
+  "buildId": "4c0f239ddc2a39d72b50149478c7af50aff790d216d5a4fb2114ff24f7c2e5a8",
+  "errors": [],
+  "completeClick": {
+    "detail": [
+      "连接详情",
+      "在主图点选模块或连接。查看具体信号会保留模块位置和视口。",
+      "连接编辑 · middle_tdata"
+    ]
+  },
+  "overviewClick": {
+    "picked": "选中对象 · 数据 · 展开成员与原始连接",
+    "expected": "boundary_m_axis_tdata",
+    "questionTarget": "关于 1 条连接 · middle_tdata"
+  },
+  "stateReturn": {
+    "dropdown": "stage0_data_q",
+    "expected": "stage0_valid_q",
+    "task": "state"
+  },
+  "resume": [
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "measurements": {
+        "canvas": {
+          "x": 204,
+          "y": 434,
+          "w": 904,
+          "h": 0
+        },
+        "dock": {
+          "x": 0,
+          "y": 479,
+          "w": 1440,
+          "h": 490
+        },
+        "branch": {
+          "x": 108,
+          "y": 498,
+          "w": 1224,
+          "h": 30
+        },
+        "question": {
+          "x": 24,
+          "y": 723.0625,
+          "w": 454,
+          "h": 99.5625
+        },
+        "questionHit": false,
+        "localOverlay": true
+      },
+      "params": {
+        "checkpoint": "1",
+        "module": "stage0",
+        "panel": "work"
+      }
+    },
+    {
+      "viewport": {
+        "width": 1100,
+        "height": 800
+      },
+      "measurements": {
+        "canvas": {
+          "x": 172,
+          "y": 347,
+          "w": 632,
+          "h": 0
+        },
+        "dock": {
+          "x": 0,
+          "y": 377,
+          "w": 1100,
+          "h": 392
+        },
+        "branch": {
+          "x": 58,
+          "y": 398,
+          "w": 984,
+          "h": 30
+        },
+        "question": {
+          "x": 24,
+          "y": 637.0625,
+          "w": 340.65625,
+          "h": 99.5625
+        },
+        "questionHit": false,
+        "localOverlay": true
+      },
+      "params": {
+        "checkpoint": "1",
+        "module": "stage0",
+        "panel": "work"
+      }
+    }
+  ]
+}

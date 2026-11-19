@@ -1,0 +1,1374 @@
+{
+  "16-0": {
+    "record": "case-16-0/evidence/replays/replay_09dedfb11f0e4e7aa52160c964c77a97/record.json",
+    "resultSha256": "b5d398310e0a6135f804a7ca8d33dc7dd041dc45b444cc19dbf1c80d2c1b231e",
+    "coverage": {
+      "checkedEdges": 64,
+      "resetEdges": 2,
+      "accepted": 13,
+      "outputHandshakes": 13,
+      "consumed": 13,
+      "cancelled": 0,
+      "inputBlockedEdges": 22,
+      "inputRecovered": 1,
+      "blocked": 2,
+      "recovered": 1,
+      "peakOccupancy": 0,
+      "temporaryStores": 0,
+      "temporaryTransfers": 0,
+      "sameEdgeConsumeTransfer": 0,
+      "sameEdgeAcceptConsume": 13,
+      "sameEdgeOutputReplacement": 0,
+      "resetHandshakes": 1,
+      "consecutiveAccepts": 10,
+      "continuousInputEdges": 30,
+      "sameDataSuccessors": 11,
+      "sameBeatSuccessors": 1,
+      "longestOutputStall": 18
+    },
+    "rows": [
+      {
+        "edge": 2,
+        "events": [
+          {
+            "kind": "accept",
+            "phase": "pre",
+            "edge": 2,
+            "transaction": "T0",
+            "payload": "90",
+            "fields": {
+              "data": "90",
+              "keep": "1",
+              "last": "0",
+              "id": "7",
+              "dest": "164",
+              "user": "0"
+            },
+            "scope": "top",
+            "object": {
+              "kind": "boundary",
+              "role": "consumer",
+              "ports": [
+                "s_axis_tdata"
+              ]
+            }
+          },
+          {
+            "kind": "visible",
+            "phase": "pre",
+            "edge": 2,
+            "transaction": "T0",
+            "payload": "90",
+            "fields": {
+              "data": "90",
+              "keep": "1",
+              "last": "0",
+              "id": "7",
+              "dest": "164",
+              "user": "0"
+            },
+            "scope": "top",
+            "object": {
+              "kind": "boundary",
+              "role": "producer",
+              "ports": [
+                "m_axis_tdata"
+              ]
+            },
+            "observation": {
+              "phase": "pre",
+              "valid": "MATCH",
+              "data": "MATCH"
+            }
+          },
+          {
+            "kind": "consume",
+            "phase": "pre",
+            "edge": 2,
+            "transaction": "T0",
+            "payload": "90",
+            "fields": {
+              "data": "90",
+              "keep": "1",
+              "last": "0",
+              "id": "7",
+              "dest": "164",
+              "user": "0"
+            },
+            "scope": "top",
+            "object": {
+              "kind": "boundary",
+              "role": "producer",
+              "ports": [
+                "m_axis_tdata"
+              ]
+            },
+            "observation": {
+              "phase": "pre",
+              "valid": "MATCH",
+              "data": "MATCH"
+            }
+          }
+        ],
+        "locations": [],
+        "blocked": [],
+        "recovered": [],
+        "issues": [],
+        "reset": false,
+        "inputBlocked": false
+      },
+      {
+        "edge": 3,
+        "events": [
+          {
+            "kind": "accept",
+            "phase": "pre",
+            "edge": 3,
+            "transaction": "T1",
+            "payload": "90",
+            "fields": {
+              "data": "90",
+              "keep": "1",
+              "last": "0",
+              "id": "7",
+              "dest": "164",
+              "user": "0"
+            },
+            "scope": "top",
+            "object": {
+              "kind": "boundary",
+              "role": "consumer",
+              "ports": [
+                "s_axis_tdata"
+              ]
+            }
+          },
+          {
+            "kind": "visible",
+            "phase": "pre",
+            "edge": 3,
+            "transaction": "T1",
+            "payload": "90",
+            "fields": {
+              "data": "90",
+              "keep": "1",
+              "last": "0",
+              "id": "7",
+              "dest": "164",
+              "user": "0"
+            },
+            "scope": "top",
+            "object": {
+              "kind": "boundary",
+              "role": "producer",
+              "ports": [
+                "m_axis_tdata"
+              ]
+            },
+            "observation": {
+              "phase": "pre",
+              "valid": "MATCH",
+              "data": "MATCH"
+            }
+          },
+          {
+            "kind": "consume",
+            "phase": "pre",
+            "edge": 3,
+            "transaction": "T1",
+            "payload": "90",
+            "fields": {
+              "data": "90",
+              "keep": "1",
+              "last": "0",
+              "id": "7",
+              "dest": "164",
+              "user": "0"
+            },
+            "scope": "top",
+            "object": {
+              "kind": "boundary",
+              "role": "producer",
+              "ports": [
+                "m_axis_tdata"
+              ]
+            },
+            "observation": {
+              "phase": "pre",
+              "valid": "MATCH",
+              "data": "MATCH"
+            }
+          }
+        ],
+        "locations": [],
+        "blocked": [],
+        "recovered": [],
+        "issues": [],
+        "reset": false,
+        "inputBlocked": false
+      },
+      {
+        "edge": 17,
+        "events": [],
+        "locations": [],
+        "blocked": [
+          0
+        ],
+        "recovered": [],
+        "issues": [],
+        "reset": false,
+        "inputBlocked": true
+      },
+      {
+        "edge": 34,
+        "events": [],
+        "locations": [],
+        "blocked": [
+          0
+        ],
+        "recovered": [],
+        "issues": [],
+        "reset": false,
+        "inputBlocked": true
+      },
+      {
+        "edge": 35,
+        "events": [
+          {
+            "kind": "accept",
+            "phase": "pre",
+            "edge": 35,
+            "transaction": "T6",
+            "payload": "90",
+            "fields": {
+              "data": "90",
+              "keep": "2",
+              "last": "1",
+              "id": "42",
+              "dest": "179",
+              "user": "1"
+            },
+            "scope": "top",
+            "object": {
+              "kind": "boundary",
+              "role": "consumer",
+              "ports": [
+                "s_axis_tdata"
+              ]
+            }
+          },
+          {
+            "kind": "visible",
+            "phase": "pre",
+            "edge": 35,
+            "transaction": "T6",
+            "payload": "90",
+            "fields": {
+              "data": "90",
+              "keep": "2",
+              "last": "1",
+              "id": "42",
+              "dest": "179",
+              "user": "1"
+            },
+            "scope": "top",
+            "object": {
+              "kind": "boundary",
+              "role": "producer",
+              "ports": [
+                "m_axis_tdata"
+              ]
+            },
+            "observation": {
+              "phase": "pre",
+              "valid": "MATCH",
+              "data": "MATCH"
+            }
+          },
+          {
+            "kind": "consume",
+            "phase": "pre",
+            "edge": 35,
+            "transaction": "T6",
+            "payload": "90",
+            "fields": {
+              "data": "90",
+              "keep": "2",
+              "last": "1",
+              "id": "42",
+              "dest": "179",
+              "user": "1"
+            },
+            "scope": "top",
+            "object": {
+              "kind": "boundary",
+              "role": "producer",
+              "ports": [
+                "m_axis_tdata"
+              ]
+            },
+            "observation": {
+              "phase": "pre",
+              "valid": "MATCH",
+              "data": "MATCH"
+            }
+          }
+        ],
+        "locations": [],
+        "blocked": [],
+        "recovered": [
+          0
+        ],
+        "issues": [],
+        "reset": false,
+        "inputBlocked": false
+      },
+      {
+        "edge": 51,
+        "events": [
+          {
+            "kind": "accept",
+            "phase": "pre",
+            "edge": 51,
+            "transaction": "T10",
+            "payload": "90",
+            "fields": {
+              "data": "90",
+              "keep": "0",
+              "last": "0",
+              "id": "112",
+              "dest": "209",
+              "user": "0"
+            },
+            "scope": "top",
+            "object": {
+              "kind": "boundary",
+              "role": "consumer",
+              "ports": [
+                "s_axis_tdata"
+              ]
+            }
+          },
+          {
+            "kind": "visible",
+            "phase": "pre",
+            "edge": 51,
+            "transaction": "T10",
+            "payload": "90",
+            "fields": {
+              "data": "90",
+              "keep": "0",
+              "last": "0",
+              "id": "112",
+              "dest": "209",
+              "user": "0"
+            },
+            "scope": "top",
+            "object": {
+              "kind": "boundary",
+              "role": "producer",
+              "ports": [
+                "m_axis_tdata"
+              ]
+            },
+            "observation": {
+              "phase": "pre",
+              "valid": "MATCH",
+              "data": "MATCH"
+            }
+          },
+          {
+            "kind": "consume",
+            "phase": "pre",
+            "edge": 51,
+            "transaction": "T10",
+            "payload": "90",
+            "fields": {
+              "data": "90",
+              "keep": "0",
+              "last": "0",
+              "id": "112",
+              "dest": "209",
+              "user": "0"
+            },
+            "scope": "top",
+            "object": {
+              "kind": "boundary",
+              "role": "producer",
+              "ports": [
+                "m_axis_tdata"
+              ]
+            },
+            "observation": {
+              "phase": "pre",
+              "valid": "MATCH",
+              "data": "MATCH"
+            }
+          }
+        ],
+        "locations": [],
+        "blocked": [],
+        "recovered": [],
+        "issues": [],
+        "reset": true,
+        "inputBlocked": false
+      }
+    ]
+  },
+  "16-1": {
+    "record": "case-16-1/evidence/replays/replay_1739aa5c98dc494bac0289a8a8ec8dc5/record.json",
+    "resultSha256": "835c5b18ec18efd3e5e292b1a0bf2c0e1085abeab85ac943516bd19d582b7b5c",
+    "coverage": {
+      "checkedEdges": 64,
+      "resetEdges": 2,
+      "accepted": 13,
+      "outputHandshakes": 12,
+      "consumed": 12,
+      "cancelled": 1,
+      "inputBlockedEdges": 30,
+      "inputRecovered": 10,
+      "blocked": 2,
+      "recovered": 1,
+      "peakOccupancy": 1,
+      "temporaryStores": 0,
+      "temporaryTransfers": 0,
+      "sameEdgeConsumeTransfer": 0,
+      "sameEdgeAcceptConsume": 0,
+      "sameEdgeOutputReplacement": 0,
+      "resetHandshakes": 0,
+      "consecutiveAccepts": 0,
+      "continuousInputEdges": 39,
+      "sameDataSuccessors": 11,
+      "sameBeatSuccessors": 1,
+      "longestOutputStall": 17
+    },
+    "rows": [
+      {
+        "edge": 2,
+        "events": [
+          {
+            "kind": "accept",
+            "phase": "pre",
+            "edge": 2,
+            "transaction": "T0",
+            "payload": "90",
+            "fields": {
+              "data": "90",
+              "keep": "1",
+              "last": "0",
+              "id": "7",
+              "dest": "164",
+              "user": "0"
+            },
+            "scope": "top",
+            "object": {
+              "kind": "boundary",
+              "role": "consumer",
+              "ports": [
+                "s_axis_tdata"
+              ]
+            }
+          },
+          {
+            "kind": "visible",
+            "phase": "post",
+            "edge": 2,
+            "transaction": "T0",
+            "payload": "90",
+            "fields": {
+              "data": "90",
+              "keep": "1",
+              "last": "0",
+              "id": "7",
+              "dest": "164",
+              "user": "0"
+            },
+            "scope": "top",
+            "object": {
+              "kind": "local",
+              "id": "m_axis_tdata_reg",
+              "branch": "load"
+            },
+            "slot": "output",
+            "observation": {
+              "phase": "post",
+              "valid": "MATCH",
+              "data": "MATCH"
+            }
+          }
+        ],
+        "locations": [
+          {
+            "transaction": "T0",
+            "payload": "90",
+            "fields": {
+              "data": "90",
+              "keep": "1",
+              "last": "0",
+              "id": "7",
+              "dest": "164",
+              "user": "0"
+            },
+            "state": {
+              "moduleId": "top",
+              "localSignalId": "m_axis_tdata_reg"
+            },
+            "slot": "output"
+          }
+        ],
+        "blocked": [],
+        "recovered": [],
+        "issues": [],
+        "reset": false,
+        "inputBlocked": false
+      },
+      {
+        "edge": 3,
+        "events": [
+          {
+            "kind": "consume",
+            "phase": "pre",
+            "edge": 3,
+            "transaction": "T0",
+            "payload": "90",
+            "fields": {
+              "data": "90",
+              "keep": "1",
+              "last": "0",
+              "id": "7",
+              "dest": "164",
+              "user": "0"
+            },
+            "scope": "top",
+            "object": {
+              "kind": "local",
+              "id": "m_axis_tdata_reg"
+            },
+            "slot": "output",
+            "observation": {
+              "phase": "pre",
+              "valid": "MATCH",
+              "data": "MATCH"
+            }
+          }
+        ],
+        "locations": [],
+        "blocked": [],
+        "recovered": [],
+        "issues": [],
+        "reset": false,
+        "inputBlocked": true
+      },
+      {
+        "edge": 4,
+        "events": [
+          {
+            "kind": "accept",
+            "phase": "pre",
+            "edge": 4,
+            "transaction": "T1",
+            "payload": "90",
+            "fields": {
+              "data": "90",
+              "keep": "1",
+              "last": "0",
+              "id": "7",
+              "dest": "164",
+              "user": "0"
+            },
+            "scope": "top",
+            "object": {
+              "kind": "boundary",
+              "role": "consumer",
+              "ports": [
+                "s_axis_tdata"
+              ]
+            }
+          },
+          {
+            "kind": "visible",
+            "phase": "post",
+            "edge": 4,
+            "transaction": "T1",
+            "payload": "90",
+            "fields": {
+              "data": "90",
+              "keep": "1",
+              "last": "0",
+              "id": "7",
+              "dest": "164",
+              "user": "0"
+            },
+            "scope": "top",
+            "object": {
+              "kind": "local",
+              "id": "m_axis_tdata_reg",
+              "branch": "load"
+            },
+            "slot": "output",
+            "observation": {
+              "phase": "post",
+              "valid": "MATCH",
+              "data": "MATCH"
+            }
+          }
+        ],
+        "locations": [
+          {
+            "transaction": "T1",
+            "payload": "90",
+            "fields": {
+              "data": "90",
+              "keep": "1",
+              "last": "0",
+              "id": "7",
+              "dest": "164",
+              "user": "0"
+            },
+            "state": {
+              "moduleId": "top",
+              "localSignalId": "m_axis_tdata_reg"
+            },
+            "slot": "output"
+          }
+        ],
+        "blocked": [],
+        "recovered": [],
+        "issues": [],
+        "reset": false,
+        "inputBlocked": false
+      },
+      {
+        "edge": 51,
+        "events": [
+          {
+            "kind": "cancel",
+            "phase": "post",
+            "edge": 51,
+            "transaction": "T10",
+            "payload": "90",
+            "fields": {
+              "data": "90",
+              "keep": "2",
+              "last": "1",
+              "id": "70",
+              "dest": "191",
+              "user": "0"
+            },
+            "scope": "top",
+            "object": {
+              "kind": "local",
+              "id": "m_axis_tvalid_reg",
+              "branch": "reset"
+            },
+            "slot": "output",
+            "observation": {
+              "phase": "post",
+              "valid": "MATCH",
+              "data": null
+            }
+          }
+        ],
+        "locations": [],
+        "blocked": [],
+        "recovered": [],
+        "issues": [],
+        "reset": true,
+        "inputBlocked": false
+      }
+    ]
+  },
+  "16-2": {
+    "record": "case-16-2/evidence/replays/replay_a4b6ddf034b64ac19b457ee3207ab5c1/record.json",
+    "resultSha256": "906d67a60b05d8fd8e54ad6c704e9c7650c37c0dd4652f8e346e10c29ac24ec8",
+    "coverage": {
+      "checkedEdges": 64,
+      "resetEdges": 2,
+      "accepted": 14,
+      "outputHandshakes": 12,
+      "consumed": 12,
+      "cancelled": 2,
+      "inputBlockedEdges": 20,
+      "inputRecovered": 2,
+      "blocked": 2,
+      "recovered": 1,
+      "peakOccupancy": 2,
+      "temporaryStores": 2,
+      "temporaryTransfers": 1,
+      "sameEdgeConsumeTransfer": 1,
+      "sameEdgeAcceptConsume": 8,
+      "sameEdgeOutputReplacement": 8,
+      "resetHandshakes": 0,
+      "consecutiveAccepts": 9,
+      "continuousInputEdges": 30,
+      "sameDataSuccessors": 12,
+      "sameBeatSuccessors": 1,
+      "longestOutputStall": 17
+    },
+    "rows": [
+      {
+        "edge": 2,
+        "events": [
+          {
+            "kind": "accept",
+            "phase": "pre",
+            "edge": 2,
+            "transaction": "T0",
+            "payload": "90",
+            "fields": {
+              "data": "90",
+              "keep": "1",
+              "last": "0",
+              "id": "7",
+              "dest": "164",
+              "user": "0"
+            },
+            "scope": "top",
+            "object": {
+              "kind": "boundary",
+              "role": "consumer",
+              "ports": [
+                "s_axis_tdata"
+              ]
+            }
+          },
+          {
+            "kind": "visible",
+            "phase": "post",
+            "edge": 2,
+            "transaction": "T0",
+            "payload": "90",
+            "fields": {
+              "data": "90",
+              "keep": "1",
+              "last": "0",
+              "id": "7",
+              "dest": "164",
+              "user": "0"
+            },
+            "scope": "top",
+            "object": {
+              "kind": "local",
+              "id": "m_axis_tdata_reg",
+              "branch": "load"
+            },
+            "slot": "output",
+            "observation": {
+              "phase": "post",
+              "valid": "MATCH",
+              "data": "MATCH"
+            }
+          }
+        ],
+        "locations": [
+          {
+            "transaction": "T0",
+            "payload": "90",
+            "fields": {
+              "data": "90",
+              "keep": "1",
+              "last": "0",
+              "id": "7",
+              "dest": "164",
+              "user": "0"
+            },
+            "state": {
+              "moduleId": "top",
+              "localSignalId": "m_axis_tdata_reg"
+            },
+            "slot": "output"
+          }
+        ],
+        "blocked": [],
+        "recovered": [],
+        "issues": [],
+        "reset": false,
+        "inputBlocked": false
+      },
+      {
+        "edge": 3,
+        "events": [
+          {
+            "kind": "accept",
+            "phase": "pre",
+            "edge": 3,
+            "transaction": "T1",
+            "payload": "90",
+            "fields": {
+              "data": "90",
+              "keep": "1",
+              "last": "0",
+              "id": "7",
+              "dest": "164",
+              "user": "0"
+            },
+            "scope": "top",
+            "object": {
+              "kind": "boundary",
+              "role": "consumer",
+              "ports": [
+                "s_axis_tdata"
+              ]
+            }
+          },
+          {
+            "kind": "consume",
+            "phase": "pre",
+            "edge": 3,
+            "transaction": "T0",
+            "payload": "90",
+            "fields": {
+              "data": "90",
+              "keep": "1",
+              "last": "0",
+              "id": "7",
+              "dest": "164",
+              "user": "0"
+            },
+            "scope": "top",
+            "object": {
+              "kind": "local",
+              "id": "m_axis_tdata_reg"
+            },
+            "slot": "output",
+            "observation": {
+              "phase": "pre",
+              "valid": "MATCH",
+              "data": "MATCH"
+            }
+          },
+          {
+            "kind": "visible",
+            "phase": "post",
+            "edge": 3,
+            "transaction": "T1",
+            "payload": "90",
+            "fields": {
+              "data": "90",
+              "keep": "1",
+              "last": "0",
+              "id": "7",
+              "dest": "164",
+              "user": "0"
+            },
+            "scope": "top",
+            "object": {
+              "kind": "local",
+              "id": "m_axis_tdata_reg",
+              "branch": "load"
+            },
+            "slot": "output",
+            "observation": {
+              "phase": "post",
+              "valid": "MATCH",
+              "data": "MATCH"
+            }
+          }
+        ],
+        "locations": [
+          {
+            "transaction": "T1",
+            "payload": "90",
+            "fields": {
+              "data": "90",
+              "keep": "1",
+              "last": "0",
+              "id": "7",
+              "dest": "164",
+              "user": "0"
+            },
+            "state": {
+              "moduleId": "top",
+              "localSignalId": "m_axis_tdata_reg"
+            },
+            "slot": "output"
+          }
+        ],
+        "blocked": [],
+        "recovered": [],
+        "issues": [],
+        "reset": false,
+        "inputBlocked": false
+      },
+      {
+        "edge": 17,
+        "events": [
+          {
+            "kind": "accept",
+            "phase": "pre",
+            "edge": 17,
+            "transaction": "T6",
+            "payload": "90",
+            "fields": {
+              "data": "90",
+              "keep": "2",
+              "last": "1",
+              "id": "42",
+              "dest": "179",
+              "user": "1"
+            },
+            "scope": "top",
+            "object": {
+              "kind": "boundary",
+              "role": "consumer",
+              "ports": [
+                "s_axis_tdata"
+              ]
+            }
+          },
+          {
+            "kind": "visible",
+            "phase": "post",
+            "edge": 17,
+            "transaction": "T6",
+            "payload": "90",
+            "fields": {
+              "data": "90",
+              "keep": "2",
+              "last": "1",
+              "id": "42",
+              "dest": "179",
+              "user": "1"
+            },
+            "scope": "top",
+            "object": {
+              "kind": "local",
+              "id": "m_axis_tdata_reg",
+              "branch": "load"
+            },
+            "slot": "output",
+            "observation": {
+              "phase": "post",
+              "valid": "MATCH",
+              "data": "MATCH"
+            }
+          }
+        ],
+        "locations": [
+          {
+            "transaction": "T6",
+            "payload": "90",
+            "fields": {
+              "data": "90",
+              "keep": "2",
+              "last": "1",
+              "id": "42",
+              "dest": "179",
+              "user": "1"
+            },
+            "state": {
+              "moduleId": "top",
+              "localSignalId": "m_axis_tdata_reg"
+            },
+            "slot": "output"
+          }
+        ],
+        "blocked": [],
+        "recovered": [],
+        "issues": [],
+        "reset": false,
+        "inputBlocked": false
+      },
+      {
+        "edge": 18,
+        "events": [
+          {
+            "kind": "accept",
+            "phase": "pre",
+            "edge": 18,
+            "transaction": "T7",
+            "payload": "90",
+            "fields": {
+              "data": "90",
+              "keep": "3",
+              "last": "1",
+              "id": "49",
+              "dest": "182",
+              "user": "1"
+            },
+            "scope": "top",
+            "object": {
+              "kind": "boundary",
+              "role": "consumer",
+              "ports": [
+                "s_axis_tdata"
+              ]
+            }
+          },
+          {
+            "kind": "store",
+            "phase": "post",
+            "edge": 18,
+            "transaction": "T7",
+            "payload": "90",
+            "fields": {
+              "data": "90",
+              "keep": "3",
+              "last": "1",
+              "id": "49",
+              "dest": "182",
+              "user": "1"
+            },
+            "scope": "top",
+            "object": {
+              "kind": "local",
+              "id": "temp_m_axis_tdata_reg",
+              "branch": "load"
+            },
+            "slot": "temporary",
+            "observation": {
+              "phase": "post",
+              "valid": "MATCH",
+              "data": "MATCH"
+            }
+          }
+        ],
+        "locations": [
+          {
+            "transaction": "T6",
+            "payload": "90",
+            "fields": {
+              "data": "90",
+              "keep": "2",
+              "last": "1",
+              "id": "42",
+              "dest": "179",
+              "user": "1"
+            },
+            "state": {
+              "moduleId": "top",
+              "localSignalId": "m_axis_tdata_reg"
+            },
+            "slot": "output"
+          },
+          {
+            "transaction": "T7",
+            "payload": "90",
+            "fields": {
+              "data": "90",
+              "keep": "3",
+              "last": "1",
+              "id": "49",
+              "dest": "182",
+              "user": "1"
+            },
+            "state": {
+              "moduleId": "top",
+              "localSignalId": "temp_m_axis_tdata_reg"
+            },
+            "slot": "temporary"
+          }
+        ],
+        "blocked": [
+          0
+        ],
+        "recovered": [],
+        "issues": [],
+        "reset": false,
+        "inputBlocked": false
+      },
+      {
+        "edge": 19,
+        "events": [],
+        "locations": [
+          {
+            "transaction": "T6",
+            "payload": "90",
+            "fields": {
+              "data": "90",
+              "keep": "2",
+              "last": "1",
+              "id": "42",
+              "dest": "179",
+              "user": "1"
+            },
+            "state": {
+              "moduleId": "top",
+              "localSignalId": "m_axis_tdata_reg"
+            },
+            "slot": "output"
+          },
+          {
+            "transaction": "T7",
+            "payload": "90",
+            "fields": {
+              "data": "90",
+              "keep": "3",
+              "last": "1",
+              "id": "49",
+              "dest": "182",
+              "user": "1"
+            },
+            "state": {
+              "moduleId": "top",
+              "localSignalId": "temp_m_axis_tdata_reg"
+            },
+            "slot": "temporary"
+          }
+        ],
+        "blocked": [
+          0
+        ],
+        "recovered": [],
+        "issues": [],
+        "reset": false,
+        "inputBlocked": true
+      },
+      {
+        "edge": 35,
+        "events": [
+          {
+            "kind": "consume",
+            "phase": "pre",
+            "edge": 35,
+            "transaction": "T6",
+            "payload": "90",
+            "fields": {
+              "data": "90",
+              "keep": "2",
+              "last": "1",
+              "id": "42",
+              "dest": "179",
+              "user": "1"
+            },
+            "scope": "top",
+            "object": {
+              "kind": "local",
+              "id": "m_axis_tdata_reg"
+            },
+            "slot": "output",
+            "observation": {
+              "phase": "pre",
+              "valid": "MATCH",
+              "data": "MATCH"
+            }
+          },
+          {
+            "kind": "transfer",
+            "phase": "post",
+            "edge": 35,
+            "transaction": "T7",
+            "payload": "90",
+            "fields": {
+              "data": "90",
+              "keep": "3",
+              "last": "1",
+              "id": "49",
+              "dest": "182",
+              "user": "1"
+            },
+            "scope": "top",
+            "object": {
+              "kind": "local",
+              "id": "m_axis_tdata_reg",
+              "branch": "move_temp"
+            },
+            "slot": "output",
+            "from": "temporary",
+            "observation": {
+              "phase": "post",
+              "valid": "MATCH",
+              "data": "MATCH"
+            }
+          }
+        ],
+        "locations": [
+          {
+            "transaction": "T7",
+            "payload": "90",
+            "fields": {
+              "data": "90",
+              "keep": "3",
+              "last": "1",
+              "id": "49",
+              "dest": "182",
+              "user": "1"
+            },
+            "state": {
+              "moduleId": "top",
+              "localSignalId": "m_axis_tdata_reg"
+            },
+            "slot": "output"
+          }
+        ],
+        "blocked": [],
+        "recovered": [
+          0
+        ],
+        "issues": [],
+        "reset": false,
+        "inputBlocked": true
+      },
+      {
+        "edge": 36,
+        "events": [
+          {
+            "kind": "accept",
+            "phase": "pre",
+            "edge": 36,
+            "transaction": "T8",
+            "payload": "90",
+            "fields": {
+              "data": "90",
+              "keep": "0",
+              "last": "0",
+              "id": "56",
+              "dest": "185",
+              "user": "0"
+            },
+            "scope": "top",
+            "object": {
+              "kind": "boundary",
+              "role": "consumer",
+              "ports": [
+                "s_axis_tdata"
+              ]
+            }
+          },
+          {
+            "kind": "consume",
+            "phase": "pre",
+            "edge": 36,
+            "transaction": "T7",
+            "payload": "90",
+            "fields": {
+              "data": "90",
+              "keep": "3",
+              "last": "1",
+              "id": "49",
+              "dest": "182",
+              "user": "1"
+            },
+            "scope": "top",
+            "object": {
+              "kind": "local",
+              "id": "m_axis_tdata_reg"
+            },
+            "slot": "output",
+            "observation": {
+              "phase": "pre",
+              "valid": "MATCH",
+              "data": "MATCH"
+            }
+          },
+          {
+            "kind": "visible",
+            "phase": "post",
+            "edge": 36,
+            "transaction": "T8",
+            "payload": "90",
+            "fields": {
+              "data": "90",
+              "keep": "0",
+              "last": "0",
+              "id": "56",
+              "dest": "185",
+              "user": "0"
+            },
+            "scope": "top",
+            "object": {
+              "kind": "local",
+              "id": "m_axis_tdata_reg",
+              "branch": "load"
+            },
+            "slot": "output",
+            "observation": {
+              "phase": "post",
+              "valid": "MATCH",
+              "data": "MATCH"
+            }
+          }
+        ],
+        "locations": [
+          {
+            "transaction": "T8",
+            "payload": "90",
+            "fields": {
+              "data": "90",
+              "keep": "0",
+              "last": "0",
+              "id": "56",
+              "dest": "185",
+              "user": "0"
+            },
+            "state": {
+              "moduleId": "top",
+              "localSignalId": "m_axis_tdata_reg"
+            },
+            "slot": "output"
+          }
+        ],
+        "blocked": [],
+        "recovered": [],
+        "issues": [],
+        "reset": false,
+        "inputBlocked": false
+      },
+      {
+        "edge": 51,
+        "events": [
+          {
+            "kind": "cancel",
+            "phase": "post",
+            "edge": 51,
+            "transaction": "T10",
+            "payload": "90",
+            "fields": {
+              "data": "90",
+              "keep": "2",
+              "last": "1",
+              "id": "70",
+              "dest": "191",
+              "user": "0"
+            },
+            "scope": "top",
+            "object": {
+              "kind": "local",
+              "id": "m_axis_tvalid_reg",
+              "branch": "reset"
+            },
+            "slot": "output",
+            "observation": {
+              "phase": "post",
+              "valid": "MATCH",
+              "data": null
+            }
+          },
+          {
+            "kind": "cancel",
+            "phase": "post",
+            "edge": 51,
+            "transaction": "T11",
+            "payload": "90",
+            "fields": {
+              "data": "90",
+              "keep": "3",
+              "last": "1",
+              "id": "77",
+              "dest": "194",
+              "user": "0"
+            },
+            "scope": "top",
+            "object": {
+              "kind": "local",
+              "id": "temp_m_axis_tvalid_reg",
+              "branch": "reset"
+            },
+            "slot": "temporary",
+            "observation": {
+              "phase": "post",
+              "valid": "MATCH",
+              "data": null
+            }
+          }
+        ],
+        "locations": [],
+        "blocked": [],
+        "recovered": [],
+        "issues": [],
+        "reset": true,
+        "inputBlocked": false
+      }
+    ]
+  }
+}

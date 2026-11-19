@@ -19,6 +19,7 @@ import { contractData, hashValue, modelHash, specText } from '../core/export';
 import type { RegisteredProposal } from '../core/api';
 import { readEvidence } from './evidence';
 const storedProposalSchema = z.strictObject({ schemaVersion: z.literal(1), id: hashSchema, proposal: proposalSchema, candidateHash: hashSchema, createdAt: z.iso.datetime(), createdWith:z.string().optional() });
+const workDockSchema=z.strictObject({height:z.number().int().min(180).max(560)});
 export class ApiError extends Error { constructor(public status: number, message: string, public code = status === 409 ? 'VERSION_CONFLICT' : 'INVALID_REQUEST') { super(message); } }
 export async function atomicWrite(file: string, content: string, renameFile = rename): Promise<void> {
   await mkdir(dirname(file), { recursive: true });
@@ -96,13 +97,26 @@ export class Repository {
     return {workbench,workbenchHash:hashValue(workbench),modelHash:snapshot.modelHash,threadStates,checkpointState:workbench.checkpoint?await state(workbench.checkpoint.target):null,studyStates,decisionStates};
   }
   getWorkbench(){return this.queue(()=>this.workbenchSnapshot());}
+  getWorkDock(){return this.queue(async()=>{
+    const saved=await this.optional('.rtlarch/work-dock.json');
+    return saved===undefined?{height:null}:workDockSchema.parse(saved);
+  });}
+  putWorkDock(input:unknown){return this.queue(async()=>{
+    const saved=workDockSchema.parse(input);
+    await this.save('.rtlarch/work-dock.json',saved);
+    return saved;
+  });}
   getContextView(options:ContextViewOptions){return this.queue(async()=>contextView(await this.snapshot(),options));}
   getContext(moduleId?:string,index?:number){return this.queue(async()=>{
     const snapshot=await this.snapshot(),work=await this.workbenchSnapshot();
     const owner=snapshot.model.modules.find(m=>m.id===moduleId);
     if(moduleId&&!owner)throw new ApiError(422,'模块不存在','MODULE_NOT_FOUND');
     if(index!==undefined&&(!Number.isSafeInteger(index)||!owner?.instances||index<owner.instances.from||index>owner.instances.to))throw new ApiError(422,'数组索引超出范围','INSTANCE_INDEX');
-    const threads=work.workbench.threads.filter(t=>t.status!=='resolved'&&(!t.target.object||index===undefined||t.target.object.instancePath.at(-1)?.index===index)&&(!moduleId||!t.target.moduleId||t.target.moduleId===moduleId||t.target.connectionIds.some(id=>snapshot.model.connections.some(l=>l.id===id&&(l.from.moduleId===moduleId||l.to.moduleId===moduleId)))));
+    const threads=work.workbench.threads.filter(t=>{
+      const path=t.target.selection?.instancePath??t.target.object?.instancePath;
+      return t.status!=='resolved'&&(!path||index===undefined||path.at(-1)?.index===index)&&
+        (!moduleId||!t.target.moduleId||t.target.moduleId===moduleId||t.target.connectionIds.some(id=>snapshot.model.connections.some(l=>l.id===id&&(l.from.moduleId===moduleId||l.to.moduleId===moduleId))));
+    });
     return {...architectureContext(snapshot,moduleId,index),collaboration:{workbenchHash:work.workbenchHash,checkpoint:work.workbench.checkpoint,openCount:threads.length,threads:threads.slice(-25).map(t=>({...t,messages:t.messages.slice(-4),...work.threadStates.find(s=>s.id===t.id)})),studies:work.workbench.studies.filter(s=>!moduleId||s.moduleIds.includes(moduleId)).map(s=>({id:s.id,title:s.title,modelHash:s.modelHash,versionChanged:s.modelHash!==snapshot.modelHash})),note:'讨论是独立记录；回答用 workbench 命令提交，用户确认解决不等于架构批准。完整历史可用 workbench 读取。'}};
   });}
   getResume(){return this.queue(async()=>{

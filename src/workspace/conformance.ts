@@ -6,10 +6,10 @@ import {idSchema,modelSchema,type Model,type Endpoint} from '../core/schema';
 import {modelHash,hashValue} from '../core/export';
 import {parameterValue,widthValue} from '../core/parameters';
 import {netlistSchema} from './importYosys';
-import {verificationRuns} from './verification';
+import {elaborationReference,loadElaboration} from './elaboration';
 import {inputFile,newArtifactDirectory,workspacePath} from './artifacts';
 const name=z.string().min(1),rv=z.strictObject({data:name,valid:name,ready:name});
-export const conformanceSchema=z.strictObject({schemaVersion:z.literal(1),runId:z.string().regex(/^run_\d+_[a-f0-9]{32}$/),netlist:name,top:name,mappings:z.array(z.strictObject({moduleId:idSchema,instancePath:z.array(name).max(64),rtlType:name,parameters:z.record(idSchema,name),ports:z.record(idSchema,z.union([name,rv])),clock:name.optional(),reset:name.optional()})).min(1).max(4096)});
+export const conformanceSchema=z.strictObject({schemaVersion:z.literal(1),...elaborationReference,top:name,mappings:z.array(z.strictObject({moduleId:idSchema,instancePath:z.array(name).max(64),rtlType:name,parameters:z.record(idSchema,name),ports:z.record(idSchema,z.union([name,rv])),clock:name.optional(),reset:name.optional()})).min(1).max(4096)});
 type Manifest=z.infer<typeof conformanceSchema>;
 type Item={target:string;status:'MATCH'|'MISMATCH'|'UNKNOWN';reason:string;expected?:unknown;actual?:unknown};
 /** Boundary comparison only. Bit IDs are compared exclusively in their common RTL scope. */
@@ -80,12 +80,12 @@ export function compareStructure(model:Model,manifest:Manifest,raw:unknown){
  return {items,scope:{mappedModules:[...mapped.keys()],unmappedModules:model.modules.filter(m=>!mapped.has(m.id)).map(m=>m.id)},note:'仅比较显式映射的模块边界、参数、端口与直接连接。内部逻辑、数值行为、时序、CDC/RDC 和等价性均未证明。'};
 }
 export async function evaluateConformance(workspace:string,input:unknown){
- const manifest=conformanceSchema.parse(input),model=modelSchema.parse(JSON.parse((await inputFile(workspace,'architecture/model.json')).bytes.toString())),hash=modelHash(model),runs=await verificationRuns(workspace,hash),run=runs.find(r=>r.id===manifest.runId);
- const record=JSON.parse((await inputFile(workspace,`evidence/runs/${manifest.runId}/run.json`)).bytes.toString());
- const artifact=record.artifacts?.find((a:{file:string})=>a.file===manifest.netlist),net=await inputFile(await workspacePath(workspace,`evidence/runs/${manifest.runId}`),manifest.netlist);
- const trusted=run?.fresh&&run.status==='passed'&&run.stage==='elaboration'&&run.inputClosure==='declared_complete'&&run.toolVersionsKnown&&artifact?.sha256===net.sha256;
- const comparison=compareStructure(model,manifest,JSON.parse(net.bytes.toString())),status=!trusted?'UNKNOWN':comparison.items.some(i=>i.status==='MISMATCH')?'MISMATCH':comparison.items.some(i=>i.status==='UNKNOWN')?'UNKNOWN':'MATCH';
- return {schemaVersion:1,modelHash:hash,manifest,producerRun:manifest.runId,producerFresh:!!trusted,producerInputsCurrent:!!run?.fresh,status,...comparison,producerReason:trusted?'声明完整输入、工具版本及网表摘要与当前模型匹配':'生产记录不完整、过期、未通过或未声明完整输入；观察结果不能作为当前一致性结论'};
+ const manifest=conformanceSchema.parse(input),model=modelSchema.parse(JSON.parse((await inputFile(workspace,'architecture/model.json')).bytes.toString())),hash=modelHash(model);
+ const elaboration=await loadElaboration(workspace,hash,manifest);
+ const comparison=compareStructure(model,manifest,JSON.parse(elaboration.file.bytes.toString())),status=!elaboration.trusted?'UNKNOWN':comparison.items.some(i=>i.status==='MISMATCH')?'MISMATCH':comparison.items.some(i=>i.status==='UNKNOWN')?'UNKNOWN':'MATCH';
+ const producerReason=elaboration.reused?'复用明确登记的源文件展开，以当前模型运行边界比较。':elaboration.trusted?'声明完整输入、工具版本及网表摘要与当前模型匹配':'生产记录不完整、过期、未通过或未声明完整输入；观察结果不能作为当前一致性结论';
+ return {schemaVersion:1,modelHash:hash,manifest,producerRun:manifest.runId,producerModelHash:elaboration.run.modelHash,
+  reusedElaboration:elaboration.reused,producerFresh:elaboration.trusted,producerInputsCurrent:elaboration.inputsCurrent,status,...comparison,producerReason};
 }
 export async function runConformance(workspace:string,input:unknown){
  const result=await evaluateConformance(workspace,input);await mkdir(join(workspace,'evidence'),{recursive:true});await workspacePath(workspace,'evidence');await mkdir(join(workspace,'evidence/conformance'),{recursive:true});await workspacePath(workspace,'evidence/conformance');

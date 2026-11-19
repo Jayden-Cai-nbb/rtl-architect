@@ -10,7 +10,32 @@
 4. 需要比较时填 mappings：moduleId、localSignalId、真实 state、clock，以及 signals 的 `{endpoint,pin}`。pin 为该 RTL 作用域内的完整名称；被检查状态只用 state 映射，其他端点映射为等宽输入或同域寄存器。组合模型必须内联，不能用同名 RTL 中间信号替代期望。
 5. `observe-state mapping.json --workspace <项目> --json` 保存新报告。`assurance` 与网页“行为约定 → 核验状态 → RTL 状态比较”按每个声明状态显示最新结论、覆盖缺口、反例及源码；局部重测或仅发现不会隐藏别处失败。先讲清一个差异的行为后果，再按用户问题展开其他状态。
 
-可直接运行的清单位于工具 `examples/state-updates/elaboration.json`、`state-mapping.json`。示例 runId 是占位符，必须替换为实际 verify 返回值。有映射时 UNKNOWN/MISMATCH 均返回非零退出码；空映射仅表示完成发现，不能当成设计匹配。
+工具仓库根目录可执行下列临时样例。需要 PATH 上的 Yosys；用本次 verify 返回的 ID 写映射，另存记录。
+
+```bash
+source ./env.sh
+workspace=$(mktemp -d -t rtlarch-state-XXXXXX)
+cp -R examples/state-updates/. "$workspace/"
+rtlarch help observe-state --json
+rtlarch schema stateObservation --json
+rtlarch verify "$workspace/elaboration.json" --workspace "$workspace" --json > "$workspace/elaboration-run.json"
+python3 - "$workspace" <<'PY'
+import json
+from pathlib import Path
+import sys
+
+root = Path(sys.argv[1])
+run = json.loads((root / "elaboration-run.json").read_text())
+assert run["ok"]
+mapping = json.loads((root / "state-mapping.json").read_text())
+mapping["runId"] = run["id"]
+(root / "current-mapping.json").write_text(json.dumps(mapping))
+PY
+rtlarch observe-state "$workspace/current-mapping.json" --workspace "$workspace" --json
+rtlarch assurance --workspace "$workspace" --json
+```
+
+有映射时 UNKNOWN/MISMATCH 均为非零退出。空映射的成功只说明完成发现。
 
 ## 如何解释结果
 
@@ -36,5 +61,7 @@ X/Z、异步单元、锁存、跨时钟、未知/多驱动、组合环、未支�
 v1 保留；v2 使用 `{schemaVersion:2,runId,netlist,top,scopes:[{instancePath,mappings}]}`。每个映射明确对应模型 moduleId/localSignalId；实例路径、物理状态别名和模型对象不能重复映射。同一定义的不同实例有独立作用域，内部 bit ID 不代表跨实例同网。不做跨层逻辑锥拼接。
 
 2.0 比较器升级后，旧记录显示 STALE；重新 verify/observe-state，不删除历史或自动提升批准。assurance 最多读取最近 100 份记录，找不到的声明状态保持未比较；空映射发现不算通过，缺失实例路径会失败。汇总分母是有 update 的模型寄存器，另看已扫描 RTL 作用域的状态总数；不是全设计覆盖率。
+
+2.1 使用 `yosys-proc-bdd-v3`，在同一位权层交织各独立字，减少多指针等式和进位的布尔函数开销。50,000 节点和 500,000 次运算上界保持。旧引擎结果需用当前比较器重新观察。若找到有 `elaborationInputs` 的有效源文件展开，可在映射显式使用 `reuseElaboration: true`，报告同时给出 `producerModelHash` 和本次 modelHash。查看差异时把反例与独立仿真对应到采样沿，状态可达性仍另记。[展开复用](as-built.md#复用已经登记的展开)
 
 参考工具 `examples/external-axis/README.md`：固定 MIT 上游、双实例、独立事务队列和故障/修复。局部状态差异可以在端到端抵消，不能仅凭某一项绿灯宣称实现正确。

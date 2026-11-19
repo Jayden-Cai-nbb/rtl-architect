@@ -21,6 +21,24 @@ async function check(name: string, fn: () => Promise<void>) { await fn(); consol
 const record = async (workspace: string): Promise<ServiceInfo> => JSON.parse(await readFile(join(workspace, '.rtlarch/runtime.json'), 'utf8'));
 try {
   await mkdir(projectA); await mkdir(projectB);
+  await check('help discovers runnable schemas and supports command-specific queries without a workspace', async () => {
+    const help = await cli(['help']);
+    const replay = await cli(['replay', '--help']);
+    assert.deepEqual(Object.keys(replay.commands), ['replay']);
+    assert.deepEqual(replay.schemas, ['transactionPath', 'replay', 'replaySamples', 'verification']);
+    assert(replay.capabilities.unsupported.some((item:{semantics:string})=>item.semantics==='addressed_frame_fifo'));
+    const workbench = await cli(['help', 'workbench']);
+    assert(workbench.schemas.includes('selection') && workbench.schemas.includes('decision'));
+    assert.deepEqual((await cli(['help', 'schema'])).schemas, help.schemas);
+    for (const name of help.schemas) {
+      const result = await cli(['schema', name]);
+      assert.match(result[name].$schema, /json-schema\.org/);
+    }
+    assert.deepEqual(Object.keys(await cli(['schema'])), ['ok', 'toolVersion', 'model', 'proposal']);
+    assert.equal((await cli(['schema', 'constructor'], root, true)).error.code, 'USAGE');
+    assert.equal((await cli(['help', 'no_such_command'], root, true)).error.code, 'USAGE');
+    assert.equal(await exists(join(root, '.rtlarch')), false);
+  });
   await check('doctor is read-only and reports an uninitialized workspace', async () => {
     const result = await cli(['doctor', '--workspace', projectA], root, true);
     assert.equal(result.error.code, 'ENVIRONMENT_NOT_READY'); assert.equal(await exists(join(projectA, '.rtlarch')), false);
@@ -31,6 +49,12 @@ try {
     const before = await readFile(join(projectA, 'architecture/model.json'), 'utf8');
     assert.equal((await cli(['init', '--workspace', projectA], root, true)).error.code, 'WORKSPACE_EXISTS');
     assert.equal(await readFile(join(projectA, 'architecture/model.json'), 'utf8'), before);
+    const supported=await cli(['replay','--workspace',projectA,'--semantics','registered_skid']);
+    const unavailable=await cli(['replay','--workspace',projectA,'--semantics','addressed_frame_fifo']);
+    assert.equal(supported.availability.status,'NOT_DECLARED');
+    assert.equal(unavailable.availability.status,'UNSUPPORTED');
+    assert.match(unavailable.independentVerification.command,/verify/);
+    assert.equal(await exists(join(projectA,'.rtlarch')),false);
   });
   await check('concurrent CLI requests automatically start exactly one service for the workspace', async () => {
     const [a, b] = await Promise.all([cli(['context', '--workspace', projectA]), cli(['start', '--workspace', projectA])]);

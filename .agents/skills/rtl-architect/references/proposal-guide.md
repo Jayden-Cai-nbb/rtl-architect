@@ -2,6 +2,8 @@
 
 以 `rtlarch schema` 返回值为准，类型与验证实现在 src/core/schema.ts 和 src/core/engine.ts。
 
+候选生成后按[图形反馈](diagram.md#候选生成与图形反馈)检查同一 modelHash、层级与阅读任务。`preview` 的结构校验不代表图形或 RTL 验证通过；图形记录也不能替代保存基线、验证证据或批准。对照主事务总览时显式使用 `diagram-quality --task overview`，状态局部使用 `--task state --state ID`。生成图暴露语义缺口时形成新候选；仅连线/布局问题不反写模型。
+
 ## 模型
 
 - schemaVersion：新模型使用 3；兼容读取既有 1/2，加载不会自动改文件或改变其 hash。
@@ -71,28 +73,43 @@ Proposal：`{baseHash, reason, commands:[...]}`。baseHash 必须来自当前 AP
 
 required 未连接、合同描述缺失、未决问题或需求缺少验收条件允许保存草稿，但阻断确认。非法引用、层级、参数、位宽、方向、域、rv 扇出、多驱动等阻断提交。
 
-## 常用命令
+## 从项目入口到可审阅提案
+
+使用本 skill 的 `scripts/rtlarch` 或同一安装的 `rtlarch`。在目标项目 cwd 运行时传绝对 `--workspace`；输入和显式输出文件相对调用 cwd。用 `help --json` 查命令和 schema 名，支持 `help COMMAND --json` 与 `COMMAND --help --json`。无参数的 `schema` 返回 model 和 proposal；带名称时返回对应 JSON Schema。命令也会检查实际模型、范围、版本及覆盖等跨字段约束。
+
+| 任务 | 查询名称 |
+| --- | --- |
+| 模型、变更、输入与图形 | `model`、`proposal`、`inputs`、`layout`、`context` |
+| 验证、导入、义务和状态 | `verification`、`yosys`、`checks`、`conformance`、`stateObservation` |
+| 回放路径、映射、采样 | `transactionPath`、`replay`、`replaySamples` |
+| 讨论、选择、候选决策和预算 | `workbench`、`workAction`、`selection`、`decision`、`study` |
+
+在工具仓库根目录运行此示例。它初始化新的临时项目并登记候选，保留当前模型草稿供核对。
 
 ```bash
-rtlarch open --workspace <项目> --json
-rtlarch resume --workspace <项目> --json
-rtlarch context
-rtlarch schema
-rtlarch draft proposals/design.json proposals/proposal.json --workspace <项目> --open --json
-rtlarch propose proposals/proposal.json --workspace <项目> --open --json
-rtlarch spec processing
-rtlarch handoff compute
+source ./env.sh
+workspace=$(mktemp -d -t rtlarch-proposal-XXXXXX)
+rtlarch help --json
+rtlarch help schema --json
+rtlarch schema proposal --json
+rtlarch init --workspace "$workspace" --json
+rtlarch draft examples/packet-pipeline/model.json "$workspace/proposals/pipeline.json" --workspace "$workspace" --open --json
+rtlarch preview "$workspace/proposals/pipeline.json" --workspace "$workspace" --json
+rtlarch proposals --workspace "$workspace" --json
+rtlarch context-index --workspace "$workspace" --offline --json
+rtlarch resume --workspace "$workspace" --offline --json
 ```
 
-`draft` 不覆盖已存在提案文件。输入/显式输出路径相对于当前 shell 目录；未指定输出时写到目标工作区 proposals/。除 schema / compare / study 外，命令应指定 --workspace；--json 返回单个 JSON 对象。spec 是当前 IR 的确定性派生；候选 spec 可在 GUI 候选框图的 Spec 面板查看。带 --open 的 draft 或 propose 会登记提案并返回 reviewUrl；链接打开候选框图，仍需人提交和确认。登记文件位于 proposals/registered/，不要手改。
+核对 draft 返回的 `modelHash`（保存基线）、`candidateHash`、`issues`、`diff`、`proposalId` 与 `reviewUrl`。只在核对工作区身份后打开链接，人工决定是否保存草稿和批准。重复登记用 `propose`；它和带 `--open` 的 draft 都只登记提案。完成临时演示后可用 `rtlarch stop --workspace "$workspace" --json` 停止自己的服务。若只需要独立只读候选，可由可信展开结果导入，并给 `diagram-quality` 或 `bundle` 传完整 `--model`，不必初始化。
 
+`draft` 拒绝覆盖已有文件；未指定输出时写到目标工作区 proposals/。登记文件位于 proposals/registered/，不手改。修订候选用完整模型生成新提案，基线仍从当前工作区 API 取得。 `compare` 只读两个完整模型，不替代 preview。 `spec` 派生当前 IR；`handoff` 要求当前人工批准且正式合同内容匹配。
 
 ## 错误与恢复
 
 | 错误 | 处理 |
 |---|---|
 | WORKSPACE_MISMATCH | 核对返回路径与目标项目，不改连其他服务。 |
-| VERSION_MISMATCH | 用户要继续此项目审阅时执行 stop/start，再 proposals 找回链接；仅维护工具不重启真实项目。 |
+| VERSION_MISMATCH | 用户要继续此项目审阅时显式使用 open --restart，再由 proposals 找回链接；仅维护工具不重启真实项目。 |
 | SERVICE_PERMISSION_DENIED | 按当前环境权限流程处理；等待期间可以 inventory/schema/context --offline。 |
 | VERSION_CONFLICT | 保留原提案，读取新基线和差异，再显式重新预览。 |
 | MODEL_INVALID / SCHEMA_INVALID | 修正模型；不为通过校验而改写源码事实。 |

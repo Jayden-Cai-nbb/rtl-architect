@@ -1,0 +1,165 @@
+{
+  "cases": [
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "buildId": "a194b674d1e993a23ff37cb5550c7d4b1c677dfc6c22375f17af03dea0d366ae",
+      "modelHash": "0c376d420bf9f3aab4c18449e23b548cfae3e9c039fc138099d39011d5f0b8e9",
+      "reviewStatus": "DRAFT",
+      "completeConnection": "middle_tdata",
+      "overviewQuestion": {
+        "modelHash": "0c376d420bf9f3aab4c18449e23b548cfae3e9c039fc138099d39011d5f0b8e9",
+        "scope": "top",
+        "instancePath": [
+          {
+            "moduleId": "top"
+          }
+        ],
+        "target": {
+          "kind": "relationship",
+          "members": [
+            {
+              "kind": "connection",
+              "id": "boundary_m_axis_tdata"
+            }
+          ]
+        }
+      },
+      "returnedState": "stage0_valid_q",
+      "checkpoint": {
+        "modelHash": "0c376d420bf9f3aab4c18449e23b548cfae3e9c039fc138099d39011d5f0b8e9",
+        "scope": "stage0",
+        "instancePath": [
+          {
+            "moduleId": "top"
+          },
+          {
+            "moduleId": "stage0"
+          }
+        ],
+        "target": {
+          "kind": "local",
+          "id": "stage0_valid_q",
+          "branch": "load"
+        }
+      },
+      "connectionCheckpointParams": {
+        "checkpoint": "1",
+        "module": "top",
+        "connection": "boundary_m_axis_tdata",
+        "panel": "work"
+      },
+      "checkpointParams": {
+        "checkpoint": "1",
+        "module": "stage0",
+        "panel": "work"
+      },
+      "threadParams": {
+        "module": "stage0",
+        "thread": "w_272a3dc4d06e487e9f762a36711982f2",
+        "panel": "work"
+      },
+      "resized": {
+        "old": 310,
+        "remembered": 286
+      },
+      "layout": {
+        "canvasHeight": 347,
+        "dockHeight": 286,
+        "questionHit": true,
+        "discussionHit": true,
+        "branchHit": true,
+        "selectedInView": true,
+        "localNodesInView": [
+          "local:stage0:stage0_valid_q",
+          "local:stage0:stage0_ready_q"
+        ],
+        "overlay": false
+      },
+      "errors": []
+    },
+    {
+      "viewport": {
+        "width": 1100,
+        "height": 800
+      },
+      "buildId": "a194b674d1e993a23ff37cb5550c7d4b1c677dfc6c22375f17af03dea0d366ae",
+      "modelHash": "0c376d420bf9f3aab4c18449e23b548cfae3e9c039fc138099d39011d5f0b8e9",
+      "reviewStatus": "DRAFT",
+      "completeConnection": "middle_tdata",
+      "overviewQuestion": {
+        "modelHash": "0c376d420bf9f3aab4c18449e23b548cfae3e9c039fc138099d39011d5f0b8e9",
+        "scope": "top",
+        "instancePath": [
+          {
+            "moduleId": "top"
+          }
+        ],
+        "target": {
+          "kind": "relationship",
+          "members": [
+            {
+              "kind": "connection",
+              "id": "boundary_m_axis_tdata"
+            }
+          ]
+        }
+      },
+      "returnedState": "stage0_valid_q",
+      "checkpoint": {
+        "modelHash": "0c376d420bf9f3aab4c18449e23b548cfae3e9c039fc138099d39011d5f0b8e9",
+        "scope": "stage0",
+        "instancePath": [
+          {
+            "moduleId": "top"
+          },
+          {
+            "moduleId": "stage0"
+          }
+        ],
+        "target": {
+          "kind": "local",
+          "id": "stage0_valid_q",
+          "branch": "load"
+        }
+      },
+      "connectionCheckpointParams": {
+        "checkpoint": "1",
+        "module": "top",
+        "connection": "boundary_m_axis_tdata",
+        "panel": "work"
+      },
+      "checkpointParams": {
+        "checkpoint": "1",
+        "module": "stage0",
+        "panel": "work"
+      },
+      "threadParams": {
+        "module": "stage0",
+        "thread": "w_0b6d82c8563a4765ab6d76b5527c5159",
+        "panel": "work"
+      },
+      "resized": {
+        "old": 248,
+        "remembered": 224
+      },
+      "layout": {
+        "canvasHeight": 209,
+        "dockHeight": 224,
+        "questionHit": true,
+        "discussionHit": true,
+        "branchHit": true,
+        "selectedInView": true,
+        "localNodesInView": [
+          "local:stage0:stage0_valid_q",
+          "local:stage0:stage0_ready_q"
+        ],
+        "overlay": false
+      },
+      "errors": []
+    }
+  ],
+  "chromium": "141.0.7390.37"
+}

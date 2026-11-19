@@ -1,0 +1,1715 @@
+{
+  "schemaVersion": 1,
+  "finishedAt": "2026-11-18T05:29:51.577Z",
+  "repository": "https://github.com/alexforencich/verilog-axis",
+  "commit": "48ff7a7e2ef782cf778d47910cf85835c64b1bce",
+  "frozenConfigurationSha256": "b611a8c4518ec1e31831305df44c32714f631a36cb403daa709fe7479693959c",
+  "frozenInputs": {
+    "rtl/axis_register.v": "599fde2d6c2d806643bbffb7c444297e69a71871f962d4b741ec1914342e0d39",
+    "tb/axis_register/test_axis_register.py": "46fd1f60b14f9057694251aa2fc31ea155d54a970adb57197ecf179380e8d0cb",
+    "tb/axis_register/Makefile": "ed2e29db173d706d68d9bc822f4ce9993d574645eac00c9ef5ea3d90b6978965",
+    "tox.ini": "76c4dda4eb8c59d04b41b4a22ce062f16f5732818b45f0326c8c0d15b0bb5b86",
+    "COPYING": "8ea57f95365e9b16a5b516f422b71269183a1ae53bab5878ae6d69039e58fe77"
+  },
+  "runnerInputs": {
+    "scripts/benchmark-external-axis.ts": "9c814f53e3a0a8395915ea82f6f5c8c9def24fbda8a179cf9c77966cb46c89b1",
+    "scripts/external-axis-model.ts": "0d6ccf162e728da2d394f89a7bf8a6701c6f022584336374d91d3dc58e61bbdb",
+    "examples/external-axis/benchmark/probe.py": "45ec0e417b58a4942b709a5d079133de2219586a4fe3cae4468aa3ffb2f49aec"
+  },
+  "tools": {
+    "rtlArchitect": "2.0.0",
+    "node": "v24.18.1",
+    "npmUserAgent": "npm/11.6.2 node/v24.18.1 linux x64 workspaces/false",
+    "upstream": {
+      "python": {
+        "executable": "/tmp/rtlarch-axis-venv/bin/python",
+        "version": "3.10.12 (main, Aug 31 2026, 10:18:17) [GCC 11.4.0]"
+      },
+      "toxDependencies": {
+        "pytest": "7.2.1",
+        "pytest-xdist": "3.1.0",
+        "pytest-split": "0.8.0",
+        "cocotb": "1.7.2",
+        "cocotb-bus": "0.2.1",
+        "cocotb-test": "0.2.4",
+        "cocotbext-axi": "0.1.20",
+        "jinja2": "3.1.2"
+      },
+      "installedDistributions": {
+        "Jinja2": "3.1.2",
+        "MarkupSafe": "3.0.4",
+        "attrs": "26.1.0",
+        "cocotb": "1.7.2",
+        "cocotb-bus": "0.2.1",
+        "cocotb-test": "0.2.4",
+        "cocotbext-axi": "0.1.20",
+        "exceptiongroup": "1.3.1",
+        "execnet": "2.1.2",
+        "find_libpython": "0.5.1",
+        "iniconfig": "2.3.1",
+        "packaging": "26.3",
+        "pip": "22.0.2",
+        "pluggy": "1.7.0",
+        "pytest": "7.2.1",
+        "pytest-split": "0.8.0",
+        "pytest-xdist": "3.1.0",
+        "setuptools": "59.6.0",
+        "tomli": "2.5.0",
+        "typing_extensions": "4.16.0"
+      },
+      "iverilog": {
+        "executable": "/tmp/rtlarch-axis-icarus/usr/bin/iverilog",
+        "sha256": "1ba67856249142771239573b5d51c7f6e4d67a1e7931a0d0fab56e0d473d2167",
+        "version": "Icarus Verilog version 11.0 (stable) ()"
+      },
+      "vvp": {
+        "executable": "/tmp/rtlarch-axis-icarus/usr/bin/vvp",
+        "sha256": "075b114070eed3bc72e0e4559decf40520f3b693b1da9c94bba1defe8896966d",
+        "version": "Icarus Verilog runtime version 11.0 (stable) ()"
+      }
+    },
+    "fst2vcd": {
+      "executable": "/home/cjjnbb/eda/oss-cad-suite/bin/fst2vcd",
+      "sha256": "8fe115ca3f4f881da2c6092d583094fe2893caba69c476aae88c99e9ccfd0058"
+    }
+  },
+  "upstream": "upstream/results",
+  "seed": 1,
+  "denominator": 9,
+  "tally": {
+    "test": {
+      "passed": 9,
+      "denominator": 9,
+      "statuses": {
+        "PASS": 9
+      }
+    },
+    "structure": {
+      "passed": 9,
+      "denominator": 9,
+      "statuses": {
+        "PASS": 9
+      }
+    },
+    "state": {
+      "passed": 6,
+      "denominator": 9,
+      "statuses": {
+        "NOT_APPLICABLE": 3,
+        "PASS": 6
+      }
+    },
+    "transaction": {
+      "passed": 9,
+      "denominator": 9,
+      "statuses": {
+        "PASS": 9
+      }
+    },
+    "reading": {
+      "passed": 9,
+      "denominator": 9,
+      "statuses": {
+        "PASS": 9
+      }
+    }
+  },
+  "humanReading": {
+    "passed": 0,
+    "denominator": 9,
+    "status": "NOT_RUN"
+  },
+  "nativeReplay": {
+    "passed": 0,
+    "denominator": 9,
+    "unsupported": 6,
+    "notRun": 3
+  },
+  "rows": [
+    {
+      "id": "8-0",
+      "parameters": {
+        "REG_TYPE": 0,
+        "DATA_WIDTH": 8,
+        "KEEP_ENABLE": 0,
+        "KEEP_WIDTH": 1,
+        "LAST_ENABLE": 1,
+        "ID_ENABLE": 1,
+        "ID_WIDTH": 8,
+        "DEST_ENABLE": 1,
+        "DEST_WIDTH": 8,
+        "USER_ENABLE": 1,
+        "USER_WIDTH": 1
+      },
+      "test": {
+        "status": "PASS",
+        "case": "8-0",
+        "pytestTest": "test_axis_register[8-0]",
+        "parameters": {
+          "DATA_WIDTH": 8,
+          "KEEP_ENABLE": 0,
+          "KEEP_WIDTH": 1,
+          "LAST_ENABLE": 1,
+          "ID_ENABLE": 1,
+          "ID_WIDTH": 8,
+          "DEST_ENABLE": 1,
+          "DEST_WIDTH": 8,
+          "USER_ENABLE": 1,
+          "USER_WIDTH": 1,
+          "REG_TYPE": 0
+        },
+        "seed": 1,
+        "counts": {
+          "passed": 9,
+          "failure": 0,
+          "error": 0,
+          "skipped": 0
+        },
+        "tests": {
+          "run_test_001": "passed",
+          "run_test_002": "passed",
+          "run_test_003": "passed",
+          "run_test_004": "passed",
+          "run_test_tuser_assert_001": "passed",
+          "run_stress_test_001": "passed",
+          "run_stress_test_002": "passed",
+          "run_stress_test_003": "passed",
+          "run_stress_test_004": "passed"
+        },
+        "compileCommand": "iverilog -o /tmp/rtlarch-axis-benchmark-OM9PZ0/upstream/tb/axis_register/sim_build/test_axis_register-8-0/axis_register.vvp -D COCOTB_SIM=1 -g2012 -s axis_register -Paxis_register.DATA_WIDTH=8 -Paxis_register.KEEP_ENABLE=0 -Paxis_register.KEEP_WIDTH=1 -Paxis_register.LAST_ENABLE=1 -Paxis_register.ID_ENABLE=1 -Paxis_register.ID_WIDTH=8 -Paxis_register.DEST_ENABLE=1 -Paxis_register.DEST_WIDTH=8 -Paxis_register.USER_ENABLE=1 -Paxis_register.USER_WIDTH=1 -Paxis_register.REG_TYPE=0 -s iverilog_dump /tmp/rtlarch-axis-benchmark-OM9PZ0/upstream/rtl/axis_register.v /tmp/rtlarch-axis-benchmark-OM9PZ0/upstream/tb/axis_register/sim_build/test_axis_register-8-0/iverilog_dump.v",
+        "simulationCommand": "vvp -M /tmp/rtlarch-axis-venv/lib/python3.10/site-packages/cocotb/libs -m libcocotbvpi_icarus /tmp/rtlarch-axis-benchmark-OM9PZ0/upstream/tb/axis_register/sim_build/test_axis_register-8-0/axis_register.vvp -fst",
+        "artifacts": {
+          "cocotb.xml": "10831bf8aaee272b2093acdc774616afefdd939e89660530e5532b9e9045da94",
+          "axis_register.fst": "3de4a7cc65b95080c046c1b9f6e42856cfba807e24efaebfff975db6a429f906"
+        }
+      },
+      "structure": {
+        "status": "PASS",
+        "ports": 18,
+        "outputs": 8,
+        "portBits": 60,
+        "vectors": 0,
+        "importGaps": [],
+        "importedFidelity": "partial",
+        "modelHash": "f096cc9da512dba60d2ae598111d11a9b0c84f7f715d0a550cc141e20107d3dd",
+        "yosys": "Yosys 0.68+206 (git sha1 72dc97739-dirty, Release, Clang /usr/bin/clang++ 21.1.8)",
+        "run": "case-8-0/evidence/runs/run_1794979754067_8815d7833ff84dc0bdc092a55f877af7/run.json",
+        "import": "case-8-0/imported/import.json",
+        "netlist": "case-8-0/evidence/runs/run_1794979754067_8815d7833ff84dc0bdc092a55f877af7/netlist.json"
+      },
+      "state": {
+        "status": "NOT_APPLICABLE",
+        "boundary": "PASS",
+        "reason": "Pure combinational bypass. No register state to compare.",
+        "record": "case-8-0/evidence/state-observation/state_1794979754944_6b73a05fc06d4c33815a88bb143e4573/report.json",
+        "vectors": 0,
+        "mapped": 0,
+        "observedStatus": "UNKNOWN"
+      },
+      "transaction": {
+        "status": "PASS",
+        "evidence": "case-8-0/transaction.json",
+        "acceptToConsumeCycles": 0,
+        "nativeReplay": {
+          "status": "UNSUPPORTED",
+          "reason": "Native replay requires at least one stored stage."
+        }
+      },
+      "reading": {
+        "status": "PASS",
+        "modelHash": "f096cc9da512dba60d2ae598111d11a9b0c84f7f715d0a550cc141e20107d3dd",
+        "humanReview": "NOT_RUN",
+        "bundle": "case-8-0/reading/index.html",
+        "reports": [
+          {
+            "task": "overview",
+            "ok": true,
+            "report": "case-8-0/diagram-overview.json",
+            "svg": "case-8-0/diagram-overview.svg",
+            "geometry": "passed",
+            "fidelity": "passed",
+            "readability": "clear",
+            "crossings": 0,
+            "hiddenLabels": 0
+          },
+          {
+            "task": "signals",
+            "ok": true,
+            "report": "case-8-0/diagram-signals.json",
+            "svg": "case-8-0/diagram-signals.svg",
+            "geometry": "passed",
+            "fidelity": "passed",
+            "readability": "needs_review",
+            "crossings": 5,
+            "hiddenLabels": 3
+          }
+        ],
+        "tasks": [
+          "沿一条数据和 sideband 通路找到入口与出口，指出 tready 的返回方向。",
+          "定位实际保存的位置并解释阻塞时谁保持有效数据。旁路需指出没有保存槽。",
+          "定位 clk、rst 及其控制的有效状态，指出 8 位配置中 tkeep 的常量来源。"
+        ],
+        "anchors": {
+          "forward": [
+            "s_axis_tdata",
+            "m_axis_tdata",
+            "m_axis_tlast",
+            "m_axis_tid",
+            "m_axis_tdest",
+            "m_axis_tuser"
+          ],
+          "reverse": [
+            "m_axis_tready",
+            "s_axis_tready"
+          ],
+          "storage": [],
+          "backpressure": "ready 由下游组合返回，等待期间由发送方保持负载。",
+          "reset": {
+            "pins": [
+              "clk",
+              "rst"
+            ],
+            "clears": []
+          },
+          "keep": {
+            "output": "m_axis_tkeep",
+            "source": "constant_1"
+          }
+        }
+      }
+    },
+    {
+      "id": "8-1",
+      "parameters": {
+        "REG_TYPE": 1,
+        "DATA_WIDTH": 8,
+        "KEEP_ENABLE": 0,
+        "KEEP_WIDTH": 1,
+        "LAST_ENABLE": 1,
+        "ID_ENABLE": 1,
+        "ID_WIDTH": 8,
+        "DEST_ENABLE": 1,
+        "DEST_WIDTH": 8,
+        "USER_ENABLE": 1,
+        "USER_WIDTH": 1
+      },
+      "test": {
+        "status": "PASS",
+        "case": "8-1",
+        "pytestTest": "test_axis_register[8-1]",
+        "parameters": {
+          "DATA_WIDTH": 8,
+          "KEEP_ENABLE": 0,
+          "KEEP_WIDTH": 1,
+          "LAST_ENABLE": 1,
+          "ID_ENABLE": 1,
+          "ID_WIDTH": 8,
+          "DEST_ENABLE": 1,
+          "DEST_WIDTH": 8,
+          "USER_ENABLE": 1,
+          "USER_WIDTH": 1,
+          "REG_TYPE": 1
+        },
+        "seed": 1,
+        "counts": {
+          "passed": 9,
+          "failure": 0,
+          "error": 0,
+          "skipped": 0
+        },
+        "tests": {
+          "run_test_001": "passed",
+          "run_test_002": "passed",
+          "run_test_003": "passed",
+          "run_test_004": "passed",
+          "run_test_tuser_assert_001": "passed",
+          "run_stress_test_001": "passed",
+          "run_stress_test_002": "passed",
+          "run_stress_test_003": "passed",
+          "run_stress_test_004": "passed"
+        },
+        "compileCommand": "iverilog -o /tmp/rtlarch-axis-benchmark-OM9PZ0/upstream/tb/axis_register/sim_build/test_axis_register-8-1/axis_register.vvp -D COCOTB_SIM=1 -g2012 -s axis_register -Paxis_register.DATA_WIDTH=8 -Paxis_register.KEEP_ENABLE=0 -Paxis_register.KEEP_WIDTH=1 -Paxis_register.LAST_ENABLE=1 -Paxis_register.ID_ENABLE=1 -Paxis_register.ID_WIDTH=8 -Paxis_register.DEST_ENABLE=1 -Paxis_register.DEST_WIDTH=8 -Paxis_register.USER_ENABLE=1 -Paxis_register.USER_WIDTH=1 -Paxis_register.REG_TYPE=1 -s iverilog_dump /tmp/rtlarch-axis-benchmark-OM9PZ0/upstream/rtl/axis_register.v /tmp/rtlarch-axis-benchmark-OM9PZ0/upstream/tb/axis_register/sim_build/test_axis_register-8-1/iverilog_dump.v",
+        "simulationCommand": "vvp -M /tmp/rtlarch-axis-venv/lib/python3.10/site-packages/cocotb/libs -m libcocotbvpi_icarus /tmp/rtlarch-axis-benchmark-OM9PZ0/upstream/tb/axis_register/sim_build/test_axis_register-8-1/axis_register.vvp -fst",
+        "artifacts": {
+          "cocotb.xml": "25ac6f0ae9efc0f4c631b5d3502e4179f51bc293ab1b8b484f30d2fdf856559f",
+          "axis_register.fst": "7054ae33a27a4d6a659fedcbad209bff5c1d772225a2d0d78fede5d3667804f8"
+        }
+      },
+      "structure": {
+        "status": "PASS",
+        "ports": 18,
+        "outputs": 8,
+        "portBits": 60,
+        "vectors": 8,
+        "importGaps": [
+          "internal_logic",
+          "unresolved_connection"
+        ],
+        "importedFidelity": "partial",
+        "modelHash": "4b637909ac3dde723ccaa93739a4bd998e0954cf8304ee7c989df8f81b2f04ac",
+        "yosys": "Yosys 0.68+206 (git sha1 72dc97739-dirty, Release, Clang /usr/bin/clang++ 21.1.8)",
+        "run": "case-8-1/evidence/runs/run_1794979758079_06dc973faa6146eb804a21338cb2d6e3/run.json",
+        "import": "case-8-1/imported/import.json",
+        "netlist": "case-8-1/evidence/runs/run_1794979758079_06dc973faa6146eb804a21338cb2d6e3/netlist.json"
+      },
+      "state": {
+        "status": "PASS",
+        "record": "case-8-1/evidence/state-observation/state_1794979758899_a37ab5e348594d60a585a8cdb29d9568/report.json",
+        "vectors": 8,
+        "mapped": 8,
+        "observedStatus": "MATCH",
+        "gaps": []
+      },
+      "transaction": {
+        "status": "PASS",
+        "evidence": "case-8-1/transaction.json",
+        "acceptToConsumeCycles": 1,
+        "nativeReplay": {
+          "status": "NOT_RUN",
+          "reason": "Single-slot replay mapping and verify sample artifact were not registered."
+        }
+      },
+      "reading": {
+        "status": "PASS",
+        "modelHash": "4b637909ac3dde723ccaa93739a4bd998e0954cf8304ee7c989df8f81b2f04ac",
+        "humanReview": "NOT_RUN",
+        "bundle": "case-8-1/reading/index.html",
+        "reports": [
+          {
+            "task": "overview",
+            "ok": true,
+            "report": "case-8-1/diagram-overview.json",
+            "svg": "case-8-1/diagram-overview.svg",
+            "geometry": "passed",
+            "fidelity": "passed",
+            "readability": "needs_review",
+            "crossings": 5,
+            "hiddenLabels": 0
+          },
+          {
+            "task": "state",
+            "ok": true,
+            "report": "case-8-1/diagram-state.json",
+            "svg": "case-8-1/diagram-state.svg",
+            "geometry": "passed",
+            "fidelity": "passed",
+            "readability": "needs_review",
+            "crossings": 15,
+            "hiddenLabels": 0
+          }
+        ],
+        "tasks": [
+          "沿一条数据和 sideband 通路找到入口与出口，指出 tready 的返回方向。",
+          "定位实际保存的位置并解释阻塞时谁保持有效数据。旁路需指出没有保存槽。",
+          "定位 clk、rst 及其控制的有效状态，指出 8 位配置中 tkeep 的常量来源。"
+        ],
+        "anchors": {
+          "forward": [
+            "s_axis_tdata",
+            "m_axis_tdata",
+            "m_axis_tlast",
+            "m_axis_tid",
+            "m_axis_tdest",
+            "m_axis_tuser"
+          ],
+          "reverse": [
+            "m_axis_tready",
+            "s_axis_tready"
+          ],
+          "storage": [
+            "s_axis_tready_reg",
+            "m_axis_tvalid_reg",
+            "m_axis_tdata_reg",
+            "m_axis_tkeep_reg",
+            "m_axis_tlast_reg",
+            "m_axis_tid_reg",
+            "m_axis_tdest_reg",
+            "m_axis_tuser_reg"
+          ],
+          "backpressure": "输出槽在下游未 ready 时保留有效负载。",
+          "reset": {
+            "pins": [
+              "clk",
+              "rst"
+            ],
+            "clears": [
+              "s_axis_tready_reg",
+              "m_axis_tvalid_reg"
+            ]
+          },
+          "keep": {
+            "output": "m_axis_tkeep",
+            "source": "constant_1"
+          }
+        }
+      }
+    },
+    {
+      "id": "8-2",
+      "parameters": {
+        "REG_TYPE": 2,
+        "DATA_WIDTH": 8,
+        "KEEP_ENABLE": 0,
+        "KEEP_WIDTH": 1,
+        "LAST_ENABLE": 1,
+        "ID_ENABLE": 1,
+        "ID_WIDTH": 8,
+        "DEST_ENABLE": 1,
+        "DEST_WIDTH": 8,
+        "USER_ENABLE": 1,
+        "USER_WIDTH": 1
+      },
+      "test": {
+        "status": "PASS",
+        "case": "8-2",
+        "pytestTest": "test_axis_register[8-2]",
+        "parameters": {
+          "DATA_WIDTH": 8,
+          "KEEP_ENABLE": 0,
+          "KEEP_WIDTH": 1,
+          "LAST_ENABLE": 1,
+          "ID_ENABLE": 1,
+          "ID_WIDTH": 8,
+          "DEST_ENABLE": 1,
+          "DEST_WIDTH": 8,
+          "USER_ENABLE": 1,
+          "USER_WIDTH": 1,
+          "REG_TYPE": 2
+        },
+        "seed": 1,
+        "counts": {
+          "passed": 9,
+          "failure": 0,
+          "error": 0,
+          "skipped": 0
+        },
+        "tests": {
+          "run_test_001": "passed",
+          "run_test_002": "passed",
+          "run_test_003": "passed",
+          "run_test_004": "passed",
+          "run_test_tuser_assert_001": "passed",
+          "run_stress_test_001": "passed",
+          "run_stress_test_002": "passed",
+          "run_stress_test_003": "passed",
+          "run_stress_test_004": "passed"
+        },
+        "compileCommand": "iverilog -o /tmp/rtlarch-axis-benchmark-OM9PZ0/upstream/tb/axis_register/sim_build/test_axis_register-8-2/axis_register.vvp -D COCOTB_SIM=1 -g2012 -s axis_register -Paxis_register.DATA_WIDTH=8 -Paxis_register.KEEP_ENABLE=0 -Paxis_register.KEEP_WIDTH=1 -Paxis_register.LAST_ENABLE=1 -Paxis_register.ID_ENABLE=1 -Paxis_register.ID_WIDTH=8 -Paxis_register.DEST_ENABLE=1 -Paxis_register.DEST_WIDTH=8 -Paxis_register.USER_ENABLE=1 -Paxis_register.USER_WIDTH=1 -Paxis_register.REG_TYPE=2 -s iverilog_dump /tmp/rtlarch-axis-benchmark-OM9PZ0/upstream/rtl/axis_register.v /tmp/rtlarch-axis-benchmark-OM9PZ0/upstream/tb/axis_register/sim_build/test_axis_register-8-2/iverilog_dump.v",
+        "simulationCommand": "vvp -M /tmp/rtlarch-axis-venv/lib/python3.10/site-packages/cocotb/libs -m libcocotbvpi_icarus /tmp/rtlarch-axis-benchmark-OM9PZ0/upstream/tb/axis_register/sim_build/test_axis_register-8-2/axis_register.vvp -fst",
+        "artifacts": {
+          "cocotb.xml": "b8040e6c04a6a32f843a6824d719c6ab6fe942f6c58e39d5fa9daeecf821d23d",
+          "axis_register.fst": "b25d3da2190a540aa82ddd8babb21aa1eb141ab774d1e06679678d429dbb114e"
+        }
+      },
+      "structure": {
+        "status": "PASS",
+        "ports": 18,
+        "outputs": 8,
+        "portBits": 60,
+        "vectors": 15,
+        "importGaps": [
+          "internal_logic",
+          "unresolved_connection"
+        ],
+        "importedFidelity": "partial",
+        "modelHash": "3340533d4cccda94f57f8c7c91e95c9ca20fc55e92e7d3d8d0a4913372b47e0c",
+        "yosys": "Yosys 0.68+206 (git sha1 72dc97739-dirty, Release, Clang /usr/bin/clang++ 21.1.8)",
+        "run": "case-8-2/evidence/runs/run_1794979761858_c4afc42d4f5949ca951effa1cdffaaf5/run.json",
+        "import": "case-8-2/imported/import.json",
+        "netlist": "case-8-2/evidence/runs/run_1794979761858_c4afc42d4f5949ca951effa1cdffaaf5/netlist.json"
+      },
+      "state": {
+        "status": "PASS",
+        "record": "case-8-2/evidence/state-observation/state_1794979762671_1d289a4aeacd4c48908fa22a4830d960/report.json",
+        "vectors": 15,
+        "mapped": 15,
+        "observedStatus": "MATCH",
+        "gaps": []
+      },
+      "transaction": {
+        "status": "PASS",
+        "evidence": "case-8-2/transaction.json",
+        "acceptToConsumeCycles": 1,
+        "nativeReplay": {
+          "status": "UNSUPPORTED",
+          "reason": "Native replay models one slot per stage."
+        }
+      },
+      "reading": {
+        "status": "PASS",
+        "modelHash": "3340533d4cccda94f57f8c7c91e95c9ca20fc55e92e7d3d8d0a4913372b47e0c",
+        "humanReview": "NOT_RUN",
+        "bundle": "case-8-2/reading/index.html",
+        "reports": [
+          {
+            "task": "overview",
+            "ok": true,
+            "report": "case-8-2/diagram-overview.json",
+            "svg": "case-8-2/diagram-overview.svg",
+            "geometry": "passed",
+            "fidelity": "passed",
+            "readability": "needs_review",
+            "crossings": 5,
+            "hiddenLabels": 0
+          },
+          {
+            "task": "state",
+            "ok": true,
+            "report": "case-8-2/diagram-state.json",
+            "svg": "case-8-2/diagram-state.svg",
+            "geometry": "passed",
+            "fidelity": "passed",
+            "readability": "needs_review",
+            "crossings": 221,
+            "hiddenLabels": 1
+          }
+        ],
+        "tasks": [
+          "沿一条数据和 sideband 通路找到入口与出口，指出 tready 的返回方向。",
+          "定位实际保存的位置并解释阻塞时谁保持有效数据。旁路需指出没有保存槽。",
+          "定位 clk、rst 及其控制的有效状态，指出 8 位配置中 tkeep 的常量来源。"
+        ],
+        "anchors": {
+          "forward": [
+            "s_axis_tdata",
+            "m_axis_tdata",
+            "m_axis_tlast",
+            "m_axis_tid",
+            "m_axis_tdest",
+            "m_axis_tuser"
+          ],
+          "reverse": [
+            "m_axis_tready",
+            "s_axis_tready"
+          ],
+          "storage": [
+            "s_axis_tready_reg",
+            "m_axis_tvalid_reg",
+            "temp_m_axis_tvalid_reg",
+            "m_axis_tdata_reg",
+            "temp_m_axis_tdata_reg",
+            "m_axis_tkeep_reg",
+            "temp_m_axis_tkeep_reg",
+            "m_axis_tlast_reg",
+            "temp_m_axis_tlast_reg",
+            "m_axis_tid_reg",
+            "temp_m_axis_tid_reg",
+            "m_axis_tdest_reg",
+            "temp_m_axis_tdest_reg",
+            "m_axis_tuser_reg",
+            "temp_m_axis_tuser_reg"
+          ],
+          "backpressure": "输出被阻塞时可暂存一个已获准的输入，恢复时临时槽移入输出槽。",
+          "reset": {
+            "pins": [
+              "clk",
+              "rst"
+            ],
+            "clears": [
+              "s_axis_tready_reg",
+              "m_axis_tvalid_reg",
+              "temp_m_axis_tvalid_reg"
+            ]
+          },
+          "keep": {
+            "output": "m_axis_tkeep",
+            "source": "constant_1"
+          }
+        }
+      }
+    },
+    {
+      "id": "16-0",
+      "parameters": {
+        "REG_TYPE": 0,
+        "DATA_WIDTH": 16,
+        "KEEP_ENABLE": 1,
+        "KEEP_WIDTH": 2,
+        "LAST_ENABLE": 1,
+        "ID_ENABLE": 1,
+        "ID_WIDTH": 8,
+        "DEST_ENABLE": 1,
+        "DEST_WIDTH": 8,
+        "USER_ENABLE": 1,
+        "USER_WIDTH": 1
+      },
+      "test": {
+        "status": "PASS",
+        "case": "16-0",
+        "pytestTest": "test_axis_register[16-0]",
+        "parameters": {
+          "DATA_WIDTH": 16,
+          "KEEP_ENABLE": 1,
+          "KEEP_WIDTH": 2,
+          "LAST_ENABLE": 1,
+          "ID_ENABLE": 1,
+          "ID_WIDTH": 8,
+          "DEST_ENABLE": 1,
+          "DEST_WIDTH": 8,
+          "USER_ENABLE": 1,
+          "USER_WIDTH": 1,
+          "REG_TYPE": 0
+        },
+        "seed": 1,
+        "counts": {
+          "passed": 9,
+          "failure": 0,
+          "error": 0,
+          "skipped": 0
+        },
+        "tests": {
+          "run_test_001": "passed",
+          "run_test_002": "passed",
+          "run_test_003": "passed",
+          "run_test_004": "passed",
+          "run_test_tuser_assert_001": "passed",
+          "run_stress_test_001": "passed",
+          "run_stress_test_002": "passed",
+          "run_stress_test_003": "passed",
+          "run_stress_test_004": "passed"
+        },
+        "compileCommand": "iverilog -o /tmp/rtlarch-axis-benchmark-OM9PZ0/upstream/tb/axis_register/sim_build/test_axis_register-16-0/axis_register.vvp -D COCOTB_SIM=1 -g2012 -s axis_register -Paxis_register.DATA_WIDTH=16 -Paxis_register.KEEP_ENABLE=1 -Paxis_register.KEEP_WIDTH=2 -Paxis_register.LAST_ENABLE=1 -Paxis_register.ID_ENABLE=1 -Paxis_register.ID_WIDTH=8 -Paxis_register.DEST_ENABLE=1 -Paxis_register.DEST_WIDTH=8 -Paxis_register.USER_ENABLE=1 -Paxis_register.USER_WIDTH=1 -Paxis_register.REG_TYPE=0 -s iverilog_dump /tmp/rtlarch-axis-benchmark-OM9PZ0/upstream/rtl/axis_register.v /tmp/rtlarch-axis-benchmark-OM9PZ0/upstream/tb/axis_register/sim_build/test_axis_register-16-0/iverilog_dump.v",
+        "simulationCommand": "vvp -M /tmp/rtlarch-axis-venv/lib/python3.10/site-packages/cocotb/libs -m libcocotbvpi_icarus /tmp/rtlarch-axis-benchmark-OM9PZ0/upstream/tb/axis_register/sim_build/test_axis_register-16-0/axis_register.vvp -fst",
+        "artifacts": {
+          "cocotb.xml": "c222533469c70b3ab17f26343d59ba0ac36001cde782d6f57c7c2f042aa6ef9c",
+          "axis_register.fst": "dc9d4bf9c2055fb11a8b8ded85a3f215c6ff6cc87b1f3ee983c5f04e33109dbc"
+        }
+      },
+      "structure": {
+        "status": "PASS",
+        "ports": 18,
+        "outputs": 8,
+        "portBits": 78,
+        "vectors": 0,
+        "importGaps": [],
+        "importedFidelity": "partial",
+        "modelHash": "7ec2bbcba3ee3de7a6f0fd750501a0c8eca7084f580dbeed779b14f6c6622189",
+        "yosys": "Yosys 0.68+206 (git sha1 72dc97739-dirty, Release, Clang /usr/bin/clang++ 21.1.8)",
+        "run": "case-16-0/evidence/runs/run_1794979765819_4254a24893464ecb936912d14b5e4ea7/run.json",
+        "import": "case-16-0/imported/import.json",
+        "netlist": "case-16-0/evidence/runs/run_1794979765819_4254a24893464ecb936912d14b5e4ea7/netlist.json"
+      },
+      "state": {
+        "status": "NOT_APPLICABLE",
+        "boundary": "PASS",
+        "reason": "Pure combinational bypass. No register state to compare.",
+        "record": "case-16-0/evidence/state-observation/state_1794979766524_5c45ba67dfa246cca8ee065ffa65e8e7/report.json",
+        "vectors": 0,
+        "mapped": 0,
+        "observedStatus": "UNKNOWN"
+      },
+      "transaction": {
+        "status": "PASS",
+        "evidence": "case-16-0/transaction.json",
+        "acceptToConsumeCycles": 0,
+        "nativeReplay": {
+          "status": "UNSUPPORTED",
+          "reason": "Native replay requires at least one stored stage."
+        }
+      },
+      "reading": {
+        "status": "PASS",
+        "modelHash": "7ec2bbcba3ee3de7a6f0fd750501a0c8eca7084f580dbeed779b14f6c6622189",
+        "humanReview": "NOT_RUN",
+        "bundle": "case-16-0/reading/index.html",
+        "reports": [
+          {
+            "task": "overview",
+            "ok": true,
+            "report": "case-16-0/diagram-overview.json",
+            "svg": "case-16-0/diagram-overview.svg",
+            "geometry": "passed",
+            "fidelity": "passed",
+            "readability": "clear",
+            "crossings": 0,
+            "hiddenLabels": 0
+          },
+          {
+            "task": "signals",
+            "ok": true,
+            "report": "case-16-0/diagram-signals.json",
+            "svg": "case-16-0/diagram-signals.svg",
+            "geometry": "passed",
+            "fidelity": "passed",
+            "readability": "needs_review",
+            "crossings": 9,
+            "hiddenLabels": 5
+          }
+        ],
+        "tasks": [
+          "沿一条数据和 sideband 通路找到入口与出口，指出 tready 的返回方向。",
+          "定位实际保存的位置并解释阻塞时谁保持有效数据。旁路需指出没有保存槽。",
+          "定位 clk、rst 及其控制的有效状态，指出 8 位配置中 tkeep 的常量来源。"
+        ],
+        "anchors": {
+          "forward": [
+            "s_axis_tdata",
+            "m_axis_tdata",
+            "m_axis_tlast",
+            "m_axis_tid",
+            "m_axis_tdest",
+            "m_axis_tuser"
+          ],
+          "reverse": [
+            "m_axis_tready",
+            "s_axis_tready"
+          ],
+          "storage": [],
+          "backpressure": "ready 由下游组合返回，等待期间由发送方保持负载。",
+          "reset": {
+            "pins": [
+              "clk",
+              "rst"
+            ],
+            "clears": []
+          },
+          "keep": {
+            "output": "m_axis_tkeep",
+            "source": "s_axis_tkeep"
+          }
+        }
+      }
+    },
+    {
+      "id": "16-1",
+      "parameters": {
+        "REG_TYPE": 1,
+        "DATA_WIDTH": 16,
+        "KEEP_ENABLE": 1,
+        "KEEP_WIDTH": 2,
+        "LAST_ENABLE": 1,
+        "ID_ENABLE": 1,
+        "ID_WIDTH": 8,
+        "DEST_ENABLE": 1,
+        "DEST_WIDTH": 8,
+        "USER_ENABLE": 1,
+        "USER_WIDTH": 1
+      },
+      "test": {
+        "status": "PASS",
+        "case": "16-1",
+        "pytestTest": "test_axis_register[16-1]",
+        "parameters": {
+          "DATA_WIDTH": 16,
+          "KEEP_ENABLE": 1,
+          "KEEP_WIDTH": 2,
+          "LAST_ENABLE": 1,
+          "ID_ENABLE": 1,
+          "ID_WIDTH": 8,
+          "DEST_ENABLE": 1,
+          "DEST_WIDTH": 8,
+          "USER_ENABLE": 1,
+          "USER_WIDTH": 1,
+          "REG_TYPE": 1
+        },
+        "seed": 1,
+        "counts": {
+          "passed": 9,
+          "failure": 0,
+          "error": 0,
+          "skipped": 0
+        },
+        "tests": {
+          "run_test_001": "passed",
+          "run_test_002": "passed",
+          "run_test_003": "passed",
+          "run_test_004": "passed",
+          "run_test_tuser_assert_001": "passed",
+          "run_stress_test_001": "passed",
+          "run_stress_test_002": "passed",
+          "run_stress_test_003": "passed",
+          "run_stress_test_004": "passed"
+        },
+        "compileCommand": "iverilog -o /tmp/rtlarch-axis-benchmark-OM9PZ0/upstream/tb/axis_register/sim_build/test_axis_register-16-1/axis_register.vvp -D COCOTB_SIM=1 -g2012 -s axis_register -Paxis_register.DATA_WIDTH=16 -Paxis_register.KEEP_ENABLE=1 -Paxis_register.KEEP_WIDTH=2 -Paxis_register.LAST_ENABLE=1 -Paxis_register.ID_ENABLE=1 -Paxis_register.ID_WIDTH=8 -Paxis_register.DEST_ENABLE=1 -Paxis_register.DEST_WIDTH=8 -Paxis_register.USER_ENABLE=1 -Paxis_register.USER_WIDTH=1 -Paxis_register.REG_TYPE=1 -s iverilog_dump /tmp/rtlarch-axis-benchmark-OM9PZ0/upstream/rtl/axis_register.v /tmp/rtlarch-axis-benchmark-OM9PZ0/upstream/tb/axis_register/sim_build/test_axis_register-16-1/iverilog_dump.v",
+        "simulationCommand": "vvp -M /tmp/rtlarch-axis-venv/lib/python3.10/site-packages/cocotb/libs -m libcocotbvpi_icarus /tmp/rtlarch-axis-benchmark-OM9PZ0/upstream/tb/axis_register/sim_build/test_axis_register-16-1/axis_register.vvp -fst",
+        "artifacts": {
+          "cocotb.xml": "8d3ab84e5dde69437a3920042bd7502fb38d5e59e498796a6a1266d31e1430ce",
+          "axis_register.fst": "2c4b3cb8b827e7d85998e1f7ae4f604844cb28aa73e2039b5494564159bc120c"
+        }
+      },
+      "structure": {
+        "status": "PASS",
+        "ports": 18,
+        "outputs": 8,
+        "portBits": 78,
+        "vectors": 8,
+        "importGaps": [
+          "internal_logic",
+          "unresolved_connection"
+        ],
+        "importedFidelity": "partial",
+        "modelHash": "5591c6d0775c757bc9ca8fa7544fca0c273b336a9784a2269b430db5f64473ca",
+        "yosys": "Yosys 0.68+206 (git sha1 72dc97739-dirty, Release, Clang /usr/bin/clang++ 21.1.8)",
+        "run": "case-16-1/evidence/runs/run_1794979769064_dc87eaf594494db180b307828b6145e2/run.json",
+        "import": "case-16-1/imported/import.json",
+        "netlist": "case-16-1/evidence/runs/run_1794979769064_dc87eaf594494db180b307828b6145e2/netlist.json"
+      },
+      "state": {
+        "status": "PASS",
+        "record": "case-16-1/evidence/state-observation/state_1794979769794_8e08f99d41c441b5ae9e5332e8a01c88/report.json",
+        "vectors": 8,
+        "mapped": 8,
+        "observedStatus": "MATCH",
+        "gaps": []
+      },
+      "transaction": {
+        "status": "PASS",
+        "evidence": "case-16-1/transaction.json",
+        "acceptToConsumeCycles": 1,
+        "nativeReplay": {
+          "status": "NOT_RUN",
+          "reason": "Single-slot replay mapping and verify sample artifact were not registered."
+        }
+      },
+      "reading": {
+        "status": "PASS",
+        "modelHash": "5591c6d0775c757bc9ca8fa7544fca0c273b336a9784a2269b430db5f64473ca",
+        "humanReview": "NOT_RUN",
+        "bundle": "case-16-1/reading/index.html",
+        "reports": [
+          {
+            "task": "overview",
+            "ok": true,
+            "report": "case-16-1/diagram-overview.json",
+            "svg": "case-16-1/diagram-overview.svg",
+            "geometry": "passed",
+            "fidelity": "passed",
+            "readability": "needs_review",
+            "crossings": 3,
+            "hiddenLabels": 0
+          },
+          {
+            "task": "state",
+            "ok": true,
+            "report": "case-16-1/diagram-state.json",
+            "svg": "case-16-1/diagram-state.svg",
+            "geometry": "passed",
+            "fidelity": "passed",
+            "readability": "needs_review",
+            "crossings": 15,
+            "hiddenLabels": 0
+          }
+        ],
+        "tasks": [
+          "沿一条数据和 sideband 通路找到入口与出口，指出 tready 的返回方向。",
+          "定位实际保存的位置并解释阻塞时谁保持有效数据。旁路需指出没有保存槽。",
+          "定位 clk、rst 及其控制的有效状态，指出 8 位配置中 tkeep 的常量来源。"
+        ],
+        "anchors": {
+          "forward": [
+            "s_axis_tdata",
+            "m_axis_tdata",
+            "m_axis_tlast",
+            "m_axis_tid",
+            "m_axis_tdest",
+            "m_axis_tuser"
+          ],
+          "reverse": [
+            "m_axis_tready",
+            "s_axis_tready"
+          ],
+          "storage": [
+            "s_axis_tready_reg",
+            "m_axis_tvalid_reg",
+            "m_axis_tdata_reg",
+            "m_axis_tkeep_reg",
+            "m_axis_tlast_reg",
+            "m_axis_tid_reg",
+            "m_axis_tdest_reg",
+            "m_axis_tuser_reg"
+          ],
+          "backpressure": "输出槽在下游未 ready 时保留有效负载。",
+          "reset": {
+            "pins": [
+              "clk",
+              "rst"
+            ],
+            "clears": [
+              "s_axis_tready_reg",
+              "m_axis_tvalid_reg"
+            ]
+          },
+          "keep": {
+            "output": "m_axis_tkeep",
+            "source": "m_axis_tkeep_reg"
+          }
+        }
+      }
+    },
+    {
+      "id": "16-2",
+      "parameters": {
+        "REG_TYPE": 2,
+        "DATA_WIDTH": 16,
+        "KEEP_ENABLE": 1,
+        "KEEP_WIDTH": 2,
+        "LAST_ENABLE": 1,
+        "ID_ENABLE": 1,
+        "ID_WIDTH": 8,
+        "DEST_ENABLE": 1,
+        "DEST_WIDTH": 8,
+        "USER_ENABLE": 1,
+        "USER_WIDTH": 1
+      },
+      "test": {
+        "status": "PASS",
+        "case": "16-2",
+        "pytestTest": "test_axis_register[16-2]",
+        "parameters": {
+          "DATA_WIDTH": 16,
+          "KEEP_ENABLE": 1,
+          "KEEP_WIDTH": 2,
+          "LAST_ENABLE": 1,
+          "ID_ENABLE": 1,
+          "ID_WIDTH": 8,
+          "DEST_ENABLE": 1,
+          "DEST_WIDTH": 8,
+          "USER_ENABLE": 1,
+          "USER_WIDTH": 1,
+          "REG_TYPE": 2
+        },
+        "seed": 1,
+        "counts": {
+          "passed": 9,
+          "failure": 0,
+          "error": 0,
+          "skipped": 0
+        },
+        "tests": {
+          "run_test_001": "passed",
+          "run_test_002": "passed",
+          "run_test_003": "passed",
+          "run_test_004": "passed",
+          "run_test_tuser_assert_001": "passed",
+          "run_stress_test_001": "passed",
+          "run_stress_test_002": "passed",
+          "run_stress_test_003": "passed",
+          "run_stress_test_004": "passed"
+        },
+        "compileCommand": "iverilog -o /tmp/rtlarch-axis-benchmark-OM9PZ0/upstream/tb/axis_register/sim_build/test_axis_register-16-2/axis_register.vvp -D COCOTB_SIM=1 -g2012 -s axis_register -Paxis_register.DATA_WIDTH=16 -Paxis_register.KEEP_ENABLE=1 -Paxis_register.KEEP_WIDTH=2 -Paxis_register.LAST_ENABLE=1 -Paxis_register.ID_ENABLE=1 -Paxis_register.ID_WIDTH=8 -Paxis_register.DEST_ENABLE=1 -Paxis_register.DEST_WIDTH=8 -Paxis_register.USER_ENABLE=1 -Paxis_register.USER_WIDTH=1 -Paxis_register.REG_TYPE=2 -s iverilog_dump /tmp/rtlarch-axis-benchmark-OM9PZ0/upstream/rtl/axis_register.v /tmp/rtlarch-axis-benchmark-OM9PZ0/upstream/tb/axis_register/sim_build/test_axis_register-16-2/iverilog_dump.v",
+        "simulationCommand": "vvp -M /tmp/rtlarch-axis-venv/lib/python3.10/site-packages/cocotb/libs -m libcocotbvpi_icarus /tmp/rtlarch-axis-benchmark-OM9PZ0/upstream/tb/axis_register/sim_build/test_axis_register-16-2/axis_register.vvp -fst",
+        "artifacts": {
+          "cocotb.xml": "a51a6249d3d83190640a38872647fb9b0c2ea5112db81d8468067e91f82029b6",
+          "axis_register.fst": "a0d544a50c9fa950265e4e99c3a8898e2785e24ce7ece302267788fb93f46808"
+        }
+      },
+      "structure": {
+        "status": "PASS",
+        "ports": 18,
+        "outputs": 8,
+        "portBits": 78,
+        "vectors": 15,
+        "importGaps": [
+          "internal_logic",
+          "unresolved_connection"
+        ],
+        "importedFidelity": "partial",
+        "modelHash": "05c36e616a20ff531027e8c3b10dbb506015f1c21da81e637e2f51c3091a3143",
+        "yosys": "Yosys 0.68+206 (git sha1 72dc97739-dirty, Release, Clang /usr/bin/clang++ 21.1.8)",
+        "run": "case-16-2/evidence/runs/run_1794979772375_0f5d559474ff4e49b549a236fef22ec0/run.json",
+        "import": "case-16-2/imported/import.json",
+        "netlist": "case-16-2/evidence/runs/run_1794979772375_0f5d559474ff4e49b549a236fef22ec0/netlist.json"
+      },
+      "state": {
+        "status": "PASS",
+        "record": "case-16-2/evidence/state-observation/state_1794979773131_881100520b6d4fecbdc5e0fa91bb2ac7/report.json",
+        "vectors": 15,
+        "mapped": 15,
+        "observedStatus": "MATCH",
+        "gaps": []
+      },
+      "transaction": {
+        "status": "PASS",
+        "evidence": "case-16-2/transaction.json",
+        "acceptToConsumeCycles": 1,
+        "nativeReplay": {
+          "status": "UNSUPPORTED",
+          "reason": "Native replay models one slot per stage."
+        }
+      },
+      "reading": {
+        "status": "PASS",
+        "modelHash": "05c36e616a20ff531027e8c3b10dbb506015f1c21da81e637e2f51c3091a3143",
+        "humanReview": "NOT_RUN",
+        "bundle": "case-16-2/reading/index.html",
+        "reports": [
+          {
+            "task": "overview",
+            "ok": true,
+            "report": "case-16-2/diagram-overview.json",
+            "svg": "case-16-2/diagram-overview.svg",
+            "geometry": "passed",
+            "fidelity": "passed",
+            "readability": "needs_review",
+            "crossings": 5,
+            "hiddenLabels": 0
+          },
+          {
+            "task": "state",
+            "ok": true,
+            "report": "case-16-2/diagram-state.json",
+            "svg": "case-16-2/diagram-state.svg",
+            "geometry": "passed",
+            "fidelity": "passed",
+            "readability": "needs_review",
+            "crossings": 221,
+            "hiddenLabels": 1
+          }
+        ],
+        "tasks": [
+          "沿一条数据和 sideband 通路找到入口与出口，指出 tready 的返回方向。",
+          "定位实际保存的位置并解释阻塞时谁保持有效数据。旁路需指出没有保存槽。",
+          "定位 clk、rst 及其控制的有效状态，指出 8 位配置中 tkeep 的常量来源。"
+        ],
+        "anchors": {
+          "forward": [
+            "s_axis_tdata",
+            "m_axis_tdata",
+            "m_axis_tlast",
+            "m_axis_tid",
+            "m_axis_tdest",
+            "m_axis_tuser"
+          ],
+          "reverse": [
+            "m_axis_tready",
+            "s_axis_tready"
+          ],
+          "storage": [
+            "s_axis_tready_reg",
+            "m_axis_tvalid_reg",
+            "temp_m_axis_tvalid_reg",
+            "m_axis_tdata_reg",
+            "temp_m_axis_tdata_reg",
+            "m_axis_tkeep_reg",
+            "temp_m_axis_tkeep_reg",
+            "m_axis_tlast_reg",
+            "temp_m_axis_tlast_reg",
+            "m_axis_tid_reg",
+            "temp_m_axis_tid_reg",
+            "m_axis_tdest_reg",
+            "temp_m_axis_tdest_reg",
+            "m_axis_tuser_reg",
+            "temp_m_axis_tuser_reg"
+          ],
+          "backpressure": "输出被阻塞时可暂存一个已获准的输入，恢复时临时槽移入输出槽。",
+          "reset": {
+            "pins": [
+              "clk",
+              "rst"
+            ],
+            "clears": [
+              "s_axis_tready_reg",
+              "m_axis_tvalid_reg",
+              "temp_m_axis_tvalid_reg"
+            ]
+          },
+          "keep": {
+            "output": "m_axis_tkeep",
+            "source": "m_axis_tkeep_reg"
+          }
+        }
+      }
+    },
+    {
+      "id": "32-0",
+      "parameters": {
+        "REG_TYPE": 0,
+        "DATA_WIDTH": 32,
+        "KEEP_ENABLE": 1,
+        "KEEP_WIDTH": 4,
+        "LAST_ENABLE": 1,
+        "ID_ENABLE": 1,
+        "ID_WIDTH": 8,
+        "DEST_ENABLE": 1,
+        "DEST_WIDTH": 8,
+        "USER_ENABLE": 1,
+        "USER_WIDTH": 1
+      },
+      "test": {
+        "status": "PASS",
+        "case": "32-0",
+        "pytestTest": "test_axis_register[32-0]",
+        "parameters": {
+          "DATA_WIDTH": 32,
+          "KEEP_ENABLE": 1,
+          "KEEP_WIDTH": 4,
+          "LAST_ENABLE": 1,
+          "ID_ENABLE": 1,
+          "ID_WIDTH": 8,
+          "DEST_ENABLE": 1,
+          "DEST_WIDTH": 8,
+          "USER_ENABLE": 1,
+          "USER_WIDTH": 1,
+          "REG_TYPE": 0
+        },
+        "seed": 1,
+        "counts": {
+          "passed": 9,
+          "failure": 0,
+          "error": 0,
+          "skipped": 0
+        },
+        "tests": {
+          "run_test_001": "passed",
+          "run_test_002": "passed",
+          "run_test_003": "passed",
+          "run_test_004": "passed",
+          "run_test_tuser_assert_001": "passed",
+          "run_stress_test_001": "passed",
+          "run_stress_test_002": "passed",
+          "run_stress_test_003": "passed",
+          "run_stress_test_004": "passed"
+        },
+        "compileCommand": "iverilog -o /tmp/rtlarch-axis-benchmark-OM9PZ0/upstream/tb/axis_register/sim_build/test_axis_register-32-0/axis_register.vvp -D COCOTB_SIM=1 -g2012 -s axis_register -Paxis_register.DATA_WIDTH=32 -Paxis_register.KEEP_ENABLE=1 -Paxis_register.KEEP_WIDTH=4 -Paxis_register.LAST_ENABLE=1 -Paxis_register.ID_ENABLE=1 -Paxis_register.ID_WIDTH=8 -Paxis_register.DEST_ENABLE=1 -Paxis_register.DEST_WIDTH=8 -Paxis_register.USER_ENABLE=1 -Paxis_register.USER_WIDTH=1 -Paxis_register.REG_TYPE=0 -s iverilog_dump /tmp/rtlarch-axis-benchmark-OM9PZ0/upstream/rtl/axis_register.v /tmp/rtlarch-axis-benchmark-OM9PZ0/upstream/tb/axis_register/sim_build/test_axis_register-32-0/iverilog_dump.v",
+        "simulationCommand": "vvp -M /tmp/rtlarch-axis-venv/lib/python3.10/site-packages/cocotb/libs -m libcocotbvpi_icarus /tmp/rtlarch-axis-benchmark-OM9PZ0/upstream/tb/axis_register/sim_build/test_axis_register-32-0/axis_register.vvp -fst",
+        "artifacts": {
+          "cocotb.xml": "11a67b68557c87dcabf9ae221895a816c28c7f53bf00f17c9990eeaceb6964d7",
+          "axis_register.fst": "96cb6e8b7493b738f555f407eb0ffd371d843abcf38c7a061cf89bae7157c45b"
+        }
+      },
+      "structure": {
+        "status": "PASS",
+        "ports": 18,
+        "outputs": 8,
+        "portBits": 114,
+        "vectors": 0,
+        "importGaps": [],
+        "importedFidelity": "partial",
+        "modelHash": "22c69ef1cbefabcf740e1e040ff7e568b944b9b3088bac77631e618fe99f3ecf",
+        "yosys": "Yosys 0.68+206 (git sha1 72dc97739-dirty, Release, Clang /usr/bin/clang++ 21.1.8)",
+        "run": "case-32-0/evidence/runs/run_1794979776257_e4cd47919cbb4f519143045dff936210/run.json",
+        "import": "case-32-0/imported/import.json",
+        "netlist": "case-32-0/evidence/runs/run_1794979776257_e4cd47919cbb4f519143045dff936210/netlist.json"
+      },
+      "state": {
+        "status": "NOT_APPLICABLE",
+        "boundary": "PASS",
+        "reason": "Pure combinational bypass. No register state to compare.",
+        "record": "case-32-0/evidence/state-observation/state_1794979777002_d6785b6dc64e4c708b733e30a270cfed/report.json",
+        "vectors": 0,
+        "mapped": 0,
+        "observedStatus": "UNKNOWN"
+      },
+      "transaction": {
+        "status": "PASS",
+        "evidence": "case-32-0/transaction.json",
+        "acceptToConsumeCycles": 0,
+        "nativeReplay": {
+          "status": "UNSUPPORTED",
+          "reason": "Native replay requires at least one stored stage."
+        }
+      },
+      "reading": {
+        "status": "PASS",
+        "modelHash": "22c69ef1cbefabcf740e1e040ff7e568b944b9b3088bac77631e618fe99f3ecf",
+        "humanReview": "NOT_RUN",
+        "bundle": "case-32-0/reading/index.html",
+        "reports": [
+          {
+            "task": "overview",
+            "ok": true,
+            "report": "case-32-0/diagram-overview.json",
+            "svg": "case-32-0/diagram-overview.svg",
+            "geometry": "passed",
+            "fidelity": "passed",
+            "readability": "clear",
+            "crossings": 0,
+            "hiddenLabels": 0
+          },
+          {
+            "task": "signals",
+            "ok": true,
+            "report": "case-32-0/diagram-signals.json",
+            "svg": "case-32-0/diagram-signals.svg",
+            "geometry": "passed",
+            "fidelity": "passed",
+            "readability": "needs_review",
+            "crossings": 9,
+            "hiddenLabels": 5
+          }
+        ],
+        "tasks": [
+          "沿一条数据和 sideband 通路找到入口与出口，指出 tready 的返回方向。",
+          "定位实际保存的位置并解释阻塞时谁保持有效数据。旁路需指出没有保存槽。",
+          "定位 clk、rst 及其控制的有效状态，指出 8 位配置中 tkeep 的常量来源。"
+        ],
+        "anchors": {
+          "forward": [
+            "s_axis_tdata",
+            "m_axis_tdata",
+            "m_axis_tlast",
+            "m_axis_tid",
+            "m_axis_tdest",
+            "m_axis_tuser"
+          ],
+          "reverse": [
+            "m_axis_tready",
+            "s_axis_tready"
+          ],
+          "storage": [],
+          "backpressure": "ready 由下游组合返回，等待期间由发送方保持负载。",
+          "reset": {
+            "pins": [
+              "clk",
+              "rst"
+            ],
+            "clears": []
+          },
+          "keep": {
+            "output": "m_axis_tkeep",
+            "source": "s_axis_tkeep"
+          }
+        }
+      }
+    },
+    {
+      "id": "32-1",
+      "parameters": {
+        "REG_TYPE": 1,
+        "DATA_WIDTH": 32,
+        "KEEP_ENABLE": 1,
+        "KEEP_WIDTH": 4,
+        "LAST_ENABLE": 1,
+        "ID_ENABLE": 1,
+        "ID_WIDTH": 8,
+        "DEST_ENABLE": 1,
+        "DEST_WIDTH": 8,
+        "USER_ENABLE": 1,
+        "USER_WIDTH": 1
+      },
+      "test": {
+        "status": "PASS",
+        "case": "32-1",
+        "pytestTest": "test_axis_register[32-1]",
+        "parameters": {
+          "DATA_WIDTH": 32,
+          "KEEP_ENABLE": 1,
+          "KEEP_WIDTH": 4,
+          "LAST_ENABLE": 1,
+          "ID_ENABLE": 1,
+          "ID_WIDTH": 8,
+          "DEST_ENABLE": 1,
+          "DEST_WIDTH": 8,
+          "USER_ENABLE": 1,
+          "USER_WIDTH": 1,
+          "REG_TYPE": 1
+        },
+        "seed": 1,
+        "counts": {
+          "passed": 9,
+          "failure": 0,
+          "error": 0,
+          "skipped": 0
+        },
+        "tests": {
+          "run_test_001": "passed",
+          "run_test_002": "passed",
+          "run_test_003": "passed",
+          "run_test_004": "passed",
+          "run_test_tuser_assert_001": "passed",
+          "run_stress_test_001": "passed",
+          "run_stress_test_002": "passed",
+          "run_stress_test_003": "passed",
+          "run_stress_test_004": "passed"
+        },
+        "compileCommand": "iverilog -o /tmp/rtlarch-axis-benchmark-OM9PZ0/upstream/tb/axis_register/sim_build/test_axis_register-32-1/axis_register.vvp -D COCOTB_SIM=1 -g2012 -s axis_register -Paxis_register.DATA_WIDTH=32 -Paxis_register.KEEP_ENABLE=1 -Paxis_register.KEEP_WIDTH=4 -Paxis_register.LAST_ENABLE=1 -Paxis_register.ID_ENABLE=1 -Paxis_register.ID_WIDTH=8 -Paxis_register.DEST_ENABLE=1 -Paxis_register.DEST_WIDTH=8 -Paxis_register.USER_ENABLE=1 -Paxis_register.USER_WIDTH=1 -Paxis_register.REG_TYPE=1 -s iverilog_dump /tmp/rtlarch-axis-benchmark-OM9PZ0/upstream/rtl/axis_register.v /tmp/rtlarch-axis-benchmark-OM9PZ0/upstream/tb/axis_register/sim_build/test_axis_register-32-1/iverilog_dump.v",
+        "simulationCommand": "vvp -M /tmp/rtlarch-axis-venv/lib/python3.10/site-packages/cocotb/libs -m libcocotbvpi_icarus /tmp/rtlarch-axis-benchmark-OM9PZ0/upstream/tb/axis_register/sim_build/test_axis_register-32-1/axis_register.vvp -fst",
+        "artifacts": {
+          "cocotb.xml": "92709a8c2d2f325cb55134129d334fe291692e3b8615af03e4dd126619137949",
+          "axis_register.fst": "43084cb068b3590761184d0bd51d3d6abd2d74ce09d8299346ae70adcc6f977e"
+        }
+      },
+      "structure": {
+        "status": "PASS",
+        "ports": 18,
+        "outputs": 8,
+        "portBits": 114,
+        "vectors": 8,
+        "importGaps": [
+          "internal_logic",
+          "unresolved_connection"
+        ],
+        "importedFidelity": "partial",
+        "modelHash": "dde1f61587cc9dc20a6b6993e7dc5f7337c9467e29d8034cc36200533765cde7",
+        "yosys": "Yosys 0.68+206 (git sha1 72dc97739-dirty, Release, Clang /usr/bin/clang++ 21.1.8)",
+        "run": "case-32-1/evidence/runs/run_1794979779477_52a2bbef96514442be143f78a9d6d5e5/run.json",
+        "import": "case-32-1/imported/import.json",
+        "netlist": "case-32-1/evidence/runs/run_1794979779477_52a2bbef96514442be143f78a9d6d5e5/netlist.json"
+      },
+      "state": {
+        "status": "PASS",
+        "record": "case-32-1/evidence/state-observation/state_1794979780150_335299ec813242beb8e716d39116d2ad/report.json",
+        "vectors": 8,
+        "mapped": 8,
+        "observedStatus": "MATCH",
+        "gaps": []
+      },
+      "transaction": {
+        "status": "PASS",
+        "evidence": "case-32-1/transaction.json",
+        "acceptToConsumeCycles": 1,
+        "nativeReplay": {
+          "status": "NOT_RUN",
+          "reason": "Single-slot replay mapping and verify sample artifact were not registered."
+        }
+      },
+      "reading": {
+        "status": "PASS",
+        "modelHash": "dde1f61587cc9dc20a6b6993e7dc5f7337c9467e29d8034cc36200533765cde7",
+        "humanReview": "NOT_RUN",
+        "bundle": "case-32-1/reading/index.html",
+        "reports": [
+          {
+            "task": "overview",
+            "ok": true,
+            "report": "case-32-1/diagram-overview.json",
+            "svg": "case-32-1/diagram-overview.svg",
+            "geometry": "passed",
+            "fidelity": "passed",
+            "readability": "needs_review",
+            "crossings": 3,
+            "hiddenLabels": 0
+          },
+          {
+            "task": "state",
+            "ok": true,
+            "report": "case-32-1/diagram-state.json",
+            "svg": "case-32-1/diagram-state.svg",
+            "geometry": "passed",
+            "fidelity": "passed",
+            "readability": "needs_review",
+            "crossings": 15,
+            "hiddenLabels": 0
+          }
+        ],
+        "tasks": [
+          "沿一条数据和 sideband 通路找到入口与出口，指出 tready 的返回方向。",
+          "定位实际保存的位置并解释阻塞时谁保持有效数据。旁路需指出没有保存槽。",
+          "定位 clk、rst 及其控制的有效状态，指出 8 位配置中 tkeep 的常量来源。"
+        ],
+        "anchors": {
+          "forward": [
+            "s_axis_tdata",
+            "m_axis_tdata",
+            "m_axis_tlast",
+            "m_axis_tid",
+            "m_axis_tdest",
+            "m_axis_tuser"
+          ],
+          "reverse": [
+            "m_axis_tready",
+            "s_axis_tready"
+          ],
+          "storage": [
+            "s_axis_tready_reg",
+            "m_axis_tvalid_reg",
+            "m_axis_tdata_reg",
+            "m_axis_tkeep_reg",
+            "m_axis_tlast_reg",
+            "m_axis_tid_reg",
+            "m_axis_tdest_reg",
+            "m_axis_tuser_reg"
+          ],
+          "backpressure": "输出槽在下游未 ready 时保留有效负载。",
+          "reset": {
+            "pins": [
+              "clk",
+              "rst"
+            ],
+            "clears": [
+              "s_axis_tready_reg",
+              "m_axis_tvalid_reg"
+            ]
+          },
+          "keep": {
+            "output": "m_axis_tkeep",
+            "source": "m_axis_tkeep_reg"
+          }
+        }
+      }
+    },
+    {
+      "id": "32-2",
+      "parameters": {
+        "REG_TYPE": 2,
+        "DATA_WIDTH": 32,
+        "KEEP_ENABLE": 1,
+        "KEEP_WIDTH": 4,
+        "LAST_ENABLE": 1,
+        "ID_ENABLE": 1,
+        "ID_WIDTH": 8,
+        "DEST_ENABLE": 1,
+        "DEST_WIDTH": 8,
+        "USER_ENABLE": 1,
+        "USER_WIDTH": 1
+      },
+      "test": {
+        "status": "PASS",
+        "case": "32-2",
+        "pytestTest": "test_axis_register[32-2]",
+        "parameters": {
+          "DATA_WIDTH": 32,
+          "KEEP_ENABLE": 1,
+          "KEEP_WIDTH": 4,
+          "LAST_ENABLE": 1,
+          "ID_ENABLE": 1,
+          "ID_WIDTH": 8,
+          "DEST_ENABLE": 1,
+          "DEST_WIDTH": 8,
+          "USER_ENABLE": 1,
+          "USER_WIDTH": 1,
+          "REG_TYPE": 2
+        },
+        "seed": 1,
+        "counts": {
+          "passed": 9,
+          "failure": 0,
+          "error": 0,
+          "skipped": 0
+        },
+        "tests": {
+          "run_test_001": "passed",
+          "run_test_002": "passed",
+          "run_test_003": "passed",
+          "run_test_004": "passed",
+          "run_test_tuser_assert_001": "passed",
+          "run_stress_test_001": "passed",
+          "run_stress_test_002": "passed",
+          "run_stress_test_003": "passed",
+          "run_stress_test_004": "passed"
+        },
+        "compileCommand": "iverilog -o /tmp/rtlarch-axis-benchmark-OM9PZ0/upstream/tb/axis_register/sim_build/test_axis_register-32-2/axis_register.vvp -D COCOTB_SIM=1 -g2012 -s axis_register -Paxis_register.DATA_WIDTH=32 -Paxis_register.KEEP_ENABLE=1 -Paxis_register.KEEP_WIDTH=4 -Paxis_register.LAST_ENABLE=1 -Paxis_register.ID_ENABLE=1 -Paxis_register.ID_WIDTH=8 -Paxis_register.DEST_ENABLE=1 -Paxis_register.DEST_WIDTH=8 -Paxis_register.USER_ENABLE=1 -Paxis_register.USER_WIDTH=1 -Paxis_register.REG_TYPE=2 -s iverilog_dump /tmp/rtlarch-axis-benchmark-OM9PZ0/upstream/rtl/axis_register.v /tmp/rtlarch-axis-benchmark-OM9PZ0/upstream/tb/axis_register/sim_build/test_axis_register-32-2/iverilog_dump.v",
+        "simulationCommand": "vvp -M /tmp/rtlarch-axis-venv/lib/python3.10/site-packages/cocotb/libs -m libcocotbvpi_icarus /tmp/rtlarch-axis-benchmark-OM9PZ0/upstream/tb/axis_register/sim_build/test_axis_register-32-2/axis_register.vvp -fst",
+        "artifacts": {
+          "cocotb.xml": "0f7319e320bb70b866c41f0d835588139c78ba1c087c9b0b4fbe14c42d9071ae",
+          "axis_register.fst": "4a8022f470d53f98b992e6a3e37d86a4cb024e0838fe20a296a0879ac6e89417"
+        }
+      },
+      "structure": {
+        "status": "PASS",
+        "ports": 18,
+        "outputs": 8,
+        "portBits": 114,
+        "vectors": 15,
+        "importGaps": [
+          "internal_logic",
+          "unresolved_connection"
+        ],
+        "importedFidelity": "partial",
+        "modelHash": "35cddd2c9e038a2e926dce04e04f50368ffb1a1a6975aff19e2984c2d3efe4b5",
+        "yosys": "Yosys 0.68+206 (git sha1 72dc97739-dirty, Release, Clang /usr/bin/clang++ 21.1.8)",
+        "run": "case-32-2/evidence/runs/run_1794979782766_a8192a22311940c992f3a4e632b83d3a/run.json",
+        "import": "case-32-2/imported/import.json",
+        "netlist": "case-32-2/evidence/runs/run_1794979782766_a8192a22311940c992f3a4e632b83d3a/netlist.json"
+      },
+      "state": {
+        "status": "PASS",
+        "record": "case-32-2/evidence/state-observation/state_1794979783629_caa88c1b37644b0c9e3635d83f0ea779/report.json",
+        "vectors": 15,
+        "mapped": 15,
+        "observedStatus": "MATCH",
+        "gaps": []
+      },
+      "transaction": {
+        "status": "PASS",
+        "evidence": "case-32-2/transaction.json",
+        "acceptToConsumeCycles": 1,
+        "nativeReplay": {
+          "status": "UNSUPPORTED",
+          "reason": "Native replay models one slot per stage."
+        }
+      },
+      "reading": {
+        "status": "PASS",
+        "modelHash": "35cddd2c9e038a2e926dce04e04f50368ffb1a1a6975aff19e2984c2d3efe4b5",
+        "humanReview": "NOT_RUN",
+        "bundle": "case-32-2/reading/index.html",
+        "reports": [
+          {
+            "task": "overview",
+            "ok": true,
+            "report": "case-32-2/diagram-overview.json",
+            "svg": "case-32-2/diagram-overview.svg",
+            "geometry": "passed",
+            "fidelity": "passed",
+            "readability": "needs_review",
+            "crossings": 5,
+            "hiddenLabels": 0
+          },
+          {
+            "task": "state",
+            "ok": true,
+            "report": "case-32-2/diagram-state.json",
+            "svg": "case-32-2/diagram-state.svg",
+            "geometry": "passed",
+            "fidelity": "passed",
+            "readability": "needs_review",
+            "crossings": 221,
+            "hiddenLabels": 1
+          }
+        ],
+        "tasks": [
+          "沿一条数据和 sideband 通路找到入口与出口，指出 tready 的返回方向。",
+          "定位实际保存的位置并解释阻塞时谁保持有效数据。旁路需指出没有保存槽。",
+          "定位 clk、rst 及其控制的有效状态，指出 8 位配置中 tkeep 的常量来源。"
+        ],
+        "anchors": {
+          "forward": [
+            "s_axis_tdata",
+            "m_axis_tdata",
+            "m_axis_tlast",
+            "m_axis_tid",
+            "m_axis_tdest",
+            "m_axis_tuser"
+          ],
+          "reverse": [
+            "m_axis_tready",
+            "s_axis_tready"
+          ],
+          "storage": [
+            "s_axis_tready_reg",
+            "m_axis_tvalid_reg",
+            "temp_m_axis_tvalid_reg",
+            "m_axis_tdata_reg",
+            "temp_m_axis_tdata_reg",
+            "m_axis_tkeep_reg",
+            "temp_m_axis_tkeep_reg",
+            "m_axis_tlast_reg",
+            "temp_m_axis_tlast_reg",
+            "m_axis_tid_reg",
+            "temp_m_axis_tid_reg",
+            "m_axis_tdest_reg",
+            "temp_m_axis_tdest_reg",
+            "m_axis_tuser_reg",
+            "temp_m_axis_tuser_reg"
+          ],
+          "backpressure": "输出被阻塞时可暂存一个已获准的输入，恢复时临时槽移入输出槽。",
+          "reset": {
+            "pins": [
+              "clk",
+              "rst"
+            ],
+            "clears": [
+              "s_axis_tready_reg",
+              "m_axis_tvalid_reg",
+              "temp_m_axis_tvalid_reg"
+            ]
+          },
+          "keep": {
+            "output": "m_axis_tkeep",
+            "source": "m_axis_tkeep_reg"
+          }
+        }
+      }
+    }
+  ],
+  "fault": {
+    "status": "PASS",
+    "case": "8-1",
+    "originalRequirement": {
+      "id": "frame_integrity",
+      "verdict": "FAIL",
+      "oracle": "original_upstream_cocotb"
+    },
+    "target": {
+      "moduleId": "top",
+      "localSignalId": "m_axis_tdata_reg",
+      "interfaceId": "m_axis_tdata",
+      "bit": 0
+    },
+    "source": {
+      "file": "rtl/axis_register.v",
+      "line": 247,
+      "pristineSha256": "599fde2d6c2d806643bbffb7c444297e69a71871f962d4b741ec1914342e0d39",
+      "mutatedSha256": "33f92d9a8f8b57b1b8cb44d4c3d1aad5ce77535e257890108d5d71ec2820cd42"
+    },
+    "scoreboard": {
+      "test": "run_test_001",
+      "assertion": "assert rx_frame.tdata == test_frame.tdata",
+      "log": "fault-as-built/evidence/runs/run_1794979786944_74f225708c30479cb3e32187de46d477/pytest.log",
+      "run": "fault-as-built/evidence/runs/run_1794979786944_74f225708c30479cb3e32187de46d477/run.json",
+      "xml": "fault-as-built/evidence/runs/run_1794979786944_74f225708c30479cb3e32187de46d477/8-1/cocotb.xml",
+      "inputs": {
+        "status": "FAIL",
+        "case": "8-1",
+        "pytestTest": "test_axis_register[8-1]",
+        "parameters": {
+          "DATA_WIDTH": 8,
+          "KEEP_ENABLE": 0,
+          "KEEP_WIDTH": 1,
+          "LAST_ENABLE": 1,
+          "ID_ENABLE": 1,
+          "ID_WIDTH": 8,
+          "DEST_ENABLE": 1,
+          "DEST_WIDTH": 8,
+          "USER_ENABLE": 1,
+          "USER_WIDTH": 1,
+          "REG_TYPE": 1
+        },
+        "seed": 1,
+        "counts": {
+          "passed": 0,
+          "failure": 9,
+          "error": 0,
+          "skipped": 0
+        },
+        "tests": {
+          "run_test_001": "failure",
+          "run_test_002": "failure",
+          "run_test_003": "failure",
+          "run_test_004": "failure",
+          "run_test_tuser_assert_001": "failure",
+          "run_stress_test_001": "failure",
+          "run_stress_test_002": "failure",
+          "run_stress_test_003": "failure",
+          "run_stress_test_004": "failure"
+        },
+        "compileCommand": "iverilog -o /tmp/rtlarch-axis-benchmark-OM9PZ0/fault-as-built/tb/axis_register/sim_build/test_axis_register-8-1/axis_register.vvp -D COCOTB_SIM=1 -g2012 -s axis_register -Paxis_register.DATA_WIDTH=8 -Paxis_register.KEEP_ENABLE=0 -Paxis_register.KEEP_WIDTH=1 -Paxis_register.LAST_ENABLE=1 -Paxis_register.ID_ENABLE=1 -Paxis_register.ID_WIDTH=8 -Paxis_register.DEST_ENABLE=1 -Paxis_register.DEST_WIDTH=8 -Paxis_register.USER_ENABLE=1 -Paxis_register.USER_WIDTH=1 -Paxis_register.REG_TYPE=1 -s iverilog_dump /tmp/rtlarch-axis-benchmark-OM9PZ0/fault-as-built/rtl/axis_register.v /tmp/rtlarch-axis-benchmark-OM9PZ0/fault-as-built/tb/axis_register/sim_build/test_axis_register-8-1/iverilog_dump.v",
+        "simulationCommand": "vvp -M /tmp/rtlarch-axis-venv/lib/python3.10/site-packages/cocotb/libs -m libcocotbvpi_icarus /tmp/rtlarch-axis-benchmark-OM9PZ0/fault-as-built/tb/axis_register/sim_build/test_axis_register-8-1/axis_register.vvp -fst",
+        "artifacts": {
+          "cocotb.xml": "6b5c3e671c46adfc816aed6cfb1cb6357cf4c5e130f74511ff031ca3e52b0d18",
+          "axis_register.fst": "a9b74f6a028862577f97f63bf3c169cc7d2e996d86c6038bb17c580f31852837"
+        }
+      }
+    },
+    "reference": {
+      "status": "MISMATCH",
+      "record": "fault-reference/evidence/state-observation/state_1794979789358_a3aadaf2d8a24a94871d1db734bed26a/report.json",
+      "witness": {
+        "inputs": [
+          {
+            "signal": "s_axis_tdata",
+            "kind": "input",
+            "width": 8,
+            "value": "0x0"
+          },
+          {
+            "signal": "genblk1.genblk1.s_axis_tready_reg",
+            "kind": "state",
+            "width": 1,
+            "value": "0x1"
+          },
+          {
+            "signal": "genblk1.genblk1.m_axis_tdata_reg",
+            "kind": "state",
+            "width": 8,
+            "value": "0x0"
+          }
+        ],
+        "expected": "0x0",
+        "actual": "0x1",
+        "reachable": "not_checked"
+      },
+      "modelHash": "4b637909ac3dde723ccaa93739a4bd998e0954cf8304ee7c989df8f81b2f04ac"
+    },
+    "faultAsBuilt": {
+      "status": "MATCH",
+      "record": "fault-as-built/evidence/state-observation/state_1794979790792_22b37daf09c843178a1c2aa545e41afd/report.json",
+      "modelHash": "c6d434372ca9bed37d70457416d8984c389f23400c56ef608ad54ef99db763da",
+      "basis": "as_built",
+      "approval": "DRAFT",
+      "assurance": "fault-as-built/assurance.stdout"
+    }
+  },
+  "passed": true
+}

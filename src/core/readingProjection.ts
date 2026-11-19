@@ -10,7 +10,7 @@ export function readingProjection(model:Model,scope:string,task:ReadingTask,read
  const members=[...children.map(m=>m.id),...locals.map(n=>`local:${scope}:${n.id}`)];
  const available=new Set(members),groups:ReadingGroup[]=[],issues:{code:string;target:string;reason:string}[]=[];
  const add=(key:string,label:string,ids:string[],basis:ReadingGroup['basis'])=>{
-  if(!ids.length)return;
+  if(ids.length<2)return;
   const id=`aggregate:${scope}:${key}`;
   groups.push({id,label,members:ids,basis,expanded:task.expanded?.includes(id)??false});
  };
@@ -28,7 +28,7 @@ export function readingProjection(model:Model,scope:string,task:ReadingTask,read
   const conflicted=new Set(declarations.filter(g=>g.nodes.some(id=>(owners.get(id)??0)>1)).flatMap(g=>g.nodes));
   if(conflicted.size)issues.push({code:'READING_GROUP_OVERLAP',target:scope,reason:'声明的阅读组交叠，保留这些成员独立显示；未任选一组聚合。'});
   for(const g of declarations)if(!g.nodes.some(id=>conflicted.has(id)))add(`${g.basis}:${g.id}`,g.label,g.nodes.filter(id=>available.has(id)),g.basis);
-  const assigned=new Set([...groups.flatMap(g=>g.members),...conflicted]);
+  const assigned=new Set(declarations.flatMap(g=>g.nodes));
   // A scope inventory is explicitly unnamed, not an inferred functional group.
   add('states','未分组状态',locals.filter(n=>n.driver.kind==='register'&&!assigned.has(`local:${scope}:${n.id}`)).map(n=>`local:${scope}:${n.id}`),'inventory');
   add('logic','未分组组合逻辑',locals.filter(n=>n.driver.kind==='comb'&&!assigned.has(`local:${scope}:${n.id}`)).map(n=>`local:${scope}:${n.id}`),'inventory');

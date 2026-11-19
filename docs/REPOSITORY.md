@@ -32,4 +32,4 @@
 
 node_modules、dist、运行环境、用户 architecture/proposals/generated、仿真波形和临时服务目录不推送。dist 通过构建生成，通用 examples 中明确允许的模型由 .gitignore 例外保留。
 
-当前包版本继续为 2.0.0；本次是源代码更新，不创建额外 GitHub Release 或版本标签。页面/服务通过内容摘要区分构建。
+2.1.0 在公开发布副本从锁文件验收。页面与服务通过内容摘要核对构建，发布记录绑定 Git 标签。版本迁移和证据边界见 [升级说明](UPGRADE-2.1.md)。

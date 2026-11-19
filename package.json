@@ -1,6 +1,6 @@
 {
   "name": "rtl-architect",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "private": true,
   "type": "module",
   "engines": {
@@ -39,6 +39,7 @@
     "check:layout-constraints": "node --import tsx scripts/check-layout-constraints.ts",
     "check:expression-types": "node --import tsx scripts/check-expression-types.ts",
     "check:external-axis": "node --import tsx scripts/check-external-axis.ts",
+    "benchmark:external-axis": "node --import tsx scripts/benchmark-external-axis.ts",
     "check:release": "node --import tsx scripts/check-release.ts",
     "check:reading-tasks": "node --import tsx scripts/check-reading-tasks.ts",
     "check:state-cone": "node --import tsx scripts/check-state-cone.ts",

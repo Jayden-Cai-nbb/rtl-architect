@@ -2,6 +2,7 @@ import type {Model} from '../../core/schema';
 import {scopeDiagram,diagramColors,type DiagramOptions} from './scopeDiagram';
 import {portDetailZoom} from './ports';
 import {relationshipRoute} from './route';
+import {readingAudit} from './readingAudit';
 import {excerpt,kindLabel} from '../reading';
 const xml=(value:unknown)=>String(value??'').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'",'&apos;');
 const wrapped=(value:string,limit:number)=>{const rows:string[]=[];let line='',size=0;for(const char of value){const step=char.charCodeAt(0)>255?1:0.55;if(size+step>limit){rows.push(line);line='';size=0;}line+=char;size+=step;}if(line)rows.push(line);return rows;};
@@ -15,6 +16,11 @@ export function diagramSvg(model:Model,scope:string,options:DiagramOptions={},ha
  out.push(`<rect x="${frame.position.x}" y="${frame.position.y}" width="${frame.width}" height="${frame.height}" rx="0" fill="#fff" stroke="#dce3e8"/>`);
  for(const n of graph.nodes.filter(n=>n.data.kind==='region'))out.push(`<g data-reading-stage="${xml(n.id)}"><rect x="${n.position.x}" y="${n.position.y}" width="${n.data.geometry.width}" height="${n.data.geometry.height}" rx="8" fill="#f5f9fb" stroke="#dfe8ec"/>${text(n.position.x+16,n.position.y+25,n.data.label,15)}${text(n.position.x+16,n.position.y+43,n.data.summary,11)}</g>`);
  if(graph.projection)out.push(`<metadata id="reading-projection">${xml(JSON.stringify({modelHash:hash,projection:graph.projection,relationships:graph.edges.map(e=>({id:e.id,members:e.data?.relationMembers})),issues:graph.semantics.issues}))}</metadata>`);
+ if(graph.reading)out.push(`<metadata id="reading-constraints">${xml(JSON.stringify(readingAudit(graph)))}</metadata>`);
+ if(graph.taskEvidence.tasks.length){
+  out.push(`<metadata id="reading-task-evidence">${xml(JSON.stringify(graph.taskEvidence))}</metadata>`);
+  out.push(text(x+24,y+73,`阅读路径 · ${graph.taskEvidence.status==='ready'?'步骤可定位':'存在未显示步骤或表达缺口'}`,11));
+ }
  const labels:string[]=[];
  for(const edge of graph.edges){
   const source=graph.nodes.find(n=>n.id===edge.source)!,target=graph.nodes.find(n=>n.id===edge.target)!;
@@ -43,6 +49,7 @@ export function diagramSvg(model:Model,scope:string,options:DiagramOptions={},ha
   for(const p of g.ports.filter(p=>active.has(p.id)))out.push(`<circle cx="${x+p.x}" cy="${y+p.y}" r="2" fill="#718da2"/>`);
   out.push('</g>');
  }
- out.push(text(x+24,y+h-38,`时钟 / 配置折叠 ${graph.auxiliaryCount} 条 · 内部逻辑折叠 ${graph.foldedLocalCount} 条 · 依赖折叠 ${graph.foldedDependencyCount} 条${graph.edges.some(e=>e.data?.routingFallback)?' · 部分连线未找到绕行路径':''}`,12),text(x+24,y+h-18,'实心点表示同源分叉，可共用线名；留白交叉不相连。实心箭头为连接、空心箭头为依赖；RV 的 data/valid 正向、ready 反向。输入集合未分角色，更新规则为声明；位置不表示周期。',11),'</g></svg>');
+ const readyValidLegend=graph.semantics.relationships.some(r=>r.kind==='ready_valid')?'RV 的 data/valid 正向、ready 反向。':'';
+ out.push(text(x+24,y+h-38,`时钟 / 配置折叠 ${graph.auxiliaryCount} 条 · 内部逻辑折叠 ${graph.foldedLocalCount} 条 · 依赖折叠 ${graph.foldedDependencyCount} 条${graph.edges.some(e=>e.data?.routingFallback)?' · 部分连线未找到绕行路径':''}`,12),text(x+24,y+h-18,`实心点表示同源分叉，可共用线名；留白交叉不相连。实心箭头为连接、空心箭头为依赖。${readyValidLegend}输入集合未分角色，更新规则为声明；位置不表示周期。`,11),'</g></svg>');
  return out.join('\n');
 }

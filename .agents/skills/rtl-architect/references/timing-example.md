@@ -58,6 +58,6 @@ sequenceDiagram
 
 还原示例时，证据指向FIFO的ready/valid及count更新、ADD的ready与out_valid更新、包装连接及TB观察点。对新项目，重新核对这些条件，再生成属于该项目的逐拍表；切勿复制这里的2拍、深度4或复位行为。
 
-工具仓库的对应源码是 [rv_fifo.sv](../../../../examples/tiny-stream/rtl/rv_fifo.sv) 第20–40行、[add_const.sv](../../../../examples/tiny-stream/rtl/add_const.sv) 第16–25行、[stream_path.sv](../../../../examples/tiny-stream/rtl/stream_path.sv) 的实例连接，以及 [tb_tiny_stream.sv](../../../../examples/tiny-stream/tb/tb_tiny_stream.sv) 的沿前计分板。在工具目录运行 `npm run rtl:test` 可重新执行 fixture 自检并输出输入哈希与结果；验证范围见 [验证说明](../../../../VALIDATION.md)，后续源码变化需重新核对。
+工具仓库的对应源码是 [rv_fifo.sv](../../../../examples/tiny-stream/rtl/rv_fifo.sv) 第20–40行、[add_const.sv](../../../../examples/tiny-stream/rtl/add_const.sv) 第16–25行、[stream_path.sv](../../../../examples/tiny-stream/rtl/stream_path.sv) 的实例连接，以及 [tb_tiny_stream.sv](../../../../examples/tiny-stream/tb/tb_tiny_stream.sv) 的沿前计分板。具体运行、输入哈希与结果见 [0.7.1时序核对记录](../../../../docs/evidence/0.7.1/README.md)，后续源码变化需重新核对。
 
 时序表写明来源配置与modelHash，核心结论放latencyCondition/backpressure/resetBehavior及验收条件中。实测是否达到两拍、是否发生满出队和阻塞保持，需要对应运行记录；本页示例本身不是当前用户项目的验证结果。

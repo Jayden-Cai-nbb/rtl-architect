@@ -6,17 +6,19 @@ import {wireSpacing} from './ports';
 import { autoReadingLayout } from './autoReadingLayout';
 
 /** Shared online/offline layout: explicit plans take priority over automatic display hints. */
-export async function arrangeScope(model: Model, scope: string, hash: string, reading?: ScopeLayout['reading'],options:DiagramOptions={}): Promise<Positions> {
-  if(options.task){
-    if(reading&&reading.modelHash!==hash)throw new Error('阅读布局对应旧模型；核对后重试。');
-    return autoReadingLayout(model,scope,{...options,reading});
-  }
-  const diagram = scopeDiagram(model, scope,{...options,measureOnly:true,reading}), nodes = diagram.nodes.filter(n => !n.data.boundary);
+export async function arrangeScope(model: Model, scope: string, hash: string, original?: ScopeLayout['reading'],options:DiagramOptions={}): Promise<Positions> {
+  const settings={...options,reading:original};
+  if (!original) return autoReadingLayout(model, scope,settings);
+  if (original.modelHash !== hash) throw new Error('阅读布局对应旧模型；核对展示约束并更新布局版本后重试。');
+  const measure=(positions?:Positions)=>scopeDiagram(model,scope,{...settings,positions,measureOnly:true});
+  const diagram=measure(),reading=diagram.reading!;
+  if(diagram.projection&&!diagram.projection.constraints.some(c=>c.status==='applied'))return autoReadingLayout(model,scope,settings);
+  const nodes = diagram.nodes.filter(n => !n.data.boundary);
   const ids = new Set(nodes.map(n => n.id));
-  if (!reading) return autoReadingLayout(model, scope,options);
-  if (reading.modelHash !== hash) throw new Error('阅读布局对应旧模型；核对展示约束并更新布局版本后重试。');
-  if(reading.parallel?.length||reading.shared?.length||reading.feedback?.length)return constrainedLayout(model,scope,reading,options);
-  if(reading.stages?.length)return stageLayout(model,scope,reading,options);
+  if(reading.parallel?.length||reading.shared?.length||reading.feedback?.length||reading.stages?.length&&reading.adjacent.length){
+    return constrainedLayout(diagram,reading,measure);
+  }
+  if(reading.stages?.length)return stageLayout(diagram,reading,measure);
   const controls=new Set(reading.control);
   const controlNets=new Set(diagram.edges.filter(e=>(controls.has(e.source)&&ids.has(e.target))||(controls.has(e.target)&&ids.has(e.source))).map(e=>e.data?.netKey??e.id));
   const channelHeight=Math.max(180,controlNets.size*wireSpacing),gap=220;
@@ -43,6 +45,6 @@ export async function arrangeScope(model: Model, scope: string, hash: string, re
   };
   // Measure ports in the intended rows before choosing row spacing, without doing routing twice.
   const draft=place();
-  for(const n of scopeDiagram(model,scope,{...options,positions:draft,measureOnly:true,reading}).nodes)if(ids.has(n.id))dimensions.set(n.id,n.data.geometry);
+  for(const n of measure(draft).nodes)if(ids.has(n.id))dimensions.set(n.id,n.data.geometry);
   return place();
 }

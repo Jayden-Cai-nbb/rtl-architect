@@ -16,6 +16,22 @@ export function provenanceIssues(model: Model): Issue[] {
     if (new Set(collection.map(e => e.id)).size !== collection.length) add('EVIDENCE_REFERENCE', '证据、发现或表达限制存在重复 ID', true);
   }
   const evidenceIds = new Set(p.evidence.map(e => e.id)), moduleIds = new Set(model.modules.map(m => m.id));
+  const reading=p.readingTasks??[];
+  if(new Set(reading.map(task=>task.id)).size!==reading.length)add('READING_TASK_REFERENCE','阅读任务 ID 重复',true);
+  for(const task of reading){
+    const scope=model.modules.find(m=>m.id===task.moduleId);
+    if(!scope||new Set(task.steps.map(step=>step.id)).size!==task.steps.length)add('READING_TASK_REFERENCE',`${task.id} 的层级或步骤 ID 无效`,true);
+    for(const step of task.steps){
+      const {target}=step;
+      const anchor=target?.kind==='local'?model.localSignals?.some(l=>l.scope===task.moduleId&&l.id===target.id)
+        :target?.kind==='boundary'?scope?.interfaces.some(i=>i.id===target.id)
+        :target?.kind==='module'?model.modules.some(m=>m.id===target.id&&m.parent===task.moduleId):false;
+      const gap=p.unsupportedStructures.find(g=>g.id===step.gapId&&g.moduleIds.includes(task.moduleId));
+      if((target&&!anchor)||(step.gapId&&!gap)||(!target&&!gap)||step.evidenceIds.some(id=>!evidenceIds.has(id))||
+        step.connectionIds?.some(id=>!model.connections.some(c=>c.id===id&&c.scope===task.moduleId)))
+        add('READING_TASK_REFERENCE',`${task.id}/${step.id} 的对象、缺口或证据无效`,true);
+    }
+  }
   for(const item of [...p.evidence,...p.unsupportedStructures])for(const target of item.targets??[]){
     const m=model.modules.find(m=>m.id===target.moduleId);
     const valid=target.kind==='connection'?!!model.connections.find(l=>l.id===target.itemId&&(!target.moduleId||l.scope===target.moduleId)):target.kind==='local'?!!model.localSignals?.find(l=>l.id===target.itemId&&(!target.moduleId||l.scope===target.moduleId)):!!m&&(target.kind==='module'||target.kind==='contract'||target.kind==='parameter'&&!!target.itemId&&Object.hasOwn(m.parameters,target.itemId)||target.kind==='interface'&&m.interfaces.some(i=>i.id===target.itemId));
@@ -66,5 +82,7 @@ export function provenanceForModule(model: Model, moduleId: string) {
   const related = (item: { moduleIds: string[] }) => !item.moduleIds.length || item.moduleIds.includes(moduleId);
   const findings = p.findings.filter(related), unsupportedStructures = p.unsupportedStructures.filter(related);
   const ids = new Set([...findings, ...unsupportedStructures, ...p.verification].flatMap(item => item.evidenceIds));
-  return { ...p, findings, unsupportedStructures, evidence: p.evidence.filter(e => ids.has(e.id)||e.targets?.some(t=>t.moduleId===moduleId||t.kind==='connection'&&model.connections.some(l=>l.id===t.itemId&&(l.from.moduleId===moduleId||l.to.moduleId===moduleId)))) };
+  const readingTasks=p.readingTasks?.filter(task=>task.moduleId===moduleId);
+  for(const task of readingTasks??[])for(const step of task.steps)for(const id of step.evidenceIds)ids.add(id);
+  return { ...p, findings, unsupportedStructures,...(readingTasks?{readingTasks}:{}), evidence: p.evidence.filter(e => ids.has(e.id)||e.targets?.some(t=>t.moduleId===moduleId||t.kind==='connection'&&model.connections.some(l=>l.id===t.itemId&&(l.from.moduleId===moduleId||l.to.moduleId===moduleId)))) };
 }

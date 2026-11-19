@@ -13,13 +13,35 @@ export const obligationSchema=z.discriminatedUnion('kind',[
 ]);
 export type Obligation=z.infer<typeof obligationSchema>;
 const transactionStateSchema=z.strictObject({moduleId:idSchema,localSignalId:idSchema});
-export const transactionPathSchema=z.strictObject({
+const transactionSampling=z.literal('pre_edge_handshake_post_edge_settled');
+export const legacyTransactionPathSchema=z.strictObject({
  id:idSchema,description:z.string().trim().min(1),clock:idSchema,reset:idSchema,width:integer.min(1).max(256),
  semantics:z.literal('ordered_lossless_single_slot_stages'),resetPolicy:z.literal('cancel_all'),
- sampling:z.literal('pre_edge_handshake_post_edge_settled'),
+ sampling:transactionSampling,
  stages:z.array(z.strictObject({dataState:transactionStateSchema,validState:transactionStateSchema,loadBranch:idSchema,evidenceIds:z.array(idSchema)})).min(1).max(8),
  connectionIds:z.array(idSchema).min(1).max(256)
 });
+export const transactionClockSchema=z.strictObject({id:idSchema,edge:z.enum(['rising','falling'])});
+const handshakePorts=z.strictObject({valid:idSchema,ready:idSchema});
+const slotFields=z.record(idSchema,idSchema);
+const streamPathBase={
+ schemaVersion:z.literal(2),id:idSchema,description:z.string().trim().min(1),sampling:transactionSampling,
+ clock:transactionClockSchema,reset:z.strictObject({interfaceId:idSchema,activeLevel:z.enum(['high','low'])}),
+ ingress:handshakePorts,egress:handshakePorts,
+ fields:z.array(z.strictObject({id:idSchema,width:integer.min(1).max(256),input:idSchema,output:idSchema,
+  constant:z.string().regex(/^[0-9]+$/).max(78).optional()})).min(1).max(6),
+ connectionIds:z.array(idSchema).min(1).max(256),evidenceIds:z.array(idSchema),
+};
+const outputSlot={validState:idSchema,fields:slotFields,loadInputBranch:idSchema};
+export const streamTransactionPathSchema=z.discriminatedUnion('semantics',[
+ z.strictObject({...streamPathBase,semantics:z.literal('combinational_bypass'),resetPolicy:z.literal('transparent')}),
+ z.strictObject({...streamPathBase,semantics:z.literal('registered_single_slot'),resetPolicy:z.literal('cancel_all'),readyState:idSchema,output:z.strictObject(outputSlot)}),
+ z.strictObject({...streamPathBase,semantics:z.literal('registered_skid'),resetPolicy:z.literal('cancel_all'),readyState:idSchema,
+  output:z.strictObject({...outputSlot,loadTemporaryBranch:idSchema}),temporary:z.strictObject(outputSlot)}),
+]);
+export const transactionPathSchema=z.union([legacyTransactionPathSchema,streamTransactionPathSchema]);
+export type LegacyTransactionPath=z.infer<typeof legacyTransactionPathSchema>;
+export type StreamTransactionPath=z.infer<typeof streamTransactionPathSchema>;
 export type TransactionPath=z.infer<typeof transactionPathSchema>;
 export const contractSchema = z.strictObject({ responsibility: z.string(), latencyMinCycles: integer.nonnegative(), latencyCondition: z.string(), backpressure: z.string(), resetBehavior: z.string(), invariants: z.array(z.string()), verificationPlan: z.array(z.string()), openQuestions: z.array(z.string()), obligations:z.array(obligationSchema).optional(), transactionPaths:z.array(transactionPathSchema).max(8).optional() });
 export const parameterSchema = z.union([integer, z.string(), z.boolean()]);
@@ -40,6 +62,10 @@ export const evidenceTargetSchema = z.strictObject({ kind: z.enum(['module', 'in
 const bitRange=z.strictObject({msb:integer.nonnegative(),lsb:integer.nonnegative()});
 const causeRuleSchema=z.strictObject({issueCodes:z.array(idSchema).min(1),moduleId:idSchema,interfaceId:idSchema.optional(),scope:idSchema.optional(),indices:z.strictObject({from:integer.nonnegative(),to:integer.nonnegative()}).optional(),bits:bitRange.optional()});
 const assessment=z.strictObject({status:z.enum(['complete','partial','unknown']),expected:integer.nonnegative().nullable(),detail:text,evidenceIds:z.array(idSchema)});
+const readingTaskEvidenceSchema=z.strictObject({id:idSchema,label:text,moduleId:idSchema,steps:z.array(z.strictObject({
+  id:idSchema,label:text,evidenceIds:z.array(idSchema).min(1),gapId:idSchema.optional(),connectionIds:z.array(idSchema).min(1).optional(),
+  target:z.strictObject({kind:z.enum(['local','module','boundary']),id:idSchema}).optional(),
+})).min(1).max(32)});
 export const provenanceSchema = z.strictObject({
   origin: z.enum(['as_built', 'design']), fidelity: z.enum(['partial', 'exact']), scope: text,
   sourceDigest: hashSchema, configuration: text,
@@ -47,6 +73,7 @@ export const provenanceSchema = z.strictObject({
   evidence: z.array(z.strictObject({ id: idSchema, file: text, fileHash: hashSchema, line: integer.positive().optional(), endLine: integer.positive().optional(), symbol: text.optional(), sourceKind: z.enum(['code', 'comment', 'test', 'measurement', 'report']), targets: z.array(evidenceTargetSchema).optional() })),
   findings: z.array(z.strictObject({ id: idSchema, classification: z.enum(['fact', 'inference', 'unknown', 'conflict']), moduleIds: z.array(idSchema), text, evidenceIds: z.array(idSchema) })),
   unsupportedStructures: z.array(z.strictObject({ id: idSchema, kind: text, moduleIds: z.array(idSchema), description: text, evidenceIds: z.array(idSchema), category:z.enum(['not_imported','unsupported','source_unknown','missing_asset']).optional(), causes:z.array(causeRuleSchema).optional(), targets: z.array(evidenceTargetSchema).optional() })),
+  readingTasks:z.array(readingTaskEvidenceSchema).max(128).optional(),
   verification: z.array(z.strictObject({ stage: z.enum(['compile', 'elaboration', 'lint', 'simulation', 'synthesis', 'timing', 'formal']), status: z.enum(['passed', 'failed', 'not_run', 'blocked']), command: z.string(), detail: text, evidenceIds: z.array(idSchema), target: text.optional(), executedAt: z.iso.datetime().optional(), sourceDigest: hashSchema.optional(), tool: z.strictObject({ name: text, version: text }).optional(), batchId: text.optional() }))
 });
 export const endpointSchema = z.strictObject({ moduleId: idSchema, interfaceId: idSchema, index: z.union([integer.nonnegative(), z.literal('all')]).optional(), local: z.literal(true).optional(), slice: bitRange.optional(), sliceMapping:z.strictObject({arrayModuleId:idSchema,stride:integer,offset:integer,width:integer.min(1).max(65536)}).optional() });

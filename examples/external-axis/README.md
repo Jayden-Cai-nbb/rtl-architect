@@ -2,6 +2,8 @@
 
 上游为 [alexforencich/verilog-axis](https://github.com/alexforencich/verilog-axis/blob/48ff7a7e2ef782cf778d47910cf85835c64b1bce/rtl/axis_register.v)，固定提交 `48ff7a7e2ef782cf778d47910cf85835c64b1bce`。`vendor/axis_register.v` 原样保留 MIT 许可；摘要、参数和来源见 `upstream.json`。
 
+原版 cocotb 九配置、事务波形和故障证据使用 [上游九配置基准](benchmark/README.md) 的独立入口。
+
 `rtl/axis_pair.sv` 串接两个 REG_TYPE=1 简单寄存级，8 位数据、禁用 sideband；会插入空拍，不是每拍吞吐的 skid buffer。模型还原每级 data/valid/ready 三项状态；没有数据复位，valid/ready 同步高有效复位。模型保持 as_built / partial，不声称独立需求已批准。
 
 复制整个示例到工作目录，再使用工具入口：

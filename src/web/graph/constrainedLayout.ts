@@ -1,18 +1,24 @@
 import type {Edge} from '@xyflow/react';
-import type {Model,ScopeLayout} from '../../core/schema';
+import type {ScopeLayout} from '../../core/schema';
 import type {RtlNode} from './types';
-import {scopeDiagram,type DiagramOptions,type Positions} from './scopeDiagram';
+import type {Positions,ScopeDiagram} from './scopeDiagram';
 import {elkLayout} from './elkLayout';
 import {alignColumns,orderingRelations} from './topology';
 
 /** Collapse display lanes only for ordering. The projected circuit retains every node and edge. */
-export async function constrainedLayout(model:Model,scope:string,reading:NonNullable<ScopeLayout['reading']>,options:DiagramOptions):Promise<Positions>{
+export async function constrainedLayout(initial:ScopeDiagram,reading:NonNullable<ScopeLayout['reading']>,measure:(positions:Positions)=>ScopeDiagram):Promise<Positions>{
  let positions:Positions|undefined;
  const sizes=new Map<string,{width:number;height:number}>();
  for(let pass=0;pass<3;pass++){
-  const graph=scopeDiagram(model,scope,{...options,positions,reading,measureOnly:true});
+  const graph=positions?measure(positions):initial;
   const nodes=graph.nodes.filter(n=>!n.data.boundary),byId=new Map(nodes.map(n=>[n.id,n]));
-  for(const n of nodes){const old=sizes.get(n.id);sizes.set(n.id,{width:Math.max(old?.width??0,n.data.geometry.width),height:Math.max(old?.height??0,n.data.geometry.height)});}
+  let grew=false;
+  for(const n of nodes){
+   const old=sizes.get(n.id),{width,height}=n.data.geometry;
+   if(!old||width>old.width||height>old.height)grew=true;
+   sizes.set(n.id,{width:Math.max(old?.width??0,width),height:Math.max(old?.height??0,height)});
+  }
+  if(positions&&!grew)return positions;
   const size=(id:string)=>sizes.get(id)!;
   const peripheral=new Set([...reading.control,...reading.adjacent.map(a=>a.node),...(reading.shared??[]).map(s=>s.node)]);
   const groups=new Map<string,string[]>(),unitOf=new Map<string,string>();
@@ -47,7 +53,7 @@ export async function constrainedLayout(model:Model,scope:string,reading:NonNull
   const below:{id:string;x:number}[]=[];
   for(const shared of reading.shared??[]){
    const xs=shared.clients.map(id=>positions![id].x);
-   if(Math.max(...xs)-Math.min(...xs)>1){below.push({id:shared.node,x:average(shared.clients)});continue;}
+   if(xs.length===1||Math.max(...xs)-Math.min(...xs)>1){below.push({id:shared.node,x:average(shared.clients)});continue;}
    // Stacked clients face one shared object to their right, avoiding long U turns.
    const id=shared.node,y=Math.max(100,shared.clients.reduce((v,c)=>v+positions![c].y+size(c).height/2,0)/shared.clients.length-size(id).height/2);
    let x=Math.max(...shared.clients.map(c=>positions![c].x+size(c).width))+240;

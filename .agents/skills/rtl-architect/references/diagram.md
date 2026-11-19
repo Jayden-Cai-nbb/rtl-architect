@@ -2,6 +2,43 @@
 
 图先解释模块分工与流向，完整职责、端口、位域和源码在点选后查看。主图、离线阅读页和 SVG 共用模型与路由，不能另画一张看似漂亮却对应不上连接的图。
 
+## 候选生成与图形反馈
+
+生成候选前先记录当前模型 hash、目标层级、阅读任务和一笔要追踪的事务。提示词可以采用：
+
+> 从实际 IR、源码与已声明规则形成可审阅候选。总览只用有依据的功能组或状态组；局部图在上游寄存状态停止。保留每个原始连接、端点位域、成员 ID、partial、UNKNOWN 和验证失败。不要用名称猜协议、复位、优先级或分组。先解释接受、运算、状态保存与输出关系，再给出最小模型修改；纯位置与阅读约束留在独立 layout。候选必须经 preview，不能为减少交叉删除连接或改写真实状态边界。
+
+候选登记后分别核对语义与图形。语义使用 compare/preview；图形对照固定 modelHash、层级、模式和布局来源。进入页面正常尺寸试读一笔事务；没有运行页面时记录人工阅读未执行。
+
+## 阅读任务投影
+
+网页默认进入主事务总览，`diagram-quality` 默认检查完整架构视图。显式指定 `--task overview`、`--task state --state ID` 或 `--task full` 对照；原始连接模式配合完整图使用。状态局部图沿有限依赖展开，在上游寄存状态停止；它和[下一状态逻辑锥](state-cone.md)分别回答作用域与表达式问题。
+
+`provenance.readingTasks` 可显式列出要跟读的硬件步骤。每一步关联当前作用域对象和源码证据，需要的连接可列 `connectionIds`，未表达步骤绑定 `gapId`。图旁“阅读路径”能选中已显示的真实对象并打开来源。RAM 写地址、提交边界、RAM 读入、输出管线可各自定位，缺口不生成虚构连线。`diagram-quality --reading-task ID` 核对指定任务，几何通过且路径有缺口时仍返回 `READING_TASK_INCOMPLETE`。`quality.taskEvidence` 保留每步位置、关系、缺口和来源。没有显式任务时为 `unassessed`。
+
+总览依照已声明的阅读组聚合。局部状态范围之外的内容保留在上下文账本；原始成员、连接、关系和位域仍可追溯。单成员保留原名与类别。根据模型声明判断协议，不按用途相似的名称把单线拼成 ready/valid。
+
+有对应候选的 reading 时传 `--layout`。总览和状态任务将主线、控制、邻接、分区、并排、共享及反馈映射到当前对象。看 `quality.readingConstraints.constraints` 的原对象、映射对象与处置。每条显式约束报告 `applied`、`internal_to_group`、`not_applicable` 或 `unsupported`；`applied` 后仍须核对实际几何，超出范围的关系继续保留原声明。候选不会套用保存模型的 reading，旧 hash 须重新核对。
+
+在工具仓库根目录运行下面这组只读命令。它们输出同一现状样例的完整图、总览与指定状态局部报告。
+
+```bash
+source ./env.sh
+workspace=$(mktemp -d -t rtlarch-diagram-XXXXXX)
+candidate="$PWD/examples/external-axis/architecture/model.json"
+rtlarch help diagram-quality --json
+rtlarch schema layout --json
+rtlarch diagram-quality --workspace "$workspace" --model "$candidate" --task full --mode signals --json
+rtlarch diagram-quality --workspace "$workspace" --model "$candidate" --task overview --json
+rtlarch diagram-quality --workspace "$workspace" --model "$candidate" --module stage0 --task state --state stage0_valid_q --json
+```
+
+响应中的 modelHash、view、generatedMs、quality 与 routeReview 标明本次对象、耗时和原始关系。报告节点与边、交叉、未排下线名、最长线和耗时。聚合改变边数时单列；同一图的路由改进应保持原始关系分区和折叠范围。禁止删边、隐藏关键名称或扩大折叠改善指标。
+
+反馈提示先要求修正连接对应、未路由和穿框，再核对关键线名，然后处理交叉、共线和长路径。用 `quality.routeReview` 的原始连接/依赖成员定位具体关系；长度、绕行量只是图坐标，不代表物理长度或时序。不能为了降低某个总数，让原来可见的关键名称消失，或增加误认成同一网络的共线重叠。无安全改善时保留基线并说明限制，不无限尝试。
+
+最终打开候选 reviewUrl，在正常窗口按相同任务逐段阅读。可从“框图检查”点选长线或隐藏名称，普通点选只高亮；“更多操作 → 下载本图检查”保存当前候选 hash 与图形记录。生成耗时、几何完整、关键标签、阅读拥挤与实际视觉检查分别报告；没有执行的视觉/RTL 验证保持 not_run。页面不会自动调用 AI，这些提示用于 Agent 的候选生成与修订流程。
+
 ## 先分清关系，再选视图
 
 画布三种阅读模式共用同一 IR：架构通路保留模块、主要关系和真实状态；内部状态与运算展开已建模表达式；原始连接逐条核对端点与位宽。先用架构模式解释一笔事务，再根据用户的问题深入，不默认把所有信号铺开。当前会话各模式位置独立；导出 SVG 保留当前模式，离线 bundle 默认架构模式。
@@ -98,9 +135,10 @@
 先运行只读检查，不需要为了看图启动或保存项目：
 
 ```bash
-rtlarch diagram-quality --workspace <项目> --module <层级> --json
-# 候选及独立阅读布局：
-rtlarch diagram-quality --workspace <项目> --model proposals/design.json --layout proposals/reading.json --json
+source ./env.sh
+workspace=$(mktemp -d -t rtlarch-reading-layout-XXXXXX)
+example="$PWD/examples/typed-expressions/architecture"
+rtlarch diagram-quality --workspace "$workspace" --model "$example/model.json" --layout "$example/layout.json" --task overview --json
 ```
 
 结果分别给出连接对应、几何、`readingConstraints` 和拥挤。几何/对应错误或受检查约束不满足返回非零；交叉、隐藏线名和语义未知保留明细，退出码 0 不等于阅读验收。完整手动位置优先，只报告问题，不擅自重排；有意改变阅读安排时同步调整 reading。然后打开页面沿一笔事务核对，再用 bundle 保存可分享快照。
