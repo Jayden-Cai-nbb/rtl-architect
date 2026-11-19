@@ -23,4 +23,4 @@ v2 清单用 `scopes: [{instancePath: ["stage0"], mappings: [...]}, ...]` 明确
 
 前端显式运行 `proc; opt_muxtree`，仅移除 MUX 控制条件不可能选中的分支，避免把降级过程产生的不可达 X 当成有效更新。不运行该 pass 时，valid/ready 继续 UNKNOWN；有效路径中的 X 也不会判过。TB 是独立事务队列，检查有界场景的数据、顺序、背压保持及复位取消，不使用模型生成期望。
 
-维护入口 `npm run check:external-axis` 自动在临时目录检验固定来源、原版、双级异或抵消、加一故障、局部重测及修复。记录分别说明局部函数与事务仿真结论；不证明初值、禁用 sideband、其他 REG_TYPE、任意参数、完整协议或顺序等价。
+维护入口 `npm run check -- verification` 自动在临时目录检验固定来源、原版、双级异或抵消、加一故障、局部重测及修复。记录分别说明局部函数与事务仿真结论；不证明初值、禁用 sideband、其他 REG_TYPE、任意参数、完整协议或顺序等价。

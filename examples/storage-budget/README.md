@@ -79,4 +79,4 @@ core、CLI、页面共同使用 `evaluateStudy`。`constraints` 分开输出 res
 
 规模限制：最多 6 个预算选项、16 bank、512 条地址映射、512 次 RAM 访问、256 次运算启动、32 条反馈；请求时刻为 0..4095 的有效沿。超范围或整数溢出拒绝计算，不截断。冲突按资源或物理 word 聚合，保留全部成员 ID。
 
-检查入口为 `npm run check:storage-budget`。本轮实际检查、截图、失败尝试和未执行范围见 [验证记录](../../docs/evidence/storage-budget/README.md)。
+检查入口为 `npm run check -- workspace`。范围及实际结果见 [验证记录](../../VALIDATION.md)。

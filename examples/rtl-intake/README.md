@@ -30,4 +30,4 @@ rtlarch runs --workspace . --json
 
 两个 stage 实例需要重新核对，旧运行显示输入已变化。重新展开并导入到新目录，比较新旧模型；不重新手抄层级或用旧日志冒充本次执行。
 
-完整自动化复现（始终使用临时工作区）：在工具仓库运行 `npm run check:workflow`。可追加 `-- /tmp/new-workflow-report.json` 保存新报告。自动化中的提交仅模拟实验用户保存，不允许 skill 在真实项目自动确认。
+完整自动化复现（始终使用临时工作区）：在工具仓库运行 `npm run check -- workflow`。可运行 `npm run check -- workflow /tmp/new-workflow-report.json` 保存新报告。自动化中的提交仅模拟实验用户保存，不允许 skill 在真实项目自动确认。

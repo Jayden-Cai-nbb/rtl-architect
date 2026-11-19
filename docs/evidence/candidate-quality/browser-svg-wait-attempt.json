@@ -1,5 +1,0 @@
-{
-  "error": "TimeoutError: locator.waitFor: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.react-flow__edge-path').first() to be visible\u001b[22m\n\u001b[2m    57 × locator resolved to hidden <path fill=\"none\" d=\"M 272 200 L 612 200\" class=\"react-flow__edge-path\" marker-end=\"url('#1__color=#326ea1&type=arrow')\" id=\"reading-relation:[\"aggregate:top:states\",\"rack:top:producer\",\"wire\",\"data\",\"\",\"逻辑右移\",\"\",\"\",\"in:logical_value_result\"]\"></path>\u001b[22m\n",
-  "results": [],
-  "errors": []
-}

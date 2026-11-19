@@ -1,69 +1,87 @@
-# RTL Architect 2.1.0 验证记录
+# RTL Architect 验证与发布
 
-## 2.1.0 · 2026-11-19
+本页是当前源码的验证入口。历史结果在 [HISTORY.md](docs/HISTORY.md)。自动化图形审计、实际浏览器操作和人工试读分别报告。
 
-- 固定上游 `axis_fifo` 144/144 配置、2,016/2,016 个 cocotb 用例。首阶段四组共 20 个单步状态 `MATCH`，提前提交得到 `0x0 → 0x1` 反例并用独立仿真核对。四组原生 FIFO 回放均为 `UNSUPPORTED`。
-- 五个临时副本各只展开一次。结构和状态比较引用来源摘要和原生产模型，配置变化使记录失效。原始 RAM 导入在几何通过时仍可明确报告阅读任务受阻。
-- 九配置 `axis_register` 原版测试 81/81、原生回放 9/9。两项 `axis_fifo` 浏览器操作通过。干净安装从锁文件构建，发布 fixture 被 Git 跟踪，安装 skill 并打开含空格路径的临时工作区。
+## 主要基准
 
-[发布实测与复跑入口](docs/evidence/2.1.0/README.md) · [升级说明](docs/UPGRADE-2.1.md)
+| 主入口 | 范围与分母 |
+| --- | --- |
+| `npm run check` | 4 个分组、29 个维护场景。覆盖语义、图形、核验和真实 RTL 工作流，包括已知故障、来源失效与权限边界。 |
+| `npm run benchmark:external-axis` | 固定上游 `axis_register`，3 个位宽 × 3 个 REG_TYPE。上游测试、结构、状态、事务解释、原生回放和图形均按九组报告。 |
+| `npm run benchmark:axis-fifo` | 固定上游 `axis_fifo`，原版 144 组。另用固定 16/32 位普通与帧四组做读取路径、5 个状态、独立场景和提前提交故障检查。 |
 
-## Skill 路由与独立试用（2026-11-18）
+### 维护回归
 
-审计本机发布提交发现，两份参考文档虽在树中，但此前更新未入该提交。隔离分支补齐当前通用实现与证据，skill 入口从 81 行缩到 36 行，18 个 schema 与最终 10 个参考示例实跑通过。独立新 Agent 以固定上游的 16 位双槽配置完成原版 9 个用例、5,775 笔波形核对和离线审阅包，保留状态 UNKNOWN、原生回放不支持、显式投影失败与在线权限失败。最终构建、12 组入口回归和 6 组阅读保护通过。[提交与执行证据](docs/evidence/skill-routing/README.md)
+```bash
+source ./env.sh
+npm run build
+npm run check
+```
 
-## 硬件对象选择与讨论恢复（2026-11-18）
+可用 `npm run check -- <分组>` 聚焦。运行完整回归时已包含下面各项。
 
-真实浏览器复现了连接详情缺失、总览 B 沿用 A 和状态下拉错位。修复后，1440×1000 和 1100×800 均通过完整 `panel=work` 冷启动恢复，画布高度分别为 347 和 209 像素。实际点选、提问、跨层、拖动、同分支定位和输入均通过，旧格式继续位置恢复到原分支。构建、分组执行的 27 个维护入口和 rtl:test 通过，根目录模型与布局摘要一致。[复跑脚本、结果与截图](docs/evidence/selection-workbench/README.md)
+| 分组 | 验收 |
+| --- | --- |
+| `workspace` | 模型兼容、语义修改、身份、提案/批准、参数与数组、对象讨论、候选决策、资源及存储预算。 |
+| `diagrams` | 完整/总览/状态图、阅读约束、共享/反馈/并行、长关系和线名、逻辑锥、SVG 与离线包。六类真实 RTL 的展开端点另行核对。 |
+| `verification` | 显式结构和状态映射、有限二态类型与覆盖、旧证据失效、双实例抵消故障、事务回放及来源核验。 |
+| `workflow` | skill 与重启入口、阅读整理守卫、tiny-stream 自检/TIMEOUT 负例，以及原 RTL 的展开 → 还原 → 草稿 → 讨论 → 恢复 → 自检 → 来源变更失效。 |
 
-## 显式阅读约束投影（2026-11-18）
+`npm run rtl:test` 单独执行 tiny-stream 兼容回归。所有工作流的保存、批准与注入发生于临时副本。需要保存工作流 JSON 时，可运行 `npm run check -- workflow /tmp/rtlarch-new-workflow.json`。
 
-累加器、FIFO、共享 RAM 三例在同一模型和 reading 下复现总览丢失约束，修复后均核对通过。原始关系逐条保留，三张总览的成员及折叠清单一致。共享 RAM 在 2 节点、11 边下交叉 16 → 0，未排下线名 2 → 0。FIFO 总览仍有 12 个交叉和 1 条未排下线名。构建、完整 27 个维护入口、rtl:test 和四个临时 Chromium 页面通过。离线投影保留已批准临时样例的批准记录，根目录模型和布局摘要一致。[实测对照与证据](docs/evidence/reading-tasks/projected-constraints/README.md)
+### 固定上游
 
-## 事务回放检查器版本 2（2026-11-18）
+两个基准共用固定提交 `48ff7a7e2ef782cf778d47910cf85835c64b1bce` 的冻结目录。先按 [原版环境和配置矩阵](examples/external-axis/benchmark/README.md) 准备 Python 与 Icarus，再从已构建的工具目录执行：
 
-六项缺陷均先复现再修复。等值参数和表达式宽度通过合同检查，常量 0 和被常量 1 屏蔽的装载分支被拒绝。零事务显示覆盖不足，入口等待违规定位输入端口并停止该沿的路径归因。旧检查器结果标记过期，101 份历史测试保留按时间最新的 100 份。原版 Verilator 轨迹接受 17 笔、消费 16 笔、级内阻塞 2 笔、恢复 2 笔、取消 1 笔。两种临时 RTL 故障仍给出寄存状态和采样沿。build、27 个维护入口、rtl:test 和 Chromium 实测通过。根目录模型、布局及原版 RTL 文件的前后摘要一致。[修复前后原始输出及页面核对](docs/evidence/transaction-replay/hardening/README.md)
+```bash
+npm run benchmark:external-axis -- --python "$rtlarch_axis_env/bin/python" --icarus-bin "$rtlarch_icarus_bin"
+npm run benchmark:axis-fifo -- --python "$rtlarch_axis_env/bin/python" --icarus-bin "$rtlarch_icarus_bin"
+```
 
-## 固定上游九配置基准（2026-11-18）
+两项运行均保留各自输出路径、冻结输入摘要、seed、参数、工具版本、检查器身份和故障证据。CLI 的 `ok`、上游 pytest/cocotb 结果、局部比较、有限回放和图形阅读分项使用各自分母。旁路的零状态与 FIFO 的 `UNSUPPORTED` 分别按边界判定。允许事先建立临时环境，保持上游原件和验收规则原样。
 
-`npm run benchmark:external-axis` 在 Python 3.10.12、Icarus 11.0 和固定 `tox.ini` 依赖下运行。原版测试 9/9 配置、81/81 cocotb 用例通过。结构 9/9，69 个向量跨 6/9 配置完成二态单步比较。另三组旁路只通过零状态边界检查。原版 FST 的事务说明及图形自动检查各 9/9。旁路和双槽原生回放超出当前支持范围，简单寄存原生回放和人工试读未执行。临时单比特故障触发原版断言，失败证据定位到输出数据寄存器，故障版 `as_built` 匹配与原始要求失败同时保留。根目录模型和布局的前后摘要一致。[矩阵、工具与失败证据](docs/evidence/external-axis-benchmark/README.md)
+### 浏览器与源码交付
 
-`npm run build`、`npm run check` 的 27 个维护入口和 `npm run rtl:test` 均通过。旧双实例检查的八组维护回归通过。
+先用 [临时 Playwright 步骤](examples/external-axis/benchmark/README.md#页面复跑) 准备 Chromium。浏览器可检查主题工作流或两个固定基准的页面。基准参数目录由上一步命令输出。
 
-## 2.0.0 · 2026-10-14：逐状态证据、多实例与发布验收
+```bash
+npm run check:browser -- selection "$rtlarch_browser" "$rtlarch_browser/selection"
+npm run check:browser -- axis-register "$rtlarch_browser" "$rtlarch_axis_run" "$rtlarch_browser/register"
+npm run check:browser -- axis-fifo "$rtlarch_browser" "$rtlarch_fifo_run" "$rtlarch_browser/fifo.json"
+npm run release -- --check
+```
 
-- 完整 `npm run check` 的 20 个入口通过；本轮新增外部 RTL 检查 8 组，状态观察扩充至 16 组。最终布局另重跑阅读 11 组、反馈 8 组；两副本类型检查和构建通过。
-- 固定 MIT 上游双实例：6 个声明状态一致，实际发现 16 个 RTL 状态；未建模 sideband 不计为匹配。独立队列原版/修复均通过，场景中接收 255、输出 254、复位取消 1、停顿 187 拍。
-- 双级异或故障会端到端抵消，但局部核验仍发现两处差异；双级加一同时被局部核验与事务队列发现。部分重测、仅发现、源码变化、缺失实例、重复映射、旧比较器、摘要损坏和修复均有回归。
-- 同一保存位置的五状态样例：交叉 46 → 28，共线重叠长度 6090.95 → 1323.2；仍有 5 条收起线名。基本几何、连接对应、阅读约束通过，人工读图评估仍为 not_run。
-- Chromium 140 在 1440×960、1100×820 检查初始主线可见、边界组分布、类型详情、多实例路径、局部重测保留失败、反例与还原依据；无页面异常。检查后查看截图，失败项已优先显示。
-- 公开目录 `check:release`：临时干净副本从 lockfile 安装，未携带 dist/node_modules/.runtime；构建、项目 skill 安装、带空格工作区、网页服务与只读模型检查通过。原始 RTL fixture 及完整用户工作流通过。
-- 6 份真实项目受保护文件均未改变；公开目录仅同步通用代码/示例。远端结果请查看 [GitHub Actions](https://github.com/Jayden-Cai-nbb/rtl-architect/actions)；本地验收不能代替远端运行。CI 已纳入干净安装检查。
+源码交付目录默认为 `release/rtl-architect-<版本>`。命令从白名单收集源码与输入，再在隔离副本从锁文件安装、构建、安装项目 skill、打开含空格路径的项目并验证构建身份。平台兼容、发布上传和完整工具链离线安装有各自验收。
 
-[本轮原始记录与截图](docs/evidence/2.0.0/README.md) · [升级说明](docs/UPGRADE-2.0.md) · [外部样例](examples/external-axis/README.md)。页面构建仍有现有 chunk 大小提示。以上不证明任意 RTL、完整协议、顺序等价或真实用户效率提升。
+## 2.1.1 发布验收
 
-## 发布目录检查
+2026-11-19，在 Ubuntu 22.04 WSL2 上执行。内核为 `6.18.58.1-microsoft-standard-WSL2`，Node 24.18.1、npm 11.6.2。发布构建身份为 `c0d8707290bd293d86c813971ce9d7570468d6a6e463ba29f63fda498d4d4306`。
 
-通用示例的模型和布局必须进入 Git；用户工作区的 architecture/ 仍忽略。发布前从暂存树核对示例文件，再运行 `npm run check:release` 检查干净安装。已确认三个新示例模型/布局被 Git 收录，发布目录构建与干净安装检查再次通过，记录见 [publish-install.log](docs/evidence/2.0.0/publish-install.log)。旧截图和离线包已清理，回归源码与最新验证证据保留。
+| 检查 | 实际结果 |
+| --- | --- |
+| WSL 用户级注册 | `~/.local/bin/rtlarch` 与 `~/.agents/skills/rtl-architect` 指向同一源码。Codex `skills/list` 在独立项目目录发现 `scope=user`、`enabled=true` 的 `rtl-architect`。 |
+| 干净 shell | 无 PATH 上的 Node，从用户 CLI 和 skill 脚本读取、打开含空格路径的临时项目。页面与服务构建身份一致，服务实际使用当前源码目录的 Node。原已保存的模型字节一致。 |
+| 综合与干净安装 | 锁文件安装、构建和 4 组 29 个综合场景通过。从源码白名单另建临时副本，验证依赖安装、项目 skill 和页面启动。 |
+| 固定 `axis_register` | 本轮重跑 9/9 配置、81/81 原版用例、9/9 原生回放。数据位反转和双槽 sideband 故障均保留检出结果。 |
+| 固定 `axis_fifo` | 核对整理版的 144 组、2,016 个原版产物，使用当前构建重新跑四组定向仿真，20/20 映射 MATCH。提前提交得到 MISMATCH，独立仿真回报 `check_failed`。原版 pytest 产物以 `reranUpstream=false` 标记为复用。 |
 
-[历史验证摘要](docs/VALIDATION-HISTORY.md)
+本轮页面验收使用真实本机服务与 HTTP 冒烟。下节 Chromium 交互为整理版实测记录。工作区写入均在临时项目执行。远端运行由 GitHub Release 链接关联到提交。
 
-## 最小事务场景回放（2026-11-17）
+## 2.1.0 整理版验收
 
-新增可选事务路径合同、显式沿前/沿后 JSON 产物导入、版本绑定轨迹及逐拍结构联动。固定外部双寄存级实际观察 56 沿：接受 17、消费 16、复位取消 1、结束在途 0；错拍负例定位 T0/E2+/stage0_valid_q，阻塞覆盖定位 T3/E10+/stage1_data_q。最终 build、5 组事务检查、rtl:test、CLI 和临时 Chromium 页面检查通过。长 npm run check 两次以 SIGTERM/143 结束；保留中断日志，顺序分段续跑后 24 个入口全部完成，不称为一次未中断的整套命令成功。模型、布局和 vendor 摘要未变，无真实批准。源码/分支/讨论为显式关联；OBSERVED 不证明任意 RTL 或完整时序。具体记录、失败尝试、截图、未执行项及清理见 [本轮报告](docs/evidence/transaction-replay/README.md)。
+2026-11-19，本机 Ubuntu Linux。Node 24.18.1、npm 11.6.2、Yosys 0.68+206、Verilator 5.053 devel，外部基准使用 Python 3.10.12、Icarus 11.0、cocotb 1.7.2、cocotbext-axi 0.1.20。源码与页面构建身份为 `244382e8c2347efc9ae23277edccf48c5e904cbc67c8b53b0e23a02c81d04165`。
 
-## 阅读任务投影（2026-11-16）
+| 实际执行 | 本轮结果 |
+| --- | --- |
+| 构建与完整维护回归 | TypeScript 和 Vite 构建通过。一次 `npm run check` 完成 4 组、29 个场景。原 1,365 处 TypeScript 维护断言中，唯一文字变化是切换被调用的 CLI 包装。 |
+| 原 tiny-stream | 接受 1,134 笔、消费 1,125 笔、复位取消 9 笔。故意超时的负例按预期失败。 |
+| 固定上游 `axis_register` | 上游 9/9 配置、81/81 用例。结构、事务解释、原生回放和图形自动阅读任务均为 9/9。状态为 6/9 MATCH 与 3/9 零状态边界。数据位翻转和 skid sideband 错接都检出。 |
+| 固定上游 `axis_fifo` | **新入口一次通过原版 144/144 配置、2,016/2,016 cocotb 用例**。四组普通/帧定向仿真通过，20 个已映射状态 MATCH。提前提交的 `wr_ptr_commit_reg` 反例为 E2+ 期望 0、实际 1，独立队列在 E4+ 报 `VISIBLE_BEFORE_ELIGIBLE`。RAM 阅读任务保留缺口，原生回放 0/4，为 UNSUPPORTED。 |
+| Chromium 141.0.7390.37 | 对象讨论与恢复 2/2，寄存器回放 5/5，FIFO 正常和故障页 2/2，无页面异常。包含 1440×1000 与 1100×800。FIFO 页面使用本轮原版产物复用验证生成的副本。 |
+| 说明书与源码交付 | 实跑 9 段说明书操作，涵盖临时示例、候选登记、结构导入、状态比较、回放能力预检和离线包。独立源码副本从锁文件安装，借本机 npm 缓存完成构建。含空格路径、项目 skill 和页面服务均通过。已有输出目录拒绝覆盖。 |
 
-实现主事务总览和选中状态局部范围，保留原模型、成员与关系追溯；布局操作归入菜单。最终 build、完整 check（包含新增 check:reading-tasks）、rtl:test 通过。Chromium 临时工作区检查普通选择几何不变、任务切换、菜单和中文截图通过。typed 原保存布局交叉 28 → 6、隐藏线名 5 → 0；external-axis 顶层交叉 6 → 4。局部范围仍有拥挤，没有用户阅读效率结论，也不表示完整 RTL 等价。生成时间与分项证据见 [阅读任务报告](docs/evidence/reading-tasks/README.md)。未执行远端 CI 或本轮发布安装检查。
+整理后的脚本 16 个，原 45 个。npm 入口从 40 个归并为 9 个。原 `docs/` 的 1,101 个历史与说明文件压缩归档，现行目录为两本说明书和一份履历。源码交付只包含可构建和复跑的资料。
 
-## 候选图形质量链路（2026-11-16）
+首轮 FIFO 原版 144 组已通过，后续发现合并入口漏接 `profile` 与 `directed`。恢复两个方法后，使用本轮原始产物核对后续流程，再重跑完整入口。原版 RTL、测试、冻结验收和独立队列逐文件摘要一致。工具根目录的模型和布局摘要一致，维护运行全部使用临时目标工作区。
 
-统一 Worker/CLI 的投影准备，增加按任务检查、长关系追溯、点选高亮与本图报告导出，更新候选生成/反馈提示。build、完整 check、rtl:test 通过；实际截图发现的成员详情拥挤随后调整，并重新 build、运行 5 组候选质量检查及最终浏览器复核。两个临时候选页面与 CLI 报告一致，选择后节点和路径不变，原模型/布局摘要不变。没有新增本轮交叉数改善、用户效率或完整 RTL 等价结论。失败尝试、最终构建身份、截图与清理记录见 [候选图形质量报告](docs/evidence/candidate-quality/README.md)。
-
-## 硬件对象协作闭环（2026-11-17）
-
-第一步增加带作用域、实例路径与版本的状态/分支/需求/义务讨论及精确恢复，4 组独立检查和构建通过；第二步增加候选绑定预算、结构化决策、独立证据评估和确定性硬件变化摘要，5 组独立检查和构建通过。最终按顺序分段完成标准 check 的全部 26 个入口，build、rtl:test、真实 RTL check:workflow 均通过。临时 Chromium 完整检查实例隔离、分支恢复、预算失效、证据隔离、选择不提交/批准及目标失效，无页面异常；首次定位器失败和两次成功记录均保留。9 份受保护文件摘要未变，临时服务与依赖已清理。对象跨版本采用保守失效；候选实验 fixture 只检验 Node 记录隔离，不声称 RTL 或性能通过。未执行远端 CI、本轮发布安装检查或用户效率实验。改动、限制、日志与截图见 [本轮报告](docs/evidence/object-collaboration/README.md)。
-
-## 有限资源与存储预算（2026-11-18）
-
-保留旧输入/hash 及服务量下界，新增显式 latency/II、资源独占、三种 RAM 端口、bank 映射与有限访问、反馈距离和持续流率。资源间隔 1/3 拍、共享与 1R1W 存储间隔 2/1 拍、同 bank 冲突以及 8/6 GB/s 长期失稳均有负例。新增 11 组预算检查通过；标准 27 个维护入口顺序分段完成，rtl:test、check:workflow 通过。修复临时工具缺少预算示例的构建依赖，并为未知同拍请求补强负例；随后重跑预算检查和最终 build。Chromium 两尺寸检查四例、未知、输入拦截和保存恢复通过，无页面异常；失败尝试保留。8 条受保护路径状态不变，临时环境已清理。结果不是完整调度或 RTL 性能证明，未执行远端 CI、本轮发布安装或用户效率实验。[本轮详细报告](docs/evidence/storage-budget/README.md)。
+原版 FIFO 日志保留 30 条日志截断提示，对应 XML 的用例数与 seed 已核对。Vite 保留现有大 chunk 提示。人工试读、其他平台和本轮远端 CI 未执行。各项工具输出与独立场景结论按表中的实际范围解释。

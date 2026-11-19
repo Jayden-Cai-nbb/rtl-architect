@@ -1,9 +1,0 @@
-{
-  "ok": true,
-  "toolVersion": "2.0.0",
-  "command": "stop",
-  "workspaceRoot": "/tmp/rtlarch-budget-workspace",
-  "workspaceId": "05ef78f1b850bf1ef25eb16b582089b737b4248b3626d2e02905c3c7d9c2280e",
-  "stopped": true,
-  "instanceId": "4867c492-4bca-415a-acce-65a6759d45ac"
-}

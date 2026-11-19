@@ -1,5 +1,0 @@
-REPLAY_CAPTURED
-- tb_replay.sv:25: Verilog $finish
-- S i m u l a t i o n   R e p o r t: Verilator 5.053 devel
-- Verilator: $finish at 560ns; walltime 0.000 s; speed 1.639 ms/s
-- Verilator: cpu 0.000 s on 1 threads; allocated 4 MB

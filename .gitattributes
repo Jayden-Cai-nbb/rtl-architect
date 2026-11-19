@@ -1,2 +1,0 @@
-# Preserve generated evidence exactly; whitespace checks still apply to source code.
-docs/evidence/** whitespace=-blank-at-eof,-blank-at-eol

@@ -17,9 +17,9 @@
 
 ```bash
 source ./env.sh
-npm run check:layout-constraints
+npm run check -- diagrams
 # 输出目录须不存在；保留这次运行的六个离线包及质量记录：
-RTLARCH_LAYOUT_EVIDENCE=/tmp/rtlarch-reading-example npm run check:layout-constraints
+RTLARCH_LAYOUT_EVIDENCE=/tmp/rtlarch-reading-example npm run check -- diagrams
 ```
 
 检查覆盖三种视图、声明约束、未排下线名、选择几何稳定，以及错误引用、过期布局和手动破坏约束。样稿中的交叉数与语义缺口继续显示；使用者能否正确回答阅读问题，需实际试用，不由测试代答。

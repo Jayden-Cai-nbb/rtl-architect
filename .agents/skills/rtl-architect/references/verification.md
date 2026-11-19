@@ -26,7 +26,7 @@ IR 3 的 `contract.obligations` 可选，经过正常提案保存。`schema mode
 
 `inputClosure: {status:"declared_complete",note:"实际依赖与配置依据"}` 是作者对输入闭包的声明；不知道就 partial 或不填。它不自动发现隐式文件或环境。外部工具提供 versionArgs；本次 runDir 内构建出的可执行程序保存摘要。环境影响结果时把配置固化到清单输入，不能靠声明完整掩盖未知依赖。
 
-至少做一个针对义务的故障注入，确认错误会失败；正常结果不能单独证明检查器有效。通用可运行例子见工具 `examples/contract-checks`，维护验收为 `check:assurance`。
+至少做一个针对义务的故障注入，确认错误会失败；正常结果不能单独证明检查器有效。通用可运行例子见工具 `examples/contract-checks`，在工具目录用 `npm run check -- verification` 验收。
 
 `verify` 只通过显式 CLI 清单运行 argv；每次在独立 evidence/runs 目录保存日志、版本和产物摘要。{runDir} 绑定本次目录。exit_code、contains、junit 或 artifact 证据各自按清单检查。JUnit 成功须有实际用例，失败、错误、跳过均不能算通过。
 

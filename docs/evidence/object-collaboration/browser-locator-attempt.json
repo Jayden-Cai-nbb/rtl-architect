@@ -1,4 +1,0 @@
-{
-  "error": "Error: locator.waitFor: Error: strict mode violation: locator('.thread-list').getByText('实例零的 payload 保持条件', { exact: true }) resolved to 2 elements:\n    1) <strong>实例零的 payload 保持条件</strong> aka getByRole('strong').filter({ hasText: '实例零的 payload 保持条件' })\n    2) <p>实例零的 payload 保持条件</p> aka getByRole('paragraph').filter({ hasText: '实例零的 payload 保持条件' })\n\nCall log:\n\u001b[2m  - waiting for locator('.thread-list').getByText('实例零的 payload 保持条件', { exact: true }) to be visible\u001b[22m\n",
-  "errors": []
-}

@@ -1,5 +1,0 @@
-{
-  "error": "AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:\n\n  assert(canvasHeight>200)\n",
-  "results": [],
-  "errors": []
-}

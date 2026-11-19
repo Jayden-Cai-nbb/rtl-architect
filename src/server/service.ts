@@ -1,4 +1,4 @@
-import {assertCurrentBuild,sourceBuildId} from '../workspace/build';
+import { assertCurrentBuild } from '../workspace/build';
 import { createServer, type Server } from 'node:http';
 import { join } from 'node:path';
 import { createApp } from './app';
@@ -7,11 +7,11 @@ import { acquireService } from '../workspace/service-lock';
 import { exists, toolRoot, toolVersion, ToolError, workspaceIdentity } from '../workspace/environment';
 import { protocolVersion, type ServiceInfo } from '../core/service';
 
-export async function startService(workspace: string, options: { port?: number; apiPort?: number; dev?: boolean; devWebPort?: number } = {}) {
+export async function startService(workspace: string, options: { port?: number; apiPort?: number } = {}) {
   const identity = await workspaceIdentity(workspace), repository = new Repository(identity.workspaceRoot);
   await repository.getModel();
   const staticDirectory = join(toolRoot, 'dist');
-  const buildId=options.dev?await sourceBuildId():await assertCurrentBuild();
+  const buildId = await assertCurrentBuild();
   const lock = await acquireService(identity.workspaceRoot), servers: Server[] = [];
   let stopping: Promise<void> | undefined, finished!: () => void;
   const closed = new Promise<void>(resolve => { finished = resolve; });
@@ -31,11 +31,11 @@ export async function startService(workspace: string, options: { port?: number; 
   try {
     const web = await listen(options.port ?? 0);
     const api = options.apiPort !== undefined && options.apiPort !== web.port ? await listen(options.apiPort) : web;
-    const webPort = options.dev ? options.devWebPort ?? 5173 : web.port;
+    const webPort = web.port;
     const info: ServiceInfo = { product: 'rtl-architect', protocolVersion, toolVersion, buildId, ...identity, instanceId: lock.instanceId, pid: process.pid,
       apiUrl: `http://127.0.0.1:${api.port}`, webUrl: `http://127.0.0.1:${webPort}` };
     const settings = { service: info, shutdown: () => { setTimeout(() => void close(), 20); } };
-    web.server.on('request', createApp(repository, api.port, webPort, options.dev ? undefined : staticDirectory, settings));
+    web.server.on('request', createApp(repository, api.port, webPort, staticDirectory, settings));
     if (api !== web) api.server.on('request', createApp(repository, api.port, webPort, undefined, settings));
     await lock.publish(info);
     return { info, close, closed };

@@ -1,6 +1,8 @@
-# AXI Stream 寄存器上游基准
+# 固定上游 AXI Stream 基准
 
-基准直接测试 `axis_register`。提交 `48ff7a7e2ef782cf778d47910cf85835c64b1bce` 的 RTL、cocotb 测试、Makefile、`tox.ini` 和 MIT 许可证按原路径保存在 `upstream/`。文件 SHA-256、九组参数、seed、验收场景及故障点冻结在 [baseline.json](baseline.json)。[固定上游提交](https://github.com/alexforencich/verilog-axis/tree/48ff7a7e2ef782cf778d47910cf85835c64b1bce) · [上游依赖](upstream/tox.ini) · [MIT 许可证](upstream/COPYING)
+本目录冻结 `axis_register` 和 `axis_fifo` 的原版源码与测试。提交 `48ff7a7e2ef782cf778d47910cf85835c64b1bce` 的 RTL、cocotb 测试、Makefile、`tox.ini` 和 MIT 许可证按原路径保存在 `upstream/`。文件 SHA-256、九组参数、seed、验收场景及故障点冻结在 [baseline.json](baseline.json)。[固定上游提交](https://github.com/alexforencich/verilog-axis/tree/48ff7a7e2ef782cf778d47910cf85835c64b1bce) · [上游依赖](upstream/tox.ini) · [MIT 许可证](upstream/COPYING)
+
+## axis_register 配置
 
 | DATA_WIDTH | REG_TYPE | KEEP_ENABLE | KEEP_WIDTH | 其余 sideband |
 | --- | --- | --- | --- | --- |
@@ -52,7 +54,7 @@ npm run benchmark:external-axis -- --python "$rtlarch_axis_env/bin/python" --ica
 
 入口先按原版 `tox.ini` 从 pytest 执行测试模块，再启动架构分析。在终端给出的新临时目录保留 `summary.json`、原始 pytest 和 cocotb XML、仿真日志与波形、各配置模型和证据。覆盖的检查发生失败或受阻时返回非零，报告仍给出九组；依赖或初始化错误会在终端和对应日志定位。正常无寄存器的旁路配置只通过状态边界检查。
 
-## 分项验收
+## axis_register 分项验收
 
 | 分项 | 每配置通过条件 |
 | --- | --- |
@@ -67,6 +69,18 @@ npm run benchmark:external-axis -- --python "$rtlarch_axis_env/bin/python" --ica
 
 冻结的独立故障在临时 8 位、`REG_TYPE=1` 副本翻转写入输出槽的数据位 0。原版断言须失败，`rtlarch verify` 保存失败 JUnit。报告定位 `top.m_axis_tdata_reg`、`m_axis_tdata[0]` 和帧完整性要求。另外在临时 16 位双槽副本将临时槽的 ID 错接到输出槽 dest。独立定向队列与回放都须检出，回放应保留同一接受编号、沿、字段和状态。原版测试及冻结验收配置按摘要核对。
 
+## axis_fifo 配置与定向验收
+
+原版 [test_axis_fifo.py](upstream/tb/axis_fifo/test_axis_fifo.py) 包含 4 种数据宽度（8、16、32、64）、6 种 RAM 管线与输出 FIFO 组合、6 种帧和丢弃策略，共 **144** 组。每组包含 14 个 cocotb 用例，seed 为 1。工具核对原始 XML、仿真器实际编译参数及输入摘要。复用上节同一 Python 和 Icarus 环境。
+
+```bash
+npm run benchmark:axis-fifo -- --python "$rtlarch_axis_env/bin/python" --icarus-bin "$rtlarch_icarus_bin"
+```
+
+目录由入口创建在系统临时目录，也可用 `--out` 指定其中一个不存在的目录。需要复用上次原版测试时，提供其 `--upstream` 临时副本与 `--junit` 文件，报告标记 `reranUpstream=false`。新运行仍比较四组 16/32 位普通与帧配置，逐组检查五个已映射状态和独立仿真。原版测试失败时停止后续比较，运行输出保留。
+
+直连端口、写地址、提交、RAM 读入和输出管线按源码定位。四组保留地址化 RAM 行为缺口，原生帧回放为 `UNSUPPORTED`。独立端口队列覆盖持续输入、相同值、等待、地址回绕、丢弃、恢复与复位取消。提前提交故障仅注入临时 16 位帧副本，保留原候选和端口队列。预期的单步 `MISMATCH` 与 `check_failed` 均须出现。原始判定见 [端口队列](../../../scripts/benchmarks/directed_fifo.py) 和 [基准入口](../../../scripts/benchmarks/axis-fifo.py)。
+
 ## 页面复跑
 
 `rtlarch_axis_run` 为基准输出的临时目录。在同一构建上运行。Chromium 需可加载本机所需的共享库。
@@ -76,7 +90,9 @@ rtlarch_browser=$(mktemp -d -t rtlarch-axis-browser-XXXXXX)
 export PLAYWRIGHT_BROWSERS_PATH="$rtlarch_browser/browsers"
 npm install --prefix "$rtlarch_browser" --cache "$rtlarch_browser/npm-cache" --no-audit --no-fund playwright@1.56.1
 "$rtlarch_browser/node_modules/.bin/playwright" install chromium --only-shell
-node scripts/check-axis-replay-browser.mjs "$rtlarch_browser" "$rtlarch_axis_run" "$rtlarch_browser/observed"
+npm run check:browser -- axis-register "$rtlarch_browser" "$rtlarch_axis_run" "$rtlarch_browser/observed"
 ```
 
-[本轮原生回放实测与失败证据](../../../docs/evidence/axis-register-replay/README.md) · [初始基准证据](../../../docs/evidence/external-axis-benchmark/README.md)
+FIFO 对应 `npm run check:browser -- axis-fifo "$rtlarch_browser" "$rtlarch_fifo_run" "$rtlarch_browser/fifo.json"`。其输入需来自同一构建的 FIFO 运行。
+
+[当前实测与其他页面场景](../../../VALIDATION.md)

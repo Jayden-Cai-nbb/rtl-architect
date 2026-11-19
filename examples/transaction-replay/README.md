@@ -38,12 +38,12 @@ bin/rtlarch replay --workspace "$work" --json
 bin/rtlarch open --workspace "$work" --json
 ```
 
-维护入口 `npm run check:transaction-replay` 在临时副本完成声明、preview/commit、真实 Verilator 采集、导入和两种实际 RTL 故障注入，另检查参数位宽、入口保持、有限轨迹和历史版本。可保留一个新临时副本以在页面查看正反例。
+维护入口 `npm run check -- verification` 在临时副本完成声明、preview/commit、真实 Verilator 采集、导入和两种实际 RTL 故障注入，另检查参数位宽、入口保持、有限轨迹和历史版本。可保留一个新临时副本以在页面查看正反例。
 
 ```bash
 source ./env.sh
 npm run build
-RTLARCH_REPLAY_WORKSPACE=/tmp/rtlarch-replay-demo npm run check:transaction-replay
+RTLARCH_REPLAY_WORKSPACE=/tmp/rtlarch-replay-demo npm run check -- verification
 bin/rtlarch open --workspace /tmp/rtlarch-replay-demo --json
 # 页面打开“事务回放”；结束后停止自己启动的这个服务。
 bin/rtlarch stop --workspace /tmp/rtlarch-replay-demo --json
@@ -78,4 +78,4 @@ bin/rtlarch stop --workspace /tmp/rtlarch-replay-demo --json
 
 页面分别展示状态观测、入口前提、场景覆盖和声明分支。点击沿可将跟踪身份叠加到当前结构图。当前记录可定位声明分支、源码和相关讨论，过期记录保留为只读历史。
 
-本例包含持续 valid 输入、下游阻塞后恢复、在途复位和最后排空。REG_TYPE=1 的实际输入握手之间有空拍。负例仅在临时 vendor 副本中增加一级 valid 延迟，或无视装载条件覆盖 payload。诊断给出事务身份、沿和对应状态。[六项缺陷的修复前后输出](../../docs/evidence/transaction-replay/hardening/README.md)
+本例包含持续 valid 输入、下游阻塞后恢复、在途复位和最后排空。REG_TYPE=1 的实际输入握手之间有空拍。负例仅在临时 vendor 副本中增加一级 valid 延迟，或无视装载条件覆盖 payload。诊断给出事务身份、沿和对应状态。[回放沿革](../../docs/HISTORY.md#2021-的验证与兼容节点)

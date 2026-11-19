@@ -1,7 +1,0 @@
-- tb.sv:12: Verilog $finish
-RTLARCH_OBL_PASS top/stable 78940d9cc5fdc07157d179b4a1f612826fabd2ef0f7d126d5f1805f841c8d7fb hits=4
-RTLARCH_OBL_PASS top/flush 151944760150e33e4126d636b0fa5b7925637a3646df7e2f64cd42e13dfe238b hits=1
-RTLARCH_OBL_PASS top/order b7d91439902a1b823f343ab597017cbb66aec793594ab550140abd5033899a40 hits=2
-- S i m u l a t i o n   R e p o r t: Verilator 5.053 devel
-- Verilator: $finish at 130ns; walltime 0.000 s; speed 1.527 ms/s
-- Verilator: cpu 0.000 s on 1 threads; allocated 4 MB

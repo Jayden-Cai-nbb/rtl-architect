@@ -46,7 +46,7 @@ sourceDigest 纳入配置、文件顺序、文件内容和缺失状态。生成�
 
 ### 复用已经登记的展开
 
-在 `verify` 的 elaboration 清单用 `elaborationInputs` 引用一份 `schema inputs` 兼容的配置文件。`inputs` 同时列出该配置和所有实际编译输入。作者声明命令只使用源码配置，且清单不含 `architecture/`、`generated/` 或运行状态。保留完整 argv、工具版本和成功网表产物。[可运行的完整例子](../../../../docs/UPGRADE-2.1.md#复用一次展开)
+在 `verify` 的 elaboration 清单用 `elaborationInputs` 引用一份 `schema inputs` 兼容的配置文件。`inputs` 同时列出该配置和所有实际编译输入。作者声明命令只使用源码配置，且清单不含 `architecture/`、`generated/` 或运行状态。保留完整 argv、工具版本和成功网表产物。[可运行的完整例子](../../../../docs/USER-GUIDE.md#复用一次展开)
 
 导入清单 v2 使用 `{schemaVersion:2,runId,netlist}`。`netlist` 相对当次 `verify` 目录。工具读取同一份配置、查看顶层与已声明非负整数参数，并输出 `model.json`、`import.json`、`conformance.json` 和 `state-discovery.json`。端口、实例路径和生产运行 ID 直接复用。时钟、复位和状态按实际来源补充。发现存储的展开可产生地址访问阅读缺口及源码入口。
 

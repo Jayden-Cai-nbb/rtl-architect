@@ -1,8 +1,0 @@
-import {mkdir,writeFile} from 'node:fs/promises';
-import {architecturePattern} from '/home/cjjnbb/projects/rtl-architect/scripts/architecture-patterns.ts';
-const root='/tmp/rtlarch-budget-workspace',f=await architecturePattern('shared_ram');
-await mkdir(root);await mkdir(root+'/architecture');await mkdir(root+'/rtl');
-await writeFile(root+'/architecture/model.json',JSON.stringify(f.model,null,2)+'\n');
-await writeFile(root+'/architecture/layout.json',JSON.stringify({schemaVersion:1,scopes:{top:{positions:{},reading:f.reading,viewport:{x:0,y:0,zoom:1}}}},null,2)+'\n');
-await writeFile(root+'/rtl/shared_ram.sv',f.source);
-console.log('Created temporary shared RAM structural fixture. Budget examples remain hypothetical assumptions; no approvals.');

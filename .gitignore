@@ -2,45 +2,20 @@ node_modules/
 .runtime/
 .venv/
 .tools/
-dist/
-.rtlarch/
-architecture/
-generated/
-proposals/
 test-results/
 playwright-report/
-__pycache__/
-*.pyc
-.env
-.env.*
-!.env.example
+architecture/review.json
+architecture/module-reviews.json
+generated/*
 
-# Publish only the authority fixtures of these generic, runnable examples.
-!examples/contract-checks/architecture/
-examples/contract-checks/architecture/*
-!examples/contract-checks/architecture/model.json
-!examples/hardware-views/architecture/
-examples/hardware-views/architecture/*
-!examples/hardware-views/architecture/model.json
-!examples/state-updates/architecture/
-examples/state-updates/architecture/*
-!examples/state-updates/architecture/model.json
+.rtlarch/
 
 ci-evidence/
 
-# Generic 2.0 fixtures are published; user workspace artifacts stay ignored.
-!examples/typed-expressions/architecture/
-examples/typed-expressions/architecture/*
-!examples/typed-expressions/architecture/model.json
-!examples/typed-expressions/architecture/layout.json
-!examples/external-axis/architecture/
-examples/external-axis/architecture/*
-!examples/external-axis/architecture/model.json
-
-# Local simulation, coverage and editor artifacts.
-obj_dir/
-coverage/
-*.vcd
-*.fst
-*.tmp
-.DS_Store
+/dist/
+/release/
+/.archive/
+/architecture/
+/proposals/
+/evidence/
+/exports/

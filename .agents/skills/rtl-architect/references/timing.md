@@ -80,7 +80,7 @@
 
 latencyMinCycles只能表示非负整数下界，不能表示unknown、最大延迟、半拍或多时钟换算。若确实无可证实的更强下界，只能以0表达保守下界，并在latencyCondition明确“实际延迟未知，0不表示零拍”，保留未决问题；不能因此宣称时序已完整。已知时钟与寄存类型但延迟未知时，不要把整个模块错误改成 timing=unknown。
 
-周期表、寄存边界图和波形附件记录场景前提、模块ID、modelHash以及 sourceDigest/证据。正式合同只保留不依赖某次测试刺激的约定；具体轨迹是它的实例，不成为另一份可独立编辑的规范。更改模型后更新派生图，旧图保留旧版本标识。新来源/测量要通过提案加入provenance，不能悄悄把推断升级为事实。现在可用可选 contract.transactionPaths 声明有限单时钟、有序、每级单槽 ready/valid 路径，再用 replay 导入 verify 的显式沿前/沿后 JSON 产物。规范与具体轨迹分开保存；人工推演、仿真观察、失败与过期分别显示。详见 [事务回放示例](../../../../examples/transaction-replay/README.md)。这不是通用波形解析或自动时序求解，不向严格 Schema 塞其他自定义属性。
+周期表、寄存边界图和波形附件记录场景前提、模块ID、modelHash以及 sourceDigest/证据。正式合同只保留不依赖某次测试刺激的约定；具体轨迹是它的实例，不成为另一份可独立编辑的规范。更改模型后更新派生图，旧图保留旧版本标识。新来源/测量要通过提案加入provenance，不能悄悄把推断升级为事实。先用 `rtlarch help replay --json` 确认当前支持的语义，再通过可选 `contract.transactionPaths` 声明单时钟 ready/valid 路径。级联单槽、旁路、简单寄存和双槽 skid 通过 replay 导入 verify 的显式沿前/沿后 JSON 产物。地址化 RAM FIFO 与帧场景使用独立 verify。规范与具体轨迹分开保存；人工推演、仿真观察、失败与过期分别显示。详见 [事务回放示例](../../../../examples/transaction-replay/README.md)。这不是通用波形解析或自动时序求解，不向严格 Schema 塞其他自定义属性。
 
 ## 单独核对物理时序
 

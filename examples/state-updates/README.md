@@ -23,7 +23,7 @@ rtlarch open --workspace . --json
 
 此例仍是 as_built / partial：通过表示还原规则在本次输入下与 RTL 一致，不表示原始需求已验收。`assurance --json` 及页面“行为约定 → 核验状态”可查看分支、复位、保持的命中/缺口与检查依据。缺少激励会返回 coverage_incomplete；常量能证明不可达时单独列出原因。
 
-工具维护新增 `npm run check:reliability`：在临时副本检查无条件计数器、优先级竞争，以及“已批准加五期望 vs 错误加三实现”。不修改本例权威文件，不自动批准用户设计。版本更新后使用新目录重新运行 checks 并更新 verification.json 的路径；旧生成检查器不会冒充当前规则。
+维护用 `npm run check -- verification`：在临时副本检查无条件计数器、优先级竞争，以及“已批准加五期望 vs 错误加三实现”。不修改本例权威文件，不自动批准用户设计。版本更新后使用新目录重新运行 checks 并更新 verification.json 的路径；旧生成检查器不会冒充当前规则。
 
 <a id="observe-state"></a>
 

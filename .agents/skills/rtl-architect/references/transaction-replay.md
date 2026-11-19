@@ -38,7 +38,7 @@ rtlarch help replay --json
 rtlarch schema transactionPath --json
 rtlarch schema replay --json
 rtlarch schema replaySamples --json
-RTLARCH_REPLAY_WORKSPACE="$temp" npm run check:transaction-replay
+RTLARCH_REPLAY_WORKSPACE="$temp" npm run check -- verification
 rtlarch replay --workspace "$temp" --json
 ```
 

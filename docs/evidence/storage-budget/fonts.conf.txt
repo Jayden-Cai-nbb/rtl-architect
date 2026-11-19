@@ -1,3 +1,0 @@
-<?xml version="1.0"?>
-<!DOCTYPE fontconfig SYSTEM "fonts.dtd">
-<fontconfig><dir>/tmp/rtlarch-budget-browser/libs/usr/share/fonts</dir><dir>/usr/share/fonts</dir><cachedir>/tmp/rtlarch-budget-browser/font-cache</cachedir><alias><family>sans-serif</family><prefer><family>Noto Sans CJK SC</family></prefer></alias></fontconfig>

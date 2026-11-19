@@ -14,7 +14,7 @@ export function useArchitecture() {
   const dirty = useRef(false), layoutRef = useRef<LayoutSnapshot | undefined>(undefined), snapshotRef = useRef(snapshot), layoutQueue = useRef(Promise.resolve()), previewSequence = useRef(0);
   snapshotRef.current = snapshot;
   function fail(error: unknown) { setMessage(error instanceof Error ? error.message : String(error)); if (error instanceof HttpError) { setExtraIssues(error.issues); if (error.status === 409) { setConflict(true); setPreview(undefined); } } }
-  async function load() { setService(await bindWorkspace()); const [state, layout] = await Promise.all([api<Snapshot>('model'), api<LayoutSnapshot>('layout')]); if (!Array.isArray(state.moduleReviews)) throw new Error('后台仍是旧版本，请停止旧服务并重新运行 ./start-demo.sh，然后刷新页面。'); setSnapshot(state); setLayouts(layout); layoutRef.current = layout; setScope(s => state.model.modules.some(m => m.id === s && m.kind === 'subsystem') ? s : state.model.design.top); return state; }
+  async function load() { setService(await bindWorkspace()); const [state, layout] = await Promise.all([api<Snapshot>('model'), api<LayoutSnapshot>('layout')]); if (!Array.isArray(state.moduleReviews)) throw new Error('当前服务缺少模块确认记录接口。保存页面输入后，在对应工作区运行 rtlarch open --workspace . --restart。'); setSnapshot(state); setLayouts(layout); layoutRef.current = layout; setScope(s => state.model.modules.some(m => m.id === s && m.kind === 'subsystem') ? s : state.model.design.top); return state; }
   useEffect(() => {
     let cancelled = false;
     void (async () => {

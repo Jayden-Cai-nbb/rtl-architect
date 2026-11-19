@@ -1,7 +1,0 @@
-Get:1 http://archive.ubuntu.com/ubuntu jammy/main amd64 fonts-noto-cjk all 1:20220127+repack1-1 [61.2 MB]
-Ign:1 http://archive.ubuntu.com/ubuntu jammy/main amd64 fonts-noto-cjk all 1:20220127+repack1-1
-Get:2 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 libasound2 amd64 1.2.6.1-1ubuntu1.2 [391 kB]
-Get:3 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 libnspr4 amd64 2:4.35-0ubuntu0.22.04.1 [119 kB]
-Get:4 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 libnss3 amd64 2:3.98-0ubuntu0.22.04.5 [1346 kB]
-Get:1 http://archive.ubuntu.com/ubuntu jammy/main amd64 fonts-noto-cjk all 1:20220127+repack1-1 [61.2 MB]
-Fetched 2057 kB in 39s (52.2 kB/s)

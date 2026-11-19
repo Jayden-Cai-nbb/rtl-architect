@@ -24,8 +24,6 @@ jobs:
         with:
           node-version: '24.18.1'
           cache: npm
-      - name: Install pinned npm
-        run: npm install --global npm@11.6.2 --ignore-scripts --no-audit --no-fund
       - name: Install pinned EDA archive
         run: |
           curl --fail --location --retry 3 \
@@ -48,14 +46,10 @@ jobs:
           npm ci 2>&1 | tee ci-evidence/install.log
       - name: Build
         run: npm run build 2>&1 | tee ci-evidence/build.log
-      - name: Core, skill, workspace and fault-injection regressions
+      - name: Product regression and RTL workflow
         run: npm run check 2>&1 | tee ci-evidence/check.log
-      - name: Initial RTL fixture
-        run: npm run rtl:test 2>&1 | tee ci-evidence/rtl.log
-      - name: Complete user workflow
-        run: npm run check:workflow 2>&1 | tee ci-evidence/workflow.log
-      - name: Clean installation and page smoke test
-        run: npm run check:release 2>&1 | tee ci-evidence/release.log
+      - name: Stage release and verify clean installation
+        run: npm run release -- --check "$RUNNER_TEMP/rtl-architect-release" 2>&1 | tee ci-evidence/release.log
       - name: Save this run's logs
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4

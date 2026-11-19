@@ -48,7 +48,7 @@ export async function ensureService(workspace: string, options: ClientOptions = 
   const dir = join(workspace, '.rtlarch'); await mkdir(dir, { recursive: true });
   const log = await open(join(dir, 'service.log'), 'a');
   const child = spawn(process.execPath, ['--import', loader, join(toolRoot, 'src/server/index.ts')], {
-    cwd: workspace, env: { ...process.env, RTLARCH_WORKSPACE: workspace, RTLARCH_MANAGED: '1', RTLARCH_MODE: 'demo' },
+    cwd: workspace, env: { ...process.env, RTLARCH_WORKSPACE: workspace },
     detached: true, stdio: ['ignore', log.fd, log.fd],
   });
   let spawnError: Error | undefined; child.on('error', error => { spawnError = error; }); child.unref(); await log.close();

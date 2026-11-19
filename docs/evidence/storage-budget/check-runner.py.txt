@@ -1,8 +1,0 @@
-import json,subprocess,time
-from pathlib import Path
-out=Path('docs/evidence/storage-budget');scripts=json.loads(Path('package.json').read_text())['scripts'];entries=[s.strip().removeprefix('npm run ') for s in scripts['check'].split('&&')];records=json.loads((out/'check-status-first-attempt.json').read_text())[:10]
-for entry in entries[10:]+['rtl:test','check:workflow']:
- start=time.monotonic();name=entry.replace(':','-')
- with (out/(name+'.log')).open('w') as log:rc=subprocess.run(['npm','run',entry],stdout=log,stderr=subprocess.STDOUT).returncode
- records.append({'entry':entry,'exitCode':rc,'seconds':round(time.monotonic()-start,3)});(out/'check-status.json').write_text(json.dumps(records,indent=2)+'\n');print(entry,rc,flush=True)
- if rc:raise SystemExit(rc)
